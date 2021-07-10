@@ -24,8 +24,8 @@ class MasjidCard extends StatelessWidget {
                 topRight: Radius.circular(16.0)),
             child: Image.asset(
               dataMasjid.image,
-              // width: width,
-              height: 200,
+              width: width,
+              height: width / 1.77,
               fit: BoxFit.fill,
             )),
         Padding(

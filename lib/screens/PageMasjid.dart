@@ -63,7 +63,7 @@ class PageMasjid extends StatelessWidget {
                   delegate: _SliverAppBarDelegate(
                     TabBar(
                       labelColor: mkColorPrimary,
-                      indicatorColor: mkColorPrimary,
+                      indicatorColor: mkColorPrimaryDark,
                       unselectedLabelColor: appStore.textPrimaryColor,
                       tabs: [
                         Tab(text: "Profil"),

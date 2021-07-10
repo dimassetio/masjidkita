@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:masjidkita/controllers/authController.dart';
 import 'package:masjidkita/routes/route_name.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:masjidkita/main/utils/AppConstant.dart';
@@ -28,6 +29,8 @@ class T5SignInState extends State<T5SignIn> {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     // changeStatusColor(appStore.appBarColor!);
+    final AuthController authController = Get.find();
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -53,12 +56,16 @@ class T5SignInState extends State<T5SignIn> {
                   children: <Widget>[
                     SizedBox(height: 10),
                     EditText(
-                      hint: mk_hint_phone_no,
+                      mController: authController.email,
+                      hint: "Email",
                       textColor: mkColorPrimary,
                       isPassword: false,
                     ),
                     SizedBox(height: 16),
-                    EditText(hint: mk_hint_password, isSecure: true),
+                    EditText(
+                        mController: authController.password,
+                        hint: mk_hint_password,
+                        isSecure: true),
                     SizedBox(height: 10),
                     GestureDetector(
                       onTap: () {
@@ -82,7 +89,8 @@ class T5SignInState extends State<T5SignIn> {
                           child: GestureDetector(
                             onTap: () {
                               // toast("Sign in clicked");
-                              Get.toNamed(RouteName.dashboard);
+                              // Get.toNamed(RouteName.dashboard);
+                              authController.signIn();
                             },
                             child: Container(
                               margin: EdgeInsets.only(right: 16),

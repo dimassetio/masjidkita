@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:masjidkita/controllers/authController.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
@@ -11,6 +14,7 @@ import 'utils/MKConstant.dart';
 
 class PageProfile extends StatelessWidget {
   static var tag = "/T1Profile";
+  final AuthController authC = Get.find();
 
   Widget counter(String counter, String counterName) {
     return Column(
@@ -44,11 +48,11 @@ class PageProfile extends StatelessWidget {
         child: Column(
           children: <Widget>[
             SizedBox(height: 50),
-            text("t1_user_name",
+            text(authC.userModel.value.name ?? "Nama",
                 textColor: appStore.textPrimaryColor,
                 fontSize: textSizeNormal,
                 fontFamily: fontMedium),
-            text("t1_user_email",
+            text(authC.userModel.value.email ?? "Email",
                 textColor: mkColorPrimary,
                 fontSize: textSizeMedium,
                 fontFamily: fontMedium),
@@ -69,10 +73,11 @@ class PageProfile extends StatelessWidget {
         ),
       ),
     );
+
+    final authController = Get.find<AuthController>();
     return Scaffold(
-      appBar: appBar(context, "t1_profile_title"),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 10, left: 2, right: 2),
+        padding: EdgeInsets.only(top: 15, left: 2, right: 2),
         physics: ScrollPhysics(),
         child: Container(
           child: Column(
@@ -97,9 +102,9 @@ class PageProfile extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 8),
-                      rowHeading("t1_lbl_personal"),
+                      rowHeading("Info Personal"),
                       SizedBox(height: 16),
-                      profileText("t1_user_name"),
+                      profileText(authC.userModel.value.name ?? "Nama"),
                       Padding(
                         padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
                         child: view(),
@@ -129,7 +134,7 @@ class PageProfile extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 8),
-                      rowHeading("t1_lbl_contacts"),
+                      rowHeading("Info Kontak"),
                       SizedBox(height: 16),
                       profileText("+91 36982145"),
                       Padding(
@@ -137,9 +142,26 @@ class PageProfile extends StatelessWidget {
                         child: view(),
                       ),
                       SizedBox(height: 8),
-                      profileText("Astoncina@gmail.com"),
+                      profileText(authC.userModel.value.email ?? "Email"),
                       SizedBox(height: 8),
                     ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 8),
+              Container(
+                margin: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                decoration: boxDecoration(
+                    bgColor: appStore.scaffoldBackground,
+                    radius: 10,
+                    showShadow: true),
+                child: GestureDetector(
+                  onTap: () {
+                    authController.signOut();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: text("Log Out"),
                   ),
                 ),
               ),

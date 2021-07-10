@@ -6,7 +6,7 @@ import 'package:masjidkita/screens/utils/widgets/MasjidCarouselSlider.dart';
 
 import '../../../../main.dart';
 import '../../MKColors.dart';
-import '../../t5Constant.dart';
+import '../../MKConstant.dart';
 
 // ignore: must_be_immutable
 class TMKasSlider extends StatelessWidget {

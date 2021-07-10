@@ -67,7 +67,7 @@ class T5VerificationState extends State<T5Verification> {
                         GestureDetector(
                           onTap: () {
                             // T5SetPassword().launch(context);
-                            Get.toNamed(RouteName.dashboard);
+                            Get.toNamed(RouteName.mkdashboard);
                           },
                           child: Container(
                             alignment: Alignment.center,

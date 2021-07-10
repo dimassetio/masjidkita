@@ -46,7 +46,7 @@ class DetailMasjid extends StatelessWidget {
                   backgroundColor: white,
                   flexibleSpace: FlexibleSpaceBar(
                       centerTitle: true,
-                      title: Text('SliverAppBar with ListView',
+                      title: Text('Nama masjid',
                           style: primaryTextStyle(
                               color: innerBoxIsScrolled
                                   ? appStore.textPrimaryColor

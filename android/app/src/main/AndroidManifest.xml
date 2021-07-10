@@ -1,8 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.masjidkita">
+    package="com.dimas.masjidkita">
+   <uses-permission android:name="android.permission.INTERNET" />  
    <application
         android:label="masjidkita"
         android:icon="@mipmap/ic_launcher">
+        <!-- android:name="androidx.multidex.MultiDexApplication" -->
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

@@ -2,7 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:masjidkita/controllers/authController.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
+import 'package:masjidkita/screens/utils/MKWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 // import 'package:masjidkita/main/utils/codePicker/country_code_picker.dart';
@@ -30,7 +33,7 @@ class T5SignUpState extends State<T5SignUp> {
 
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-
+    final AuthController authController = Get.find();
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -76,8 +79,8 @@ class T5SignUpState extends State<T5SignUp> {
                           // CountryCodePicker(onChanged: print, showFlag: true),
                           Expanded(
                             child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              maxLength: 10,
+                              controller: authController.name,
+                              keyboardType: TextInputType.name,
                               style: TextStyle(
                                   fontSize: textSizeLargeMedium,
                                   fontFamily: fontRegular),
@@ -85,7 +88,67 @@ class T5SignUpState extends State<T5SignUp> {
                                 counterText: "",
                                 contentPadding:
                                     EdgeInsets.fromLTRB(16, 10, 16, 10),
-                                hintText: mk_hint_phone_no,
+                                hintText: "Name",
+                                hintStyle: TextStyle(color: mkTextColorThird),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      padding: EdgeInsets.only(left: 16),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: mkViewColor, width: 0.5)),
+                      child: Row(
+                        children: <Widget>[
+                          // CountryCodePicker(onChanged: print, showFlag: true),
+                          Expanded(
+                            child: TextFormField(
+                              controller: authController.email,
+                              keyboardType: TextInputType.emailAddress,
+                              style: TextStyle(
+                                  fontSize: textSizeLargeMedium,
+                                  fontFamily: fontRegular),
+                              decoration: InputDecoration(
+                                counterText: "",
+                                contentPadding:
+                                    EdgeInsets.fromLTRB(16, 10, 16, 10),
+                                hintText: "Email",
+                                hintStyle: TextStyle(color: mkTextColorThird),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      padding: EdgeInsets.only(left: 16),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: mkViewColor, width: 0.5)),
+                      child: Row(
+                        children: <Widget>[
+                          // CountryCodePicker(onChanged: print, showFlag: true),
+                          Expanded(
+                            child: TextFormField(
+                              obscureText: true,
+                              controller: authController.password,
+                              keyboardType: TextInputType.visiblePassword,
+                              style: TextStyle(
+                                  fontSize: textSizeLargeMedium,
+                                  fontFamily: fontRegular),
+                              decoration: InputDecoration(
+                                // icon: Icon(Icons.lock),
+                                counterText: "",
+                                contentPadding:
+                                    EdgeInsets.fromLTRB(16, 10, 16, 10),
+                                hintText: "Password",
                                 hintStyle: TextStyle(color: mkTextColorThird),
                                 border: InputBorder.none,
                               ),
@@ -97,7 +160,8 @@ class T5SignUpState extends State<T5SignUp> {
                     SizedBox(height: 24),
                     GestureDetector(
                       onTap: () {
-                        T5Verification().launch(context);
+                        // T5Verification().launch(context);
+                        authController.signUp();
                       },
                       child: Container(
                         alignment: Alignment.center,

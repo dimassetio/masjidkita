@@ -4,8 +4,6 @@ import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/utils/widgets/MasjidCarouselSlider.dart';
 
 import '../../../../main.dart';
-import '../../MKColors.dart';
-import '../../t5Constant.dart';
 
 // ignore: must_be_immutable
 class GaleriSlider extends StatelessWidget {

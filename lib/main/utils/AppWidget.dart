@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:masjidkita/integrations/utils/common.dart';
+// import 'package:masjidkita/integrations/utils/common.dart';
 import 'package:masjidkita/main.dart';
 import 'package:masjidkita/main/model/ListModels.dart';
 
@@ -58,25 +58,25 @@ BoxDecoration boxDecoration(
   );
 }
 
-Future<List<LatLngAndGeohash>> getListOfLatLngAndGeoHash(
-    BuildContext context) async {
-  try {
-    final fakeList = await (loadDataFromJson(context));
-    List<LatLngAndGeohash> myPoints = [];
-    for (int i = 0; i < fakeList!.length; i++) {
-      //TODO Without NullSafety Geo coder
-      //final fakePoint = fakeList[i];
-      final p = LatLngAndGeohash(
-          //TODO Without NullSafety Geo coder
-          // LatLng(fakePoint["LATITUDE"], fakePoint["LONGITUDE"]),
-          );
-      myPoints.add(p);
-    }
-    return myPoints;
-  } catch (e) {
-    throw Exception(e.toString());
-  }
-}
+// Future<List<LatLngAndGeohash>> getListOfLatLngAndGeoHash(
+//     BuildContext context) async {
+//   try {
+//     final fakeList = await (loadDataFromJson(context));
+//     List<LatLngAndGeohash> myPoints = [];
+//     for (int i = 0; i < fakeList!.length; i++) {
+//       //TODO Without NullSafety Geo coder
+//       //final fakePoint = fakeList[i];
+//       final p = LatLngAndGeohash(
+//           //TODO Without NullSafety Geo coder
+//           // LatLng(fakePoint["LATITUDE"], fakePoint["LONGITUDE"]),
+//           );
+//       myPoints.add(p);
+//     }
+//     return myPoints;
+//   } catch (e) {
+//     throw Exception(e.toString());
+//   }
+// }
 
 void changeStatusColor(Color color) async {
   setStatusBarColor(color);
