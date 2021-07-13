@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
+import 'package:masjidkita/screens/utils/MKConstant.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../main.dart';
-import '../../MKConstant.dart';
 
 class TMTabTakmir extends StatelessWidget {
   @override

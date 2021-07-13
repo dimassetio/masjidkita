@@ -15,19 +15,12 @@ import 'package:masjidkita/screens/utils/MKWidget.dart';
 import '../../main.dart';
 // import 'T5Dialog.dart';
 
-class T5SignIn extends StatefulWidget {
-  static String tag = '/T5SignIn';
-
-  @override
-  T5SignInState createState() => T5SignInState();
-}
-
-class T5SignInState extends State<T5SignIn> {
+class T5SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     changeStatusColor(mkWhite);
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+    var width = Get.width;
+    var height = Get.height;
     // changeStatusColor(appStore.appBarColor!);
     final AuthController authController = Get.find();
 

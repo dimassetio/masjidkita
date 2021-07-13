@@ -4,16 +4,16 @@ import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/screens/utils/widgets/TakmirMasjid/Form/FormBangunan.dart';
-import 'package:masjidkita/screens/utils/widgets/TakmirMasjid/Form/FormDeskripsi.dart';
-import 'package:masjidkita/screens/utils/widgets/TakmirMasjid/Form/FormLokasi.dart';
-import 'package:masjidkita/screens/utils/widgets/TakmirMasjid/Form/FormNama.dart';
-import 'package:masjidkita/screens/utils/widgets/TakmirMasjid/Form/FormSOsmed.dart';
+import 'package:masjidkita/screens/utils/MKColors.dart';
+import 'package:masjidkita/screens/utils/MKConstant.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormBangunan.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormDeskripsi.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormLokasi.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormNama.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormSosmed.dart';
+import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../../../../main.dart';
-import '../../MKConstant.dart';
-import '../../MKImages.dart';
-import '../../MKColors.dart';
 
 class TMTabProfile extends StatelessWidget {
   // late T9BadgeModel model;

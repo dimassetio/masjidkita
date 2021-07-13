@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
             ? AppThemeData.lightTheme
             : AppThemeData.darkTheme,
         builder: scrollBehaviour(),
-        // initialBinding: InitBinding(),
+        initialBinding: InitBinding(),
       ),
     );
   }

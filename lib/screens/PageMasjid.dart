@@ -6,14 +6,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabKas.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabProfile.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabTakmir.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
-import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabKas.dart';
-import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabProfile.dart';
-import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabTakmir.dart';
-import 'package:masjidkita/screens/utils/widgets/TakmirMasjid/TMTabKas.dart';
-import 'package:masjidkita/screens/utils/widgets/TakmirMasjid/TMTabProfile.dart';
-import 'package:masjidkita/screens/utils/widgets/TakmirMasjid/TMTabTakmir.dart';
 import 'package:nb_utils/nb_utils.dart';
 // import 'package:masjidkita/screens/utils/widgets/T5Slider.dart';
 
@@ -49,7 +46,7 @@ class PageMasjid extends StatelessWidget {
                   backgroundColor: white,
                   flexibleSpace: FlexibleSpaceBar(
                       centerTitle: true,
-                      title: Text('SliverAppBar with ListView',
+                      title: Text('Nama Masjid',
                           style: primaryTextStyle(
                               color: innerBoxIsScrolled
                                   ? appStore.textPrimaryColor

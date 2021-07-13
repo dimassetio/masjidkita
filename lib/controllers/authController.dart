@@ -10,20 +10,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/integrations/firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nb_utils/nb_utils.dart';
 // import 'package:masjidkita/screens/inventaris/inventaris_page.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
-  Rx<User> firebaseUser;
-  RxBool isLoggedIn = false.obs;
+
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+
+  Rx<User> firebaseUser;
   String usersCollection = "users";
   Rx<UserModel> userModel = UserModel().obs;
 
   UserModel get user => userModel.value;
   set user(UserModel value) => this.userModel.value = value;
+  RxBool isLoggedIn = false.obs;
 
   final googleSignIn = GoogleSignIn();
 
@@ -32,16 +35,39 @@ class AuthController extends GetxController {
     super.onReady();
     firebaseUser = Rx<User>(auth.currentUser);
     firebaseUser.bindStream(auth.userChanges());
-    ever(firebaseUser, _setInitialScreen);
+    // isLoggedIn = changeStatus();
+    // _setUserModel;
+    ever(firebaseUser, _setLogStatus);
+    ever(firebaseUser, _setUserModel);
   }
 
-  _setInitialScreen(User user) {
+  _setLogStatus(User user) {
     if (user == null) {
-      Get.offAll(() => T5SignIn());
+      isLoggedIn.value = false;
     } else {
-      Get.offAll(() => MKDashboard());
+      isLoggedIn.value = true;
     }
   }
+
+  _setUserModel(User user) {
+    try {
+      _initializeUserModel(firebaseUser.value.uid);
+    } catch (e) {
+      userModel.value = UserModel();
+      // print(e);
+    }
+  }
+
+  // _setInitialScreen(User user) {
+  //   if (user == null) {
+  //     // Get.offAll(() => T5SignIn());
+  //     print("user.displayName");
+  //     Get.offAndToNamed(RouteName.sign_in);
+  //   } else {
+  //     Get.toNamed(RouteName.kelolamasjid);
+  //     print(user);
+  //   }
+  // }
 
   void signIn() async {
     // final userRef = firebaseFirestore.collection(usersCollection).doc(userId);
@@ -64,8 +90,9 @@ class AuthController extends GetxController {
         //   "last_login": auth.currentUser.metadata.lastSignInTime,
         // });
         _clearControllers();
-        print(userModel.value.name);
-        Get.snackbar("Sign Success", "");
+        print(firebaseUser);
+        toast("Sign In Success");
+        Get.back();
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -219,6 +246,7 @@ class AuthController extends GetxController {
   // }
 
   void signOut() async {
+    userModel.value = UserModel();
     auth.signOut();
   }
 

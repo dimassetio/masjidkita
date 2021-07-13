@@ -8,12 +8,7 @@ import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:masjidkita/screens/utils/MKWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
-// import 'package:masjidkita/main/utils/codePicker/country_code_picker.dart';
-import 'package:masjidkita/screens/MKVerification.dart';
 import 'package:masjidkita/screens/utils/MKConstant.dart';
-// import 'package:masjidkita/screens/utils/T5Images.dart';
-// import 'package:masjidkita/screens/utils/T5Colors.dart';
-// import 'package:masjidkita/screens/utils/T5Strings.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 
@@ -31,8 +26,8 @@ class T5SignUpState extends State<T5SignUp> {
   Widget build(BuildContext context) {
     changeStatusColor(appStore.appBarColor!);
 
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+    var width = Get.width;
+    var height = Get.height;
     final AuthController authController = Get.find();
     return Scaffold(
       body: SingleChildScrollView(
@@ -117,7 +112,7 @@ class T5SignUpState extends State<T5SignUp> {
                                 counterText: "",
                                 contentPadding:
                                     EdgeInsets.fromLTRB(16, 10, 16, 10),
-                                hintText: "Email",
+                                hintText: mk_lbl_email,
                                 hintStyle: TextStyle(color: mkTextColorThird),
                                 border: InputBorder.none,
                               ),
@@ -148,7 +143,7 @@ class T5SignUpState extends State<T5SignUp> {
                                 counterText: "",
                                 contentPadding:
                                     EdgeInsets.fromLTRB(16, 10, 16, 10),
-                                hintText: "Password",
+                                hintText: mk_lbl_password,
                                 hintStyle: TextStyle(color: mkTextColorThird),
                                 border: InputBorder.none,
                               ),

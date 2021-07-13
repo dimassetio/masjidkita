@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-showLoading(){
+showLoading() {
   Get.defaultDialog(
-    title: "Loading...",
-    content: CircularProgressIndicator(),
-    barrierDismissible: false
-  );
+      title: "Loading...",
+      content: CircularProgressIndicator(),
+      barrierDismissible: false);
 }
 
-dismissLoadingWidget(){
+dismissLoadingWidget() {
   Get.back();
 }

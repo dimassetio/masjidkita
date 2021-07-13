@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/screens/utils/MKColors.dart';
+import 'package:masjidkita/screens/utils/MKConstant.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:masjidkita/screens/utils/widgets/MasjidCarouselSlider.dart';
 
 import '../../../../main.dart';
-import '../../MKColors.dart';
-import '../../MKConstant.dart';
 
 // ignore: must_be_immutable
 class TMKasSlider extends StatelessWidget {
