@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
@@ -46,17 +47,19 @@ class TMMasjid extends StatelessWidget {
                 snap: false,
                 elevation: 50,
                 backgroundColor: white,
-                flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: true,
-                    title: Text('Nama Masjid',
-                        style: primaryTextStyle(
-                            color: innerBoxIsScrolled
-                                ? appStore.textPrimaryColor
-                                : white)),
-                    background: Image.asset(
-                      mk_contoh_image,
-                      fit: BoxFit.cover,
-                    )),
+                flexibleSpace: Obx(
+                  () => FlexibleSpaceBar(
+                      centerTitle: true,
+                      title: Text(keMasjidC.keMasjid.nama ?? "Nama Masjid",
+                          style: primaryTextStyle(
+                              color: innerBoxIsScrolled
+                                  ? appStore.textPrimaryColor
+                                  : white)),
+                      background: Image.asset(
+                        mk_contoh_image,
+                        fit: BoxFit.cover,
+                      )),
+                ),
               ),
               SliverPersistentHeader(
                 delegate: _SliverAppBarDelegate(

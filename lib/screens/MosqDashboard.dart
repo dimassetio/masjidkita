@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:masjidkita/controllers/keMasjidController.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/integrations/firestore.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/routes/route_name.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/cekLog.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKConstant.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
@@ -74,21 +76,31 @@ class MosqDashboardState extends State<MosqDashboard> {
                       () => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              CircleAvatar(
-                                // backgroundImage:
-                                //     CachedNetworkImageProvider(mk_net_img),
-                                radius: 25,
-                              ),
-                              SizedBox(width: 16),
-                              text(
-                                  authController.userModel.value.name ??
-                                      "Guest",
-                                  textColor: mkWhite,
-                                  fontSize: textSizeNormal,
-                                  fontFamily: fontMedium)
-                            ],
+                          GestureDetector(
+                            onTap: () {
+                              authController.isLoggedIn.value
+                                  ? Get.toNamed(RouteName.profile)
+                                  : showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          CekLogin());
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                CircleAvatar(
+                                  // backgroundImage:
+                                  //     CachedNetworkImageProvider(mk_net_img),
+                                  radius: 25,
+                                ),
+                                SizedBox(width: 16),
+                                text(
+                                    authController.userModel.value.name ??
+                                        "Guest",
+                                    textColor: mkWhite,
+                                    fontSize: textSizeNormal,
+                                    fontFamily: fontMedium)
+                              ],
+                            ),
                           ),
                           IconButton(
                             onPressed: () {
@@ -131,12 +143,25 @@ class MosqDashboardState extends State<MosqDashboard> {
                         padding: EdgeInsets.all(24.0),
                         child: MQGridListing(mFavouriteList, false),
                       ),
-                      Obx(
-                        () => Text("Is Logged In = " +
-                            authController.isLoggedIn.toString()),
-                      ),
-                      ElevatedButton(
-                          onPressed: () {}, child: Text("Test Controller"))
+                      // Obx(
+                      //   () => Text(
+                      //       "Has Masjid = " + keMasjidC.haveMasjid.toString()),
+                      // ),
+                      // Obx(
+                      //   () =>
+                      //       Text("Nama " + keMasjidC.keMasjid.nama.toString()),
+                      // ),
+                      // Obx(
+                      //   () => Text("Id " + keMasjidC.keMasjid.id.toString()),
+                      // ),
+                      // Obx(
+                      //   () => Text("User " + authController.user.id.toString()),
+                      // ),
+                      // ElevatedButton(
+                      //     onPressed: () {
+                      //       keMasjidC.testdata();
+                      //     },
+                      //     child: Text("Test Data"))
                     ],
                   ),
                 ),

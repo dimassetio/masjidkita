@@ -4,16 +4,14 @@ import 'package:get/get.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
-import 'package:masjidkita/screens/utils/m_k_icon_icons.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-class FormDeskripsi extends StatelessWidget {
+class NewMasjid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    keMasjidC.deskripsi =
-        TextEditingController(text: keMasjidC.keMasjid.deskripsi);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -48,45 +46,63 @@ class FormDeskripsi extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: Icon(Icons.close, color: appStore.textPrimaryColor)),
               ),
-              // Obx(()=>
-              // Text(keMasjidC.deskripsi.value.toString()),
-              // ),
-              Text(mk_lbl_deskripsi,
+              Text(mk_lbl_nama,
                   style: boldTextStyle(
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
               TextFormField(
-                controller: keMasjidC.deskripsi,
-                focusNode: FocusNode(),
-                onEditingComplete: () {
-                  keMasjidC.updateDataMasjid();
-                },
-                style: primaryTextStyle(),
+                controller: keMasjidC.nama,
+                cursorColor: appStore.textPrimaryColor,
                 decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide: BorderSide(color: appStore.iconColor!),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide:
-                        BorderSide(width: 1, color: appStore.iconColor!),
-                  ),
-                  labelText: mk_tentang_masjid,
-                  labelStyle: primaryTextStyle(),
-                  alignLabelWithHint: true,
+                  contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
+                  hintText: 'Nama Masjid',
+                  hintStyle: secondaryTextStyle(
+                      color: appStore.textSecondaryColor, size: 16),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: appStore.textPrimaryColor!, width: 0.0)),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: appStore.textPrimaryColor!, width: 0.0)),
                 ),
-                maxLines: 3,
-                cursorColor: appStore.isDarkModeOn ? white : blackColor,
-                keyboardType: TextInputType.multiline,
+                keyboardType: TextInputType.name,
+                inputFormatters: [
+                  FilteringTextInputFormatter.singleLineFormatter
+                ],
+                style: primaryTextStyle(color: appStore.textPrimaryColor),
+              ),
+              30.height,
+              Text(mk_lbl_alamat,
+                  style: boldTextStyle(
+                      color: appStore.textPrimaryColor, size: 20)),
+              16.height,
+              TextFormField(
+                cursorColor: appStore.textPrimaryColor,
+                controller: keMasjidC.alamat,
+
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
+                  hintText: 'Nama Jalan',
+                  hintStyle: secondaryTextStyle(
+                      color: appStore.textSecondaryColor, size: 16),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: appStore.textPrimaryColor!, width: 0.0)),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: appStore.textPrimaryColor!, width: 0.0)),
+                ),
+                keyboardType: TextInputType.streetAddress,
+                // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                style: primaryTextStyle(color: appStore.textPrimaryColor),
               ),
               30.height,
               GestureDetector(
                 onTap: () {
-                  keMasjidC.updateDataMasjid();
-                  // deskripsi: keMasjidC.deskripsi.text);
-                  keMasjidC.clearControllers();
+                  keMasjidC.addMasjidToFirestore(
+                      authController.firebaseUser.value.uid);
                   finish(context);
+                  Get.toNamed(RouteName.kelolamasjid);
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,

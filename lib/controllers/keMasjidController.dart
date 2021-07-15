@@ -1,155 +1,143 @@
-// @dart=2.9
-import 'package:masjidkita/controllers/authController.dart';
-import 'package:masjidkita/helpers/showLoading.dart';
-import 'package:masjidkita/models/keMasjid.dart';
-import 'package:masjidkita/models/user.dart';
-import 'package:masjidkita/routes/route_name.dart';
+import 'dart:collection';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:masjidkita/controllers/authController.dart';
+import 'package:masjidkita/integrations/controllers.dart';
+import 'package:masjidkita/models/keMasjid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/integrations/firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/KeMasjid.dart';
+import 'package:masjidkita/models/user.dart';
 import 'package:nb_utils/nb_utils.dart';
-// import 'package:masjidkita/screens/inventaris/inventaris_page.dart';
 
 class KeMasjidController extends GetxController {
   static KeMasjidController instance = Get.find();
 
-  final authC = Get.find<AuthController>();
-
   TextEditingController nama = TextEditingController();
   TextEditingController alamat = TextEditingController();
-  TextEditingController photo_url = TextEditingController();
+  // TextEditingController photo_url = TextEditingController();
+  TextEditingController deskripsi = TextEditingController();
+  TextEditingController kecamatan = TextEditingController();
+  TextEditingController kodePos = TextEditingController();
+  TextEditingController kota = TextEditingController();
+  TextEditingController provinsi = TextEditingController();
+  TextEditingController tahun = TextEditingController();
+  TextEditingController luasTanah = TextEditingController();
+  TextEditingController luasBangunan = TextEditingController();
+  TextEditingController statusTanah = TextEditingController();
+  TextEditingController legalitas = TextEditingController();
 
-  String masjidCollection = "masjid";
   Rx<KeMasjidModel> keMasjidModel = KeMasjidModel().obs;
+
+  var haveMasjid = false.obs;
 
   KeMasjidModel get keMasjid => keMasjidModel.value;
   set keMasjid(KeMasjidModel value) => this.keMasjidModel.value = value;
-  RxBool isLoggedIn = false.obs;
 
-  final googleSignIn = GoogleSignIn();
-
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  //   // firebaseUser = Rx<User>(auth.currentUser);
-  //   // firebaseUser.bindStream(auth.userChanges());
-
-  //   // ever(firebaseUser, _setLogStatus);
-  //   // ever(firebaseUser, _setUserModel);
-  // }
   @override
-  void onInit() {
-    super.onInit();
-    _initializeKeMasjidModel(authC.firebaseUser.value.uid);
-    _setMasjidStatus(keMasjid);
+  void onReady() {
+    super.onReady();
+    // _getKeMasjidModel();
+    // ever(authController.firebaseUser, _getKeMasjidModel);
+    ever(authController.userModel, _getKeMasjidModel);
   }
 
-  void testdata() {
-    _initializeKeMasjidModel(authC.firebaseUser.value.uid);
-    _setMasjidStatus(keMasjid);
+  void testdata() async {
+    // clear();
+    await _getKeMasjidModel(authController.user);
+    // _setHaveMasjid();
   }
 
-  _setMasjidStatus(KeMasjidModel keMasjid) {
-    if (keMasjid == null) {
-      toast("null");
+  void clear() {
+    keMasjidModel.value = KeMasjidModel();
+  }
+
+  _setHaveMasjid() {
+    if (keMasjid.nama == null) {
+      haveMasjid.value = false;
     } else {
-      toast("setted");
+      haveMasjid.value = true;
     }
-    print(keMasjid);
+    print(haveMasjid.value);
   }
 
-  _setKeMasjidModel() {
-    try {
-      _initializeKeMasjidModel(authC.firebaseUser.value.uid);
-    } catch (e) {
-      keMasjidModel.value = KeMasjidModel();
-      print(e);
-    }
-  }
-
-  // void signIn() async {
-  //   try {
-  //     // showLoading();
-  //     await auth
-  //         .signInWithEmailAndPassword(
-  //             email: email.text.trim(), password: password.text.trim())
-  //         .then((result) {
-  //       String _userId = result.user.uid;
-  //       _initializeUserModel(_userId);
-  //       // userRef.set({
-  //       //   "last_login": auth.currentUser.metadata.lastSignInTime,
-  //       // });
-  //       _clearControllers();
-  //       print(firebaseUser);
-  //       toast("Sign In Success");
-  //       Get.back();
-  //     });
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //     Get.snackbar("Sign In Failed", "Try again");
-  //   }
-  // }
-
-  // void signUp() async {
-  //   showLoading();
-  //   try {
-  //     await auth
-  //         .createUserWithEmailAndPassword(
-  //             email: email.text.trim(), password: password.text.trim())
-  //         .then((result) {
-  //       String _userId = result.user.uid;
-  //       _addUserToFirestore(_userId);
-  //       _initializeUserModel(_userId);
-  //       _clearControllers();
-  //     });
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //     Get.snackbar("Sign Up Failed", "Try again");
-  //   }
-  // }
-
-  // void signOut() async {
-  //   userModel.value = UserModel();
-  //   auth.signOut();
-  // }
-
-  _addUserToFirestore(String userId) {
-    firebaseFirestore.collection(masjidCollection).doc(userId).set({
+  addMasjidToFirestore(String userId) async {
+    await firebaseFirestore.collection(masjidCollection).doc(userId).set({
       "nama": nama.text.trim(),
       "id": userId,
       "alamat": alamat.text.trim(),
-      "photo_url": ""
+      "photoUrl": "",
     });
+    await firebaseFirestore.collection(usersCollection).doc(userId).update({
+      "masjid": userId,
+    });
+    await _getKeMasjidModel(authController.user);
+    clearControllers();
   }
 
-  // _addUserGoogleToFirestore(String uid) {
-  //   User user;
-  //   firebaseFirestore.collection(usersCollection).doc(uid).set({
-  //     "name": user.displayName,
-  //     "id": uid,
-  //     "email": user.email,
-  //     "role": "user"
-  //   });
-  // }
+  updateDataMasjid(
+      // {nama,
+      // alamat,
+      // deskripsi,
+      // kecamatan,
+      // kodePos,
+      // kota,
+      // provinsi,
+      // tahun,
+      // luasTanah,
+      // luasBangunan,
+      // statusTanah,
+      // legalitas}
+      ) async {
+    Map<String, dynamic> data = new HashMap();
+    if (nama.text != "") data['nama'] = nama.text;
+    if (alamat.text != "") data["alamat"] = alamat.text;
+    // if (photoUrl != null) data["photoUrl"] = "";
+    if (deskripsi.text != "") data["deskripsi"] = deskripsi.text;
+    if (kecamatan.text != "") data["kecamatan"] = kecamatan.text;
+    if (kodePos.text != "") data["kodePos"] = kodePos.text;
+    if (kota.text != "") data["kota"] = kota.text;
+    if (provinsi.text != "") data["provinsi"] = provinsi.text;
+    if (tahun.text != "") data["tahun"] = tahun.text;
+    if (luasTanah.text != "") data["luasTanah"] = luasTanah.text;
+    if (luasBangunan.text != "") data["luasBangunan"] = luasBangunan.text;
+    if (statusTanah.text != "") data["statusTanah"] = statusTanah.text;
+    if (legalitas.text != "") data["legalitas"] = legalitas.text;
+    print(data);
+    await firebaseFirestore
+        .collection(masjidCollection)
+        .doc(keMasjid.id)
+        .update(data);
+    await _getKeMasjidModel(keMasjid);
+  }
 
-  _initializeKeMasjidModel(String userId) async {
+  _getKeMasjidModel(userModel) async {
     try {
       keMasjidModel.value = await firebaseFirestore
           .collection(masjidCollection)
-          .doc(userId)
+          .doc(authController.user.masjid)
           .get()
           .then((doc) => KeMasjidModel.fromSnapshot(doc));
-    } on Exception catch (e) {
+    } catch (e) {
       keMasjidModel.value = KeMasjidModel();
     }
+    _setHaveMasjid();
   }
 
-  _clearControllers() {
+  clearControllers() {
     nama.clear();
     alamat.clear();
-    photo_url.clear();
+    deskripsi.clear();
+    kecamatan.clear();
+    kodePos.clear();
+    kota.clear();
+    provinsi.clear();
+    tahun.clear();
+    luasTanah.clear();
+    luasBangunan.clear();
+    statusTanah.clear();
+    legalitas.clear();
+    // photo_url.clear();
   }
 }

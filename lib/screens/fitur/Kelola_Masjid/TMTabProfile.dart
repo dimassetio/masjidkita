@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKConstant.dart';
@@ -12,6 +13,7 @@ import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormLokasi.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormNama.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormSosmed.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
+import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../../../../main.dart';
 
@@ -24,9 +26,6 @@ class TMTabProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
       child: SingleChildScrollView(
@@ -38,25 +37,26 @@ class TMTabProfile extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Divider(),
-                    text("Nama Masjid",
-                        textColor: appStore.textPrimaryColor,
-                        fontFamily: fontBold,
-                        fontSize: textSizeLargeMedium),
-                    SizedBox(height: 5),
-                    Row(
+                Obx(() => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.pin_drop_outlined, color: mkColorPrimary),
-                        text("Alamat",
-                            isLongText: true, fontSize: textSizeMedium),
+                        // Divider(),
+                        text(keMasjidC.keMasjid.nama ?? "Nama Masjid",
+                            textColor: appStore.textPrimaryColor,
+                            fontFamily: fontBold,
+                            fontSize: textSizeLargeMedium),
+                        SizedBox(height: 5),
+                        Row(
+                          children: [
+                            Icon(Icons.pin_drop_outlined,
+                                color: mkColorPrimary),
+                            text(keMasjidC.keMasjid.alamat ?? "Alamat",
+                                isLongText: true, fontSize: textSizeMedium),
+                          ],
+                        ),
+                        SizedBox(height: 5)
                       ],
-                    ),
-                    SizedBox(height: 5)
-                  ],
-                ),
+                    )),
                 GestureDetector(
                     onTap: () {
                       showDialog(
@@ -90,13 +90,13 @@ class TMTabProfile extends StatelessWidget {
             childrenPadding: EdgeInsets.all(10),
             textColor: mkColorPrimary,
             title: Text(
-              "Deskripsi",
+              mk_lbl_deskripsi,
               style: TextStyle(
                   fontSize: textSizeLargeMedium, fontFamily: fontBold),
             ),
             children: <Widget>[
-              text('Lorem ipsum dolor sit amet consectetur adipisicing elit.',
-                  fontSize: textSizeMedium, isLongText: true)
+              Obx(() => text(keMasjidC.keMasjid.deskripsi ?? "-",
+                  fontSize: textSizeMedium, isLongText: true))
             ],
           ),
 
@@ -122,7 +122,7 @@ class TMTabProfile extends StatelessWidget {
                 )),
 
             title: Text(
-              "Lokasi",
+              mk_lbl_lokasi,
               style: TextStyle(
                   fontSize: textSizeLargeMedium, fontFamily: fontBold),
             ),
@@ -141,45 +141,45 @@ class TMTabProfile extends StatelessWidget {
                 ),
                 children: [
                   text(
-                    "Kecamatan",
+                    mk_kecamatan,
                     textColor: mkTextColorSecondary,
                     fontSize: textSizeMedium,
                   ),
+                  Obx(() => text(
+                        keMasjidC.keMasjid.kecamatan ?? mk_null,
+                        // textColor: mkTextColorSecondary,
+                        fontSize: textSizeMedium,
+                      )),
                   text(
-                    "Dampit",
-                    // textColor: mkTextColorSecondary,
-                    fontSize: textSizeMedium,
-                  ),
-                  text(
-                    "Kode Pos",
+                    mk_kode_pos,
                     textColor: mkTextColorSecondary,
                     fontSize: textSizeMedium,
                   ),
+                  Obx(() => text(
+                        keMasjidC.keMasjid.kodePos ?? mk_null,
+                        // textColor: mkTextColorSecondary,
+                        fontSize: textSizeMedium,
+                      )),
                   text(
-                    "65181",
-                    // textColor: mkTextColorSecondary,
-                    fontSize: textSizeMedium,
-                  ),
-                  text(
-                    "Kota",
+                    mk_kota,
                     textColor: mkTextColorSecondary,
                     fontSize: textSizeMedium,
                   ),
+                  Obx(() => text(
+                        keMasjidC.keMasjid.kota ?? mk_null,
+                        // textColor: mkTextColorSecondary,
+                        fontSize: textSizeMedium,
+                      )),
                   text(
-                    "Kab. Malang",
-                    // textColor: mkTextColorSecondary,
-                    fontSize: textSizeMedium,
-                  ),
-                  text(
-                    "Provinsi",
+                    mk_provinsi,
                     textColor: mkTextColorSecondary,
                     fontSize: textSizeMedium,
                   ),
-                  text(
-                    "Jawa Timur",
-                    // textColor: mkTextColorSecondary,
-                    fontSize: textSizeMedium,
-                  ),
+                  Obx(() => text(
+                        keMasjidC.keMasjid.provinsi ?? mk_null,
+                        // textColor: mkTextColorSecondary,
+                        fontSize: textSizeMedium,
+                      )),
                 ],
               ),
             ],
@@ -206,7 +206,7 @@ class TMTabProfile extends StatelessWidget {
                 )),
 
             title: Text(
-              "Informasi Bangunan",
+              mk_info_bangunan,
               style: TextStyle(
                   fontSize: textSizeLargeMedium, fontFamily: fontBold),
             ),
@@ -225,55 +225,55 @@ class TMTabProfile extends StatelessWidget {
                 ),
                 children: [
                   text(
-                    "Tahun Berdiri",
+                    mk_tahun,
                     textColor: mkTextColorSecondary,
                     fontSize: textSizeMedium,
                   ),
+                  Obx(() => text(
+                        keMasjidC.keMasjid.tahun ?? mk_null,
+                        // textColor: mkTextColorSecondary,
+                        fontSize: textSizeMedium,
+                      )),
                   text(
-                    "1999",
-                    // textColor: mkTextColorSecondary,
-                    fontSize: textSizeMedium,
-                  ),
-                  text(
-                    "Luas Tanah",
+                    mk_LT,
                     textColor: mkTextColorSecondary,
                     fontSize: textSizeMedium,
                   ),
+                  Obx(() => text(
+                        keMasjidC.keMasjid.luasTanah ?? mk_null,
+                        // textColor: mkTextColorSecondary,
+                        fontSize: textSizeMedium,
+                      )),
                   text(
-                    "356 m2",
-                    // textColor: mkTextColorSecondary,
-                    fontSize: textSizeMedium,
-                  ),
-                  text(
-                    "Luas Bangunan",
+                    mk_LB,
                     textColor: mkTextColorSecondary,
                     fontSize: textSizeMedium,
                   ),
+                  Obx(() => text(
+                        keMasjidC.keMasjid.luasBangunan ?? mk_null,
+                        // textColor: mkTextColorSecondary,
+                        fontSize: textSizeMedium,
+                      )),
                   text(
-                    "267 m2",
-                    // textColor: mkTextColorSecondary,
-                    fontSize: textSizeMedium,
-                  ),
-                  text(
-                    "Status Tanah",
+                    mk_status_tanah,
                     textColor: mkTextColorSecondary,
                     fontSize: textSizeMedium,
                   ),
+                  Obx(() => text(
+                        keMasjidC.keMasjid.statusTanah ?? mk_null,
+                        // textColor: mkTextColorSecondary,
+                        fontSize: textSizeMedium,
+                      )),
                   text(
-                    "Milik Bersama",
-                    // textColor: mkTextColorSecondary,
-                    fontSize: textSizeMedium,
-                  ),
-                  text(
-                    "Legalitas",
+                    mk_legalitas,
                     textColor: mkTextColorSecondary,
                     fontSize: textSizeMedium,
                   ),
-                  text(
-                    "Sah",
-                    // textColor: mkTextColorSecondary,
-                    fontSize: textSizeMedium,
-                  ),
+                  Obx(() => text(
+                        keMasjidC.keMasjid.legalitas ?? mk_null,
+                        // textColor: mkTextColorSecondary,
+                        fontSize: textSizeMedium,
+                      )),
                 ],
               ),
             ],

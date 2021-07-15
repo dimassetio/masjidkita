@@ -1,8 +1,8 @@
 // @dart=2.9
 import 'package:masjidkita/helpers/showLoading.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/models/user.dart';
 import 'package:masjidkita/routes/route_name.dart';
-import 'package:masjidkita/screens/MKDashboard.dart';
 import 'package:masjidkita/screens/MKSignIn.dart';
 import 'package:masjidkita/screens/authentication/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +21,6 @@ class AuthController extends GetxController {
   TextEditingController password = TextEditingController();
 
   Rx<User> firebaseUser;
-  String usersCollection = "users";
   Rx<UserModel> userModel = UserModel().obs;
 
   UserModel get user => userModel.value;
@@ -101,7 +100,6 @@ class AuthController extends GetxController {
   }
 
   void signUp() async {
-    showLoading();
     try {
       await auth
           .createUserWithEmailAndPassword(
@@ -112,6 +110,8 @@ class AuthController extends GetxController {
         _initializeUserModel(_userId);
         _clearControllers();
       });
+      toast("Sign Up Success");
+      Get.toNamed(RouteName.home);
     } catch (e) {
       debugPrint(e.toString());
       Get.snackbar("Sign Up Failed", "Try again");
@@ -247,7 +247,8 @@ class AuthController extends GetxController {
 
   void signOut() async {
     userModel.value = UserModel();
-    auth.signOut();
+    keMasjidC.clear();
+    await auth.signOut();
   }
 
   _addUserToFirestore(String userId) {
@@ -255,7 +256,8 @@ class AuthController extends GetxController {
       "name": name.text.trim(),
       "id": userId,
       "email": email.text.trim(),
-      "role": "user"
+      "role": "user",
+      "masjid": ""
     });
   }
 

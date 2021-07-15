@@ -4,4 +4,4 @@ import 'package:masjidkita/controllers/keMasjidController.dart';
 
 AppController appController = AppController.instance;
 AuthController authController = AuthController.instance;
-KeMasjidController keMasjidController = KeMasjidController.instance;
+KeMasjidController keMasjidC = KeMasjidController.instance;

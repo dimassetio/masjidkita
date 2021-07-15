@@ -9,10 +9,11 @@ import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:masjidkita/screens/utils/MKWidget.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 import 'utils/MKConstant.dart';
 
-class PageProfile extends StatelessWidget {
+class MosqProfile extends StatelessWidget {
   static var tag = "/T1Profile";
   final AuthController authC = Get.find();
 
@@ -35,7 +36,7 @@ class PageProfile extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16.0),
       alignment: FractionalOffset.center,
       child: CircleAvatar(
-        backgroundImage: CachedNetworkImageProvider(mk_net_img),
+        // backgroundImage: CachedNetworkImageProvider(mk_net_img),
         radius: 50,
       ),
     );
@@ -75,6 +76,7 @@ class PageProfile extends StatelessWidget {
     );
 
     final authController = Get.find<AuthController>();
+    final width = Get.width / 10;
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 15, left: 2, right: 2),
@@ -87,7 +89,27 @@ class PageProfile extends StatelessWidget {
               Container(
                 margin: EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Stack(
-                  children: <Widget>[profileContent, profileImg],
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      decoration:
+                          boxDecoration(showShadow: true, radius: width),
+                      width: width,
+                      height: width,
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Icon(
+                          Icons.arrow_back_ios_new,
+                          color: mkTextColorPrimary,
+                        ),
+                      ),
+                      // height: ,
+                    ),
+                    profileContent,
+                    profileImg
+                  ],
                 ),
               ),
               SizedBox(height: 8),

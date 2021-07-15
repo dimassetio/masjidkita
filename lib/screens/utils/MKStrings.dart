@@ -20,4 +20,27 @@ const mk_lbl_belum_login = "Anda Belum Sign In";
 const mk_lbl_belum_login_desc = "Anda Harus Sign In Untuk Menikmati Fitur Ini";
 const mk_lbl_batal = "Batal";
 const mk_lbl_email = "Email";
+const mk_lbl_nama = "Nama";
+const mk_lbl_alamat = "Alamat";
+const mk_lbl_deskripsi = "Deskripsi";
+const mk_lbl_lokasi = "Lokasi";
+const mk_tentang_masjid = "Tentang Masjid Anda";
+const mk_submit = "Submit";
 const mk_lbl_password = "Password";
+const mk_kecamatan = "Kecamatan";
+const mk_kode_pos = "Kode Pos";
+const mk_kota = "Kota";
+const mk_provinsi = "Provinsi";
+const mk_info_bangunan = "Informasi Bangunan";
+const mk_tahun = "Tahun Berdiri";
+const mk_LT = "Luas Tanah";
+const mk_LB = "Luas Bangunan";
+const mk_status_tanah = "Status Tanah";
+const mk_legalitas = "Legalitas";
+const mk_null = "-";
+
+const mk_addjoin = "Anda Belum Mempunyai Akun Masjid";
+const mk_addjoin_desc =
+    "Bergabung ke Masjid yang Sudah Ada atau Membuat Akun Masjid Baru?";
+const mk_add = "Buat Baru";
+const mk_join = "Bergabung";

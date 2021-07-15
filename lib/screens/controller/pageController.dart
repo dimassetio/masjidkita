@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/screens/PageSiMasjid.dart';
 import 'package:masjidkita/screens/PageMasjid.dart';
-import 'package:masjidkita/screens/PageProfile.dart';
+import 'package:masjidkita/screens/MosqProfile.dart';
 import 'package:masjidkita/screens/model/MasjidModels.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
 
@@ -21,7 +21,7 @@ class PagexController extends GetxController {
       case 1:
         return PageMasjid();
       case 2:
-        return PageProfile();
+        return MosqProfile();
       default:
         return Center(child: CircularProgressIndicator());
     }

@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
+import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class FormNama extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // keMasjidC.nama = new TextEditingController(text: keMasjidC.keMasjid.nama);
+    // keMasjidC.alamat =
+    //     new TextEditingController(text: keMasjidC.keMasjid.alamat);
+    keMasjidC.nama.addListener(() {});
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -42,15 +50,17 @@ class FormNama extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: Icon(Icons.close, color: appStore.textPrimaryColor)),
               ),
-              Text('Nama',
+              Text(mk_lbl_nama,
                   style: boldTextStyle(
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
               TextFormField(
+                controller: keMasjidC.nama,
+                textInputAction: TextInputAction.next,
                 cursorColor: appStore.textPrimaryColor,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                  hintText: 'Nama Masjid',
+                  hintText: keMasjidC.keMasjid.nama ?? mk_null,
                   hintStyle: secondaryTextStyle(
                       color: appStore.textSecondaryColor, size: 16),
                   enabledBorder: UnderlineInputBorder(
@@ -61,21 +71,23 @@ class FormNama extends StatelessWidget {
                           color: appStore.textPrimaryColor!, width: 0.0)),
                 ),
                 keyboardType: TextInputType.name,
-                inputFormatters: [
-                  FilteringTextInputFormatter.singleLineFormatter
-                ],
+                // inputFormatters: [
+                //   FilteringTextInputFormatter.singleLineFormatter
+                // ],
                 style: primaryTextStyle(color: appStore.textPrimaryColor),
               ),
               30.height,
-              Text('Alamat',
+              Text(mk_lbl_alamat,
                   style: boldTextStyle(
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
+              // TextField(),
               TextFormField(
                 cursorColor: appStore.textPrimaryColor,
+                controller: keMasjidC.alamat,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                  hintText: 'Nama Jalan',
+                  hintText: keMasjidC.keMasjid.alamat ?? mk_null,
                   hintStyle: secondaryTextStyle(
                       color: appStore.textSecondaryColor, size: 16),
                   enabledBorder: UnderlineInputBorder(
@@ -92,6 +104,11 @@ class FormNama extends StatelessWidget {
               30.height,
               GestureDetector(
                 onTap: () {
+                  keMasjidC.updateDataMasjid(
+                      // nama: keMasjidC.nama.text,
+                      // alamat: keMasjidC.alamat.text,
+                      );
+                  keMasjidC.clearControllers();
                   finish(context);
                 },
                 child: Container(
@@ -100,7 +117,7 @@ class FormNama extends StatelessWidget {
                       boxDecoration(bgColor: mkColorPrimary, radius: 10),
                   padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                   child: Center(
-                    child: Text("Apply", style: boldTextStyle(color: white)),
+                    child: Text(mk_submit, style: boldTextStyle(color: white)),
                   ),
                 ),
               ),
