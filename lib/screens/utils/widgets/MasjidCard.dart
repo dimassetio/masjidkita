@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/screens/utils/MKImages.dart';
 import '../../../main.dart';
 import '../MKConstant.dart';
 
@@ -23,7 +24,8 @@ class MasjidCard extends StatelessWidget {
                 topLeft: Radius.circular(16.0),
                 topRight: Radius.circular(16.0)),
             child: Image.asset(
-              dataMasjid.image,
+              mk_contoh_image,
+              // dataMasjid.image,
               width: width,
               height: width / 1.77,
               fit: BoxFit.fill,
@@ -38,7 +40,7 @@ class MasjidCard extends StatelessWidget {
                   fontSize: textSizeLargeMedium,
                   fontFamily: fontMedium),
               text(
-                dataMasjid.kota,
+                dataMasjid.alamat,
                 textColor: appStore.textSecondaryColor,
               ),
             ],

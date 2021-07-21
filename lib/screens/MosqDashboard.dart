@@ -1,21 +1,16 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/controllers/keMasjidController.dart';
 import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/integrations/firestore.dart';
+import 'package:masjidkita/main/utils/AppConstant.dart';
+// import 'package:masjidkita/controllers/manMasjidController.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/routes/route_name.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/cekLog.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
-import 'package:masjidkita/screens/utils/MKConstant.dart';
-import 'package:masjidkita/screens/utils/MKImages.dart';
-import 'package:masjidkita/screens/utils/widgets/ConfirmLogout.dart';
 import 'package:masjidkita/screens/utils/widgets/FiturGridList.dart';
+import 'package:masjidkita/screens/utils/widgets/UserTopBar.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 // import 'package:masjidkita/theme5/utils/widgets/T5Slider.dart';
@@ -69,64 +64,7 @@ class MosqDashboardState extends State<MosqDashboard> {
           SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Container(
-                    height: 70,
-                    margin: EdgeInsets.all(16),
-                    child: Obx(
-                      () => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              authController.isLoggedIn.value
-                                  ? Get.toNamed(RouteName.profile)
-                                  : showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          CekLogin());
-                            },
-                            child: Row(
-                              children: <Widget>[
-                                CircleAvatar(
-                                  // backgroundImage:
-                                  //     CachedNetworkImageProvider(mk_net_img),
-                                  radius: 25,
-                                ),
-                                SizedBox(width: 16),
-                                text(
-                                    authController.userModel.value.name ??
-                                        "Guest",
-                                    textColor: mkWhite,
-                                    fontSize: textSizeNormal,
-                                    fontFamily: fontMedium)
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              authController.isLoggedIn.value
-                                  ? showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          ConfirmLogout())
-                                  : Get.toNamed(RouteName.sign_in);
-                              // print("P");
-                            },
-                            icon: Icon(authController.isLoggedIn.value
-                                ? Icons.logout
-                                : Icons.login),
-                            color: mkWhite,
-                          )
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     toast("xcvxcxv ");
-                          //     Get.toNamed(RouteName.sign_in);
-                          //   },
-                          // //   child: Icon(Icons.login, size: 25, color: mkWhite),
-                          // )
-                        ],
-                      ),
-                    )),
+                UserTopBar(),
                 Container(
                   padding: EdgeInsets.only(top: 28),
                   alignment: Alignment.topLeft,
@@ -145,23 +83,29 @@ class MosqDashboardState extends State<MosqDashboard> {
                       ),
                       // Obx(
                       //   () => Text(
-                      //       "Has Masjid = " + keMasjidC.haveMasjid.toString()),
+                      //       "Has Masjid = " + manMasjidC.haveMasjid.toString()),
                       // ),
                       // Obx(
                       //   () =>
-                      //       Text("Nama " + keMasjidC.keMasjid.nama.toString()),
+                      //       Text("Nama " + manMasjidC.keMasjid.nama.toString()),
                       // ),
                       // Obx(
-                      //   () => Text("Id " + keMasjidC.keMasjid.id.toString()),
+                      //   () => Text("Id " + manMasjidC.keMasjid.id.toString()),
                       // ),
                       // Obx(
                       //   () => Text("User " + authController.user.id.toString()),
                       // ),
-                      // ElevatedButton(
-                      //     onPressed: () {
-                      //       keMasjidC.testdata();
-                      //     },
-                      //     child: Text("Test Data"))
+                      Switch(
+                          value: appStore.isDarkModeOn,
+                          onChanged: (bool newValue) {
+                            appStore.toggleDarkMode();
+                          }),
+                      ElevatedButton(
+                          onPressed: () {
+                            manMasjidC.testdata();
+                            Get.toNamed(RouteName.home);
+                          },
+                          child: Icon(Icons.refresh))
                     ],
                   ),
                 ),

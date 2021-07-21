@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class KeMasjidModel {
+class ManMasjidModel {
   static const ID = "id";
   static const NAMA = "nama";
   static const ALAMAT = "alamat";
@@ -22,7 +22,7 @@ class KeMasjidModel {
   String? statusTanah;
   String? legalitas;
 
-  KeMasjidModel({
+  ManMasjidModel({
     this.id,
     this.nama,
     this.alamat,
@@ -39,7 +39,7 @@ class KeMasjidModel {
     this.legalitas,
   });
 
-  KeMasjidModel.fromSnapshot(DocumentSnapshot snapshot) {
+  ManMasjidModel.fromSnapshot(DocumentSnapshot snapshot) {
     id = snapshot.id;
     nama = snapshot.data()?[NAMA];
     alamat = snapshot.data()?[ALAMAT];
@@ -59,13 +59,13 @@ class KeMasjidModel {
 
 class ListMasjidModel {
   String? nama;
-  String? kota;
+  String? alamat;
   String? masjidID;
   // Timestamp dateCreated;
 
   ListMasjidModel({
     this.nama,
-    this.kota,
+    this.alamat,
   });
 
   ListMasjidModel.fromDocumentSnapshot(
@@ -73,6 +73,26 @@ class ListMasjidModel {
   ) {
     masjidID = documentSnapshot.id;
     nama = documentSnapshot.data()?["nama"];
-    kota = documentSnapshot.data()?["kota"];
+    alamat = documentSnapshot.data()?["alamat"];
+  }
+}
+
+class FavoritMasjidModel {
+  String? nama;
+  String? alamat;
+  String? masjidID;
+  // Timestamp dateCreated;
+
+  FavoritMasjidModel({
+    this.nama,
+    this.alamat,
+  });
+
+  FavoritMasjidModel.fromDocumentSnapshot(
+    DocumentSnapshot documentSnapshot,
+  ) {
+    masjidID = documentSnapshot.id;
+    nama = documentSnapshot.data()?["nama"];
+    alamat = documentSnapshot.data()?["alamat"];
   }
 }

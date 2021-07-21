@@ -5,6 +5,7 @@ import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/routes/route_name.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -12,46 +13,54 @@ import 'package:nb_utils/nb_utils.dart';
 class NewMasjid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+    return Scaffold(
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.circular(16),
+      // ),
+      // elevation: 0.0,
+      // backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        leading: BackButton(
+          onPressed: () {
+            Get.back();
+          },
+        ),
+        title: text("Daftar Masjid Baru", isCentered: true),
       ),
-      elevation: 0.0,
-      backgroundColor: Colors.transparent,
-      child: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(16),
-          decoration: new BoxDecoration(
-            color: appStore.scaffoldBackground,
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10.0,
-                offset: const Offset(0.0, 10.0),
-              ),
-            ],
-          ),
+          // decoration: new BoxDecoration(
+          //   color: appStore.scaffoldBackground,
+          //   shape: BoxShape.rectangle,
+          //   borderRadius: BorderRadius.circular(16),
+          //   boxShadow: [
+          //     BoxShadow(
+          //       color: Colors.black26,
+          //       // blurRadius: 10.0,
+          //       // offset: const Offset(0.0, 10.0),
+          //     ),
+          //   ],
+          // ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min, // To make the card compact
+            // mainAxisSize: MainAxisSize.min, // To make the card compact
             children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  finish(context);
-                },
-                child: Container(
-                    padding: EdgeInsets.all(4),
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.close, color: appStore.textPrimaryColor)),
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     finish(context);
+              //   },
+              //   child: Container(
+              //       padding: EdgeInsets.all(4),
+              //       alignment: Alignment.centerRight,
+              //       child: Icon(Icons.close, color: appStore.textPrimaryColor)),
+              // ),
               Text(mk_lbl_nama,
                   style: boldTextStyle(
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
               TextFormField(
-                controller: keMasjidC.nama,
+                controller: manMasjidC.nama,
                 cursorColor: appStore.textPrimaryColor,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
@@ -78,7 +87,7 @@ class NewMasjid extends StatelessWidget {
               16.height,
               TextFormField(
                 cursorColor: appStore.textPrimaryColor,
-                controller: keMasjidC.alamat,
+                controller: manMasjidC.alamat,
 
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
@@ -99,7 +108,7 @@ class NewMasjid extends StatelessWidget {
               30.height,
               GestureDetector(
                 onTap: () {
-                  keMasjidC.addMasjidToFirestore(
+                  manMasjidC.addMasjidToFirestore(
                       authController.firebaseUser.value.uid);
                   finish(context);
                   Get.toNamed(RouteName.kelolamasjid);

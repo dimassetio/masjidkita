@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:masjidkita/screens/utils/m_k_icon_icons.dart';
@@ -12,8 +13,8 @@ import 'package:nb_utils/nb_utils.dart';
 class FormDeskripsi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    keMasjidC.deskripsi =
-        TextEditingController(text: keMasjidC.keMasjid.deskripsi);
+    manMasjidC.deskripsi =
+        TextEditingController(text: manMasjidC.keMasjid.deskripsi);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -49,17 +50,17 @@ class FormDeskripsi extends StatelessWidget {
                     child: Icon(Icons.close, color: appStore.textPrimaryColor)),
               ),
               // Obx(()=>
-              // Text(keMasjidC.deskripsi.value.toString()),
+              // Text(manMasjidC.deskripsi.value.toString()),
               // ),
               Text(mk_lbl_deskripsi,
                   style: boldTextStyle(
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
               TextFormField(
-                controller: keMasjidC.deskripsi,
+                controller: manMasjidC.deskripsi,
                 focusNode: FocusNode(),
                 onEditingComplete: () {
-                  keMasjidC.updateDataMasjid();
+                  manMasjidC.updateDataMasjid();
                 },
                 style: primaryTextStyle(),
                 decoration: InputDecoration(
@@ -83,9 +84,9 @@ class FormDeskripsi extends StatelessWidget {
               30.height,
               GestureDetector(
                 onTap: () {
-                  keMasjidC.updateDataMasjid();
-                  // deskripsi: keMasjidC.deskripsi.text);
-                  keMasjidC.clearControllers();
+                  manMasjidC.updateDataMasjid();
+                  // deskripsi: manMasjidC.deskripsi.text);
+                  manMasjidC.clearControllers();
                   finish(context);
                 },
                 child: Container(

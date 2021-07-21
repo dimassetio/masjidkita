@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:masjidkita/screens/utils/widgets/MasjidCarouselSlider.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 import '../../../main.dart';
 import '../MKColors.dart';
@@ -40,7 +42,8 @@ class MasjidSliderWidget extends StatelessWidget {
                         topLeft: Radius.circular(16.0),
                         topRight: Radius.circular(16.0),
                       ),
-                      child: Image.asset(slider.image,
+                      child: Image.asset(mk_contoh_image,
+                          // slider.image,
                           // placeholder: placeholderWidgetFn() as Widget Function(
                           //     BuildContext, String)?,
                           height: 180,
@@ -62,32 +65,14 @@ class MasjidSliderWidget extends StatelessWidget {
                                 textColor: appStore.textPrimaryColor,
                                 fontSize: textSizeLargeMedium,
                                 fontFamily: fontMedium),
-                            RichText(
-                              text: TextSpan(
-                                style: Theme.of(context).textTheme.bodyText2,
-                                children: [
-                                  WidgetSpan(
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 4.0),
-                                      // child: Icon(
-                                      //   Icons.access_time,
-                                      //   color: mkicon_color,
-                                      //   size: 16,
-                                      // ),
-                                    ),
-                                  ),
-                                  TextSpan(
-                                      text: slider.kota,
-                                      style: TextStyle(
-                                          fontSize: textSizeSMedium,
-                                          color: mkColorPrimary)),
-                                ],
-                              ),
-                            )
+                            Icon(
+                              Icons.star,
+                              // color: yellow,
+                              size: 16,
+                            ),
                           ],
                         ),
-                        text(slider.kota),
+                        text(slider.alamat),
                       ],
                     ),
                   ),

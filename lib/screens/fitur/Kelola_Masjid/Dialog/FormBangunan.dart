@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -49,11 +51,11 @@ class FormBangunan extends StatelessWidget {
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
               TextFormField(
-                controller: keMasjidC.tahun,
+                controller: manMasjidC.tahun,
                 cursorColor: appStore.textPrimaryColor,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                  hintText: keMasjidC.keMasjid.tahun ?? mk_null,
+                  hintText: manMasjidC.keMasjid.tahun ?? mk_null,
                   hintStyle: secondaryTextStyle(
                       color: appStore.textSecondaryColor, size: 16),
                   enabledBorder: UnderlineInputBorder(
@@ -75,11 +77,11 @@ class FormBangunan extends StatelessWidget {
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
               TextFormField(
-                controller: keMasjidC.luasTanah,
+                controller: manMasjidC.luasTanah,
                 cursorColor: appStore.textPrimaryColor,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                  hintText: "${keMasjidC.keMasjid.luasTanah ?? mk_null} m2",
+                  hintText: "${manMasjidC.keMasjid.luasTanah ?? mk_null} m2",
                   hintStyle: secondaryTextStyle(
                       color: appStore.textSecondaryColor, size: 16),
                   enabledBorder: UnderlineInputBorder(
@@ -99,11 +101,11 @@ class FormBangunan extends StatelessWidget {
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
               TextFormField(
-                controller: keMasjidC.luasBangunan,
+                controller: manMasjidC.luasBangunan,
                 cursorColor: appStore.textPrimaryColor,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                  hintText: "${keMasjidC.keMasjid.luasBangunan ?? mk_null} m2",
+                  hintText: "${manMasjidC.keMasjid.luasBangunan ?? mk_null} m2",
                   hintStyle: secondaryTextStyle(
                       color: appStore.textSecondaryColor, size: 16),
                   enabledBorder: UnderlineInputBorder(
@@ -123,11 +125,11 @@ class FormBangunan extends StatelessWidget {
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
               TextFormField(
-                controller: keMasjidC.statusTanah,
+                controller: manMasjidC.statusTanah,
                 cursorColor: appStore.textPrimaryColor,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                  hintText: keMasjidC.keMasjid.statusTanah ?? mk_null,
+                  hintText: manMasjidC.keMasjid.statusTanah ?? mk_null,
                   hintStyle: secondaryTextStyle(
                       color: appStore.textSecondaryColor, size: 16),
                   enabledBorder: UnderlineInputBorder(
@@ -149,11 +151,11 @@ class FormBangunan extends StatelessWidget {
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
               TextFormField(
-                controller: keMasjidC.legalitas,
+                controller: manMasjidC.legalitas,
                 cursorColor: appStore.textPrimaryColor,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                  hintText: keMasjidC.keMasjid.legalitas ?? mk_null,
+                  hintText: manMasjidC.keMasjid.legalitas ?? mk_null,
                   hintStyle: secondaryTextStyle(
                       color: appStore.textSecondaryColor, size: 16),
                   enabledBorder: UnderlineInputBorder(
@@ -172,14 +174,14 @@ class FormBangunan extends StatelessWidget {
               30.height,
               GestureDetector(
                 onTap: () {
-                  keMasjidC.updateDataMasjid(
-                      // tahun: keMasjidC.tahun.text,
-                      // luasTanah: keMasjidC.luasTanah.text,
-                      // luasBangunan: keMasjidC.luasBangunan.text,
-                      // statusTanah: keMasjidC.statusTanah.text,
-                      // legalitas: keMasjidC.legalitas.text,
+                  manMasjidC.updateDataMasjid(
+                      // tahun: manMasjidC.tahun.text,
+                      // luasTanah: manMasjidC.luasTanah.text,
+                      // luasBangunan: manMasjidC.luasBangunan.text,
+                      // statusTanah: manMasjidC.statusTanah.text,
+                      // legalitas: manMasjidC.legalitas.text,
                       );
-                  keMasjidC.clearControllers();
+                  manMasjidC.clearControllers();
                   finish(context);
                 },
                 child: Container(

@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:masjidkita/integrations/binding.dart';
 import 'package:masjidkita/screens/MosqDashboard.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -26,6 +27,8 @@ void main() async {
   appStore.toggleDarkMode(value: getBoolAsync(isDarkModeOnPref));
 
   await Firebase.initializeApp();
+
+  await GetStorage.init();
   // if (isMobile) {
   //   MobileAds.instance.initialize();
 

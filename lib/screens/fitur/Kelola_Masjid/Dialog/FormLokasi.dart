@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -10,10 +11,10 @@ import 'package:nb_utils/nb_utils.dart';
 class FormLokasi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // final kecamatan = TextEditingController(text: keMasjidC.keMasjid.kecamatan);
-    // final kodePos = TextEditingController(text: keMasjidC.keMasjid.kodePos);
-    // final kota = new TextEditingController(text: keMasjidC.keMasjid.kota);
-    // final provinsi = TextEditingController(text: keMasjidC.keMasjid.provinsi);
+    // final kecamatan = TextEditingController(text: manMasjidC.keMasjid.kecamatan);
+    // final kodePos = TextEditingController(text: manMasjidC.keMasjid.kodePos);
+    // final kota = new TextEditingController(text: manMasjidC.keMasjid.kota);
+    // final provinsi = TextEditingController(text: manMasjidC.keMasjid.provinsi);
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -56,11 +57,11 @@ class FormLokasi extends StatelessWidget {
                         color: appStore.textPrimaryColor, size: 20)),
                 16.height,
                 TextFormField(
-                  controller: keMasjidC.kecamatan,
+                  controller: manMasjidC.kecamatan,
                   cursorColor: appStore.textPrimaryColor,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                    hintText: keMasjidC.keMasjid.kecamatan ?? 'Nama Kecamatan',
+                    hintText: manMasjidC.keMasjid.kecamatan ?? 'Nama Kecamatan',
                     hintStyle: secondaryTextStyle(
                         color: appStore.textSecondaryColor, size: 16),
                     enabledBorder: UnderlineInputBorder(
@@ -82,11 +83,11 @@ class FormLokasi extends StatelessWidget {
                         color: appStore.textPrimaryColor, size: 20)),
                 16.height,
                 TextFormField(
-                  controller: keMasjidC.kodePos,
+                  controller: manMasjidC.kodePos,
                   cursorColor: appStore.textPrimaryColor,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                    hintText: keMasjidC.keMasjid.kodePos ?? 'Kode Pos',
+                    hintText: manMasjidC.keMasjid.kodePos ?? 'Kode Pos',
                     hintStyle: secondaryTextStyle(
                         color: appStore.textSecondaryColor, size: 16),
                     enabledBorder: UnderlineInputBorder(
@@ -108,11 +109,11 @@ class FormLokasi extends StatelessWidget {
                         color: appStore.textPrimaryColor, size: 20)),
                 16.height,
                 TextFormField(
-                  controller: keMasjidC.kota,
+                  controller: manMasjidC.kota,
                   cursorColor: appStore.textPrimaryColor,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                    hintText: keMasjidC.keMasjid.kota ?? 'Nama Kota / Kab.',
+                    hintText: manMasjidC.keMasjid.kota ?? 'Nama Kota / Kab.',
                     hintStyle: secondaryTextStyle(
                         color: appStore.textSecondaryColor, size: 16),
                     enabledBorder: UnderlineInputBorder(
@@ -135,11 +136,11 @@ class FormLokasi extends StatelessWidget {
                 16.height,
                 TextField(
                   // TextFormField(
-                  controller: keMasjidC.provinsi,
+                  controller: manMasjidC.provinsi,
                   cursorColor: appStore.textPrimaryColor,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                    hintText: keMasjidC.keMasjid.provinsi ?? 'Nama Provinsi',
+                    hintText: manMasjidC.keMasjid.provinsi ?? 'Nama Provinsi',
                     hintStyle: secondaryTextStyle(
                         color: appStore.textSecondaryColor, size: 16),
                     enabledBorder: UnderlineInputBorder(
@@ -158,8 +159,8 @@ class FormLokasi extends StatelessWidget {
                 30.height,
                 GestureDetector(
                   onTap: () {
-                    keMasjidC.updateDataMasjid();
-                    keMasjidC.clearControllers();
+                    manMasjidC.updateDataMasjid();
+                    manMasjidC.clearControllers();
                     finish(context);
                   },
                   child: Container(

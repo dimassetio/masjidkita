@@ -4,12 +4,15 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:masjidkita/integrations/controllers.dart';
+import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/controller/pageController.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:masjidkita/screens/utils/MKWidget.dart';
 import 'package:masjidkita/screens/utils/widgets/MasjidSlider.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
 import 'utils/widgets/MasjidList.dart';
@@ -21,6 +24,18 @@ class PageSiMasjid extends StatelessWidget {
   Widget build(BuildContext context) {
     final pageC = Get.put(PagexController());
     var width = MediaQuery.of(context).size.width;
+
+    tes(id) {
+      infoMasjidC.idFavorit.add(id);
+      infoMasjidC.addStr();
+      print(infoMasjidC.idFav);
+    }
+
+    tesrmv(id) {
+      infoMasjidC.idFavorit.remove(id);
+      infoMasjidC.addStr();
+      print(infoMasjidC.idFav);
+    }
 
     return Scaffold(
       // appBar: AppBar(
@@ -113,15 +128,53 @@ class PageSiMasjid extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
+                          Row(children: [
+                            IconButton(
+                                onPressed: () {
+                                  infoMasjidC.update();
+                                  infoMasjidC.refreshFav();
+                                  toast("update");
+                                },
+                                icon: Icon(Icons.refresh)),
+                            IconButton(
+                                onPressed: () {
+                                  infoMasjidC.readStr();
+                                },
+                                icon: Icon(Icons.book)),
+                            TextButton(
+                                onPressed: () =>
+                                    tes("Atrwobk1pnUz4wKdYct5kTkKxTd2"),
+                                child: text("+1")),
+                            TextButton(
+                                onPressed: () =>
+                                    tes("bLmwedXB1IRjpJIz9IE0vjjfDHe2"),
+                                child: text("+2")),
+                            TextButton(
+                                onPressed: () =>
+                                    tesrmv("Atrwobk1pnUz4wKdYct5kTkKxTd2"),
+                                child: text("-1")),
+                            TextButton(
+                                onPressed: () =>
+                                    tesrmv("bLmwedXB1IRjpJIz9IE0vjjfDHe2"),
+                                child: text("-2")),
+                          ]),
                           Container(
                             alignment: Alignment.topLeft,
                             padding: EdgeInsets.only(left: 15, bottom: 5),
                             child: Text(
-                              "Masjid Terdekat",
+                              "Masjid Favorit",
                               style: TextStyle(fontSize: 18),
                             ),
                           ),
-                          MasjidSliderWidget(pageC.mListing),
+
+                          Obx(
+                            () => infoMasjidC.favMasjids.isEmpty
+                                ? text(
+                                    "Anda belum memiliki masjid favorit untuk ditampilkan",
+                                    isLongText: true,
+                                    isCentered: true)
+                                : MasjidSliderWidget(infoMasjidC.favMasjids),
+                          ),
                           // SizedBox(height: 40),
                           Container(
                             alignment: Alignment.topLeft,
@@ -132,8 +185,10 @@ class PageSiMasjid extends StatelessWidget {
                               style: TextStyle(fontSize: 18),
                             ),
                           ),
-                          MasjidListing(
-                              mListings: pageC.mListing, width: width),
+                          Obx(
+                            () => MasjidListing(
+                                mListings: infoMasjidC.masjids, width: width),
+                          ),
                         ],
                       ),
                     ),

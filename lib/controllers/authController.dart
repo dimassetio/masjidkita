@@ -247,7 +247,6 @@ class AuthController extends GetxController {
 
   void signOut() async {
     userModel.value = UserModel();
-    keMasjidC.clear();
     await auth.signOut();
   }
 

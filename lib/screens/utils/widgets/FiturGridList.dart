@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -41,7 +43,10 @@ class MQGridListing extends StatelessWidget {
             isScrollable ? ScrollPhysics() : NeverScrollableScrollPhysics(),
         itemCount: mFavouriteList!.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, crossAxisSpacing: 16, mainAxisSpacing: 16),
+            crossAxisCount: 3,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 1 / 1.15),
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
@@ -51,11 +56,11 @@ class MQGridListing extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               decoration: boxDecoration(
-                  radius: 10,
-                  showShadow: true,
+                  // radius: 10,
+                  // showShadow: true,
                   bgColor: appStore.scaffoldBackground),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Container(
                     height: width / 7.5,
@@ -70,6 +75,8 @@ class MQGridListing extends StatelessWidget {
                     ),
                   ),
                   text(mFavouriteList![index].name,
+                      isCentered: true,
+                      isLongText: true,
                       textColor: appStore.textSecondaryColor,
                       fontSize: textSizeMedium)
                 ],
@@ -84,16 +91,16 @@ List<MQCategory> getCategoryItems() {
   List<MQCategory> list = [];
 
   var category1 = MQCategory();
-  category1.name = "Si Masjid";
+  category1.name = "Manajemen Masjid";
   category1.color = mkCat1;
-  category1.icon = mk_ic_mosque_2;
+  category1.icon = mk_ic_mosque;
   // category1.routeName = ;
   list.add(category1);
 
   var category2 = MQCategory();
   category2.name = "Kelola Masjid";
   category2.color = mkCat2;
-  category2.icon = mk_ic_mosque;
+  category2.icon = mk_ic_mosque_2;
   // category2.routeName = RouteName.kelolamasjid;
   list.add(category2);
 

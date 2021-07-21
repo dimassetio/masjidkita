@@ -5,6 +5,7 @@ import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/routes/route_name.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -12,10 +13,10 @@ import 'package:nb_utils/nb_utils.dart';
 class FormNama extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // keMasjidC.nama = new TextEditingController(text: keMasjidC.keMasjid.nama);
-    // keMasjidC.alamat =
-    //     new TextEditingController(text: keMasjidC.keMasjid.alamat);
-    keMasjidC.nama.addListener(() {});
+    // manMasjidC.nama = new TextEditingController(text: manMasjidC.keMasjid.nama);
+    // manMasjidC.alamat =
+    //     new TextEditingController(text: manMasjidC.keMasjid.alamat);
+    manMasjidC.nama.addListener(() {});
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -55,12 +56,12 @@ class FormNama extends StatelessWidget {
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
               TextFormField(
-                controller: keMasjidC.nama,
+                controller: manMasjidC.nama,
                 textInputAction: TextInputAction.next,
                 cursorColor: appStore.textPrimaryColor,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                  hintText: keMasjidC.keMasjid.nama ?? mk_null,
+                  hintText: manMasjidC.keMasjid.nama ?? mk_null,
                   hintStyle: secondaryTextStyle(
                       color: appStore.textSecondaryColor, size: 16),
                   enabledBorder: UnderlineInputBorder(
@@ -84,10 +85,10 @@ class FormNama extends StatelessWidget {
               // TextField(),
               TextFormField(
                 cursorColor: appStore.textPrimaryColor,
-                controller: keMasjidC.alamat,
+                controller: manMasjidC.alamat,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
-                  hintText: keMasjidC.keMasjid.alamat ?? mk_null,
+                  hintText: manMasjidC.keMasjid.alamat ?? mk_null,
                   hintStyle: secondaryTextStyle(
                       color: appStore.textSecondaryColor, size: 16),
                   enabledBorder: UnderlineInputBorder(
@@ -104,11 +105,11 @@ class FormNama extends StatelessWidget {
               30.height,
               GestureDetector(
                 onTap: () {
-                  keMasjidC.updateDataMasjid(
-                      // nama: keMasjidC.nama.text,
-                      // alamat: keMasjidC.alamat.text,
+                  manMasjidC.updateDataMasjid(
+                      // nama: manMasjidC.nama.text,
+                      // alamat: manMasjidC.alamat.text,
                       );
-                  keMasjidC.clearControllers();
+                  manMasjidC.clearControllers();
                   finish(context);
                 },
                 child: Container(

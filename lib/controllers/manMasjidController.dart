@@ -4,15 +4,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:masjidkita/controllers/authController.dart';
 import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/models/keMasjid.dart';
+import 'package:masjidkita/models/manMasjid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/integrations/firestore.dart';
 import 'package:masjidkita/models/user.dart';
+import 'package:masjidkita/routes/route_name.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/cekLog.dart';
+import 'package:masjidkita/screens/utils/widgets/AddOrJoin.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-class KeMasjidController extends GetxController {
-  static KeMasjidController instance = Get.find();
+class ManMasjidController extends GetxController {
+  static ManMasjidController instance = Get.find();
 
   TextEditingController nama = TextEditingController();
   TextEditingController alamat = TextEditingController();
@@ -28,29 +31,28 @@ class KeMasjidController extends GetxController {
   TextEditingController statusTanah = TextEditingController();
   TextEditingController legalitas = TextEditingController();
 
-  Rx<KeMasjidModel> keMasjidModel = KeMasjidModel().obs;
+  Rx<ManMasjidModel> keMasjidModel = ManMasjidModel().obs;
+  ManMasjidModel get keMasjid => keMasjidModel.value;
+  set keMasjid(ManMasjidModel value) => this.keMasjidModel.value = value;
 
   var haveMasjid = false.obs;
-
-  KeMasjidModel get keMasjid => keMasjidModel.value;
-  set keMasjid(KeMasjidModel value) => this.keMasjidModel.value = value;
 
   @override
   void onReady() {
     super.onReady();
-    // _getKeMasjidModel();
-    // ever(authController.firebaseUser, _getKeMasjidModel);
-    ever(authController.userModel, _getKeMasjidModel);
+    // _getManMasjidModel();
+    // ever(authController.firebaseUser, _getManMasjidModel);
+    ever(authController.userModel, _getManMasjidModel);
   }
 
-  void testdata() async {
+  testdata() {
     // clear();
-    await _getKeMasjidModel(authController.user);
+    return _getManMasjidModel(authController.user);
     // _setHaveMasjid();
   }
 
   void clear() {
-    keMasjidModel.value = KeMasjidModel();
+    keMasjidModel.value = ManMasjidModel();
   }
 
   _setHaveMasjid() {
@@ -72,24 +74,11 @@ class KeMasjidController extends GetxController {
     await firebaseFirestore.collection(usersCollection).doc(userId).update({
       "masjid": userId,
     });
-    await _getKeMasjidModel(authController.user);
+    await _getManMasjidModel(authController.user);
     clearControllers();
   }
 
-  updateDataMasjid(
-      // {nama,
-      // alamat,
-      // deskripsi,
-      // kecamatan,
-      // kodePos,
-      // kota,
-      // provinsi,
-      // tahun,
-      // luasTanah,
-      // luasBangunan,
-      // statusTanah,
-      // legalitas}
-      ) async {
+  updateDataMasjid() async {
     Map<String, dynamic> data = new HashMap();
     if (nama.text != "") data['nama'] = nama.text;
     if (alamat.text != "") data["alamat"] = alamat.text;
@@ -109,18 +98,18 @@ class KeMasjidController extends GetxController {
         .collection(masjidCollection)
         .doc(keMasjid.id)
         .update(data);
-    await _getKeMasjidModel(keMasjid);
+    await _getManMasjidModel(keMasjid);
   }
 
-  _getKeMasjidModel(userModel) async {
+  _getManMasjidModel(userModel) async {
     try {
       keMasjidModel.value = await firebaseFirestore
           .collection(masjidCollection)
           .doc(authController.user.masjid)
           .get()
-          .then((doc) => KeMasjidModel.fromSnapshot(doc));
+          .then((doc) => ManMasjidModel.fromSnapshot(doc));
     } catch (e) {
-      keMasjidModel.value = KeMasjidModel();
+      keMasjidModel.value = ManMasjidModel();
     }
     _setHaveMasjid();
   }
