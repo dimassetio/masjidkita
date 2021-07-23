@@ -34,9 +34,9 @@ class ManMasjid extends StatelessWidget {
     fitur1.icon = mk_ic_mosque;
     fitur1.color = mkCat1;
     fitur1.route = () async {
-      // await infoMasjidC.bindListMasjid();
+      // await listMasjidC.bindListMasjid();
 
-      // infoMasjidC.masjids.isNotEmpty
+      // listMasjidC.masjids.isNotEmpty
       //     ?
       Get.toNamed(RouteName.mkdashboard);
       // : toast("Empty Masjid");
@@ -147,7 +147,7 @@ class ManMasjid extends StatelessWidget {
               // Container(
               //   // color: mkCat1,
               //   child: ElevatedButton(
-              //       onPressed: (infoMasjidC.tesFav()), child: Text("tes")),
+              //       onPressed: (listMasjidC.tesFav()), child: Text("tes")),
               // )
             ],
           ),

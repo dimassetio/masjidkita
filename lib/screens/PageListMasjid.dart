@@ -17,25 +17,12 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../main.dart';
 import 'utils/widgets/MasjidList.dart';
 
-class PageSiMasjid extends StatelessWidget {
-  const PageSiMasjid({Key? key}) : super(key: key);
+class PageListMasjid extends StatelessWidget {
+  const PageListMasjid({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final pageC = Get.put(PagexController());
     var width = MediaQuery.of(context).size.width;
-
-    tes(id) {
-      infoMasjidC.idFavorit.add(id);
-      infoMasjidC.addStr();
-      print(infoMasjidC.idFav);
-    }
-
-    tesrmv(id) {
-      infoMasjidC.idFavorit.remove(id);
-      infoMasjidC.addStr();
-      print(infoMasjidC.idFav);
-    }
 
     return Scaffold(
       // appBar: AppBar(
@@ -66,6 +53,7 @@ class PageSiMasjid extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             Get.back();
+                            listMasjidC.clearController();
                           },
                           child: CircleAvatar(
                               backgroundColor: Colors.white30,
@@ -84,6 +72,7 @@ class PageSiMasjid extends StatelessWidget {
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             TextField(
+                              controller: listMasjidC.searchController,
                               decoration: InputDecoration(
                                 filled: true,
                                 fillColor: mkWhite,
@@ -128,52 +117,39 @@ class PageSiMasjid extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          Row(children: [
-                            IconButton(
-                                onPressed: () {
-                                  infoMasjidC.update();
-                                  infoMasjidC.refreshFav();
-                                  toast("update");
-                                },
-                                icon: Icon(Icons.refresh)),
-                            IconButton(
-                                onPressed: () {
-                                  infoMasjidC.readStr();
-                                },
-                                icon: Icon(Icons.book)),
-                            TextButton(
-                                onPressed: () =>
-                                    tes("Atrwobk1pnUz4wKdYct5kTkKxTd2"),
-                                child: text("+1")),
-                            TextButton(
-                                onPressed: () =>
-                                    tes("bLmwedXB1IRjpJIz9IE0vjjfDHe2"),
-                                child: text("+2")),
-                            TextButton(
-                                onPressed: () =>
-                                    tesrmv("Atrwobk1pnUz4wKdYct5kTkKxTd2"),
-                                child: text("-1")),
-                            TextButton(
-                                onPressed: () =>
-                                    tesrmv("bLmwedXB1IRjpJIz9IE0vjjfDHe2"),
-                                child: text("-2")),
-                          ]),
+                          Obx(() => listMasjidC.searchController.text != ""
+                              ? Column(
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.topLeft,
+                                      padding:
+                                          EdgeInsets.only(left: 15, bottom: 5),
+                                      child: Text(
+                                        "${listMasjidC.filteredMasjid.length} Masjid ditemukan, dari total ${listMasjidC.masjids.length}",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ),
+                                    MasjidListing(
+                                        mListings: listMasjidC.filteredMasjid,
+                                        width: width),
+                                    Divider()
+                                  ],
+                                )
+                              : Container()),
                           Container(
                             alignment: Alignment.topLeft,
                             padding: EdgeInsets.only(left: 15, bottom: 5),
                             child: Text(
-                              "Masjid Favorit",
+                              mk_masjid_fav,
                               style: TextStyle(fontSize: 18),
                             ),
                           ),
 
                           Obx(
-                            () => infoMasjidC.favMasjids.isEmpty
-                                ? text(
-                                    "Anda belum memiliki masjid favorit untuk ditampilkan",
-                                    isLongText: true,
-                                    isCentered: true)
-                                : MasjidSliderWidget(infoMasjidC.favMasjids),
+                            () => listMasjidC.favMasjids.isEmpty
+                                ? text(mk_masjid_fav_null,
+                                    isLongText: true, isCentered: true)
+                                : MasjidSliderWidget(listMasjidC.favMasjids),
                           ),
                           // SizedBox(height: 40),
                           Container(
@@ -181,13 +157,13 @@ class PageSiMasjid extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 vertical: 15, horizontal: 15),
                             child: Text(
-                              "Daftar Masjid",
+                              mk_list_masjid,
                               style: TextStyle(fontSize: 18),
                             ),
                           ),
                           Obx(
                             () => MasjidListing(
-                                mListings: infoMasjidC.masjids, width: width),
+                                mListings: listMasjidC.masjids, width: width),
                           ),
                         ],
                       ),

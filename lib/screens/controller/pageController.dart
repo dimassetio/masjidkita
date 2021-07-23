@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/screens/PageSiMasjid.dart';
+import 'package:masjidkita/screens/PageListMasjid.dart';
 import 'package:masjidkita/screens/PageMasjid.dart';
 import 'package:masjidkita/screens/MosqProfile.dart';
 import 'package:masjidkita/screens/model/MasjidModels.dart';
@@ -17,7 +17,7 @@ class PagexController extends GetxController {
   getPage() {
     switch (page.value) {
       case 0:
-        return PageSiMasjid();
+        return PageListMasjid();
       case 1:
         return PageMasjid();
       case 2:

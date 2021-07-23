@@ -7,7 +7,7 @@ import 'package:masjidkita/screens/MKSignIn.dart';
 import 'package:masjidkita/screens/MosqDashboard.dart';
 import 'package:masjidkita/screens/MosqProfile.dart';
 import 'package:masjidkita/screens/PageMasjid.dart';
-import 'package:masjidkita/screens/PageSiMasjid.dart';
+import 'package:masjidkita/screens/PageListMasjid.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/KeMasjid.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
 import 'package:masjidkita/screens/utils/widgets/NewMasjid.dart';
@@ -19,13 +19,13 @@ class AppPage {
     GetPage(name: RouteName.sign_in, page: () => T5SignIn()),
     GetPage(name: RouteName.sign_up, page: () => T5SignUp()),
     GetPage(name: RouteName.profile, page: () => MosqProfile()),
-    GetPage(name: RouteName.mkdashboard, page: () => PageSiMasjid()),
+    GetPage(name: RouteName.mkdashboard, page: () => PageListMasjid()),
     GetPage(name: RouteName.man_masjid, page: () => ManMasjid()),
     GetPage(name: RouteName.new_masjid, page: () => NewMasjid()),
     GetPage(
-        name: RouteName.info_masjid,
-        page: () => PageSiMasjid(),
-        binding: InfoMasjidBinding()),
+        name: RouteName.list_masjid,
+        page: () => PageListMasjid(),
+        binding: ListMasjidBinding()),
     GetPage(
       name: RouteName.kelolamasjid,
       page: () => KeMasjid(),

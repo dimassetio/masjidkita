@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/routes/route_name.dart';
+import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
+import 'package:nb_utils/nb_utils.dart';
 import '../../../main.dart';
 import '../MKConstant.dart';
 
@@ -27,25 +32,40 @@ class MasjidCard extends StatelessWidget {
               mk_contoh_image,
               // dataMasjid.image,
               width: width,
-              height: width / 1.77,
+              // height: width / 1.77,
               fit: BoxFit.fill,
             )),
         Padding(
-          padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              text(dataMasjid.nama,
-                  textColor: appStore.textPrimaryColor,
-                  fontSize: textSizeLargeMedium,
-                  fontFamily: fontMedium),
-              text(
-                dataMasjid.alamat,
-                textColor: appStore.textSecondaryColor,
-              ),
-            ],
-          ),
-        ),
+            padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    text(dataMasjid.nama,
+                        textColor: appStore.textPrimaryColor,
+                        fontSize: textSizeLargeMedium,
+                        fontFamily: fontMedium),
+                    text(
+                      dataMasjid.alamat,
+                      textColor: appStore.textSecondaryColor,
+                    ),
+                  ],
+                ),
+                Obx(
+                  () => IconButton(
+                    onPressed: () {
+                      listMasjidC.addFav(dataMasjid.masjidID);
+                    },
+                    icon: Icon(listMasjidC.idFav.contains(dataMasjid.masjidID)
+                        ? Icons.star
+                        : Icons.star_border),
+                    color: mkColorPrimary,
+                  ),
+                )
+              ],
+            )),
       ],
     );
   }

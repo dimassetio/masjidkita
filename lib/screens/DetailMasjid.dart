@@ -5,9 +5,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
+import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabKas.dart';
 import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabProfile.dart';
 import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabTakmir.dart';
@@ -46,7 +48,7 @@ class DetailMasjid extends StatelessWidget {
                   backgroundColor: white,
                   flexibleSpace: FlexibleSpaceBar(
                       centerTitle: true,
-                      title: Text('Nama masjid',
+                      title: Text(manMasjidC.deMasjid.nama ?? mk_null,
                           style: primaryTextStyle(
                               color: innerBoxIsScrolled
                                   ? appStore.textPrimaryColor

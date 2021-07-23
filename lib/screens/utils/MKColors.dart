@@ -13,6 +13,7 @@ const mkTextColorSecondary = Color(0XFF888888);
 const mkTextColorThird = Color(0XFFBABFB6);
 const mkTextColorGrey = Color(0XFFB4BBC2);
 const mkWhite = Color(0XFFFFFFFF);
+const mkWhite2 = Color(0XFFFCFCFC);
 const mkLayoutBackgroundWhite = Color(0XFFF6F7FA);
 const mkViewColor = Color(0XFFB4BBC2);
 const mkSkyBlue = Color(0XFF1fc9cd);

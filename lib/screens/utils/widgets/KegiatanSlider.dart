@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
+import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:masjidkita/screens/utils/widgets/MasjidCarouselSlider.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -13,11 +11,11 @@ import '../MKColors.dart';
 import '../MKConstant.dart';
 
 // ignore: must_be_immutable
-class MasjidSliderWidget extends StatelessWidget {
+class KegiatanSliderWidget extends StatelessWidget {
   List mSliderList;
   bool infinite;
 
-  MasjidSliderWidget(this.mSliderList, {this.infinite: true});
+  KegiatanSliderWidget(this.mSliderList, {this.infinite: true});
 
   @override
   Widget build(BuildContext context) {
@@ -27,23 +25,20 @@ class MasjidSliderWidget extends StatelessWidget {
 
     return MasjidCarouselSlider(
       viewportFraction: 0.9,
-      enlargeCenterPage: true,
+      // enlargeCenterPage: true,
       scrollDirection: Axis.horizontal,
       enableInfiniteScroll: false,
       items: mSliderList.map((slider) {
         return Builder(
           builder: (BuildContext context) {
-            return Container(
-              decoration: boxDecoration(
-                  radius: 16,
-                  showShadow: true,
-                  bgColor: appStore.scaffoldBackground),
-              width: MediaQuery.of(context).size.width,
-              child: GestureDetector(
-                onTap: () async {
-                  await manMasjidC.getDetailMasjid(slider.masjidID);
-                  Get.toNamed(RouteName.detail);
-                },
+            return GestureDetector(
+              onTap: () => toast("Go To Kegiatan Detail"),
+              child: Container(
+                decoration: boxDecoration(
+                    radius: 16,
+                    showShadow: true,
+                    bgColor: appStore.scaffoldBackground),
+                width: MediaQuery.of(context).size.width,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -62,31 +57,25 @@ class MasjidSliderWidget extends StatelessWidget {
                             fit: BoxFit.cover),
                       ),
                     ),
-                    Container(
-                      width: width,
+                    Padding(
                       padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              text(slider.nama,
-                                  textColor: appStore.textPrimaryColor,
-                                  fontSize: textSizeLargeMedium,
-                                  fontFamily: fontMedium),
-                              text(slider.alamat),
-                            ],
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              listMasjidC.addFav(slider.masjidID);
-                            },
-                            icon: Icon(Icons.star),
-                            color: mkColorPrimary,
-                          ),
+                          text(slider.nama,
+                              textColor: appStore.textPrimaryColor,
+                              fontSize: textSizeLargeMedium,
+                              fontFamily: fontMedium),
+                          text(mk_long_text,
+                              maxLine: 2, fontSize: textSizeSMedium),
+                          Align(
+                              alignment: Alignment.bottomRight,
+                              child: text(
+                                "view more",
+                                fontSize: textSizeSMedium,
+                              ))
                         ],
                       ),
                     ),

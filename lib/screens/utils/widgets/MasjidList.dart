@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:cached_network_image/src/cached_image_widget.dart';
 import 'package:masjidkita/routes/route_name.dart';
@@ -30,7 +31,8 @@ class MasjidListing extends StatelessWidget {
           itemBuilder: (context, index) {
             var dataMasjid = mListings[index];
             return GestureDetector(
-              onTap: () {
+              onTap: () async {
+                await manMasjidC.getDetailMasjid(dataMasjid.masjidID);
                 Get.toNamed(RouteName.detail);
               },
               child: Container(

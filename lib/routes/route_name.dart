@@ -2,7 +2,7 @@ abstract class RouteName {
   static const sign_in = '/sign_in';
   static const sign_up = '/sign_up';
   static const mkdashboard = '/mkdashboard';
-  static const info_masjid = '/info_masjid';
+  static const list_masjid = '/list_masjid';
   static const home = '/home';
   static const kelolamasjid = '/kelolamasjid';
   static const man_masjid = '/manajemen_masjid';

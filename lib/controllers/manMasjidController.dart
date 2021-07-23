@@ -35,6 +35,10 @@ class ManMasjidController extends GetxController {
   ManMasjidModel get keMasjid => keMasjidModel.value;
   set keMasjid(ManMasjidModel value) => this.keMasjidModel.value = value;
 
+  Rx<DetailMasjidModel> deMasjidModel = DetailMasjidModel().obs;
+  DetailMasjidModel get deMasjid => deMasjidModel.value;
+  set deMasjid(DetailMasjidModel value) => this.deMasjidModel.value = value;
+
   var haveMasjid = false.obs;
 
   @override
@@ -112,6 +116,18 @@ class ManMasjidController extends GetxController {
       keMasjidModel.value = ManMasjidModel();
     }
     _setHaveMasjid();
+  }
+
+  getDetailMasjid(mID) async {
+    try {
+      deMasjidModel.value = await firebaseFirestore
+          .collection(masjidCollection)
+          .doc(mID)
+          .get()
+          .then((doc) => DetailMasjidModel.fromSnapshot(doc));
+    } catch (e) {
+      deMasjidModel.value = DetailMasjidModel();
+    }
   }
 
   clearControllers() {

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:masjidkita/controllers/authController.dart';
 import 'package:masjidkita/controllers/fiturController.dart';
-import 'package:masjidkita/controllers/infoMasjidController.dart';
+import 'package:masjidkita/controllers/listMasjidController.dart';
 import 'package:masjidkita/controllers/manMasjidController.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/routes/route_name.dart';
@@ -18,13 +18,13 @@ class InitBinding extends Bindings {
     Get.lazyPut(() => FiturController());
     Get.lazyPut(() => ManMasjidController());
     Get.lazyPut(() => ManMasjidController());
-    Get.lazyPut(() => InfoMasjidController());
+    Get.lazyPut(() => ListMasjidController());
   }
 }
 
-class InfoMasjidBinding extends Bindings {
+class ListMasjidBinding extends Bindings {
   @override
   void dependencies() {
-    Get.find<InfoMasjidController>();
+    Get.put(ListMasjidController());
   }
 }

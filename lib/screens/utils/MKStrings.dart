@@ -44,3 +44,13 @@ const mk_addjoin_desc =
     "Bergabung ke Masjid yang Sudah Ada atau Membuat Akun Masjid Baru?";
 const mk_add = "Buat Baru";
 const mk_join = "Bergabung";
+
+const mk_masjid_fav = "Masjid Favorit";
+const mk_masjid_fav_null =
+    "Anda belum memiliki masjid favorit untuk ditampilkan";
+const mk_kegiatan_masjid = "Kegiatan Masjid";
+const mk_list_masjid = "Daftar Masjid";
+const mk_filtered_null = "Masjid tidak ditemukan";
+
+const mk_long_text =
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis quis pariatur est aliquid cumque incidunt facere ducimus in deserunt modi repudiandae, quia molestias. Sed impedit aperiam perferendis iure ratione nulla sit esse unde! Ipsa distinctio minima adipisci odit modi quia omnis corporis, aperiam laborum id quo numquam explicabo quos ullam cumque velit nam at. Hic earum odio corporis fugit a similique alias rem quia eveniet, est dicta nobis blanditiis distinctio sint vitae nam repellat, expedita sunt officia, ipsum placeat ullam velit repellendus. Commodi similique, nostrum harum deserunt earum quae inventore nobis recusandae iure reprehenderit doloremque deleniti voluptate officia aspernatur sit?";
