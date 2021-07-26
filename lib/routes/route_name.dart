@@ -9,4 +9,8 @@ abstract class RouteName {
   static const new_masjid = '/new_masjid';
   static const detail = '/detail';
   static const profile = '/profile';
+  static const new_inventaris = '/new_inventaris';
+  static const inventaris = '/inventaris';
+  static const detail_inventaris = '/detail_inventaris';
+  static const edit_inventaris = '/edit_inventaris';
 }

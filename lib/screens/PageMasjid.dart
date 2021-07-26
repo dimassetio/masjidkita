@@ -6,6 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/models/inventaris.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabInventaris.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabKas.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabProfile.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabTakmir.dart';
@@ -21,7 +23,7 @@ class PageMasjid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DefaultTabController(
-        length: 3,
+        length: 4,
         child: NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
@@ -66,6 +68,7 @@ class PageMasjid extends StatelessWidget {
                         Tab(text: "Profil"),
                         Tab(text: "Takmir"),
                         Tab(text: "Kas"),
+                        Tab(text: "Inventaris"),
                       ],
                     ),
                   ),
@@ -78,6 +81,7 @@ class PageMasjid extends StatelessWidget {
                 TMTabProfile(),
                 TMTabTakmir(),
                 TMTabKas(),
+                TMTabInventaris(InventarisModel()),
               ],
             )),
       ),

@@ -5,8 +5,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:masjidkita/controllers/inventarisController.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/models/inventaris.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabKas.dart';
@@ -14,6 +16,7 @@ import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabProfile.dart';
 import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabTakmir.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:get/get.dart';
 // import 'package:masjidkita/screens/utils/widgets/T5Slider.dart';
 
 import 'package:masjidkita/main.dart';
@@ -21,13 +24,15 @@ import 'package:masjidkita/main.dart';
 import 'TMTabKas.dart';
 import 'TMTabProfile.dart';
 import 'TMTabTakmir.dart';
+import 'TMTabInventaris.dart';
 
 class KeMasjid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Get.put(InventarisController().onInit());
     return Scaffold(
       body: DefaultTabController(
-        length: 3,
+        length: 4,
         child: NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
@@ -74,6 +79,8 @@ class KeMasjid extends StatelessWidget {
                         Tab(text: "Profil"),
                         Tab(text: "Takmir"),
                         Tab(text: "Kas"),
+                        Tab(text: "Inventaris"),
+                        // Tab(text: "Kegiatan"),
                       ],
                     ),
                   ),
@@ -86,6 +93,8 @@ class KeMasjid extends StatelessWidget {
                 TMTabProfile(),
                 TMTabTakmir(),
                 TMTabKas(),
+                TMTabInventaris(InventarisModel()),
+                // TMTabKegiatan(),
               ],
             )),
       ),
