@@ -40,18 +40,20 @@ class MasjidCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    text(dataMasjid.nama,
-                        textColor: appStore.textPrimaryColor,
-                        fontSize: textSizeLargeMedium,
-                        fontFamily: fontMedium),
-                    text(
-                      dataMasjid.alamat,
-                      textColor: appStore.textSecondaryColor,
-                    ),
-                  ],
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      text(dataMasjid.nama,
+                          textColor: appStore.textPrimaryColor,
+                          fontSize: textSizeLargeMedium,
+                          fontFamily: fontMedium),
+                      text(
+                        dataMasjid.alamat,
+                        textColor: appStore.textSecondaryColor,
+                      ),
+                    ],
+                  ),
                 ),
                 Obx(
                   () => IconButton(

@@ -38,7 +38,7 @@ class MasjidSliderWidget extends StatelessWidget {
                   radius: 16,
                   showShadow: true,
                   bgColor: appStore.scaffoldBackground),
-              width: MediaQuery.of(context).size.width,
+              width: Get.width,
               child: GestureDetector(
                 onTap: () async {
                   await manMasjidC.getDetailMasjid(slider.masjidID);
@@ -69,16 +69,22 @@ class MasjidSliderWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              text(slider.nama,
-                                  textColor: appStore.textPrimaryColor,
-                                  fontSize: textSizeLargeMedium,
-                                  fontFamily: fontMedium),
-                              text(slider.alamat),
-                            ],
+                          Container(
+                            width: width - 115,
+                            // color: mkCat1,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                text(slider.nama,
+                                    textColor: appStore.textPrimaryColor,
+                                    fontSize: textSizeLargeMedium,
+                                    fontFamily: fontMedium),
+                                text(
+                                  slider.alamat,
+                                ),
+                              ],
+                            ),
                           ),
                           IconButton(
                             onPressed: () {

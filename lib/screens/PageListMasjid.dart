@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/screens/controller/pageController.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
@@ -92,12 +91,18 @@ class PageListMasjid extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(26)),
                               ),
                             ),
-                            GestureDetector(
-                              child: Padding(
-                                  padding: EdgeInsets.only(right: 16.0),
-                                  child: SvgPicture.asset(mk_ic_search,
-                                      color: mkColorPrimary)),
-                            ),
+                            // listMasjidC.searchController.text == ""
+                            //     ? GestureDetector(
+                            //         child: Padding(
+                            //             padding: EdgeInsets.only(right: 16.0),
+                            //             child: Icon(Icons.cancel,
+                            //                 color: mkColorPrimary)),
+                            //       )
+                            //     :
+                            Padding(
+                                padding: EdgeInsets.only(right: 16.0),
+                                child: SvgPicture.asset(mk_ic_search,
+                                    color: mkColorPrimary)),
                           ],
                         ),
                       ),
@@ -117,25 +122,24 @@ class PageListMasjid extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          Obx(() => listMasjidC.searchController.text != ""
-                              ? Column(
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      padding:
-                                          EdgeInsets.only(left: 15, bottom: 5),
-                                      child: Text(
-                                        "${listMasjidC.filteredMasjid.length} Masjid ditemukan, dari total ${listMasjidC.masjids.length}",
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                    ),
-                                    MasjidListing(
-                                        mListings: listMasjidC.filteredMasjid,
-                                        width: width),
-                                    Divider()
-                                  ],
-                                )
-                              : Container()),
+                          Obx(() => Column(
+                                children: [
+                                  listMasjidC.filteredMasjid.length > 0
+                                      ? Container(
+                                          alignment: Alignment.topLeft,
+                                          padding: EdgeInsets.only(
+                                              left: 15, bottom: 5),
+                                          child: Text(
+                                            "${listMasjidC.filteredMasjid.length} Masjid ditemukan, dari total ${listMasjidC.masjids.length}",
+                                            style: TextStyle(fontSize: 18),
+                                          ),
+                                        )
+                                      : Container(),
+                                  MasjidListing(
+                                      mListings: listMasjidC.filteredMasjid,
+                                      width: width),
+                                ],
+                              )),
                           Container(
                             alignment: Alignment.topLeft,
                             padding: EdgeInsets.only(left: 15, bottom: 5),

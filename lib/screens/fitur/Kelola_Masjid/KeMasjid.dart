@@ -9,10 +9,6 @@ import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
-import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabKas.dart';
-import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabProfile.dart';
-import 'package:masjidkita/screens/utils/widgets/DetailMasjid/TabTakmir.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
 import 'package:nb_utils/nb_utils.dart';
 // import 'package:masjidkita/screens/utils/widgets/T5Slider.dart';
 
@@ -53,7 +49,7 @@ class KeMasjid extends StatelessWidget {
                   flexibleSpace: Obx(
                     () => FlexibleSpaceBar(
                         centerTitle: true,
-                        title: Text(manMasjidC.keMasjid.nama ?? "Nama Masjid",
+                        title: Text(manMasjidC.deMasjid.nama ?? "Nama Masjid",
                             style: primaryTextStyle(
                                 color: innerBoxIsScrolled
                                     ? appStore.textPrimaryColor

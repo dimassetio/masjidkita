@@ -42,7 +42,10 @@ class MosqDashboard extends StatelessWidget {
               actions: [
                 IconButton(
                     onPressed: () {
-                      toast("Go to Login");
+                      print(authController.isLoggedIn.value);
+                      authController.isLoggedIn.value
+                          ? authController.signOut()
+                          : Get.toNamed(RouteName.sign_in);
                     },
                     icon: Icon(
                       Icons.person,

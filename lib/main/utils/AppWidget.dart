@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
+import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:nb_utils/nb_utils.dart';
 // import 'package:masjidkita/integrations/utils/common.dart';
 import 'package:masjidkita/main.dart';
@@ -243,7 +244,8 @@ class CustomTheme extends StatelessWidget {
               accentColor: appColorPrimary,
               backgroundColor: appStore.scaffoldBackground,
             )
-          : ThemeData.light(),
+          : ThemeData.light().copyWith(
+              accentColor: mkColorPrimaryLight, primaryColor: mkColorPrimary),
       child: child!,
     );
   }

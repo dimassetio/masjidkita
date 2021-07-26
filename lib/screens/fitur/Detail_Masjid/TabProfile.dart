@@ -5,9 +5,10 @@ import 'package:get/get.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../../../../main.dart';
-import '../../MKConstant.dart';
-import '../../MKImages.dart';
-import '../../MKColors.dart';
+
+import 'package:masjidkita/screens/utils/MKImages.dart';
+import 'package:masjidkita/screens/utils/MKColors.dart';
+import 'package:masjidkita/screens/utils/MKConstant.dart';
 
 class TabProfile extends StatelessWidget {
   // late T9BadgeModel model;
@@ -18,8 +19,8 @@ class TabProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+    var width = Get.width;
+    var height = Get.height;
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16),

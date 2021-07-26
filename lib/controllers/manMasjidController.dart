@@ -40,6 +40,7 @@ class ManMasjidController extends GetxController {
   set deMasjid(DetailMasjidModel value) => this.deMasjidModel.value = value;
 
   var haveMasjid = false.obs;
+  var myMasjid = false.obs;
 
   @override
   void onReady() {
@@ -47,6 +48,10 @@ class ManMasjidController extends GetxController {
     // _getManMasjidModel();
     // ever(authController.firebaseUser, _getManMasjidModel);
     ever(authController.userModel, _getManMasjidModel);
+
+    nama.addListener(() {
+      print(nama.text);
+    });
   }
 
   testdata() {
@@ -65,7 +70,7 @@ class ManMasjidController extends GetxController {
     } else {
       haveMasjid.value = true;
     }
-    print(haveMasjid.value);
+    // print(haveMasjid.value);
   }
 
   addMasjidToFirestore(String userId) async {
@@ -100,9 +105,10 @@ class ManMasjidController extends GetxController {
     print(data);
     await firebaseFirestore
         .collection(masjidCollection)
-        .doc(keMasjid.id)
+        .doc(deMasjid.id)
         .update(data);
-    await _getManMasjidModel(keMasjid);
+    await _getManMasjidModel(deMasjid);
+    await getDetailMasjid(deMasjid.id);
   }
 
   _getManMasjidModel(userModel) async {
@@ -120,6 +126,7 @@ class ManMasjidController extends GetxController {
 
   getDetailMasjid(mID) async {
     try {
+      // print(mID);
       deMasjidModel.value = await firebaseFirestore
           .collection(masjidCollection)
           .doc(mID)
@@ -128,6 +135,18 @@ class ManMasjidController extends GetxController {
     } catch (e) {
       deMasjidModel.value = DetailMasjidModel();
     }
+    await isMyMasjid();
+    print(myMasjid.value);
+  }
+
+  isMyMasjid() {
+    print(authController.user.masjid);
+    print(deMasjid.id);
+    authController.user.masjid != null
+        ? deMasjid.id == authController.user.masjid
+            ? myMasjid.value = true
+            : myMasjid.value = false
+        : myMasjid.value = false;
   }
 
   clearControllers() {

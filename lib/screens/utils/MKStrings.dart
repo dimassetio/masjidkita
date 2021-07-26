@@ -9,6 +9,8 @@ const mk_note_registration =
     " Please enter your mobile number, then we will send OTP to verify";
 const mk_lbl_registration = " Registration";
 const mk_continue = " Continue";
+const mk_lanjut = " Lanjut";
+const mk_batal = " Batal";
 const mk_register = "Don't Have Account? Register";
 const mk_heading_login = " Digital Wallets";
 const mk_hint_password = " Password";
@@ -21,6 +23,8 @@ const mk_lbl_belum_login_desc = "Anda Harus Sign In Untuk Menikmati Fitur Ini";
 const mk_lbl_batal = "Batal";
 const mk_lbl_email = "Email";
 const mk_lbl_nama = "Nama";
+const mk_lbl_nama_masjid = "Nama Masjid";
+const mk_lbl_enter = "Masukkan ";
 const mk_lbl_alamat = "Alamat";
 const mk_lbl_deskripsi = "Deskripsi";
 const mk_lbl_lokasi = "Lokasi";
@@ -43,6 +47,7 @@ const mk_addjoin = "Anda Belum Mempunyai Akun Masjid";
 const mk_addjoin_desc =
     "Bergabung ke Masjid yang Sudah Ada atau Membuat Akun Masjid Baru?";
 const mk_add = "Buat Baru";
+const mk_add_masjid = "Buat Masjid Baru";
 const mk_join = "Bergabung";
 
 const mk_masjid_fav = "Masjid Favorit";

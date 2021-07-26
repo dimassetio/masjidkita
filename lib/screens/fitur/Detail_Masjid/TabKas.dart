@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
-import 'package:masjidkita/screens/utils/widgets/DetailMasjid/KasSlider.dart';
+import 'package:masjidkita/screens/fitur/Detail_Masjid/KasSlider.dart';
 
 import '../../../../main.dart';
-import '../../MKConstant.dart';
+import 'package:masjidkita/screens/utils/MKConstant.dart';
 
 class TabKas extends StatelessWidget {
   @override

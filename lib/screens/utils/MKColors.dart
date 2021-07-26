@@ -29,3 +29,18 @@ const mkDarkRed = Color(0XFFF06263);
 const mkColorPrimary50 = Color(0X8096B753);
 
 const mk_view_color = Color(0XFFDADADA);
+
+const mkColorScheme = ColorScheme(
+    primary: mkColorPrimary,
+    primaryVariant: mkColorPrimary,
+    secondary: mkColorSecondary,
+    secondaryVariant: mkColorSecondary,
+    surface: mkColorPrimaryDark,
+    background: mkWhite,
+    error: mkDarkRed,
+    onPrimary: mkColorPrimary,
+    onSecondary: mkColorSecondary,
+    onSurface: mkColorPrimaryDark,
+    onBackground: mkLayoutBackgroundWhite,
+    onError: mkDarkRed,
+    brightness: Brightness.light);

@@ -13,9 +13,9 @@ import 'package:nb_utils/nb_utils.dart';
 class FormNama extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // manMasjidC.nama = new TextEditingController(text: manMasjidC.keMasjid.nama);
-    // manMasjidC.alamat =
-    //     new TextEditingController(text: manMasjidC.keMasjid.alamat);
+    // manMasjidC.nama.text = manMasjidC.deMasjid.nama ?? "";
+    manMasjidC.alamat.text = manMasjidC.deMasjid.alamat ?? "";
+
     manMasjidC.nama.addListener(() {});
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -55,15 +55,22 @@ class FormNama extends StatelessWidget {
                   style: boldTextStyle(
                       color: appStore.textPrimaryColor, size: 20)),
               16.height,
+
               TextFormField(
-                controller: manMasjidC.nama,
+                autocorrect: false,
+                autofocus: true,
+                initialValue: manMasjidC.deMasjid.nama,
+                onChanged: (newValue) {
+                  manMasjidC.nama.text = newValue;
+                },
+                // controller: manMasjidC.nama,
                 textInputAction: TextInputAction.next,
                 cursorColor: appStore.textPrimaryColor,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(4, 8, 4, 8),
                   hintText: manMasjidC.keMasjid.nama ?? mk_null,
-                  hintStyle: secondaryTextStyle(
-                      color: appStore.textSecondaryColor, size: 16),
+                  // hintStyle: secondaryTextStyle(
+                  //     color: appStore.textSecondaryColor, size: 16),
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: appStore.textPrimaryColor!, width: 0.0)),

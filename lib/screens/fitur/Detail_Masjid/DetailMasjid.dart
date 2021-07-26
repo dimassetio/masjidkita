@@ -5,18 +5,20 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabKas.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabProfile.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabTakmir.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
+import 'package:masjidkita/screens/utils/MKStrings.dart';
+import 'package:masjidkita/screens/fitur/Detail_Masjid/TabKas.dart';
+import 'package:masjidkita/screens/fitur/Detail_Masjid/TabProfile.dart';
+import 'package:masjidkita/screens/fitur/Detail_Masjid/TabTakmir.dart';
 import 'package:nb_utils/nb_utils.dart';
 // import 'package:masjidkita/screens/utils/widgets/T5Slider.dart';
 
-import '../../main.dart';
+import '../../../../main.dart';
 
-class PageMasjid extends StatelessWidget {
+class DetailMasjid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +48,7 @@ class PageMasjid extends StatelessWidget {
                   backgroundColor: white,
                   flexibleSpace: FlexibleSpaceBar(
                       centerTitle: true,
-                      title: Text('Nama Masjid',
+                      title: Text(manMasjidC.deMasjid.nama ?? mk_null,
                           style: primaryTextStyle(
                               color: innerBoxIsScrolled
                                   ? appStore.textPrimaryColor
@@ -60,7 +62,7 @@ class PageMasjid extends StatelessWidget {
                   delegate: _SliverAppBarDelegate(
                     TabBar(
                       labelColor: mkColorPrimary,
-                      indicatorColor: mkColorPrimaryDark,
+                      indicatorColor: mkColorPrimary,
                       unselectedLabelColor: appStore.textPrimaryColor,
                       tabs: [
                         Tab(text: "Profil"),
@@ -75,9 +77,9 @@ class PageMasjid extends StatelessWidget {
             },
             body: TabBarView(
               children: [
-                TMTabProfile(),
-                TMTabTakmir(),
-                TMTabKas(),
+                TabProfile(),
+                TabTakmir(),
+                TabKas(),
               ],
             )),
       ),

@@ -1,18 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKConstant.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
-import 'package:masjidkita/screens/utils/widgets/DetailMasjid/KasSlider.dart';
+import 'package:masjidkita/screens/fitur/Detail_Masjid/KasSlider.dart';
 
 import '../../../../main.dart';
 
 class TMTabKas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width - 10;
-    var height = MediaQuery.of(context).size.height;
+    var width = Get.width - 10;
+    var height = Get.height;
     return SingleChildScrollView(
       child: Column(
         children: [
