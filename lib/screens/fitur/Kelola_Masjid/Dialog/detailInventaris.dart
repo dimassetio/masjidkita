@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/controllers/inventarisController.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/models/inventaris.dart';
 import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
@@ -18,7 +19,6 @@ import 'package:masjidkita/main/utils/T10Widget.dart';
 import 'package:masjidkita/main.dart';
 
 class InventarisDetail extends StatelessWidget {
-  final InventarisController inventarisC = Get.find();
   final InventarisModel inventaris = InventarisModel();
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class InventarisDetail extends StatelessWidget {
             Row(
               children: <Widget>[
                 FloatingActionButton.extended(
-                    // heroTag: '5',
+                    heroTag: '5',
                     label: Text(
                       "Edit",
                       style: primaryTextStyle(color: Colors.white),
@@ -74,6 +74,7 @@ class InventarisDetail extends StatelessWidget {
                     }),
                 10.width,
                 FloatingActionButton.extended(
+                    heroTag: '1',
                     // heroTag: '5',
                     label: Text(
                       "Delete",
@@ -109,14 +110,14 @@ class InventarisDetail extends StatelessWidget {
                       margin: EdgeInsets.all(spacing_standard_new),
                       child: Column(
                         children: <Widget>[
-                          CachedNetworkImage(
-                            placeholder: placeholderWidgetFn() as Widget
-                                Function(BuildContext, String)?,
-                            imageUrl: "${inventarisC.inventaris.url}",
-                            width: width,
-                            height: width * 0.4,
-                            fit: BoxFit.fill,
-                          ),
+                          // CachedNetworkImage(
+                          //   placeholder: placeholderWidgetFn() as Widget
+                          //       Function(BuildContext, String)?,
+                          //   imageUrl: "${inventarisC.inventaris.url}",
+                          //   width: width,
+                          //   height: width * 0.4,
+                          //   fit: BoxFit.fill,
+                          // ),
                           SizedBox(height: spacing_standard_new),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

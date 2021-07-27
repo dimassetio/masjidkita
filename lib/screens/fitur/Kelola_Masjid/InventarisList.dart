@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:masjidkita/controllers/inventarisController.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppConstant.dart';
 import 'package:masjidkita/models/inventaris.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
@@ -24,9 +25,9 @@ class InventarisCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               GestureDetector(
-                onTap: () {
-                  Get.find<InventarisController>()
-                      .getInventaris(inventaris.inventarisID);
+                onTap: () async {
+                  await inventarisC
+                      .getInventarisModel(inventaris.inventarisID ?? "");
                   Get.toNamed(RouteName.detail_inventaris);
                 },
                 child: Row(
@@ -59,6 +60,5 @@ class InventarisCard extends StatelessWidget {
         Divider()
       ],
     );
-    ;
   }
 }

@@ -11,9 +11,10 @@ class Database {
       firebaseFirestore.collection('inventaris');
 
   Future<void> addInventaris(String? nama, String? kondisi, int? jumlah,
-      String? foto, String? inventarisID, int? harga, String? url) async {
+      String? foto, int? harga, String? url) async {
     DateTime now = DateTime.now();
     int hargaTotal = harga! * jumlah!;
+    print(harga);
     try {
       await firebaseFirestore.collection("inventaris").add({
         'nama': nama,
