@@ -73,6 +73,29 @@ class _StepperBodyState extends State<StepperBody> {
                 icon: Icon(Icons.home, color: mkColorPrimaryDark),
               ),
             ),
+            TextFormField(
+              maxLines: 2,
+              autocorrect: false,
+              initialValue: manMasjidC.deMasjid.deskripsi,
+              onChanged: (newValue) {
+                manMasjidC.deskripsi.text = newValue;
+              },
+              // textInputAction: TextInputAction.next,
+              cursorColor: appStore.textPrimaryColor,
+              // style: primaryTextStyle(),
+              keyboardType: TextInputType.multiline,
+              // inputFormatters: [
+              //   FilteringTextInputFormatter.singleLineFormatter
+              // ],
+              style: primaryTextStyle(color: appStore.textPrimaryColor),
+              decoration: InputDecoration(
+                labelText: mk_lbl_deskripsi,
+                hintStyle: secondaryTextStyle(),
+                labelStyle: secondaryTextStyle(),
+                hintText: mk_lbl_enter + mk_lbl_deskripsi,
+                icon: Icon(Icons.home, color: mkColorPrimaryDark),
+              ),
+            ),
           ],
         ),
       ),
@@ -331,58 +354,63 @@ class _StepperBodyState extends State<StepperBody> {
             data: ThemeData(colorScheme: mkColorScheme),
             child: Column(
               children: [
-                Obx(
-                  () => Stepper(
-                    steps: steps,
-                    type: StepperType.vertical,
-                    currentStep: this.currStep,
-                    controlsBuilder: (BuildContext context,
-                        {VoidCallback? onStepContinue,
-                        VoidCallback? onStepCancel}) {
-                      return Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          TextButton(
-                            onPressed: onStepContinue,
-                            child: Text(mk_lanjut, style: secondaryTextStyle()),
-                          ),
-                          10.width,
-                          TextButton(
-                            onPressed: onStepCancel,
-                            child: Text(mk_batal, style: secondaryTextStyle()),
-                          ),
-                        ],
-                      );
-                    },
-                    onStepContinue: () {
-                      setState(() {
-                        if (currStep < steps.length - 1) {
-                          currStep = currStep + 1;
-                        } else {
-                          // currStep = 0;
-                          manMasjidC.updateDataMasjid();
-                          manMasjidC.clearControllers();
+                Expanded(
+                  child: Obx(
+                    () => Stepper(
+                      steps: steps,
+                      type: StepperType.vertical,
+                      currentStep: currStep,
+                      physics: ScrollPhysics(),
+                      controlsBuilder: (BuildContext context,
+                          {VoidCallback? onStepContinue,
+                          VoidCallback? onStepCancel}) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            TextButton(
+                              onPressed: onStepContinue,
+                              child:
+                                  Text(mk_lanjut, style: secondaryTextStyle()),
+                            ),
+                            10.width,
+                            TextButton(
+                              onPressed: onStepCancel,
+                              child:
+                                  Text(mk_batal, style: secondaryTextStyle()),
+                            ),
+                          ],
+                        );
+                      },
+                      onStepContinue: () {
+                        setState(() {
+                          if (currStep < steps.length - 1) {
+                            currStep = currStep + 1;
+                          } else {
+                            // currStep = 0;
+                            manMasjidC.updateDataMasjid();
+                            manMasjidC.clearControllers();
 
-                          finish(context);
-                        }
-                      });
-                    },
-                    onStepCancel: () {
-                      // finish(context);
-                      // setState(() {
-                      if (currStep > 0) {
-                        currStep = currStep - 1;
-                      } else {
-                        currStep = 0;
-                      }
-                      // });
-                    },
-                    onStepTapped: (step) {
-                      // setState(() {
-                      currStep = step;
-                      // });
-                    },
+                            finish(context);
+                          }
+                        });
+                      },
+                      onStepCancel: () {
+                        // finish(context);
+                        setState(() {
+                          if (currStep > 0) {
+                            currStep = currStep - 1;
+                          } else {
+                            currStep = 0;
+                          }
+                        });
+                      },
+                      onStepTapped: (step) {
+                        setState(() {
+                          currStep = step;
+                        });
+                      },
+                    ),
                   ),
                 ),
                 GestureDetector(

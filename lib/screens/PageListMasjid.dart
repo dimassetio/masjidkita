@@ -22,7 +22,6 @@ class PageListMasjid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       // appBar: AppBar(
       //   leading: BackButton(
@@ -91,18 +90,19 @@ class PageListMasjid extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(26)),
                               ),
                             ),
-                            // listMasjidC.searchController.text == ""
-                            //     ? GestureDetector(
-                            //         child: Padding(
-                            //             padding: EdgeInsets.only(right: 16.0),
-                            //             child: Icon(Icons.cancel,
-                            //                 color: mkColorPrimary)),
-                            //       )
-                            //     :
-                            Padding(
-                                padding: EdgeInsets.only(right: 16.0),
-                                child: SvgPicture.asset(mk_ic_search,
-                                    color: mkColorPrimary)),
+                            Obx(
+                              () => listMasjidC.searchController.text != ""
+                                  ? GestureDetector(
+                                      child: Padding(
+                                          padding: EdgeInsets.only(right: 16.0),
+                                          child: Icon(Icons.cancel,
+                                              color: mkColorPrimary)),
+                                    )
+                                  : Padding(
+                                      padding: EdgeInsets.only(right: 16.0),
+                                      child: SvgPicture.asset(mk_ic_search,
+                                          color: mkColorPrimary)),
+                            )
                           ],
                         ),
                       ),
@@ -136,8 +136,8 @@ class PageListMasjid extends StatelessWidget {
                                         )
                                       : Container(),
                                   MasjidListing(
-                                      mListings: listMasjidC.filteredMasjid,
-                                      width: width),
+                                    mListings: listMasjidC.filteredMasjid,
+                                  ),
                                 ],
                               )),
                           Container(
@@ -167,7 +167,8 @@ class PageListMasjid extends StatelessWidget {
                           ),
                           Obx(
                             () => MasjidListing(
-                                mListings: listMasjidC.masjids, width: width),
+                              mListings: listMasjidC.masjids,
+                            ),
                           ),
                         ],
                       ),

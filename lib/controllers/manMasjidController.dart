@@ -47,6 +47,7 @@ class ManMasjidController extends GetxController {
     super.onReady();
     // _getManMasjidModel();
     // ever(authController.firebaseUser, _getManMasjidModel);
+    // deMasjidModel.bindStream(getDetailMasjids(mID))
     ever(authController.userModel, _getManMasjidModel);
 
     nama.addListener(() {
@@ -132,6 +133,21 @@ class ManMasjidController extends GetxController {
           .doc(mID)
           .get()
           .then((doc) => DetailMasjidModel.fromSnapshot(doc));
+    } catch (e) {
+      deMasjidModel.value = DetailMasjidModel();
+    }
+    await isMyMasjid();
+    print(myMasjid.value);
+  }
+
+  getDetailMasjids(mID) async {
+    try {
+      // print(mID);
+      return firebaseFirestore
+          .collection(masjidCollection)
+          .doc(mID)
+          .snapshots()
+          .map((event) => DetailMasjidModel.fromSnapshot(event));
     } catch (e) {
       deMasjidModel.value = DetailMasjidModel();
     }

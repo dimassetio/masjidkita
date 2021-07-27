@@ -4,20 +4,20 @@ import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:cached_network_image/src/cached_image_widget.dart';
 import 'package:masjidkita/routes/route_name.dart';
+import 'package:masjidkita/screens/utils/widgets/MasjidCard2.dart';
 import '../../../main.dart';
 import '../MKConstant.dart';
 import '../MKColors.dart';
 import 'MasjidCard.dart';
 
 class MasjidListing extends StatelessWidget {
-  const MasjidListing({
+  MasjidListing({
     Key? key,
     required this.mListings,
-    required this.width,
   }) : super(key: key);
 
   final List mListings;
-  final double width;
+  final width = Get.width;
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +32,10 @@ class MasjidListing extends StatelessWidget {
             var dataMasjid = mListings[index];
             return GestureDetector(
               onTap: () async {
-                await manMasjidC.getDetailMasjid(dataMasjid.masjidID);
+                await manMasjidC.getDetailMasjid(dataMasjid.id);
                 Get.toNamed(RouteName.detail);
               },
-              child: Container(
-                margin: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                width: width,
-                decoration: boxDecoration(
-                    radius: 16,
-                    showShadow: true,
-                    bgColor: appStore.scaffoldBackground),
-                child: MasjidCard(dataMasjid: dataMasjid, width: width),
-              ),
+              child: MasjidCard2(dataMasjid: dataMasjid, width: width),
             );
           }),
     );

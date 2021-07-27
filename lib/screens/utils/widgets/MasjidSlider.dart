@@ -6,6 +6,7 @@ import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:masjidkita/screens/utils/widgets/MasjidCarouselSlider.dart';
+import 'package:masjidkita/screens/utils/widgets/like_button/like_button.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../main.dart';
@@ -41,7 +42,7 @@ class MasjidSliderWidget extends StatelessWidget {
               width: Get.width,
               child: GestureDetector(
                 onTap: () async {
-                  await manMasjidC.getDetailMasjid(slider.masjidID);
+                  await manMasjidC.getDetailMasjid(slider.id);
                   Get.toNamed(RouteName.detail);
                 },
                 child: Column(
@@ -86,12 +87,13 @@ class MasjidSliderWidget extends StatelessWidget {
                               ],
                             ),
                           ),
-                          IconButton(
-                            onPressed: () {
-                              listMasjidC.addFav(slider.masjidID);
+                          LikeButton(
+                            size: 25,
+                            isLiked: listMasjidC.idFavorit.contains(slider.id),
+                            onTap: (isLiked) async {
+                              listMasjidC.addFav(slider.id);
+                              return !isLiked;
                             },
-                            icon: Icon(Icons.star),
-                            color: mkColorPrimary,
                           ),
                         ],
                       ),

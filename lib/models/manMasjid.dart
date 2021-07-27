@@ -116,7 +116,7 @@ class DetailMasjidModel {
 class ListMasjidModel {
   String? nama;
   String? alamat;
-  String? masjidID;
+  String? id;
   // Timestamp dateCreated;
 
   ListMasjidModel({
@@ -127,7 +127,7 @@ class ListMasjidModel {
   ListMasjidModel.fromDocumentSnapshot(
     DocumentSnapshot documentSnapshot,
   ) {
-    masjidID = documentSnapshot.id;
+    id = documentSnapshot.id;
     nama = documentSnapshot.data()?["nama"];
     alamat = documentSnapshot.data()?["alamat"];
   }
@@ -136,7 +136,7 @@ class ListMasjidModel {
 class FavoritMasjidModel {
   String? nama;
   String? alamat;
-  String? masjidID;
+  String? id;
   // Timestamp dateCreated;
 
   FavoritMasjidModel({
@@ -147,7 +147,7 @@ class FavoritMasjidModel {
   FavoritMasjidModel.fromDocumentSnapshot(
     DocumentSnapshot documentSnapshot,
   ) {
-    masjidID = documentSnapshot.id;
+    id = documentSnapshot.id;
     nama = documentSnapshot.data()?["nama"];
     alamat = documentSnapshot.data()?["alamat"];
   }
