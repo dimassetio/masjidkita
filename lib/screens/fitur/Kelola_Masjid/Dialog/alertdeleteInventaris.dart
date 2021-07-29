@@ -1,16 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/main.dart';
-import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/routes/route_name.dart';
-import 'package:masjidkita/screens/utils/MKColors.dart';
-import 'package:masjidkita/screens/utils/MKConstant.dart';
-import 'package:masjidkita/screens/utils/MKStrings.dart';
-import 'package:masjidkita/screens/utils/widgets/NewMasjid.dart';
+import 'package:masjidkita/models/inventaris.dart';
+import 'package:masjidkita/services/database.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:masjidkita/main/utils/AppConstant.dart';
+import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/main.dart';
 
-class AddOrJoin extends StatelessWidget {
+class CustomDelete extends StatelessWidget {
+  final InventarisModel inventaris = InventarisModel();
+  // CustomDelete(
+  //   this.inventaris,
+  // );
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -31,36 +32,30 @@ class AddOrJoin extends StatelessWidget {
                 offset: const Offset(0.0, 10.0)),
           ],
         ),
-        width: Get.width,
+        width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            // ClipRRect(
-            //   borderRadius: BorderRadius.only(
-            //       topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-            //   child: Image(
-            //       width: MediaQuery.of(context).size.width,
-            //       image: AssetImage(
-            //           'images/widgets/materialWidgets/mwDialogAlertPanelWidgets/widget_delete.jpg'),
-            //       height: 120,
-            //       fit: BoxFit.cover),
-            // ),
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+              child: Image(
+                  width: MediaQuery.of(context).size.width,
+                  image: AssetImage('images/widgets/widget_delete.jpg'),
+                  height: 120,
+                  fit: BoxFit.cover),
+            ),
             24.height,
-            text(mk_addjoin,
-                textColor: mkTextColorPrimary,
-                fontSize: textSizeLargeMedium,
-                fontFamily: fontBold,
-                isCentered: true,
-                isLongText: true),
+            Text('Hapus inventaris?',
+                style:
+                    boldTextStyle(color: appStore.textPrimaryColor, size: 18)),
             16.height,
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: text(mk_addjoin_desc,
-                  textColor: mkTextColorSecondary,
-                  fontSize: textSizeSMedium,
-                  isLongText: true,
-                  isCentered: true),
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Text(
+                  "This will also permanently delete file inside the folder",
+                  style:
+                      secondaryTextStyle(color: appStore.textSecondaryColor)),
             ),
             16.height,
             Padding(
@@ -71,7 +66,7 @@ class AddOrJoin extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: boxDecoration(
-                          color: mkColorPrimary,
+                          color: Colors.blueAccent,
                           radius: 8,
                           bgColor: appStore.scaffoldBackground),
                       child: Center(
@@ -81,13 +76,13 @@ class AddOrJoin extends StatelessWidget {
                               WidgetSpan(
                                   child: Padding(
                                       padding: EdgeInsets.only(right: 8.0),
-                                      child: Icon(Icons.chevron_right,
-                                          color: mkColorPrimary, size: 18))),
+                                      child: Icon(Icons.close,
+                                          color: Colors.blueAccent, size: 18))),
                               TextSpan(
-                                  text: mk_join,
+                                  text: "Cancel",
                                   style: TextStyle(
                                       fontSize: 16.0,
-                                      color: mkColorPrimary,
+                                      color: Colors.blueAccent,
                                       fontFamily: fontRegular)),
                             ],
                           ),
@@ -102,7 +97,7 @@ class AddOrJoin extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration:
-                          boxDecoration(bgColor: mkColorPrimary, radius: 8),
+                          boxDecoration(bgColor: Colors.blueAccent, radius: 8),
                       child: Center(
                         child: RichText(
                           text: TextSpan(
@@ -110,10 +105,10 @@ class AddOrJoin extends StatelessWidget {
                               WidgetSpan(
                                   child: Padding(
                                       padding: EdgeInsets.only(right: 8.0),
-                                      child: Icon(Icons.add,
+                                      child: Icon(Icons.delete,
                                           color: Colors.white, size: 18))),
                               TextSpan(
-                                  text: mk_add,
+                                  text: "Delete",
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.white,
@@ -123,11 +118,10 @@ class AddOrJoin extends StatelessWidget {
                         ),
                       ),
                     ).onTap(() {
+                      // Database().deleteInventaris(
+                      //     inventaris.inventarisID, inventaris.foto);
+                      toast("Successfully Deleted");
                       finish(context);
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => NewMasjid(),
-                      );
                     }),
                   )
                 ],

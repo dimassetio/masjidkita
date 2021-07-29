@@ -11,7 +11,7 @@ class MasjidCarouselSlider extends StatefulWidget {
       this.aspectRatio: 16 / 9,
       this.viewportFraction: 0.8,
       this.initialPage: 0,
-      int realPage: 10000,
+      int realPage: 1,
       this.enableInfiniteScroll: true,
       this.reverse: false,
       this.autoPlay: false,

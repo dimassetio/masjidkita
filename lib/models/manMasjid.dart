@@ -60,8 +60,6 @@ class DetailMasjidModel {
   static const ID = "id";
   static const NAMA = "nama";
   static const ALAMAT = "alamat";
-  static const LASTLOGIN = "last_login";
-  static const PHOTOURL = "photo_url";
 
   String? id;
   String? nama;
@@ -99,7 +97,7 @@ class DetailMasjidModel {
     id = snapshot.id;
     nama = snapshot.data()?[NAMA];
     alamat = snapshot.data()?[ALAMAT];
-    photoUrl = snapshot.data()?[PHOTOURL];
+    photoUrl = snapshot.data()?["photoUrl"];
     deskripsi = snapshot.data()?["deskripsi"];
     kecamatan = snapshot.data()?["kecamatan"];
     kodePos = snapshot.data()?["kodePos"];
@@ -116,18 +114,23 @@ class DetailMasjidModel {
 class ListMasjidModel {
   String? nama;
   String? alamat;
-  String? masjidID;
+  String? photoUrl;
+
+  String? id;
   // Timestamp dateCreated;
 
   ListMasjidModel({
     this.nama,
     this.alamat,
+    this.id,
+    this.photoUrl,
   });
 
   ListMasjidModel.fromDocumentSnapshot(
     DocumentSnapshot documentSnapshot,
   ) {
-    masjidID = documentSnapshot.id;
+    id = documentSnapshot.id;
+    photoUrl = documentSnapshot.data()?["photoUrl"];
     nama = documentSnapshot.data()?["nama"];
     alamat = documentSnapshot.data()?["alamat"];
   }
@@ -136,18 +139,24 @@ class ListMasjidModel {
 class FavoritMasjidModel {
   String? nama;
   String? alamat;
-  String? masjidID;
+  String? id;
+  String? photoUrl;
+
   // Timestamp dateCreated;
 
   FavoritMasjidModel({
+    this.id,
     this.nama,
     this.alamat,
+    this.photoUrl,
   });
 
   FavoritMasjidModel.fromDocumentSnapshot(
     DocumentSnapshot documentSnapshot,
   ) {
-    masjidID = documentSnapshot.id;
+    id = documentSnapshot.id;
+    photoUrl = documentSnapshot.data()?["photoUrl"];
+
     nama = documentSnapshot.data()?["nama"];
     alamat = documentSnapshot.data()?["alamat"];
   }

@@ -22,7 +22,6 @@ class PageListMasjid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       // appBar: AppBar(
       //   leading: BackButton(
@@ -91,18 +90,28 @@ class PageListMasjid extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(26)),
                               ),
                             ),
-                            // listMasjidC.searchController.text == ""
-                            //     ? GestureDetector(
-                            //         child: Padding(
-                            //             padding: EdgeInsets.only(right: 16.0),
-                            //             child: Icon(Icons.cancel,
-                            //                 color: mkColorPrimary)),
-                            //       )
-                            //     :
-                            Padding(
-                                padding: EdgeInsets.only(right: 16.0),
-                                child: SvgPicture.asset(mk_ic_search,
-                                    color: mkColorPrimary)),
+                            Obx(
+                              () => listMasjidC.isSearching.value
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        listMasjidC.searchController.clear();
+                                        FocusScopeNode currentFocus =
+                                            FocusScope.of(context);
+
+                                        if (!currentFocus.hasPrimaryFocus) {
+                                          currentFocus.unfocus();
+                                        }
+                                      },
+                                      child: Padding(
+                                          padding: EdgeInsets.only(right: 16.0),
+                                          child: Icon(Icons.cancel,
+                                              color: mkColorPrimary)),
+                                    )
+                                  : Padding(
+                                      padding: EdgeInsets.only(right: 16.0),
+                                      child: SvgPicture.asset(mk_ic_search,
+                                          color: mkColorPrimary)),
+                            )
                           ],
                         ),
                       ),
@@ -120,11 +129,12 @@ class PageListMasjid extends StatelessWidget {
                             topLeft: Radius.circular(24),
                             topRight: Radius.circular(24))),
                     child: SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          Obx(() => Column(
+                      child: Obx(
+                        () => listMasjidC.isSearching.value
+                            // If Searching
+                            ? Column(
                                 children: [
-                                  listMasjidC.filteredMasjid.length > 0
+                                  listMasjidC.isSearching.value
                                       ? Container(
                                           alignment: Alignment.topLeft,
                                           padding: EdgeInsets.only(
@@ -136,40 +146,47 @@ class PageListMasjid extends StatelessWidget {
                                         )
                                       : Container(),
                                   MasjidListing(
-                                      mListings: listMasjidC.filteredMasjid,
-                                      width: width),
+                                    mListings: listMasjidC.filteredMasjid,
+                                  ),
                                 ],
-                              )),
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding: EdgeInsets.only(left: 15, bottom: 5),
-                            child: Text(
-                              mk_masjid_fav,
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
+                              )
+                            // If not Searching
+                            : Column(
+                                children: <Widget>[
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    padding:
+                                        EdgeInsets.only(left: 15, bottom: 5),
+                                    child: Text(
+                                      mk_masjid_fav,
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
 
-                          Obx(
-                            () => listMasjidC.favMasjids.isEmpty
-                                ? text(mk_masjid_fav_null,
-                                    isLongText: true, isCentered: true)
-                                : MasjidSliderWidget(listMasjidC.favMasjids),
-                          ),
-                          // SizedBox(height: 40),
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 15),
-                            child: Text(
-                              mk_list_masjid,
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          Obx(
-                            () => MasjidListing(
-                                mListings: listMasjidC.masjids, width: width),
-                          ),
-                        ],
+                                  Obx(
+                                    () => listMasjidC.favMasjids.isEmpty
+                                        ? text(mk_masjid_fav_null,
+                                            isLongText: true, isCentered: true)
+                                        : MasjidSliderWidget(
+                                            listMasjidC.favMasjids),
+                                  ),
+                                  // SizedBox(height: 40),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 15, horizontal: 15),
+                                    child: Text(
+                                      mk_list_masjid,
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  Obx(
+                                    () => MasjidListing(
+                                      mListings: listMasjidC.masjids,
+                                    ),
+                                  ),
+                                ],
+                              ),
                       ),
                     ),
                   ),

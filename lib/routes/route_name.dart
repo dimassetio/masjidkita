@@ -10,4 +10,8 @@ abstract class RouteName {
   static const detail = '/detail';
   static const profile = '/profile';
   static const form_profile = '/form_profile';
+  static const new_inventaris = '/new_inventaris';
+  static const inventaris = '/inventaris';
+  static const detail_inventaris = '/detail_inventaris';
+  static const edit_inventaris = '/edit_inventaris';
 }

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main.dart';
+import 'package:masjidkita/main/utils/AppColors.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKConstant.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
-import 'package:masjidkita/screens/utils/widgets/NewMasjid.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-class AddOrJoin extends StatelessWidget {
+class ConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -47,16 +47,13 @@ class AddOrJoin extends StatelessWidget {
             //       fit: BoxFit.cover),
             // ),
             24.height,
-            text(mk_addjoin,
-                textColor: mkTextColorPrimary,
-                fontSize: textSizeLargeMedium,
-                fontFamily: fontBold,
-                isCentered: true,
-                isLongText: true),
+            Text(mk_lbl_belum_login,
+                style:
+                    boldTextStyle(color: appStore.textPrimaryColor, size: 18)),
             16.height,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: text(mk_addjoin_desc,
+              child: text(mk_lbl_belum_login_desc,
                   textColor: mkTextColorSecondary,
                   fontSize: textSizeSMedium,
                   isLongText: true,
@@ -81,10 +78,10 @@ class AddOrJoin extends StatelessWidget {
                               WidgetSpan(
                                   child: Padding(
                                       padding: EdgeInsets.only(right: 8.0),
-                                      child: Icon(Icons.chevron_right,
+                                      child: Icon(Icons.close,
                                           color: mkColorPrimary, size: 18))),
                               TextSpan(
-                                  text: mk_join,
+                                  text: mk_lbl_batal,
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: mkColorPrimary,
@@ -110,10 +107,10 @@ class AddOrJoin extends StatelessWidget {
                               WidgetSpan(
                                   child: Padding(
                                       padding: EdgeInsets.only(right: 8.0),
-                                      child: Icon(Icons.add,
+                                      child: Icon(Icons.login,
                                           color: Colors.white, size: 18))),
                               TextSpan(
-                                  text: mk_add,
+                                  text: mk_sign_in,
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.white,
@@ -123,11 +120,16 @@ class AddOrJoin extends StatelessWidget {
                         ),
                       ),
                     ).onTap(() {
-                      finish(context);
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => NewMasjid(),
-                      );
+                      // finish(context);
+                      FocusScopeNode currentFocus = FocusScope.of(context);
+
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
+                      Get.offAllNamed(RouteName.detail);
+                      manMasjidC.clearControllers();
+                      // Get.back();
+                      // Get.toNamed(RouteName.sign_in);
                     }),
                   )
                 ],

@@ -6,6 +6,7 @@ import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:masjidkita/screens/utils/widgets/MasjidCarouselSlider.dart';
+import 'package:masjidkita/screens/utils/widgets/like_button/like_button.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../main.dart';
@@ -41,8 +42,9 @@ class MasjidSliderWidget extends StatelessWidget {
               width: Get.width,
               child: GestureDetector(
                 onTap: () async {
-                  await manMasjidC.getDetailMasjid(slider.masjidID);
-                  Get.toNamed(RouteName.detail);
+                  manMasjidC.gotoDetail(slider.id);
+                  // await manMasjidC.getDetailMasjid(slider.id);
+                  // Get.toNamed(RouteName.detail);
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,13 +55,32 @@ class MasjidSliderWidget extends StatelessWidget {
                           topLeft: Radius.circular(16.0),
                           topRight: Radius.circular(16.0),
                         ),
-                        child: Image.asset(mk_contoh_image,
-                            // slider.image,
-                            // placeholder: placeholderWidgetFn() as Widget Function(
-                            //     BuildContext, String)?,
-                            height: 180,
-                            width: width,
-                            fit: BoxFit.cover),
+                        child: Image.network(
+                          slider.photoUrl ?? "",
+                          height: 180,
+                          width: width,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            }
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          },
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                            return Image.asset(mk_contoh_image,
+                                height: 180, width: width, fit: BoxFit.cover);
+                          },
+                        ),
                       ),
                     ),
                     Container(
@@ -86,12 +107,13 @@ class MasjidSliderWidget extends StatelessWidget {
                               ],
                             ),
                           ),
-                          IconButton(
-                            onPressed: () {
-                              listMasjidC.addFav(slider.masjidID);
+                          LikeButton(
+                            size: 25,
+                            isLiked: listMasjidC.idFavorit.contains(slider.id),
+                            onTap: (isLiked) async {
+                              listMasjidC.addFav(slider.id);
+                              return !isLiked;
                             },
-                            icon: Icon(Icons.star),
-                            color: mkColorPrimary,
                           ),
                         ],
                       ),

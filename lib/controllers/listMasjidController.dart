@@ -11,8 +11,10 @@ class ListMasjidController extends GetxController {
   static ListMasjidController instance = Get.find();
 
   RxList<ListMasjidModel> listMasjid = RxList<ListMasjidModel>();
-
   List<ListMasjidModel> get masjids => listMasjid.value;
+
+  // Rx<ListMasjidModel> selectMasjid = ListMasjidModel().obs;
+  // ListMasjidModel get selected => selectMasjid.value;
 
   RxList<FavoritMasjidModel> favoritMasjid = RxList<FavoritMasjidModel>();
   List<FavoritMasjidModel> get favMasjids => favoritMasjid.value;
@@ -21,8 +23,17 @@ class ListMasjidController extends GetxController {
   List<ListMasjidModel> get filteredMasjid => resultsList.value;
 
   TextEditingController searchController = TextEditingController();
+  // Rx<TextEditingController> rxSearchController = TextEditingController().obs;
+  // TextEditingController get searchController => rxSearchController.value;
+  // set searchController(TextEditingController value) =>
+  //     this.rxSearchController.value = value;
 
+  var isSearching = false.obs;
   final box = GetStorage();
+
+  // selectById(String id) {
+  //   selectMasjid.value = listMasjid.firstWhere((element) => element.id == id);
+  // }
 
   var idFavorit = [
     "Null Safety",
@@ -56,6 +67,11 @@ class ListMasjidController extends GetxController {
   }
 
   _onSearchChanged() {
+    if (searchController.text == "") {
+      isSearching.value = false;
+    } else {
+      isSearching.value = true;
+    }
     searchResultsList();
   }
 
@@ -89,6 +105,10 @@ class ListMasjidController extends GetxController {
   // getIdFavorit() {
   //   idFavorit.value = box.read('favMasjid');
   // }
+
+  isMyFav(id) {
+    return idFavorit.contains(id);
+  }
 
   addFav(id) {
     idFavorit.contains(id) ? idFavorit.remove(id) : idFavorit.add(id);
