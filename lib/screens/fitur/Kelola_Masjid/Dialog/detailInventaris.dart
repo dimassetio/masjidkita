@@ -120,19 +120,18 @@ class InventarisDetail extends StatelessWidget {
                       margin: EdgeInsets.all(spacing_standard_new),
                       child: Column(
                         children: <Widget>[
-                          if (inventarisC.inventaris.url != null)
-                            CachedNetworkImage(
-                              placeholder: placeholderWidgetFn() as Widget
-                                  Function(BuildContext, String)?,
-                              imageUrl: "$imageURL",
-                              width: width,
-                              height: width * 0.6,
-                              fit: BoxFit.fill,
-                            ),
-                          if (inventarisC.inventaris.url == "")
-                            Container(
-                              child: text("Tidak ada gambar"),
-                            ),
+                          inventarisC.inventaris.url != ""
+                              ? CachedNetworkImage(
+                                  placeholder: placeholderWidgetFn() as Widget
+                                      Function(BuildContext, String)?,
+                                  imageUrl: "$imageURL",
+                                  width: width,
+                                  height: width * 0.6,
+                                  fit: BoxFit.fill,
+                                )
+                              : Container(
+                                  child: text("Tidak ada gambar"),
+                                ),
                           SizedBox(height: spacing_standard_new),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

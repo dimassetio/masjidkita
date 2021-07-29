@@ -140,113 +140,115 @@ class AddInventarisPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(InventarisController());
-    final InventarisController inventarisController = Get.find();
+    // final InventarisController inventarisController = Get.find();
     return Scaffold(
       appBar: AppBar(
         title: text('Tambah Inventaris'),
       ),
       body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                controller: inventarisC.namaController,
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  hintText: 'ex: Karpet',
-                  labelText: 'Nama Barang',
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                controller: inventarisC.kondisiController,
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  hintText: 'ex: Baik',
-                  labelText: 'Kondisi barang',
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                controller: inventarisC.hargaController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  hintText: 'misal: Rp. 15.000,-',
-                  labelText: 'Masukkan Harga barang (satuan)',
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                controller: inventarisC.jumlahController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
-                  hintText: 'ex: 20',
-                  labelText: 'Masukkan Jumlah barang',
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextField(
-                focusNode: FocusNode(),
-                enableInteractiveSelection: false,
-                // style: GoogleFonts.poppins(),
-                enabled: false,
-                controller: inventarisC.fotoController,
-                decoration: InputDecoration(hintText: message),
-              ),
-            ),
-            Container(
-              child: Padding(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: PopupMenuButton(
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                        child: Icon(Icons.photo_album), value: "gallery"),
-                    PopupMenuItem(child: Icon(Icons.camera), value: "cam")
-                  ],
-                  onSelected: (value) async {
-                    if (value == "gallery") {
-                      getImage();
-                    } else {
-                      getImageCam();
-                    }
-                  },
-                  child: Text("Pilih gambar"),
-                  offset: Offset(0, 25),
+                child: TextFormField(
+                  controller: inventarisC.namaController,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'ex: Karpet',
+                    labelText: 'Nama Barang',
+                  ),
                 ),
               ),
-            ),
-            Opacity(
-              opacity: 0.0,
-              child: TextField(
-                focusNode: FocusNode(),
-                enableInteractiveSelection: false,
-                // style: GoogleFonts.poppins(),
-                enabled: false,
-                controller: inventarisC.urlController,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: TextFormField(
+                  controller: inventarisC.kondisiController,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'ex: Baik',
+                    labelText: 'Kondisi barang',
+                  ),
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                inventarisController.addInventaris();
-              },
-              child: Text("Tambahkan"),
-              style: ElevatedButton.styleFrom(
-                primary: mkColorPrimary,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: TextFormField(
+                  controller: inventarisC.hargaController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'misal: Rp. 15.000,-',
+                    labelText: 'Masukkan Harga barang (satuan)',
+                  ),
+                ),
               ),
-            ).center()
-          ],
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: TextFormField(
+                  controller: inventarisC.jumlahController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'ex: 20',
+                    labelText: 'Masukkan Jumlah barang',
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: TextField(
+                  focusNode: FocusNode(),
+                  enableInteractiveSelection: false,
+                  // style: GoogleFonts.poppins(),
+                  enabled: false,
+                  controller: inventarisC.fotoController,
+                  decoration: InputDecoration(hintText: message),
+                ),
+              ),
+              Container(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  child: PopupMenuButton(
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                          child: Icon(Icons.photo_album), value: "gallery"),
+                      PopupMenuItem(child: Icon(Icons.camera), value: "cam")
+                    ],
+                    onSelected: (value) async {
+                      if (value == "gallery") {
+                        getImage();
+                      } else {
+                        getImageCam();
+                      }
+                    },
+                    child: Text("Pilih gambar"),
+                    offset: Offset(0, 25),
+                  ),
+                ),
+              ),
+              Opacity(
+                opacity: 0.0,
+                child: TextField(
+                  focusNode: FocusNode(),
+                  enableInteractiveSelection: false,
+                  // style: GoogleFonts.poppins(),
+                  enabled: false,
+                  controller: inventarisC.urlController,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  inventarisC.addInventaris();
+                },
+                child: Text("Tambahkan"),
+                style: ElevatedButton.styleFrom(
+                  primary: mkColorPrimary,
+                ),
+              ).center()
+            ],
+          ),
         ),
       ),
     );

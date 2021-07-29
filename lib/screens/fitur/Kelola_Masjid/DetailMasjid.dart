@@ -48,40 +48,50 @@ class KeMasjid extends StatelessWidget {
                   expandedHeight: 220.0,
                   floating: true,
                   centerTitle: true,
-                  title: Text(manMasjidC.deMasjid.nama ?? "Nama Masjid",
+                  title: Obx(() => Text(
+                      manMasjidC.deMasjid.nama ?? "Nama Masjid",
                       style:
-                          primaryTextStyle(color: appStore.textPrimaryColor)),
+                          primaryTextStyle(color: appStore.textPrimaryColor))),
                   pinned: true,
                   snap: false,
                   elevation: 50,
                   backgroundColor: white,
                   flexibleSpace: Obx(
                     () => FlexibleSpaceBar(
-                        centerTitle: true,
-                        background: Image.network(
-                          manMasjidC.deMasjid.photoUrl ?? "",
-                          fit: BoxFit.cover,
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            );
-                          },
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                            return Image.asset(mk_contoh_image,
-                                fit: BoxFit.cover);
-                          },
-                        )),
+                      centerTitle: true,
+                      background: manMasjidC.deMasjid.photoUrl != ""
+                          ? CachedNetworkImage(
+                              placeholder: placeholderWidgetFn() as Widget
+                                  Function(BuildContext, String)?,
+                              imageUrl: manMasjidC.deMasjid.photoUrl ?? "",
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(mk_contoh_image, fit: BoxFit.cover),
+                      // Image.network(
+                      //   manMasjidC.deMasjid.photoUrl ?? "",
+                      //   fit: BoxFit.cover,
+                      //   loadingBuilder: (BuildContext context, Widget child,
+                      //       ImageChunkEvent? loadingProgress) {
+                      //     if (loadingProgress == null) {
+                      //       return child;
+                      //     }
+                      //     return Center(
+                      //       child: CircularProgressIndicator(
+                      //         value: loadingProgress.expectedTotalBytes !=
+                      //                 null
+                      //             ? loadingProgress.cumulativeBytesLoaded /
+                      //                 loadingProgress.expectedTotalBytes!
+                      //             : null,
+                      //       ),
+                      //     );
+                      //   },
+                      //   errorBuilder: (BuildContext context, Object exception,
+                      //       StackTrace? stackTrace) {
+                      //     return Image.asset(mk_contoh_image,
+                      //         fit: BoxFit.cover);
+                      //   },
+                      // ),
+                    ),
                   ),
                 ),
                 SliverPersistentHeader(

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/integrations/controllers.dart';
@@ -386,27 +387,37 @@ class _StepperBodyState extends State<StepperBody> {
           isActive: currStep == 3,
           state: StepState.indexed,
           content: Column(children: [
-            Obx(() => Image.network(
-                  manMasjidC.deMasjid.photoUrl ?? "",
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    }
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
-                      ),
-                    );
-                  },
-                  errorBuilder: (BuildContext context, Object exception,
-                      StackTrace? stackTrace) {
-                    return const Text("Belum Ada Gambar");
-                  },
-                )),
+            Obx(() => manMasjidC.deMasjid.photoUrl != "" &&
+                    manMasjidC.deMasjid.photoUrl != null
+                ? CachedNetworkImage(
+                    placeholder: placeholderWidgetFn() as Widget Function(
+                        BuildContext, String)?,
+                    imageUrl: manMasjidC.deMasjid.photoUrl ?? "",
+                    fit: BoxFit.fill,
+                  )
+                : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
+            // Image.network(
+            //       manMasjidC.deMasjid.photoUrl ?? "",
+            //       loadingBuilder: (BuildContext context, Widget child,
+            //           ImageChunkEvent? loadingProgress) {
+            //         if (loadingProgress == null) {
+            //           return child;
+            //         }
+            //         return Center(
+            //           child: CircularProgressIndicator(
+            //             value: loadingProgress.expectedTotalBytes != null
+            //                 ? loadingProgress.cumulativeBytesLoaded /
+            //                     loadingProgress.expectedTotalBytes!
+            //                 : null,
+            //           ),
+            //         );
+            //       },
+            //       errorBuilder: (BuildContext context, Object exception,
+            //           StackTrace? stackTrace) {
+            //         return const Text("Belum Ada Gambar");
+            //       },
+            //     ),
+            // ),
             ElevatedButton(
               child: text("Upload Image", textColor: mkWhite),
               onPressed: () {

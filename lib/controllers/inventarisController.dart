@@ -36,7 +36,7 @@ class InventarisController extends GetxController {
     int price = finalHarga.toInt();
     int jumlah = jumlahController.text.toInt();
     int totalPrice = price * jumlah;
-    print('controller passed');
+    print("Nama = ${namaController.text}");
     DateTime now = DateTime.now();
     // int hargaTotal = jumlah!;
     try {
@@ -57,6 +57,37 @@ class InventarisController extends GetxController {
     clearController();
     Get.back(); // Get.toNamed(RouteName.kelolamasjid);
   }
+
+  // Future getImage(bool isCam) async {
+  //   final XFile? pickImage = await _picker.pickImage(
+  //       source: isCam ? ImageSource.camera : ImageSource.gallery);
+  //     String downloadUrl, fileName, filePath;
+  //   if (pickImage != null) {
+  //     fileName = pickImage.name;
+  //     filePath = pickImage.path;
+  //     Reference refFeedBuckets = firebaseStorage
+  //         .ref()
+  //         .child(masjidCollection)
+  //         .child(deMasjid.id!)
+  //         .child("Foto Profil");
+  //     var file = File(filePath);
+
+  //     TaskSnapshot uploadedFile = await refFeedBuckets.putFile(file);
+
+  //     if (uploadedFile.state == TaskState.running) toast("Loading Image");
+
+  //     if (uploadedFile.state == TaskState.success) {
+  //       downloadUrl.value = await refFeedBuckets.getDownloadURL();
+  //       photoUrl.text = downloadUrl.value;
+  //       await firebaseFirestore
+  //           .collection(masjidCollection)
+  //           .doc(deMasjid.id)
+  //           .update({'photoUrl': downloadUrl.value});
+  //     } else {
+  //       print(message);
+  //     }
+  //   }
+  // }
 
   clearController() {
     namaController.clear();
@@ -117,9 +148,12 @@ class InventarisController extends GetxController {
 
   deleteInventaris(
     inventarisID,
-    // foto
   ) {
-    firebaseFirestore.collection("inventaris").doc(inventarisID).delete();
+    try {
+      firebaseFirestore.collection("inventaris").doc(inventarisID).delete();
+    } finally {
+      toast("Successfully Deleted");
+    }
     // var imageRef = firebaseStorage.ref().child(
     //     'inventaris/18ae6632-7083-49dd-b0d3-e7a617346b564771009612812182052.jpg');
     // imageRef.delete();
@@ -128,7 +162,7 @@ class InventarisController extends GetxController {
     //     .refFromURL("gs://masjidkita-2d58e.appspot.com//Inventaris/${foto}")
     //     .delete();
     // print(foto);
-    Get.back();
+    // Get.back();
     // Get.toNamed(RouteName.inventaris);
   }
 

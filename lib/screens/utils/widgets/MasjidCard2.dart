@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/integrations/controllers.dart';
@@ -38,35 +39,50 @@ class MasjidCard2 extends StatelessWidget {
           child: Row(
             children: <Widget>[
               ClipRRect(
-                child: Image.network(
-                  dataMasjid.photoUrl ?? "",
-                  width: width / 3,
-                  height: width / 3.2,
-                  fit: BoxFit.fill,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    }
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
+                child: dataMasjid.photoUrl != "" && dataMasjid.photoUrl != null
+                    ? CachedNetworkImage(
+                        placeholder: placeholderWidgetFn() as Widget Function(
+                            BuildContext, String)?,
+                        imageUrl: dataMasjid.photoUrl ?? "",
+                        width: width / 3,
+                        height: width / 3.2,
+                        fit: BoxFit.fill,
+                      )
+                    : Image.asset(
+                        mk_contoh_image,
+                        width: width / 3,
+                        height: width / 3.2,
+                        fit: BoxFit.fill,
                       ),
-                    );
-                  },
-                  errorBuilder: (BuildContext context, Object exception,
-                      StackTrace? stackTrace) {
-                    return Image.asset(
-                      mk_contoh_image,
-                      width: width / 3,
-                      height: width / 3.2,
-                      fit: BoxFit.fill,
-                    );
-                  },
-                ),
+                //  Image.network(
+                //   dataMasjid.photoUrl ?? "",
+                //   width: width / 3,
+                //   height: width / 3.2,
+                //   fit: BoxFit.fill,
+                //   loadingBuilder: (BuildContext context, Widget child,
+                //       ImageChunkEvent? loadingProgress) {
+                //     if (loadingProgress == null) {
+                //       return child;
+                //     }
+                //     return Center(
+                //       child: CircularProgressIndicator(
+                //         value: loadingProgress.expectedTotalBytes != null
+                //             ? loadingProgress.cumulativeBytesLoaded /
+                //                 loadingProgress.expectedTotalBytes!
+                //             : null,
+                //       ),
+                //     );
+                //   },
+                //   errorBuilder: (BuildContext context, Object exception,
+                //       StackTrace? stackTrace) {
+                //     return Image.asset(
+                //       mk_contoh_image,
+                //       width: width / 3,
+                //       height: width / 3.2,
+                //       fit: BoxFit.fill,
+                //     );
+                //   },
+                // ),
                 borderRadius: BorderRadius.circular(10),
               ),
               Expanded(

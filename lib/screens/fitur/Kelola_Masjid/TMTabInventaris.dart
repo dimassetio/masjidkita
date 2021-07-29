@@ -126,20 +126,38 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                         child: InventarisCard(inventarisC.inventariss[index]),
                         background: slideRightBackground(),
                         secondaryBackground: slideLeftBackground(),
-                        onDismissed: (direction) {
+                        confirmDismiss: (direction) async {
+                          final bool? res;
                           if (direction == DismissDirection.startToEnd) {
-                            // ScaffoldMessengerState().showSnackBar(
-                            //     SnackBar(content: Text("Swipe to left")));
-                            setState(() {
-                              inventarisC.inventariss.removeAt(index);
-                              Get.toNamed(RouteName.detail_inventaris);
-                            });
+                            Get.toNamed(RouteName.detail_inventaris);
+                            res = false;
                           } else if (direction == DismissDirection.endToStart) {
-                            // userList.removeAt(index);d
-                            // ScaffoldMessengerState().showSnackBar(
-                            //     SnackBar(content: Text("Swipe to right")));
-                            Get.to(() => CustomDelete());
-                          }
+                            return res = await showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    CustomDelete());
+                          } else
+                            res = false;
+                          return res;
+                        },
+                        onDismissed: (direction) {
+                          setState(() {
+                            inventarisC.inventariss.removeAt(index);
+                          });
+                          // if (direction == DismissDirection.startToEnd) {
+                          // ScaffoldMessengerState().showSnackBar(
+                          //     SnackBar(content: Text("Swipe to left")));
+                          //   setState(() {
+                          //     inventarisC.inventariss.removeAt(index);
+                          //     Get.toNamed(RouteName.detail_inventaris);
+                          //   });
+                          // } else if (direction == DismissDirection.endToStart) {
+                          // userList.removeAt(index);d
+                          // ScaffoldMessengerState().showSnackBar(
+                          //     SnackBar(content: Text("Swipe to right")));
+
+                          // Get.to(() => CustomDelete());
+                          // }
                         },
                       );
                     }),

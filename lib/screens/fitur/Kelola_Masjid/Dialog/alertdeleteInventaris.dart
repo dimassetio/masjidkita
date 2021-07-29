@@ -9,10 +9,8 @@ import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/main.dart';
 
 class CustomDelete extends StatelessWidget {
-  final InventarisModel inventaris = InventarisModel();
-  // CustomDelete(
-  //   this.inventaris,
-  // );
+  // final InventarisModel inventaris = InventarisModel();
+  // CustomDelete(int index);
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -91,6 +89,7 @@ class CustomDelete extends StatelessWidget {
                       ),
                     ).onTap(() {
                       finish(context);
+                      return false;
                     }),
                   ),
                   16.width,
@@ -118,15 +117,20 @@ class CustomDelete extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ).onTap(() {
+                    ).onTap(() async {
                       // Database().deleteInventaris(
                       //   inventaris.inventarisID,
                       //   // inventaris.foto
                       // );
-                      inventarisC.deleteInventaris(
+                      // inventarisC.deleteInventaris(
+                      //     inventarisC.inventaris.inventarisID);
+                      // inventarisC.inventariss.removeAt(index);
+
+                      await inventarisC.deleteInventaris(
                           inventarisC.inventaris.inventarisID);
-                      toast("Successfully Deleted");
                       finish(context);
+
+                      return true;
                     }),
                   )
                 ],

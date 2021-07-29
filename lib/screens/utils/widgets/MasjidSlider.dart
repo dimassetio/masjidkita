@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,32 +56,48 @@ class MasjidSliderWidget extends StatelessWidget {
                           topLeft: Radius.circular(16.0),
                           topRight: Radius.circular(16.0),
                         ),
-                        child: Image.network(
-                          slider.photoUrl ?? "",
-                          height: 180,
-                          width: width,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (BuildContext context, Widget child,
-                              ImageChunkEvent? loadingProgress) {
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            return Center(
-                              child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
+                        child: slider.photoUrl != "" && slider.photoUrl != null
+                            ? CachedNetworkImage(
+                                // imageBuilder: (context, imageProvider) => ,
+                                placeholder: placeholderWidgetFn() as Widget
+                                    Function(BuildContext, String)?,
+                                imageUrl: slider.photoUrl ?? "",
+                                height: 180,
+                                width: width,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                mk_contoh_image,
+                                height: 180,
+                                width: width,
+                                fit: BoxFit.cover,
                               ),
-                            );
-                          },
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                            return Image.asset(mk_contoh_image,
-                                height: 180, width: width, fit: BoxFit.cover);
-                          },
-                        ),
+                        // Image.network(
+                        //   slider.photoUrl ?? "",
+                        //   height: 180,
+                        //   width: width,
+                        //   fit: BoxFit.cover,
+                        //   loadingBuilder: (BuildContext context, Widget child,
+                        //       ImageChunkEvent? loadingProgress) {
+                        //     if (loadingProgress == null) {
+                        //       return child;
+                        //     }
+                        //     return Center(
+                        //       child: CircularProgressIndicator(
+                        //         value: loadingProgress.expectedTotalBytes !=
+                        //                 null
+                        //             ? loadingProgress.cumulativeBytesLoaded /
+                        //                 loadingProgress.expectedTotalBytes!
+                        //             : null,
+                        //       ),
+                        //     );
+                        //   },
+                        //   errorBuilder: (BuildContext context, Object exception,
+                        //       StackTrace? stackTrace) {
+                        //     return Image.asset(mk_contoh_image,
+                        //         height: 180, width: width, fit: BoxFit.cover);
+                        //   },
+                        // ),
                       ),
                     ),
                     Container(
