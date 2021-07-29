@@ -7,6 +7,8 @@ import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/models/inventaris.dart';
 import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
+import 'package:masjidkita/screens/utils/MKImages.dart';
+import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:masjidkita/services/database.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
@@ -22,8 +24,15 @@ class InventarisDetail extends StatelessWidget {
   final InventarisModel inventaris = InventarisModel();
   @override
   Widget build(BuildContext context) {
+    String? imageURL = inventarisC.inventaris.url;
+    // String noImage = "https://i.postimg.cc/9M4hLrrJ/no-image.png";
+    if (imageURL == "") {
+      String? imageURL = "https://i.postimg.cc/9M4hLrrJ/no-image.png";
+      print(imageURL);
+    }
     changeStatusColor(appStore.appBarColor!);
     var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
 
     Widget mTag(var value) {
       return Container(
@@ -111,20 +120,25 @@ class InventarisDetail extends StatelessWidget {
                       margin: EdgeInsets.all(spacing_standard_new),
                       child: Column(
                         children: <Widget>[
-                          CachedNetworkImage(
-                            placeholder: placeholderWidgetFn() as Widget
-                                Function(BuildContext, String)?,
-                            imageUrl: "${inventarisC.inventaris.url}",
-                            width: width,
-                            height: width * 0.5,
-                            fit: BoxFit.fill,
-                          ),
+                          if (inventarisC.inventaris.url != null)
+                            CachedNetworkImage(
+                              placeholder: placeholderWidgetFn() as Widget
+                                  Function(BuildContext, String)?,
+                              imageUrl: "$imageURL",
+                              width: width,
+                              height: width * 0.6,
+                              fit: BoxFit.fill,
+                            ),
+                          if (inventarisC.inventaris.url == "")
+                            Container(
+                              child: text("Tidak ada gambar"),
+                            ),
                           SizedBox(height: spacing_standard_new),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               text("${inventarisC.inventaris.nama}",
-                                  fontFamily: fontMedium,
+                                  fontFamily: fontBold,
                                   fontSize: textSizeNormal),
                               text("Rp. ${inventarisC.inventaris.hargaTotal},-",
                                   fontFamily: fontMedium,

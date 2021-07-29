@@ -22,3 +22,4 @@ const t5_dollar_exchange = "images/theme5/t5_dollar_exchange.svg";
 const t5_circle = "images/theme5/t5_circle.svg";
 const t5_coupon = "images/theme5/t5_coupon.svg";
 const t5_wallet = "images/theme5/t5_wallet.svg";
+const no_image = "images/widgets/no-image.png";

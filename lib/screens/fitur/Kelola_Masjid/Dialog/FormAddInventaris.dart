@@ -243,7 +243,7 @@ class AddInventarisPage extends StatelessWidget {
               },
               child: Text("Tambahkan"),
               style: ElevatedButton.styleFrom(
-                primary: Colors.indigoAccent,
+                primary: mkColorPrimary,
               ),
             ).center()
           ],
