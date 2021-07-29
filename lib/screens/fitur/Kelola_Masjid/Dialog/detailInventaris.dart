@@ -58,26 +58,27 @@ class InventarisDetail extends StatelessWidget {
             SizedBox(height: spacing_standard_new),
             Row(
               children: <Widget>[
-                FloatingActionButton.extended(
-                    heroTag: '5',
-                    label: Text(
-                      "Edit",
-                      style: primaryTextStyle(color: Colors.white),
-                    ),
-                    backgroundColor: Colors.orange,
-                    icon: Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Get.toNamed(RouteName.edit_inventaris);
-                    }),
-                10.width,
+                // FloatingActionButton.extended(
+                //     heroTag: '5',
+                //     label: Text(
+                //       "Edit",
+                //       style: primaryTextStyle(color: Colors.white),
+                //     ),
+                //     backgroundColor: Colors.orange,
+                //     icon: Icon(
+                //       Icons.edit,
+                //       color: Colors.white,
+                //     ),
+                //     onPressed: () {
+                //       Get.toNamed(RouteName.edit_inventaris);
+                //       // Get.to(CustomDelete());
+                //     }),
+                // 10.width,
                 FloatingActionButton.extended(
                     heroTag: '1',
                     // heroTag: '5',
                     label: Text(
-                      "Delete",
+                      "Hapus",
                       style: primaryTextStyle(color: Colors.white),
                     ),
                     backgroundColor: Colors.redAccent,
@@ -86,8 +87,8 @@ class InventarisDetail extends StatelessWidget {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      // CustomDelete();
-                      Database().deleteInventaris(inventaris.inventarisID);
+                      Get.to(() => CustomDelete());
+                      // Database().deleteInventaris(inventaris.inventarisID);
                     }),
               ],
             )
@@ -110,14 +111,14 @@ class InventarisDetail extends StatelessWidget {
                       margin: EdgeInsets.all(spacing_standard_new),
                       child: Column(
                         children: <Widget>[
-                          // CachedNetworkImage(
-                          //   placeholder: placeholderWidgetFn() as Widget
-                          //       Function(BuildContext, String)?,
-                          //   imageUrl: "${inventarisC.inventaris.url}",
-                          //   width: width,
-                          //   height: width * 0.4,
-                          //   fit: BoxFit.fill,
-                          // ),
+                          CachedNetworkImage(
+                            placeholder: placeholderWidgetFn() as Widget
+                                Function(BuildContext, String)?,
+                            imageUrl: "${inventarisC.inventaris.url}",
+                            width: width,
+                            height: width * 0.5,
+                            fit: BoxFit.fill,
+                          ),
                           SizedBox(height: spacing_standard_new),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

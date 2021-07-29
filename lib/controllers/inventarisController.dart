@@ -30,8 +30,13 @@ class InventarisController extends GetxController {
   InventarisModel get inventaris => _inventarisModel.value;
 
   addInventaris() async {
+    String harga = hargaController.text;
+    String result = harga.replaceAll('Rp ', '');
+    String finalHarga = result.replaceAll('.', '');
+    int price = finalHarga.toInt();
+    int jumlah = jumlahController.text.toInt();
+    int totalPrice = price * jumlah;
     print('controller passed');
-    // print(harga);
     DateTime now = DateTime.now();
     // int hargaTotal = jumlah!;
     try {
@@ -42,8 +47,8 @@ class InventarisController extends GetxController {
         'jumlah': jumlahController.text.toInt(),
         'kondisi': kondisiController.text,
         'createdAt': now,
-        'harga': hargaController.text,
-        // 'hargaTotal': hargaTotal,
+        'harga': finalHarga.toInt(),
+        'hargaTotal': totalPrice,
       });
     } catch (e) {
       print(e);
@@ -108,6 +113,23 @@ class InventarisController extends GetxController {
     Database()
         .updateInventaris(nama, kondisi, jumlah, inventarisID, foto, harga);
     Get.toNamed(RouteName.kelolamasjid);
+  }
+
+  deleteInventaris(
+    inventarisID,
+    // foto
+  ) {
+    firebaseFirestore.collection("inventaris").doc(inventarisID).delete();
+    // var imageRef = firebaseStorage.ref().child(
+    //     'inventaris/18ae6632-7083-49dd-b0d3-e7a617346b564771009612812182052.jpg');
+    // imageRef.delete();
+    // print(imageRef);
+    // firebaseStorage
+    //     .refFromURL("gs://masjidkita-2d58e.appspot.com//Inventaris/${foto}")
+    //     .delete();
+    // print(foto);
+    Get.back();
+    // Get.toNamed(RouteName.inventaris);
   }
 
   void clear() {

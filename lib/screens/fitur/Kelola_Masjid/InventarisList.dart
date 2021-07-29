@@ -33,10 +33,11 @@ class InventarisCard extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     // CircleAvatar(
-                    //   // backgroundImage:
-                    //   //     CachedNetworkImageProvider(mk_net_img),
+                    //   backgroundImage:
+                    //       AssetImage('images/widgets/to-do-list.png'),
+                    //   // CachedNetworkImageProvider(mk_net_img),
                     //   radius: MediaQuery.of(context).size.width * 0.08,
-                    // ),),
+                    // ),
                     SizedBox(width: 16),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

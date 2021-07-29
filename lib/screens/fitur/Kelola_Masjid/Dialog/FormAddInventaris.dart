@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -46,13 +47,19 @@ class AddInventarisPage extends StatelessWidget {
         await _picker.pickImage(source: ImageSource.gallery);
     // pickImage = await ImagePicker().getImage(source: ImageSource.gallery);
     if (pickImage != null) {
+      // fileName = pickImage.name.split('/').last;
+      fileName = pickImage.name;
+      filePath = pickImage.path;
+      String files = pickImage.path;
       Reference refFeedBucket =
-          feedStorage.ref().child('inventaris').child(filePath);
+          feedStorage.ref().child('inventaris').child(files);
+      Reference refFeedBuckets =
+          firebaseStorage.ref().child('inventaris').child(files);
       // var dowurl = await (await pickImage.onComplete).ref.getDownloadURL().toString();
       String downloadUrl;
-      var file = File(filePath);
+      var file = File(files);
 
-      TaskSnapshot uploadedFile = await refFeedBucket.putFile(file);
+      TaskSnapshot uploadedFile = await refFeedBuckets.putFile(file);
 
       if (uploadedFile.state == TaskState.success) {
         downloadUrl = await refFeedBucket.getDownloadURL();
@@ -66,13 +73,20 @@ class AddInventarisPage extends StatelessWidget {
 
   Future getImageCam() async {
     final FirebaseStorage feedStorage = FirebaseStorage.instanceFor();
-    pickImage = await ImagePicker().getImage(source: ImageSource.camera);
+    final XFile? pickImage =
+        await _picker.pickImage(source: ImageSource.camera);
+    // pickImage = await ImagePicker().getImage(source: ImageSource.camera);
     if (pickImage != null) {
+      fileName = pickImage.name;
+      filePath = pickImage.path;
+      String files = pickImage.path;
       Reference refFeedBucket =
-          feedStorage.ref().child('inventaris').child(filePath);
+          feedStorage.ref().child('inventaris').child(files);
+      Reference refFeedBuckets =
+          firebaseStorage.ref().child('inventaris').child(files);
       // var dowurl = await (await pickImage.onComplete).ref.getDownloadURL().toString();
       String downloadUrl;
-      var file = File(filePath);
+      var file = File(files);
 
       TaskSnapshot uploadedFile = await refFeedBucket.putFile(file);
 
@@ -137,11 +151,12 @@ class AddInventarisPage extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextField(
+              child: TextFormField(
                 controller: inventarisC.namaController,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Nama Barang',
+                  border: UnderlineInputBorder(),
+                  hintText: 'ex: Karpet',
+                  labelText: 'Nama Barang',
                 ),
               ),
             ),
@@ -151,6 +166,7 @@ class AddInventarisPage extends StatelessWidget {
                 controller: inventarisC.kondisiController,
                 decoration: InputDecoration(
                   border: UnderlineInputBorder(),
+                  hintText: 'ex: Baik',
                   labelText: 'Kondisi barang',
                 ),
               ),
@@ -162,6 +178,7 @@ class AddInventarisPage extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: UnderlineInputBorder(),
+                  hintText: 'misal: Rp. 15.000,-',
                   labelText: 'Masukkan Harga barang (satuan)',
                 ),
               ),
@@ -173,17 +190,21 @@ class AddInventarisPage extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: UnderlineInputBorder(),
+                  hintText: 'ex: 20',
                   labelText: 'Masukkan Jumlah barang',
                 ),
               ),
             ),
-            TextField(
-              focusNode: FocusNode(),
-              enableInteractiveSelection: false,
-              // style: GoogleFonts.poppins(),
-              enabled: false,
-              controller: inventarisC.fotoController,
-              decoration: InputDecoration(hintText: message),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: TextField(
+                focusNode: FocusNode(),
+                enableInteractiveSelection: false,
+                // style: GoogleFonts.poppins(),
+                enabled: false,
+                controller: inventarisC.fotoController,
+                decoration: InputDecoration(hintText: message),
+              ),
             ),
             Container(
               child: Padding(
@@ -217,11 +238,14 @@ class AddInventarisPage extends StatelessWidget {
               ),
             ),
             ElevatedButton(
-                    onPressed: () {
-                      inventarisController.addInventaris();
-                    },
-                    child: Text("Tambahkan"))
-                .center()
+              onPressed: () {
+                inventarisController.addInventaris();
+              },
+              child: Text("Tambahkan"),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.indigoAccent,
+              ),
+            ).center()
           ],
         ),
       ),

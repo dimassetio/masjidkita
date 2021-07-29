@@ -5,10 +5,10 @@ class InventarisModel {
   String? nama;
   String? foto;
   String? url;
-  var jumlah;
+  int? jumlah;
   String? kondisi;
-  var harga;
-  var hargaTotal;
+  int? harga;
+  int? hargaTotal;
 
   InventarisModel({
     // @required this.inventarisID,
