@@ -38,19 +38,35 @@ class MasjidCard2 extends StatelessWidget {
           child: Row(
             children: <Widget>[
               ClipRRect(
-                child: Image.asset(
-                  mk_contoh_image,
-                  fit: BoxFit.fill,
+                child: Image.network(
+                  dataMasjid.photoUrl ?? "",
                   width: width / 3,
                   height: width / 3.2,
+                  fit: BoxFit.fill,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (BuildContext context, Object exception,
+                      StackTrace? stackTrace) {
+                    return Image.asset(
+                      mk_contoh_image,
+                      width: width / 3,
+                      height: width / 3.2,
+                      fit: BoxFit.fill,
+                    );
+                  },
                 ),
-                // child: CachedNetworkImage(
-                //   placeholder: placeholderWidgetFn() as Widget Function(BuildContext, String)?,
-                //   imageUrl:dataMasjid.image,
-                //   width: width / 3,
-                //   height: width / 3.2,
-                //   fit: BoxFit.fill,
-                // ),
                 borderRadius: BorderRadius.circular(10),
               ),
               Expanded(

@@ -7,18 +7,13 @@ import 'package:masjidkita/integrations/controllers.dart';
 
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/routes/route_name.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKConstant.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormBangunan.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormDeskripsi.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormLokasi.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormNama.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormSosmed.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
-import '../../../../main.dart';
+import 'package:masjidkita/main.dart';
 
 class TMTabProfile extends StatelessWidget {
   // late T9BadgeModel model;
@@ -236,8 +231,8 @@ class TMTabProfile extends StatelessWidget {
               ],
             ),
             SizedBox(height: 10),
-            text("Akun Sosial Media", fontFamily: fontSemibold),
-            SosmedRow(),
+            // text("Akun Sosial Media", fontFamily: fontSemibold),
+            // SosmedRow(),
             // IconButton(
             //     onPressed: () {
             //       showDialog(

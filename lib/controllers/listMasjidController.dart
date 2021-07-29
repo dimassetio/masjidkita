@@ -22,11 +22,13 @@ class ListMasjidController extends GetxController {
   RxList<ListMasjidModel> resultsList = RxList<ListMasjidModel>();
   List<ListMasjidModel> get filteredMasjid => resultsList.value;
 
-  Rx<TextEditingController> rxSearchController = TextEditingController().obs;
-  TextEditingController get searchController => rxSearchController.value;
-  set searchController(TextEditingController value) =>
-      this.rxSearchController.value = value;
+  TextEditingController searchController = TextEditingController();
+  // Rx<TextEditingController> rxSearchController = TextEditingController().obs;
+  // TextEditingController get searchController => rxSearchController.value;
+  // set searchController(TextEditingController value) =>
+  //     this.rxSearchController.value = value;
 
+  var isSearching = false.obs;
   final box = GetStorage();
 
   // selectById(String id) {
@@ -65,6 +67,11 @@ class ListMasjidController extends GetxController {
   }
 
   _onSearchChanged() {
+    if (searchController.text == "") {
+      isSearching.value = false;
+    } else {
+      isSearching.value = true;
+    }
     searchResultsList();
   }
 

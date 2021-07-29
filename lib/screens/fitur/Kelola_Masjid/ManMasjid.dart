@@ -9,7 +9,7 @@ import 'package:masjidkita/main/main%20copy.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/cekLog.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/KeMasjid.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/DetailMasjid.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKConstant.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';

@@ -9,7 +9,7 @@ import 'package:masjidkita/screens/PageListMasjid.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Form_Profile.dart';
 // import 'package:masjidkita/screens/PageSiMasjid.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormAddInventaris.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/KeMasjid.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/DetailMasjid.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
 import 'package:masjidkita/screens/utils/widgets/NewMasjid.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabInventaris.dart';

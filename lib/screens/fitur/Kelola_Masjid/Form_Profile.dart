@@ -1,9 +1,14 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/integrations/controllers.dart';
+import 'package:masjidkita/main/utils/AppConstant.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:masjidkita/screens/utils/m_k_icon_icons.dart';
+import 'package:masjidkita/screens/utils/widgets/AddOrJoin.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:masjidkita/main.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
@@ -15,7 +20,28 @@ class FormProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          appBar: appBar(context, manMasjidC.deMasjid.nama ?? mk_add_masjid),
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: appStore.appBarColor,
+            leading: IconButton(
+              onPressed: () {
+                manMasjidC.checkControllers()
+                    ? showDialog(
+                        context: Get.context!,
+                        builder: (BuildContext context) => ConfirmDialog(),
+                      )
+                    : finish(context);
+              },
+              icon: Icon(Icons.arrow_back,
+                  color: appStore.isDarkModeOn ? white : black),
+            ),
+            title: appBarTitleWidget(
+              context,
+              manMasjidC.deMasjid.nama ?? mk_add_masjid,
+            ),
+            // actions: actions,
+          ),
+          // appBar: appBar(context, manMasjidC.deMasjid.nama ?? mk_add_masjid),
           body: StepperBody()),
     );
   }
@@ -39,6 +65,10 @@ class _StepperBodyState extends State<StepperBody> {
   @override
   void dispose() {
     super.dispose();
+    manMasjidC.clearControllers();
+    manMasjidC.downloadUrl.value = "";
+    // showDialog(
+    //     context: context, builder: (BuildContext context) => ConfirmDialog());
   }
 
   @override
@@ -272,6 +302,8 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_lbl_enter + mk_LT,
+                suffix: text("M\u00B2"),
+                suffixStyle: boldTextStyle(size: textSizeSMedium.toInt()),
                 icon: Icon(Icons.house, color: mkColorPrimaryDark),
               ),
             ),
@@ -295,6 +327,8 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_lbl_enter + mk_LB,
+                suffix: text("M\u00B2"),
+                suffixStyle: boldTextStyle(size: textSizeSMedium.toInt()),
                 icon: Icon(Icons.house, color: mkColorPrimaryDark),
               ),
             ),
@@ -347,91 +381,137 @@ class _StepperBodyState extends State<StepperBody> {
           ],
         ),
       ),
+      Step(
+          title: Text("Foto Masjid", style: primaryTextStyle()),
+          isActive: currStep == 3,
+          state: StepState.indexed,
+          content: Column(children: [
+            Obx(() => Image.network(
+                  manMasjidC.deMasjid.photoUrl ?? "",
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (BuildContext context, Object exception,
+                      StackTrace? stackTrace) {
+                    return const Text("Belum Ada Gambar");
+                  },
+                )),
+            ElevatedButton(
+              child: text("Upload Image", textColor: mkWhite),
+              onPressed: () {
+                bool isCam = false;
+                manMasjidC.getImage(isCam);
+                // manMasjidC.uploadImage(image!);
+              },
+            ),
+          ]))
     ];
 
     return Container(
-        child: Theme(
-            data: ThemeData(colorScheme: mkColorScheme),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Obx(
-                    () => Stepper(
-                      steps: steps,
-                      type: StepperType.vertical,
-                      currentStep: currStep,
-                      physics: ScrollPhysics(),
-                      controlsBuilder: (BuildContext context,
-                          {VoidCallback? onStepContinue,
-                          VoidCallback? onStepCancel}) {
-                        return Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            TextButton(
-                              onPressed: onStepContinue,
-                              child:
-                                  Text(mk_lanjut, style: secondaryTextStyle()),
-                            ),
-                            10.width,
-                            TextButton(
-                              onPressed: onStepCancel,
-                              child:
-                                  Text(mk_batal, style: secondaryTextStyle()),
-                            ),
-                          ],
-                        );
-                      },
-                      onStepContinue: () {
-                        setState(() {
-                          if (currStep < steps.length - 1) {
-                            currStep = currStep + 1;
-                          } else {
-                            // currStep = 0;
-                            manMasjidC.updateDataMasjid();
-                            manMasjidC.clearControllers();
+        child: GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
 
-                            finish(context);
-                          }
-                        });
-                      },
-                      onStepCancel: () {
-                        // finish(context);
-                        setState(() {
-                          if (currStep > 0) {
-                            currStep = currStep - 1;
-                          } else {
-                            currStep = 0;
-                          }
-                        });
-                      },
-                      onStepTapped: (step) {
-                        setState(() {
-                          currStep = step;
-                        });
-                      },
-                    ),
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Theme(
+          data: ThemeData(colorScheme: mkColorScheme),
+          child: Column(
+            children: [
+              Expanded(
+                child: Obx(
+                  () => Stepper(
+                    steps: steps,
+                    type: StepperType.vertical,
+                    currentStep: currStep,
+                    physics: ScrollPhysics(),
+                    controlsBuilder: (BuildContext context,
+                        {VoidCallback? onStepContinue,
+                        VoidCallback? onStepCancel}) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          currStep < steps.length - 1
+                              ? TextButton(
+                                  onPressed: onStepContinue,
+                                  child: Text(mk_berikut,
+                                      style: secondaryTextStyle()),
+                                )
+                              : 10.width,
+                          currStep != 0
+                              ? TextButton(
+                                  onPressed: onStepCancel,
+                                  child: Text(mk_sebelum,
+                                      style: secondaryTextStyle()),
+                                )
+                              : 10.width,
+                        ],
+                      );
+                    },
+                    onStepContinue: () {
+                      setState(() {
+                        if (currStep < steps.length - 1) {
+                          currStep = currStep + 1;
+                        } else {
+                          manMasjidC.updateDataMasjid();
+                          manMasjidC.clearControllers();
+                          // currStep = 0;
+
+                          finish(context);
+                        }
+                      });
+                    },
+                    onStepCancel: () {
+                      // finish(context);
+                      setState(() {
+                        if (currStep > 0) {
+                          currStep = currStep - 1;
+                        } else {
+                          currStep = 0;
+                        }
+                      });
+                    },
+                    onStepTapped: (step) {
+                      setState(() {
+                        currStep = step;
+                      });
+                    },
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    manMasjidC.updateDataMasjid();
-                    manMasjidC.clearControllers();
-                    finish(context);
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.all(10),
-                    decoration:
-                        boxDecoration(bgColor: mkColorPrimary, radius: 10),
-                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    child: Center(
-                      child:
-                          Text(mk_submit, style: boldTextStyle(color: white)),
-                    ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  manMasjidC.updateDataMasjid();
+                  manMasjidC.clearControllers();
+                  finish(context);
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.all(10),
+                  decoration:
+                      boxDecoration(bgColor: mkColorPrimary, radius: 10),
+                  padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  child: Center(
+                    child: Text(mk_submit, style: boldTextStyle(color: white)),
                   ),
                 ),
-              ],
-            )));
+              ),
+            ],
+          )),
+    ));
   }
 }
