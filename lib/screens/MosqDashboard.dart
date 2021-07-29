@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -12,7 +13,6 @@ import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:masjidkita/screens/utils/widgets/BottomNav.dart';
-import 'package:masjidkita/screens/utils/widgets/FiturGridList.dart';
 import 'package:masjidkita/screens/utils/widgets/KegiatanSlider.dart';
 import 'package:masjidkita/screens/utils/widgets/MasjidList.dart';
 import 'package:masjidkita/screens/utils/widgets/MasjidSlider.dart';
@@ -122,8 +122,36 @@ class MosqDashboard extends StatelessWidget {
 
                   Obx(
                     () => listMasjidC.favMasjids.isEmpty
-                        ? text(mk_masjid_fav_null,
-                            isLongText: true, isCentered: true)
+                        ? Column(
+                            children: [
+                              text(mk_masjid_fav_null,
+                                  isLongText: true, isCentered: true),
+                              SizedBox(height: 5),
+                              FloatingActionButton.extended(
+                                  heroTag: '5',
+                                  label: Text(
+                                    mk_lbl_search,
+                                    style:
+                                        primaryTextStyle(color: Colors.white),
+                                  ),
+                                  backgroundColor: mkColorPrimary,
+                                  icon: Icon(
+                                    Icons.search,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    Get.toNamed(RouteName.list_masjid);
+                                  }),
+                              // ElevatedButton(
+                              //     onPressed: () {},
+                              //     child: Row(
+                              //       children: [
+                              //         Icon(Icons.search),
+                              //         text("Cari Masjid")
+                              //       ],
+                              //     ))
+                            ],
+                          )
                         : MasjidSliderWidget(
                             listMasjidC.favMasjids,
                             infinite: false,
@@ -145,24 +173,6 @@ class MosqDashboard extends StatelessWidget {
                       infinite: false,
                     ),
                   ),
-                  text("Testing Masjid Favorit"),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              listMasjidC.readStr();
-                            },
-                            icon: Icon(Icons.refresh)),
-                        TextButton(
-                            onPressed: () => listMasjidC
-                                .addFav("Atrwobk1pnUz4wKdYct5kTkKxTd2"),
-                            child: text("Masjid 1")),
-                        TextButton(
-                            onPressed: () => listMasjidC
-                                .addFav("bLmwedXB1IRjpJIz9IE0vjjfDHe2"),
-                            child: text("Masjid 2")),
-                      ]),
                 ],
               ),
             ),

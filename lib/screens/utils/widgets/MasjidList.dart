@@ -32,8 +32,9 @@ class MasjidListing extends StatelessWidget {
             var dataMasjid = mListings[index];
             return GestureDetector(
               onTap: () async {
-                await manMasjidC.getDetailMasjid(dataMasjid.id);
-                Get.toNamed(RouteName.detail);
+                manMasjidC.gotoDetail(dataMasjid.id);
+                // await manMasjidC.getDetailMasjid(dataMasjid.id);
+                // Get.toNamed(RouteName.detail);
               },
               child: MasjidCard2(dataMasjid: dataMasjid, width: width),
             );

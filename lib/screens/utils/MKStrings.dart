@@ -29,7 +29,7 @@ const mk_lbl_alamat = "Alamat";
 const mk_lbl_deskripsi = "Deskripsi";
 const mk_lbl_lokasi = "Lokasi";
 const mk_tentang_masjid = "Tentang Masjid Anda";
-const mk_submit = "Submit";
+const mk_submit = "Simpan";
 const mk_lbl_password = "Password";
 const mk_kecamatan = "Kecamatan";
 const mk_kode_pos = "Kode Pos";
@@ -56,6 +56,8 @@ const mk_masjid_fav_null =
 const mk_kegiatan_masjid = "Kegiatan Masjid";
 const mk_list_masjid = "Daftar Masjid";
 const mk_filtered_null = "Masjid tidak ditemukan";
+const mk_berikut = "Berikutnya";
+const mk_sebelum = "Sebelumnya";
 
 const mk_long_text =
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis quis pariatur est aliquid cumque incidunt facere ducimus in deserunt modi repudiandae, quia molestias. Sed impedit aperiam perferendis iure ratione nulla sit esse unde! Ipsa distinctio minima adipisci odit modi quia omnis corporis, aperiam laborum id quo numquam explicabo quos ullam cumque velit nam at. Hic earum odio corporis fugit a similique alias rem quia eveniet, est dicta nobis blanditiis distinctio sint vitae nam repellat, expedita sunt officia, ipsum placeat ullam velit repellendus. Commodi similique, nostrum harum deserunt earum quae inventore nobis recusandae iure reprehenderit doloremque deleniti voluptate officia aspernatur sit?";
