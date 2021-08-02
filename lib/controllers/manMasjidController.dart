@@ -33,8 +33,10 @@ class ManMasjidController extends GetxController {
   TextEditingController tahun = TextEditingController();
   TextEditingController luasTanah = TextEditingController();
   TextEditingController luasBangunan = TextEditingController();
-  TextEditingController statusTanah = TextEditingController();
-  TextEditingController legalitas = TextEditingController();
+  // TextEditingController statusTanah = TextEditingController();
+  // TextEditingController legalitas = TextEditingController();
+  String? legalitas;
+  String? statusTanah;
 
   // Rx<ManMasjidModel> keMasjidModel = ManMasjidModel().obs;
   // ManMasjidModel get keMasjid => keMasjidModel.value;
@@ -111,8 +113,8 @@ class ManMasjidController extends GetxController {
     if (tahun.text != "") data["tahun"] = tahun.text;
     if (luasTanah.text != "") data["luasTanah"] = luasTanah.text;
     if (luasBangunan.text != "") data["luasBangunan"] = luasBangunan.text;
-    if (statusTanah.text != "") data["statusTanah"] = statusTanah.text;
-    if (legalitas.text != "") data["legalitas"] = legalitas.text;
+    if (statusTanah != null) data["statusTanah"] = statusTanah;
+    if (legalitas != null) data["legalitas"] = legalitas;
     print("data = $data");
     await firebaseFirestore
         .collection(masjidCollection)
@@ -188,8 +190,8 @@ class ManMasjidController extends GetxController {
     tahun.clear();
     luasTanah.clear();
     luasBangunan.clear();
-    statusTanah.clear();
-    legalitas.clear();
+    statusTanah = null;
+    legalitas = null;
     // photo_url.clear();
   }
 
@@ -204,8 +206,8 @@ class ManMasjidController extends GetxController {
         tahun.text != "" ||
         luasTanah.text != "" ||
         luasBangunan.text != "" ||
-        statusTanah.text != "" ||
-        legalitas.text != "") {
+        statusTanah != null ||
+        legalitas != null) {
       return true;
     } else
       return false;

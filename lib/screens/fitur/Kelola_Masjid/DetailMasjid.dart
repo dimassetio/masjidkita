@@ -58,40 +58,43 @@ class KeMasjid extends StatelessWidget {
                   backgroundColor: white,
                   flexibleSpace: Obx(
                     () => FlexibleSpaceBar(
-                      centerTitle: true,
-                      background: manMasjidC.deMasjid.photoUrl != ""
-                          ? CachedNetworkImage(
-                              placeholder: placeholderWidgetFn() as Widget
-                                  Function(BuildContext, String)?,
-                              imageUrl: manMasjidC.deMasjid.photoUrl ?? "",
-                              fit: BoxFit.cover,
-                            )
-                          : Image.asset(mk_contoh_image, fit: BoxFit.cover),
-                      // Image.network(
-                      //   manMasjidC.deMasjid.photoUrl ?? "",
-                      //   fit: BoxFit.cover,
-                      //   loadingBuilder: (BuildContext context, Widget child,
-                      //       ImageChunkEvent? loadingProgress) {
-                      //     if (loadingProgress == null) {
-                      //       return child;
-                      //     }
-                      //     return Center(
-                      //       child: CircularProgressIndicator(
-                      //         value: loadingProgress.expectedTotalBytes !=
-                      //                 null
-                      //             ? loadingProgress.cumulativeBytesLoaded /
-                      //                 loadingProgress.expectedTotalBytes!
-                      //             : null,
-                      //       ),
-                      //     );
-                      //   },
-                      //   errorBuilder: (BuildContext context, Object exception,
-                      //       StackTrace? stackTrace) {
-                      //     return Image.asset(mk_contoh_image,
-                      //         fit: BoxFit.cover);
-                      //   },
-                      // ),
-                    ),
+                        centerTitle: true,
+                        background: CachedNetworkImage(
+                          placeholder: placeholderWidgetFn() as Widget Function(
+                              BuildContext, String)?,
+                          imageUrl: manMasjidC.deMasjid.photoUrl ?? "",
+                          errorWidget: (context, url, error) {
+                            // toast(error.toString());
+                            return Image.asset(mk_contoh_image,
+                                fit: BoxFit.cover);
+                          },
+                          fit: BoxFit.cover,
+                        )
+                        // Image.network(
+                        //   manMasjidC.deMasjid.photoUrl ?? "",
+                        //   fit: BoxFit.cover,
+                        //   loadingBuilder: (BuildContext context, Widget child,
+                        //       ImageChunkEvent? loadingProgress) {
+                        //     if (loadingProgress == null) {
+                        //       return child;
+                        //     }
+                        //     return Center(
+                        //       child: CircularProgressIndicator(
+                        //         value: loadingProgress.expectedTotalBytes !=
+                        //                 null
+                        //             ? loadingProgress.cumulativeBytesLoaded /
+                        //                 loadingProgress.expectedTotalBytes!
+                        //             : null,
+                        //       ),
+                        //     );
+                        //   },
+                        //   errorBuilder: (BuildContext context, Object exception,
+                        //       StackTrace? stackTrace) {
+                        //     return Image.asset(mk_contoh_image,
+                        //         fit: BoxFit.cover);
+                        //   },
+                        // ),
+                        ),
                   ),
                 ),
                 SliverPersistentHeader(

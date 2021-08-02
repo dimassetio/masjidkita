@@ -192,7 +192,7 @@ class TMTabProfile extends StatelessWidget {
                       fontSize: textSizeMedium,
                     ),
                     Obx(() => text(
-                          manMasjidC.deMasjid.luasTanah ?? mk_null,
+                          "${manMasjidC.deMasjid.luasTanah ?? mk_null} M\u00B2",
                           // textColor: mkTextColorSecondary,
                           fontSize: textSizeMedium,
                         )),
@@ -202,7 +202,7 @@ class TMTabProfile extends StatelessWidget {
                       fontSize: textSizeMedium,
                     ),
                     Obx(() => text(
-                          manMasjidC.deMasjid.luasBangunan ?? mk_null,
+                          "${manMasjidC.deMasjid.luasBangunan ?? mk_null} M\u00B2",
                           // textColor: mkTextColorSecondary,
                           fontSize: textSizeMedium,
                         )),

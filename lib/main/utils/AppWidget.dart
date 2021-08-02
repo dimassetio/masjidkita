@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
+import 'package:masjidkita/main/utils/shimmer/shimmer.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:nb_utils/nb_utils.dart';
 // import 'package:masjidkita/integrations/utils/common.dart';
@@ -254,8 +255,10 @@ class CustomTheme extends StatelessWidget {
 Widget? Function(BuildContext, String) placeholderWidgetFn() =>
     (_, s) => placeholderWidget();
 
-Widget placeholderWidget() =>
-    Image.asset('images/LikeButton/image/grey.jpg', fit: BoxFit.cover);
+Widget placeholderWidget() => Shimmer.fromColors(
+    baseColor: appStore.isDarkModeOn ? Colors.black12 : Colors.grey[400],
+    highlightColor: appStore.isDarkModeOn ? Colors.white12 : Colors.grey[100],
+    child: Image.asset('images/LikeButton/image/grey.jpg', fit: BoxFit.cover));
 
 BoxConstraints dynamicBoxConstraints({double? maxWidth}) {
   return BoxConstraints(maxWidth: maxWidth ?? applicationMaxWidth);

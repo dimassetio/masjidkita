@@ -13,6 +13,7 @@ import 'package:nb_utils/nb_utils.dart';
 class ConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -47,13 +48,14 @@ class ConfirmDialog extends StatelessWidget {
             //       fit: BoxFit.cover),
             // ),
             24.height,
-            Text(mk_lbl_belum_login,
+            Text("Perubahan belum tersimpan",
                 style:
                     boldTextStyle(color: appStore.textPrimaryColor, size: 18)),
             16.height,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: text(mk_lbl_belum_login_desc,
+              child: text(
+                  "Perubahan anda belum tersimpan. Lanjut keluar halaman?",
                   textColor: mkTextColorSecondary,
                   fontSize: textSizeSMedium,
                   isLongText: true,
@@ -81,7 +83,7 @@ class ConfirmDialog extends StatelessWidget {
                                       child: Icon(Icons.close,
                                           color: mkColorPrimary, size: 18))),
                               TextSpan(
-                                  text: mk_lbl_batal,
+                                  text: "Tidak",
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: mkColorPrimary,
@@ -91,6 +93,9 @@ class ConfirmDialog extends StatelessWidget {
                         ),
                       ),
                     ).onTap(() {
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
                       finish(context);
                     }),
                   ),
@@ -107,10 +112,10 @@ class ConfirmDialog extends StatelessWidget {
                               WidgetSpan(
                                   child: Padding(
                                       padding: EdgeInsets.only(right: 8.0),
-                                      child: Icon(Icons.login,
+                                      child: Icon(Icons.check,
                                           color: Colors.white, size: 18))),
                               TextSpan(
-                                  text: mk_sign_in,
+                                  text: "Ya",
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.white,
@@ -121,7 +126,6 @@ class ConfirmDialog extends StatelessWidget {
                       ),
                     ).onTap(() {
                       // finish(context);
-                      FocusScopeNode currentFocus = FocusScope.of(context);
 
                       if (!currentFocus.hasPrimaryFocus) {
                         currentFocus.unfocus();
