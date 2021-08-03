@@ -14,3 +14,5 @@ FirebaseAuth auth = FirebaseAuth.instance;
 // FirebaseMessaging fcm = FirebaseMessaging.instance;
 const usersCollection = "users";
 const masjidCollection = "masjid";
+const inventarisCollection = "inventaris";
+const kegiatanCollection = "kegiatan";
