@@ -57,15 +57,7 @@ class _StepperBodyState extends State<StepperBody> {
   var currentStep = 0.obs;
   int get currStep => currentStep.value;
   set currStep(int value) => this.currentStep.value = value;
-  var isLoadingImage = false.obs;
   GlobalKey<FormState> _formKey = GlobalKey();
-
-  uploadImage(bool isCam) async {
-    isLoadingImage.value = true;
-    await manMasjidC.getImage(isCam);
-    isLoadingImage.value = false;
-    Get.back();
-  }
 
   @override
   void initState() {
@@ -515,7 +507,7 @@ class _StepperBodyState extends State<StepperBody> {
                           height: 250.0,
                           padding: EdgeInsets.all(16),
                           child: Obx(
-                            () => isLoadingImage.value
+                            () => manMasjidC.isLoadingImage.value
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
@@ -525,7 +517,14 @@ class _StepperBodyState extends State<StepperBody> {
                                       SizedBox(
                                         height: 5,
                                       ),
-                                      text("Loading...")
+                                      text("Loading..."),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      LinearProgressIndicator(
+                                        value:
+                                            manMasjidC.uploadPrecentage.value,
+                                      )
                                     ],
                                   )
                                 : Column(
@@ -545,7 +544,7 @@ class _StepperBodyState extends State<StepperBody> {
                                       TextButton.icon(
                                           // style: ,
                                           onPressed: () {
-                                            uploadImage(false);
+                                            manMasjidC.uploadImage(false);
                                           },
                                           icon: Icon(
                                             Icons.image_sharp,
@@ -559,7 +558,7 @@ class _StepperBodyState extends State<StepperBody> {
                                       TextButton.icon(
                                           // style: ,
                                           onPressed: () async {
-                                            uploadImage(true);
+                                            manMasjidC.uploadImage(true);
                                           },
                                           icon: Icon(
                                             Icons.camera,

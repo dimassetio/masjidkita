@@ -56,10 +56,6 @@ class ManMasjidController extends GetxController {
     // ever(authController.firebaseUser, _getManMasjidModel);
     // deMasjidModel.bindStream(getDetailMasjids(mID))
     // ever(authController.userModel, _getManMasjidModel);
-
-    nama.addListener(() {
-      print(nama.text);
-    });
   }
 
   testdata() {
@@ -218,12 +214,35 @@ class ManMasjidController extends GetxController {
   final ImagePicker _picker = ImagePicker();
   String message = "Belum ada gambar";
   var downloadUrl = "".obs;
-  final TextEditingController fotoController = TextEditingController();
-  final TextEditingController urlController = TextEditingController();
+  var isLoadingImage = false.obs;
+  PickedFile? pickedFile;
+  XFile? pickedImage;
+  var uploadPrecentage = 0.0.obs;
+
+  uploadImage(bool isCam) async {
+    pickedImage = await manMasjidC.getImage(isCam);
+    await uploadToStorage(pickedImage);
+  }
 
   Future getImage(bool isCam) async {
-    final XFile? pickImage = await _picker.pickImage(
+    return pickedImage = await _picker.pickImage(
         source: isCam ? ImageSource.camera : ImageSource.gallery);
+
+    // if (uploadedFile.state == TaskState.running) toast("Loading Image");
+
+    // if (uploadedFile.state == TaskState.success) {
+    //   downloadUrl.value = await refFeedBuckets.getDownloadURL();
+    //   photoUrl.text = downloadUrl.value;
+    //   await firebaseFirestore
+    //       .collection(masjidCollection)
+    //       .doc(deMasjid.id)
+    //       .update({'photoUrl': downloadUrl.value});
+    // } else {
+    //   print(message);
+    // }
+  }
+
+  Future uploadToStorage(XFile? pickImage) async {
     if (pickImage != null) {
       fileName = pickImage.name;
       filePath = pickImage.path;
@@ -233,21 +252,37 @@ class ManMasjidController extends GetxController {
           .child(deMasjid.id!)
           .child("Foto Profil");
       var file = File(filePath);
+      final metadata = SettableMetadata(
+          contentType: 'image/jpeg',
+          customMetadata: {
+            'picked-file-path': filePath,
+            'picked-file-name': fileName
+          });
 
-      TaskSnapshot uploadedFile = await refFeedBuckets.putFile(file);
+      // TaskSnapshot uploadedFile = await refFeedBuckets.putFile(file);
 
-      if (uploadedFile.state == TaskState.running) toast("Loading Image");
+      UploadTask uploadTask = refFeedBuckets.putFile(file, metadata);
+      uploadTask.snapshotEvents.listen((event) async {
+        print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
+        uploadPrecentage.value = event.bytesTransferred / event.totalBytes;
+        // if (event.state == TaskState.running) {
 
-      if (uploadedFile.state == TaskState.success) {
-        downloadUrl.value = await refFeedBuckets.getDownloadURL();
-        photoUrl.text = downloadUrl.value;
-        await firebaseFirestore
-            .collection(masjidCollection)
-            .doc(deMasjid.id)
-            .update({'photoUrl': downloadUrl.value});
-      } else {
-        print(message);
-      }
+        // }
+        if (event.state == TaskState.success) {
+          downloadUrl.value = await refFeedBuckets.getDownloadURL();
+          photoUrl.text = downloadUrl.value;
+          await firebaseFirestore
+              .collection(masjidCollection)
+              .doc(deMasjid.id)
+              .update({'photoUrl': downloadUrl.value});
+          isLoadingImage.value = false;
+          Get.back();
+        } else {
+          isLoadingImage.value = true;
+        }
+      });
+    } else {
+      toast('error upload data');
     }
   }
 
