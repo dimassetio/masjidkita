@@ -88,7 +88,7 @@ class AddInventarisPage extends StatelessWidget {
       String downloadUrl;
       var file = File(files);
 
-      TaskSnapshot uploadedFile = await refFeedBucket.putFile(file);
+      TaskSnapshot uploadedFile = await refFeedBuckets.putFile(file);
 
       if (uploadedFile.state == TaskState.success) {
         downloadUrl = await refFeedBucket.getDownloadURL();
@@ -240,7 +240,8 @@ class AddInventarisPage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  inventarisC.addInventaris();
+                  inventarisC
+                      .addInventaris(authController.firebaseUser.value.uid);
                 },
                 child: Text("Tambahkan"),
                 style: ElevatedButton.styleFrom(

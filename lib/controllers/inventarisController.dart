@@ -1,7 +1,11 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/integrations/firestore.dart';
 import 'package:masjidkita/models/inventaris.dart';
+import 'package:masjidkita/models/user.dart';
 import 'package:masjidkita/services/database.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/routes/route_name.dart';
@@ -29,7 +33,7 @@ class InventarisController extends GetxController {
   Rx<InventarisModel> _inventarisModel = InventarisModel().obs;
   InventarisModel get inventaris => _inventarisModel.value;
 
-  addInventaris() async {
+  addInventaris(String userId) async {
     String harga = hargaController.text;
     String result = harga.replaceAll('Rp ', '');
     String finalHarga = result.replaceAll('.', '');
@@ -40,7 +44,11 @@ class InventarisController extends GetxController {
     DateTime now = DateTime.now();
     // int hargaTotal = jumlah!;
     try {
-      await firebaseFirestore.collection("inventaris").add({
+      await firebaseFirestore
+          .collection("masjid")
+          .doc(userId)
+          .collection("inventaris")
+          .add({
         'nama': namaController.text,
         'foto': fotoController.text,
         'url': urlController.text,
@@ -112,11 +120,15 @@ class InventarisController extends GetxController {
     try {
       // print(mID);
       _inventarisModel.value = await firebaseFirestore
-          .collection("inventaris")
+          .collection(masjidCollection)
+          .doc(manMasjidC.deMasjid.id)
+          .collection(inventarisCollection)
           .doc(inventarisID)
           .get()
           .then((doc) => InventarisModel.fromDocumentSnapshot(doc));
     } catch (e) {
+      print(inventarisID);
+      print(e);
       _inventarisModel.value = InventarisModel();
     }
   }
@@ -137,13 +149,61 @@ class InventarisController extends GetxController {
   //   // }
   // }
 
-  updateInventaris(String? nama, String? kondisi, int? jumlah,
-      String? inventarisID, String? foto, int? harga) {
-    print('controller passed');
+  updateInventaris() async {
+    Map<String, dynamic> data = new HashMap();
+    String harga = hargaController.text;
+    String result = harga.replaceAll('Rp ', '');
+    String finalHarga = result.replaceAll('.', '');
+    int price = finalHarga.toInt();
+    int jumlah = jumlahController.text.toInt();
+    int totalPrice = price * jumlah;
+    if (namaController.text != "") data['nama'] = namaController.text;
+    if (jumlahController.text != "") data["jumlah"] = jumlahController.text;
+    if (kondisiController.text != "") data["kondisi"] = kondisiController.text;
+    if (urlController.text != "") data["url"] = urlController.text;
+    if (hargaController.text != "") data["harga"] = hargaController.text;
+    if (fotoController.text != "") data["foto"] = fotoController.text;
+    data["hargaTotal"] = totalPrice;
+    // print("data = $data");
+    await firebaseFirestore
+        .collection(masjidCollection)
+        .doc(manMasjidC.deMasjid.id)
+        .collection(inventarisCollection)
+        .doc(inventaris.inventarisID)
+        .update(data);
+    clearControllers();
+    Get.back();
 
-    Database()
-        .updateInventaris(nama, kondisi, jumlah, inventarisID, foto, harga);
-    Get.toNamed(RouteName.kelolamasjid);
+    // String harga = hargaController.text;
+    // String result = harga.replaceAll('Rp ', '');
+    // String finalHarga = result.replaceAll('.', '');
+    // int price = finalHarga.toInt();
+    // int jumlah = jumlahController.text.toInt();
+    // int totalPrice = price * jumlah;
+    // DateTime now = DateTime.now();
+
+    // try {
+    //   await firebaseFirestore
+    //       .collection("masjid")
+    //       .doc(userId)
+    //       .collection("inventaris")
+    //       .doc(inventaris.inventarisID)
+    //       .update({
+    //     'nama': namaController.text,
+    //     'foto': fotoController.text,
+    //     'url': urlController.text,
+    //     'jumlah': jumlahController.text.toInt(),
+    //     'kondisi': kondisiController.text,
+    //     'createdAt': now,
+    //     'harga': finalHarga.toInt(),
+    //     'hargaTotal': totalPrice,
+    //   });
+    // } catch (e) {
+    //   print(e);
+    //   rethrow;
+    // }
+    // clearController();
+    // Get.back();
   }
 
   deleteInventaris(
@@ -166,6 +226,15 @@ class InventarisController extends GetxController {
     // Get.toNamed(RouteName.inventaris);
   }
 
+  clearControllers() {
+    namaController.clear();
+    jumlahController.clear();
+    kondisiController.clear();
+    fotoController.clear();
+    hargaController.clear();
+    // photo_url.clear();
+  }
+
   void clear() {
     _inventarisModel.value = InventarisModel();
   }
@@ -178,6 +247,8 @@ class InventarisController extends GetxController {
 
   Stream<List<InventarisModel>> inventarisStream() {
     return firebaseFirestore
+        .collection(masjidCollection)
+        .doc(manMasjidC.deMasjid.id)
         .collection("inventaris")
         .snapshots()
         .map((QuerySnapshot query) {

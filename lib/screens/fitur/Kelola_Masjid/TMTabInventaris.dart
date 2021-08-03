@@ -1,7 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:masjidkita/constants/firebase.dart';
 import 'package:masjidkita/controllers/inventarisController.dart';
-import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/controllers/manMasjidController.dart';
+import 'package:masjidkita/controllers/userController.dart';
+import 'package:masjidkita/integrations/controllers.dart';
+import 'package:masjidkita/integrations/firestore.dart';
 import 'package:masjidkita/models/inventaris.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
@@ -20,8 +23,12 @@ class TMTabInventaris extends StatefulWidget {
   @override
   _TMTabInventarisState createState() => _TMTabInventarisState();
   final InventarisModel inventaris;
+  // final UserModel user;
+  // final ManMasjidModel masjid;
   TMTabInventaris(
     this.inventaris,
+    // this.user,
+    // this.masjid,
   );
 }
 
@@ -121,7 +128,6 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                     itemBuilder: (_, index) {
                       final item = inventarisC.inventariss[index];
                       return Dismissible(
-                        // key: Key(inventarisC.inventariss[index].inventarisID!),
                         key: Key(item.inventarisID!),
                         child: InventarisCard(inventarisC.inventariss[index]),
                         background: slideRightBackground(),
@@ -129,7 +135,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                         confirmDismiss: (direction) async {
                           final bool? res;
                           if (direction == DismissDirection.startToEnd) {
-                            Get.toNamed(RouteName.detail_inventaris);
+                            Get.toNamed(RouteName.edit_inventaris);
                             res = false;
                           } else if (direction == DismissDirection.endToStart) {
                             return res = await showDialog(
@@ -169,30 +175,37 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
 
   @override
   Widget build(BuildContext context) {
+    // var visible;
+    // if (manMasjidC.deMasjid.id == authControl) {
+    //   visible = true;
+    // } else {
+    //   visible = false;
+    // }
     Get.put(InventarisController());
     return Stack(
       children: [
         generateItemList(),
         Container(
-          alignment: Alignment.bottomRight,
-          padding: EdgeInsets.only(right: 15, bottom: 15),
-          child: FloatingActionButton(
-              // heroTag: '1',
-              // heroTag: '5',
-              // label: Text(
-              //   "Add",
-              //   style: primaryTextStyle(color: Colors.white),
-              // ),
-              child: Icon(
-                Icons.edit,
-                color: mkWhite,
-              ),
-              backgroundColor: mkColorPrimary,
-              onPressed: () {
-                // CustomDelete();
-                Get.toNamed(RouteName.new_inventaris);
-              }),
-        ),
+            alignment: Alignment.bottomRight,
+            padding: EdgeInsets.only(right: 15, bottom: 15),
+            child: Obx(() => manMasjidC.myMasjid.value
+                ? FloatingActionButton(
+                    // heroTag: '1',
+                    // heroTag: '5',
+                    // label: Text(
+                    //   "Add",
+                    //   style: primaryTextStyle(color: Colors.white),
+                    // ),
+                    child: Icon(
+                      Icons.edit,
+                      color: mkWhite,
+                    ),
+                    backgroundColor: mkColorPrimary,
+                    onPressed: () {
+                      // CustomDelete();
+                      Get.toNamed(RouteName.new_inventaris);
+                    })
+                : SizedBox())),
       ],
     );
   }
