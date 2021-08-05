@@ -10,6 +10,8 @@ import 'package:masjidkita/screens/MosqDashboard.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:masjidkita/main/store/AppStore.dart';
 import 'package:masjidkita/main/utils/AppTheme.dart';
+import 'package:showcaseview/showcaseview.dart';
+import 'integrations/controllers.dart';
 import 'main/utils/AppConstant.dart';
 import 'routes/route_page.dart';
 //endregion
@@ -29,6 +31,7 @@ void main() async {
   await Firebase.initializeApp();
 
   await GetStorage.init();
+
   // if (isMobile) {
   //   MobileAds.instance.initialize();
 
