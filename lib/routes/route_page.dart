@@ -6,6 +6,7 @@ import 'package:masjidkita/screens/MKSignIn.dart';
 import 'package:masjidkita/screens/MosqDashboard.dart';
 import 'package:masjidkita/screens/MosqProfile.dart';
 import 'package:masjidkita/screens/PageListMasjid.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Form_Inventaris.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Form_Profile.dart';
 // import 'package:masjidkita/screens/PageSiMasjid.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormAddInventaris.dart';
@@ -27,7 +28,7 @@ class AppPage {
     GetPage(name: RouteName.mkdashboard, page: () => PageListMasjid()),
     GetPage(name: RouteName.man_masjid, page: () => ManMasjid()),
     GetPage(name: RouteName.new_masjid, page: () => NewMasjid()),
-    GetPage(name: RouteName.new_inventaris, page: () => AddInventarisPage()),
+    GetPage(name: RouteName.new_inventaris, page: () => FormInventaris()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),
     GetPage(name: RouteName.edit_inventaris, page: () => InventarisEdit()),
     GetPage(

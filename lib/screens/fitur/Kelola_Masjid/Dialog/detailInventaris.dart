@@ -126,7 +126,7 @@ class InventarisDetail extends StatelessWidget {
                                       Function(BuildContext, String)?,
                                   imageUrl: "$imageURL",
                                   width: width,
-                                  height: width * 0.6,
+                                  height: width * 0.7,
                                   fit: BoxFit.fill,
                                 )
                               : Container(

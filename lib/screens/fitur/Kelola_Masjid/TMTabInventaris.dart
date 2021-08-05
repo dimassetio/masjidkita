@@ -5,6 +5,7 @@ import 'package:masjidkita/controllers/manMasjidController.dart';
 import 'package:masjidkita/controllers/userController.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/integrations/firestore.dart';
+import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/models/inventaris.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
@@ -110,13 +111,11 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
             () => inventarisC.inventariss.isEmpty
                 ? Container(
                     height: 200,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        inventarisC.tesBind();
-                        // Get.toNamed(RouteName.new_inventaris);
-                      },
-                      child: Text(inventarisC.inventariss.length.toString(),
-                          style: boldTextStyle(size: 18, color: Colors.white)),
+                    child:
+                        // text("Masjid belum memiliki Inventaris")
+                        ElevatedButton(
+                      child: text("ew"),
+                      onPressed: inventarisC.tesBind(),
                     ).center(),
                   )
                 : ListView.builder(
@@ -135,8 +134,16 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                         confirmDismiss: (direction) async {
                           final bool? res;
                           if (direction == DismissDirection.startToEnd) {
-                            Get.toNamed(RouteName.edit_inventaris);
-                            res = false;
+                            try {
+                              await inventarisC.getInventarisModel(
+                                  inventarisC.inventariss[index].inventarisID ??
+                                      "");
+                              print(
+                                  inventarisC.inventariss[index].inventarisID);
+                              res = false;
+                            } finally {
+                              Get.toNamed(RouteName.edit_inventaris);
+                            }
                           } else if (direction == DismissDirection.endToStart) {
                             return res = await showDialog(
                                 context: context,
