@@ -1,4 +1,4 @@
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +8,6 @@ import 'package:masjidkita/main/utils/AppConstant.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
-import 'package:masjidkita/screens/utils/m_k_icon_icons.dart';
-import 'package:masjidkita/screens/utils/widgets/AddOrJoin.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:masjidkita/main.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
@@ -48,6 +46,7 @@ class FormProfile extends StatelessWidget {
   }
 }
 
+// class StepperBody extends StatelessWidget {
 class StepperBody extends StatefulWidget {
   @override
   _StepperBodyState createState() => _StepperBodyState();
@@ -83,6 +82,7 @@ class _StepperBodyState extends State<StepperBody> {
         content: Column(
           children: [
             TextFormField(
+              enabled: !manMasjidC.isSaving.value,
               // focusNode: FocusNode(),
               maxLines: 1,
               autocorrect: false,
@@ -103,7 +103,10 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_hint_nama_masjid,
-                icon: Icon(Icons.home, color: mkColorPrimaryDark),
+                icon: Icon(Icons.home,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               validator: (s) {
                 if (s!.trim().isEmpty) {
@@ -114,6 +117,7 @@ class _StepperBodyState extends State<StepperBody> {
               },
             ),
             TextFormField(
+              enabled: !manMasjidC.isSaving.value,
               maxLines: 2,
               autocorrect: false,
               initialValue: manMasjidC.deMasjid.deskripsi,
@@ -133,7 +137,10 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_lbl_enter + mk_lbl_deskripsi,
-                icon: Icon(Icons.home, color: mkColorPrimaryDark),
+                icon: Icon(Icons.home,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               validator: (s) {
                 if (s!.trim().isEmpty)
@@ -151,6 +158,7 @@ class _StepperBodyState extends State<StepperBody> {
         content: Column(
           children: [
             TextFormField(
+              enabled: !manMasjidC.isSaving.value,
               maxLines: 1,
               autocorrect: false,
               initialValue: manMasjidC.deMasjid.alamat,
@@ -170,7 +178,10 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_hint_alamat,
-                icon: Icon(Icons.edit_location, color: mkColorPrimaryDark),
+                icon: Icon(Icons.edit_location,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               validator: (s) {
                 if (s!.trim().isEmpty) return '$mk_lbl_alamat $mk_is_required';
@@ -178,6 +189,7 @@ class _StepperBodyState extends State<StepperBody> {
               },
             ),
             TextFormField(
+              enabled: !manMasjidC.isSaving.value,
               maxLines: 1,
               autocorrect: false,
               initialValue: manMasjidC.deMasjid.kecamatan,
@@ -197,7 +209,10 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_hint_kecamatan,
-                icon: Icon(Icons.edit_location, color: mkColorPrimaryDark),
+                icon: Icon(Icons.edit_location,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               validator: (s) {
                 if (s!.trim().isEmpty) return '$mk_kecamatan $mk_is_required';
@@ -205,6 +220,7 @@ class _StepperBodyState extends State<StepperBody> {
               },
             ),
             TextFormField(
+              enabled: !manMasjidC.isSaving.value,
               maxLines: 1,
               autocorrect: false,
               initialValue: manMasjidC.deMasjid.kodePos,
@@ -224,7 +240,10 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_hint_kode_pos,
-                icon: Icon(Icons.edit_location, color: mkColorPrimaryDark),
+                icon: Icon(Icons.edit_location,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               validator: (s) {
                 if (s!.trim().isEmpty) return '$mk_kode_pos $mk_is_required';
@@ -232,6 +251,7 @@ class _StepperBodyState extends State<StepperBody> {
               },
             ),
             TextFormField(
+              enabled: !manMasjidC.isSaving.value,
               maxLines: 1,
               autocorrect: false,
               initialValue: manMasjidC.deMasjid.kota,
@@ -251,7 +271,10 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_hint_kota,
-                icon: Icon(Icons.edit_location, color: mkColorPrimaryDark),
+                icon: Icon(Icons.edit_location,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               validator: (s) {
                 if (s!.trim().isEmpty) return '$mk_kota $mk_is_required';
@@ -259,6 +282,7 @@ class _StepperBodyState extends State<StepperBody> {
               },
             ),
             TextFormField(
+              enabled: !manMasjidC.isSaving.value,
               maxLines: 1,
               autocorrect: false,
               initialValue: manMasjidC.deMasjid.provinsi,
@@ -278,7 +302,10 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_hint_provinsi,
-                icon: Icon(Icons.edit_location, color: mkColorPrimaryDark),
+                icon: Icon(Icons.edit_location,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               validator: (s) {
                 if (s!.trim().isEmpty) return '$mk_provinsi $mk_is_required';
@@ -295,6 +322,7 @@ class _StepperBodyState extends State<StepperBody> {
         content: Column(
           children: [
             TextFormField(
+              enabled: !manMasjidC.isSaving.value,
               maxLines: 1,
               autocorrect: false,
               initialValue: manMasjidC.deMasjid.tahun,
@@ -314,7 +342,10 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_hint_tahun,
-                icon: Icon(Icons.house, color: mkColorPrimaryDark),
+                icon: Icon(Icons.house,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               validator: (s) {
                 if (s!.trim().isEmpty) return '$mk_tahun $mk_is_required';
@@ -325,6 +356,7 @@ class _StepperBodyState extends State<StepperBody> {
               },
             ),
             TextFormField(
+              enabled: !manMasjidC.isSaving.value,
               maxLines: 1,
               autocorrect: false,
               initialValue: manMasjidC.deMasjid.luasTanah,
@@ -346,7 +378,10 @@ class _StepperBodyState extends State<StepperBody> {
                 hintText: mk_hint_LT,
                 suffix: text("M\u00B2"),
                 suffixStyle: boldTextStyle(size: textSizeSMedium.toInt()),
-                icon: Icon(Icons.house, color: mkColorPrimaryDark),
+                icon: Icon(Icons.house,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               validator: (s) {
                 if (s!.trim().isEmpty) return '$mk_LT $mk_is_required';
@@ -354,6 +389,7 @@ class _StepperBodyState extends State<StepperBody> {
               },
             ),
             TextFormField(
+              enabled: !manMasjidC.isSaving.value,
               maxLines: 1,
               autocorrect: false,
               initialValue: manMasjidC.deMasjid.luasBangunan,
@@ -375,7 +411,10 @@ class _StepperBodyState extends State<StepperBody> {
                 hintText: mk_hint_LB,
                 suffix: text("M\u00B2"),
                 suffixStyle: boldTextStyle(size: textSizeSMedium.toInt()),
-                icon: Icon(Icons.house, color: mkColorPrimaryDark),
+                icon: Icon(Icons.house,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               validator: (s) {
                 if (s!.trim().isEmpty) return '$mk_LB $mk_is_required';
@@ -393,19 +432,21 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_lbl_enter + mk_status_tanah,
-                icon: Icon(Icons.house, color: mkColorPrimaryDark),
+                icon: Icon(Icons.house,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               dropdownColor: appStore.appBarColor,
-              icon: Icon(
-                Icons.arrow_drop_down,
-                color: appStore.iconColor,
-              ).paddingLeft(10),
-              onChanged: (String? newValue) {
-                setState(() {
-                  // toast(newValue);
-                  manMasjidC.statusTanah = newValue ?? "";
-                });
-              },
+              onChanged: manMasjidC.isSaving.value
+                  ? null
+                  : (String? newValue) {
+                      // setState(() {
+                      // toast(newValue);
+                      if (manMasjidC.isSaving.value == false)
+                        manMasjidC.statusTanah = newValue ?? "";
+                      // });
+                    },
               items: <String>['Wakaf', 'Lainnya']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
@@ -429,18 +470,19 @@ class _StepperBodyState extends State<StepperBody> {
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_lbl_enter + mk_legalitas,
-                icon: Icon(Icons.house, color: mkColorPrimaryDark),
+                icon: Icon(Icons.house,
+                    color: manMasjidC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
               ),
               dropdownColor: appStore.appBarColor,
-              icon: Icon(
-                Icons.arrow_drop_down,
-                color: appStore.iconColor,
-              ).paddingLeft(10),
-              onChanged: (String? newValue) {
-                setState(() {
-                  manMasjidC.legalitas = newValue ?? "";
-                });
-              },
+              onChanged: manMasjidC.isSaving.value
+                  ? null
+                  : (String? newValue) {
+                      // setState(() {
+                      manMasjidC.legalitas = newValue ?? "";
+                      // });
+                    },
               items: <String>['Terdaftar', 'Lainnya']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
@@ -513,18 +555,26 @@ class _StepperBodyState extends State<StepperBody> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      CircularProgressIndicator(),
+                                      // CircularProgressIndicator(),
                                       SizedBox(
                                         height: 5,
                                       ),
-                                      text("Loading..."),
+                                      text("Uploading"),
                                       SizedBox(
                                         height: 10,
                                       ),
                                       LinearProgressIndicator(
+                                        color: mkColorPrimary,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                mkColorPrimary),
                                         value:
                                             manMasjidC.uploadPrecentage.value,
-                                      )
+                                        // semanticsLabel:
+                                        //     '${(manMasjidC.uploadPrecentage.value * 100).toInt()}%',
+                                      ),
+                                      text(
+                                          "${(manMasjidC.uploadPrecentage.value * 100).toInt()} %"),
                                     ],
                                   )
                                 : Column(
@@ -548,11 +598,15 @@ class _StepperBodyState extends State<StepperBody> {
                                           },
                                           icon: Icon(
                                             Icons.image_sharp,
-                                            color: mkColorPrimaryDark,
+                                            color: manMasjidC.isSaving.value
+                                                ? mkColorPrimaryLight
+                                                : mkColorPrimaryDark,
                                           ),
                                           label: text(
                                             "Galeri",
-                                            textColor: mkColorPrimaryDark,
+                                            textColor: manMasjidC.isSaving.value
+                                                ? mkColorPrimaryLight
+                                                : mkColorPrimaryDark,
                                           )),
                                       Divider(),
                                       TextButton.icon(
@@ -562,11 +616,15 @@ class _StepperBodyState extends State<StepperBody> {
                                           },
                                           icon: Icon(
                                             Icons.camera,
-                                            color: mkColorPrimaryDark,
+                                            color: manMasjidC.isSaving.value
+                                                ? mkColorPrimaryLight
+                                                : mkColorPrimaryDark,
                                           ),
                                           label: text(
                                             "Kamera",
-                                            textColor: mkColorPrimaryDark,
+                                            textColor: manMasjidC.isSaving.value
+                                                ? mkColorPrimaryLight
+                                                : mkColorPrimaryDark,
                                           )),
                                       8.height,
                                     ],
@@ -610,6 +668,7 @@ class _StepperBodyState extends State<StepperBody> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
+                            // text("Saving = ${manMasjidC.isSaving}"),
                             currStep < steps.length - 1
                                 ? TextButton(
                                     onPressed: onStepContinue,
@@ -658,29 +717,42 @@ class _StepperBodyState extends State<StepperBody> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () async {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      await manMasjidC.updateDataMasjid();
-                      toast("Data Berhasil di Update");
-                      Get.back();
-                      manMasjidC.clearControllers();
-                    } else {
-                      _formKey.currentState!.validate();
-                    }
+                Obx(
+                  () => GestureDetector(
+                    onTap: () async {
+                      if (manMasjidC.isSaving.value == false) {
+                        if (_formKey.currentState!.validate()) {
+                          // _formKey.currentState!.deactivate();
+                          // _formKey.currentState!.save();
+                          setState(() {});
+                          await manMasjidC.updateDataMasjid();
+                          // setState(() {});
+                          // toast("Data Berhasil di Update");
 
-                    // finish(context);
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.all(10),
-                    decoration:
-                        boxDecoration(bgColor: mkColorPrimary, radius: 10),
-                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    child: Center(
-                      child:
-                          Text(mk_submit, style: boldTextStyle(color: white)),
+                          Get.back();
+                          // manMasjidC.clearControllers();
+                        } else {
+                          _formKey.currentState!.validate();
+                        }
+                      }
+                      // finish(context);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      margin: EdgeInsets.all(10),
+                      decoration: boxDecoration(
+                          bgColor: manMasjidC.isSaving.value
+                              ? mkColorPrimaryLight
+                              : mkColorPrimary,
+                          radius: 10),
+                      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: Center(
+                        child: manMasjidC.isSaving.value
+                            ? CircularProgressIndicator()
+                            : Text(mk_submit,
+                                style: boldTextStyle(color: white, size: 18)),
+                      ),
                     ),
                   ),
                 ),

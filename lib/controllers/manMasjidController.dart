@@ -18,6 +18,7 @@ import 'package:masjidkita/routes/route_name.dart';
 // import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class ManMasjidController extends GetxController {
   static ManMasjidController instance = Get.find();
@@ -48,6 +49,7 @@ class ManMasjidController extends GetxController {
 
   var haveMasjid = false.obs;
   var myMasjid = false.obs;
+  var isSaving = false.obs;
 
   @override
   void onReady() {
@@ -96,7 +98,7 @@ class ManMasjidController extends GetxController {
     clearControllers();
   }
 
-  updateDataMasjid() async {
+  Future updateDataMasjid() async {
     Map<String, dynamic> data = new HashMap();
     if (nama.text != "") data['nama'] = nama.text;
     if (alamat.text != "") data["alamat"] = alamat.text;
@@ -112,28 +114,32 @@ class ManMasjidController extends GetxController {
     if (statusTanah != null) data["statusTanah"] = statusTanah;
     if (legalitas != null) data["legalitas"] = legalitas;
     print("data = $data");
-    await firebaseFirestore
-        .collection(masjidCollection)
-        .doc(deMasjid.id)
-        .update(data);
-    clearControllers();
+    isSaving.value = true;
+    try {
+      await firebaseFirestore
+          .collection(masjidCollection)
+          .doc(deMasjid.id)
+          .update(data);
+    } on SocketException catch (_) {
+      showDialog(
+          context: Get.context!,
+          builder: (context) => AlertDialog(
+                title: Text("Connection Error !"),
+                content: Text("Please connect to the internet."),
+              ));
+      toast("value");
+    } catch (e) {
+      print(e);
+      toast("Error Saving Data");
+    } finally {
+      clearControllers();
+      toast("Data Berhasil Diperbarui");
+      isSaving.value = false;
+    }
 
     // await _getManMasjidModel(deMasjid);
     // await getDetailMasjid(deMasjid.id);
   }
-
-  // _getManMasjidModel(userModel) async {
-  //   try {
-  //     keMasjidModel.value = await firebaseFirestore
-  //         .collection(masjidCollection)
-  //         .doc(authController.user.masjid)
-  //         .get()
-  //         .then((doc) => ManMasjidModel.fromSnapshot(doc));
-  //   } catch (e) {
-  //     keMasjidModel.value = ManMasjidModel();
-  //   }
-  //   _setHaveMasjid();
-  // }
 
   // getDetailMasjid(mID) async {
   //   try {
@@ -216,8 +222,8 @@ class ManMasjidController extends GetxController {
   var downloadUrl = "".obs;
   var isLoadingImage = false.obs;
   PickedFile? pickedFile;
-  XFile? pickedImage;
   var uploadPrecentage = 0.0.obs;
+  XFile? pickedImage;
 
   uploadImage(bool isCam) async {
     pickedImage = await manMasjidC.getImage(isCam);
@@ -227,19 +233,6 @@ class ManMasjidController extends GetxController {
   Future getImage(bool isCam) async {
     return pickedImage = await _picker.pickImage(
         source: isCam ? ImageSource.camera : ImageSource.gallery);
-
-    // if (uploadedFile.state == TaskState.running) toast("Loading Image");
-
-    // if (uploadedFile.state == TaskState.success) {
-    //   downloadUrl.value = await refFeedBuckets.getDownloadURL();
-    //   photoUrl.text = downloadUrl.value;
-    //   await firebaseFirestore
-    //       .collection(masjidCollection)
-    //       .doc(deMasjid.id)
-    //       .update({'photoUrl': downloadUrl.value});
-    // } else {
-    //   print(message);
-    // }
   }
 
   Future uploadToStorage(XFile? pickImage) async {
@@ -285,26 +278,4 @@ class ManMasjidController extends GetxController {
       toast('error upload data');
     }
   }
-
-  // Future getImageCam() async {
-  //   final XFile? pickImage =
-  //       await _picker.pickImage(source: ImageSource.camera);
-  //   if (pickImage != null) {
-  //     Reference refFeedBucket =
-  //         feedStorage.ref().child('inventaris').child(filePath);
-  //     // var dowurl = await (await pickImage.onComplete).ref.getDownloadURL().toString();
-  //     String downloadUrl;
-  //     var file = File(filePath);
-
-  //     TaskSnapshot uploadedFile = await refFeedBucket.putFile(file);
-
-  //     if (uploadedFile.state == TaskState.success) {
-  //       downloadUrl = await refFeedBucket.getDownloadURL();
-  //       inventarisC.fotoController.text = fileName;
-  //       inventarisC.urlController.text = downloadUrl;
-  //     } else {
-  //       print(message);
-  //     }
-  //   }
-  // }
 }
