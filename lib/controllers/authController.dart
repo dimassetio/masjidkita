@@ -1,4 +1,5 @@
 // @dart=2.9
+import 'package:get_storage/get_storage.dart';
 import 'package:masjidkita/helpers/showLoading.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/models/user.dart';
@@ -11,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:masjidkita/integrations/firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:showcaseview/showcaseview.dart';
 // import 'package:masjidkita/screens/inventaris/inventaris_page.dart';
 
 class AuthController extends GetxController {
@@ -29,8 +31,11 @@ class AuthController extends GetxController {
 
   final googleSignIn = GoogleSignIn();
 
+  final box = GetStorage();
+  var isFirstLaunch = false.obs;
+
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
     firebaseUser = Rx<User>(auth.currentUser);
     firebaseUser.bindStream(auth.userChanges());
@@ -38,6 +43,21 @@ class AuthController extends GetxController {
     // _setUserModel;
     ever(firebaseUser, _setLogStatus);
     ever(firebaseUser, _setUserModel);
+
+    // isFirstLaunch.value = box.read('first_launch');
+    box.listenKey('first_launch', (value) {
+      isFirstLaunch.value = value;
+      print("p $value");
+    });
+    if (box.read('first_launch') == null) {
+      await box.write('first_launch', true);
+    } else {
+      await box.write('first_launch', false);
+    }
+    print("${box.read('first_launch')} fl box");
+
+    // print("Obs: ${isFirstLaunch.value}");
+    // print("box:  ${box.read('first_launch')}");
   }
 
   _setLogStatus(User user) {
@@ -248,6 +268,7 @@ class AuthController extends GetxController {
   void signOut() async {
     userModel.value = UserModel();
     await auth.signOut();
+    toast("Sign Out Success");
   }
 
   _addUserToFirestore(String userId) {

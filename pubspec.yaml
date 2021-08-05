@@ -39,6 +39,7 @@ dependencies:
   intl: ^0.17.0
   mobx: ^2.0.1
   nb_utils: ^4.2.11
+  showcaseview: ^1.1.0
 
 dev_dependencies:
   flutter_test:

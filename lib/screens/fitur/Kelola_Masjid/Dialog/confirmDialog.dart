@@ -14,6 +14,7 @@ class ConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -93,9 +94,10 @@ class ConfirmDialog extends StatelessWidget {
                         ),
                       ),
                     ).onTap(() {
-                      if (!currentFocus.hasPrimaryFocus) {
-                        currentFocus.unfocus();
-                      }
+                      // FocusScope.of(context).unfocus();
+                      // if (!currentFocus.hasPrimaryFocus) {
+                      //   currentFocus.unfocus();
+                      // }
                       finish(context);
                     }),
                   ),
@@ -125,14 +127,16 @@ class ConfirmDialog extends StatelessWidget {
                         ),
                       ),
                     ).onTap(() {
-                      // finish(context);
+                      FocusScope.of(context).unfocus();
 
-                      if (!currentFocus.hasPrimaryFocus) {
-                        currentFocus.unfocus();
-                      }
-                      Get.offAllNamed(RouteName.detail);
+                      finish(context);
+
+                      // if (!currentFocus.hasPrimaryFocus) {
+                      //   currentFocus.unfocus();
+                      // }
+
                       manMasjidC.clearControllers();
-                      // Get.back();
+                      Get.back(closeOverlays: true);
                       // Get.toNamed(RouteName.sign_in);
                     }),
                   )
