@@ -127,7 +127,8 @@ class CustomDelete extends StatelessWidget {
                       // inventarisC.inventariss.removeAt(index);
 
                       await inventarisC.deleteInventaris(
-                          inventarisC.inventaris.inventarisID);
+                          inventarisC.inventaris.inventarisID,
+                          inventarisC.inventaris.url);
                       finish(context);
 
                       return true;

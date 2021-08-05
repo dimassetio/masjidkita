@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:masjidkita/integrations/controllers.dart';
+import 'package:masjidkita/main/utils/AppConstant.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -9,134 +11,10 @@ import 'package:masjidkita/constants/firebase.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:masjidkita/controllers/inventarisController.dart';
+import 'package:masjidkita/main.dart';
 
 // ignore: must_be_immutable
 class AddInventarisPage extends StatelessWidget {
-  PickedFile? pickImage;
-  String fileName = '', filePath = '';
-  final ImagePicker _picker = ImagePicker();
-  String message = "Belum ada gambar";
-
-  // Future getImage() async {
-  //   pickImage = await ImagePicker().getImage(source: ImageSource.gallery);
-  //   // var dowurl = await (await pickImage.onComplete).ref.getDownloadURL().toString();
-  //   if (pickImage != null) {
-  //     fileName = pickImage!.path.split('/').last;
-  //     filePath = pickImage!.path;
-  //     // Reference reference = firebaseStorage.ref('Inventaris/' + fileName);
-  //     var file = File(filePath);
-
-  //     var snapshot =
-  //         await firebaseStorage.ref().child('Inventaris').child(fileName);
-  //     // .putFile(file);
-  //     snapshot.putFile(file);
-  //     var url =
-  //         await snapshot.child('inventaris').child(fileName).getDownloadURL();
-  //     fotoController.text = fileName;
-  //     urlController.text = url;
-  //   } else {
-  //     print(message);
-  //   }
-  // }
-
-  Future getImage() async {
-    final FirebaseStorage feedStorage = FirebaseStorage.instanceFor();
-    // final ImagePicker _picker = ImagePicker();
-    // Pick an image
-    final XFile? pickImage =
-        await _picker.pickImage(source: ImageSource.gallery);
-    // pickImage = await ImagePicker().getImage(source: ImageSource.gallery);
-    if (pickImage != null) {
-      // fileName = pickImage.name.split('/').last;
-      fileName = pickImage.name;
-      filePath = pickImage.path;
-      String files = pickImage.path;
-      Reference refFeedBucket =
-          feedStorage.ref().child('inventaris').child(files);
-      Reference refFeedBuckets =
-          firebaseStorage.ref().child('inventaris').child(files);
-      // var dowurl = await (await pickImage.onComplete).ref.getDownloadURL().toString();
-      String downloadUrl;
-      var file = File(files);
-
-      TaskSnapshot uploadedFile = await refFeedBuckets.putFile(file);
-
-      if (uploadedFile.state == TaskState.success) {
-        downloadUrl = await refFeedBucket.getDownloadURL();
-        inventarisC.fotoController.text = fileName;
-        inventarisC.urlController.text = downloadUrl;
-      } else {
-        print(message);
-      }
-    }
-  }
-
-  Future getImageCam() async {
-    final FirebaseStorage feedStorage = FirebaseStorage.instanceFor();
-    final XFile? pickImage =
-        await _picker.pickImage(source: ImageSource.camera);
-    // pickImage = await ImagePicker().getImage(source: ImageSource.camera);
-    if (pickImage != null) {
-      fileName = pickImage.name;
-      filePath = pickImage.path;
-      String files = pickImage.path;
-      Reference refFeedBucket =
-          feedStorage.ref().child('inventaris').child(files);
-      Reference refFeedBuckets =
-          firebaseStorage.ref().child('inventaris').child(files);
-      // var dowurl = await (await pickImage.onComplete).ref.getDownloadURL().toString();
-      String downloadUrl;
-      var file = File(files);
-
-      TaskSnapshot uploadedFile = await refFeedBuckets.putFile(file);
-
-      if (uploadedFile.state == TaskState.success) {
-        downloadUrl = await refFeedBucket.getDownloadURL();
-        inventarisC.fotoController.text = fileName;
-        inventarisC.urlController.text = downloadUrl;
-      } else {
-        print(message);
-      }
-    }
-    // if (pickImage != null) {
-    //   fileName = pickImage!.path.split('/').last;
-    //   filePath = pickImage!.path;
-    //   // Reference reference = firebaseStorage.ref('Inventaris/' + fileName);
-    //   var file = File(filePath);
-
-    //   var snapshot =
-    //       await firebaseStorage.ref().child('Inventaris').child(fileName);
-    //   // .putFile(file);
-    //   snapshot.putFile(file);
-    //   var url =
-    //       await snapshot.child('inventaris').child(fileName).getDownloadURL();
-    //   fotoController.text = fileName;
-    //   urlController.text = url;
-    // } else {
-    //   print(message);
-    // }
-  }
-
-  // Future getImageCam() async {
-  //   pickImage = await ImagePicker().getImage(source: ImageSource.camera);
-  //   if (pickImage != null) {
-  //     fileName = pickImage!.path.split('/').last;
-  //     filePath = pickImage!.path;
-  //     var file = File(filePath);
-  //     var snapshot =
-  //         await firebaseStorage.ref().child('Inventaris/' + fileName);
-  //     // .putFile(file);
-
-  //     snapshot.putFile(file);
-  //     var url =
-  //         await snapshot.child('inventaris').child(fileName).getDownloadURL();
-  //     fotoController.text = fileName;
-  //     urlController.text = url;
-  //   } else {
-  //     print(message);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     Get.put(InventarisController());
@@ -197,35 +75,142 @@ class AddInventarisPage extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
                 child: TextField(
                   focusNode: FocusNode(),
                   enableInteractiveSelection: false,
                   // style: GoogleFonts.poppins(),
                   enabled: false,
                   controller: inventarisC.fotoController,
-                  decoration: InputDecoration(hintText: message),
+                  decoration: InputDecoration(hintText: inventarisC.message),
                 ),
+
+                // Obx(() => inventarisC.inventaris.url != "" &&
+                //         inventarisC.inventaris.url != null
+                //     ? CachedNetworkImage(
+                //         placeholder: placeholderWidgetFn() as Widget
+                //             Function(BuildContext, String)?,
+                //         imageUrl: inventarisC.inventaris.url ?? "",
+                //         fit: BoxFit.fill,
+                //       )
+                //     : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
               ),
-              Container(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: PopupMenuButton(
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                          child: Icon(Icons.photo_album), value: "gallery"),
-                      PopupMenuItem(child: Icon(Icons.camera), value: "cam")
-                    ],
-                    onSelected: (value) async {
-                      if (value == "gallery") {
-                        getImage();
-                      } else {
-                        getImageCam();
-                      }
-                    },
-                    child: Text("Pilih gambar"),
-                    offset: Offset(0, 25),
-                  ),
+              // Container(
+              //   child: Padding(
+              //     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              //     child: PopupMenuButton(
+              //       itemBuilder: (context) => [
+              //         PopupMenuItem(
+              //             child: Icon(Icons.photo_album), value: "gallery"),
+              //         PopupMenuItem(child: Icon(Icons.camera), value: "cam")
+              //       ],
+              //       onSelected: (value) async {
+              //         if (value == "gallery") {
+              //           inventarisC.uploadImage(false);
+              //         } else {
+              //           inventarisC.uploadImage(true);
+              //         }
+              //       },
+              //       child: Text("Pilih gambar"),
+              //       offset: Offset(0, 25),
+              //     ),
+              //   ),
+              // ),
+              ElevatedButton(
+                child: text("Upload Foto", textColor: mkWhite),
+                onPressed: () {
+                  showModalBottomSheet(
+                      context: context,
+                      backgroundColor: appStore.scaffoldBackground,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(25.0)),
+                      ),
+                      builder: (builder) {
+                        return Container(
+                            height: 250.0,
+                            padding: EdgeInsets.all(16),
+                            child: Obx(
+                              () => inventarisC.isLoadingImage.value
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        CircularProgressIndicator(),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        text("Loading..."),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        LinearProgressIndicator(
+                                          value: inventarisC
+                                              .uploadPrecentage.value,
+                                        )
+                                      ],
+                                    )
+                                  : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Upload Foto dari",
+                                          style: boldTextStyle(
+                                              color: appStore.textPrimaryColor),
+                                        ),
+                                        16.height,
+                                        Divider(
+                                          height: 5,
+                                        ),
+                                        16.height,
+                                        TextButton.icon(
+                                            // style: ,
+                                            onPressed: () {
+                                              inventarisC.uploadImage(false);
+                                            },
+                                            icon: Icon(
+                                              Icons.image_sharp,
+                                              color: mkColorPrimaryDark,
+                                            ),
+                                            label: text(
+                                              "Galeri",
+                                              textColor: mkColorPrimaryDark,
+                                            )),
+                                        Divider(),
+                                        TextButton.icon(
+                                            // style: ,
+                                            onPressed: () async {
+                                              inventarisC.uploadImage(true);
+                                            },
+                                            icon: Icon(
+                                              Icons.camera,
+                                              color: mkColorPrimaryDark,
+                                            ),
+                                            label: text(
+                                              "Kamera",
+                                              textColor: mkColorPrimaryDark,
+                                            )),
+                                        8.height,
+                                      ],
+                                    ),
+                            ));
+                      });
+
+                  // inventarisC.inventarisage(image!);
+                },
+              ),
+
+              Opacity(
+                opacity: 0.0,
+                child: TextField(
+                  focusNode: FocusNode(),
+                  enableInteractiveSelection: false,
+                  // style: GoogleFonts.poppins(),
+                  enabled: false,
+                  controller: inventarisC.urlController,
                 ),
               ),
               Opacity(
@@ -235,7 +220,7 @@ class AddInventarisPage extends StatelessWidget {
                   enableInteractiveSelection: false,
                   // style: GoogleFonts.poppins(),
                   enabled: false,
-                  controller: inventarisC.urlController,
+                  controller: inventarisC.fotoController,
                 ),
               ),
               ElevatedButton(

@@ -75,3 +75,4 @@ const mk_sebelum = "Sebelumnya";
 const mk_long_text =
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis quis pariatur est aliquid cumque incidunt facere ducimus in deserunt modi repudiandae, quia molestias. Sed impedit aperiam perferendis iure ratione nulla sit esse unde! Ipsa distinctio minima adipisci odit modi quia omnis corporis, aperiam laborum id quo numquam explicabo quos ullam cumque velit nam at. Hic earum odio corporis fugit a similique alias rem quia eveniet, est dicta nobis blanditiis distinctio sint vitae nam repellat, expedita sunt officia, ipsum placeat ullam velit repellendus. Commodi similique, nostrum harum deserunt earum quae inventore nobis recusandae iure reprehenderit doloremque deleniti voluptate officia aspernatur sit?";
 const no_image_text = "Gambar tidak ditemukan";
+const mk_add_inventaris = "Tambah inventaris";
