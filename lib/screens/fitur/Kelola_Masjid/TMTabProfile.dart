@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 
 import 'package:masjidkita/main/utils/AppWidget.dart';
@@ -192,7 +193,7 @@ class TMTabProfile extends StatelessWidget {
                       fontSize: textSizeMedium,
                     ),
                     Obx(() => text(
-                          "${manMasjidC.deMasjid.luasTanah ?? mk_null} M\u00B2",
+                          "${manMasjidC.decFormat(manMasjidC.deMasjid.luasTanah.toInt())} M\u00B2",
                           // textColor: mkTextColorSecondary,
                           fontSize: textSizeMedium,
                         )),
@@ -202,7 +203,7 @@ class TMTabProfile extends StatelessWidget {
                       fontSize: textSizeMedium,
                     ),
                     Obx(() => text(
-                          "${manMasjidC.deMasjid.luasBangunan ?? mk_null} M\u00B2",
+                          "${manMasjidC.decFormat(manMasjidC.deMasjid.luasBangunan.toInt())} M\u00B2",
                           // textColor: mkTextColorSecondary,
                           fontSize: textSizeMedium,
                         )),

@@ -130,11 +130,12 @@ class AuthController extends GetxController {
         _initializeUserModel(_userId);
         _clearControllers();
       });
-      toast("Sign Up Success");
-      Get.toNamed(RouteName.home);
     } catch (e) {
       debugPrint(e.toString());
       Get.snackbar("Sign Up Failed", "Try again");
+    } finally {
+      Get.toNamed(RouteName.home);
+      toast("Sign Up Success");
     }
   }
 

@@ -2,9 +2,12 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:masjidkita/helpers/CurrencyInputFormatter.dart';
 import 'package:masjidkita/integrations/controllers.dart';
 import 'package:masjidkita/main/utils/AppConstant.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
@@ -360,9 +363,14 @@ class _StepperBodyState extends State<StepperBody> {
               maxLines: 1,
               autocorrect: false,
               initialValue: manMasjidC.deMasjid.luasTanah,
+              // controller: manMasjidC.luasTanah,
               onChanged: (newValue) {
                 manMasjidC.luasTanah.text = newValue;
               },
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                // CurrencyInputFormatter()
+              ],
               textInputAction: TextInputAction.next,
               cursorColor: appStore.textPrimaryColor,
               // style: primaryTextStyle(),
@@ -545,91 +553,17 @@ class _StepperBodyState extends State<StepperBody> {
                           BorderRadius.vertical(top: Radius.circular(25.0)),
                     ),
                     builder: (builder) {
-                      return Container(
-                          height: 250.0,
-                          padding: EdgeInsets.all(16),
-                          child: Obx(
-                            () => manMasjidC.isLoadingImage.value
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      // CircularProgressIndicator(),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      text("Uploading"),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      LinearProgressIndicator(
-                                        color: mkColorPrimary,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                mkColorPrimary),
-                                        value:
-                                            manMasjidC.uploadPrecentage.value,
-                                        // semanticsLabel:
-                                        //     '${(manMasjidC.uploadPrecentage.value * 100).toInt()}%',
-                                      ),
-                                      text(
-                                          "${(manMasjidC.uploadPrecentage.value * 100).toInt()} %"),
-                                    ],
-                                  )
-                                : Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Upload Foto Masjid dari",
-                                        style: boldTextStyle(
-                                            color: appStore.textPrimaryColor),
-                                      ),
-                                      16.height,
-                                      Divider(
-                                        height: 5,
-                                      ),
-                                      16.height,
-                                      TextButton.icon(
-                                          // style: ,
-                                          onPressed: () {
-                                            manMasjidC.uploadImage(false);
-                                          },
-                                          icon: Icon(
-                                            Icons.image_sharp,
-                                            color: manMasjidC.isSaving.value
-                                                ? mkColorPrimaryLight
-                                                : mkColorPrimaryDark,
-                                          ),
-                                          label: text(
-                                            "Galeri",
-                                            textColor: manMasjidC.isSaving.value
-                                                ? mkColorPrimaryLight
-                                                : mkColorPrimaryDark,
-                                          )),
-                                      Divider(),
-                                      TextButton.icon(
-                                          // style: ,
-                                          onPressed: () async {
-                                            manMasjidC.uploadImage(true);
-                                          },
-                                          icon: Icon(
-                                            Icons.camera,
-                                            color: manMasjidC.isSaving.value
-                                                ? mkColorPrimaryLight
-                                                : mkColorPrimaryDark,
-                                          ),
-                                          label: text(
-                                            "Kamera",
-                                            textColor: manMasjidC.isSaving.value
-                                                ? mkColorPrimaryLight
-                                                : mkColorPrimaryDark,
-                                          )),
-                                      8.height,
-                                    ],
-                                  ),
-                          ));
+                      return ImageSourceBottomSheet(
+                        isLoading: manMasjidC.isLoadingImage.value,
+                        uploadPrecentage: manMasjidC.uploadPrecentage.value,
+                        isSaving: manMasjidC.isSaving.value,
+                        fromCamera: () {
+                          manMasjidC.uploadImage(true);
+                        },
+                        fromGaleri: () {
+                          manMasjidC.uploadImage(false);
+                        },
+                      );
                     });
 
                 // manMasjidC.uploadImage(image!);

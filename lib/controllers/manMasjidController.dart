@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path/path.dart';
 
@@ -51,6 +52,22 @@ class ManMasjidController extends GetxController {
   var myMasjid = false.obs;
   var isSaving = false.obs;
 
+  var numFormat = NumberFormat.decimalPattern("id");
+  decFormat(int value) {
+    var formatted = NumberFormat.decimalPattern("id").format(value);
+    var back = formatted.toInt();
+    print(back);
+
+    return NumberFormat.decimalPattern("id").format(value);
+  }
+
+  currFormat(int value) {
+    return NumberFormat.simpleCurrency(
+      locale: "id",
+      // decimalDigits: 0,
+    ).format(value);
+  }
+
   @override
   void onReady() {
     super.onReady();
@@ -90,6 +107,7 @@ class ManMasjidController extends GetxController {
       "id": userId,
       "alamat": alamat.text.trim(),
       "photoUrl": "",
+      "createdAt": DateTime.now(),
     });
     await firebaseFirestore.collection(usersCollection).doc(userId).update({
       "masjid": userId,
@@ -113,6 +131,8 @@ class ManMasjidController extends GetxController {
     if (luasBangunan.text != "") data["luasBangunan"] = luasBangunan.text;
     if (statusTanah != null) data["statusTanah"] = statusTanah;
     if (legalitas != null) data["legalitas"] = legalitas;
+    //  data["updatedAt"] = DateTime.now();
+
     print("data = $data");
     isSaving.value = true;
     try {
@@ -275,7 +295,7 @@ class ManMasjidController extends GetxController {
         }
       });
     } else {
-      toast('error upload data');
+      toast('No Image Picked');
     }
   }
 }

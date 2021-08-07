@@ -13,6 +13,7 @@ import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/utils/MKColors.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:masjidkita/screens/utils/widgets/BottomNav.dart';
+import 'package:masjidkita/screens/utils/widgets/ConfirmLogout.dart';
 import 'package:masjidkita/screens/utils/widgets/KegiatanSlider.dart';
 import 'package:masjidkita/screens/utils/widgets/MasjidList.dart';
 import 'package:masjidkita/screens/utils/widgets/MasjidSlider.dart';
@@ -86,7 +87,11 @@ class _MosqDashboardState extends State<MosqDashboard> {
                                 onPressed: () {
                                   print(authController.isLoggedIn.value);
                                   authController.isLoggedIn.value
-                                      ? authController.signOut()
+                                      ? showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              ConfirmLogout())
+                                      // authController.signOut()
                                       : Get.toNamed(RouteName.sign_in);
                                 },
                                 icon: Icon(
@@ -197,6 +202,8 @@ class _MosqDashboardState extends State<MosqDashboard> {
                           Obx(
                             () => listMasjidC.favMasjids.isEmpty
                                 ? Showcase(
+                                    overlayPadding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: -5),
                                     key: scTwo,
                                     title: 'Masjid Favorit',
                                     description:

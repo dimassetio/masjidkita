@@ -1,7 +1,7 @@
 // import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:masjidkita/constants/firebase.dart';
+import 'package:masjidkita/integrations/firestore.dart';
 import 'package:masjidkita/models/inventaris.dart';
 // import 'package:path/path.dart';
 
