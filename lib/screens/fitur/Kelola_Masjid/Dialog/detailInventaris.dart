@@ -2,23 +2,23 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/controllers/inventarisController.dart';
-import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/models/inventaris.dart';
-import 'package:masjidkita/routes/route_name.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
-import 'package:masjidkita/screens/utils/MKImages.dart';
-import 'package:masjidkita/screens/utils/MKStrings.dart';
-import 'package:masjidkita/services/database.dart';
+import 'package:mosq/controllers/inventarisController.dart';
+import 'package:mosq/integrations/controllers.dart';
+import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/routes/route_name.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
+import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:mosq/screens/widgets/MosqTopBar.dart';
+import 'package:mosq/services/database.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/main/utils/T10Colors.dart';
-import 'package:masjidkita/main/utils/T10Constant.dart';
-import 'package:masjidkita/main/utils/T10Widget.dart';
-// import 'package:masjidkita/main/utils/T10Images.dart';
-// import 'package:masjidkita/main/utils/T10Strings.dart';
+import 'package:mosq/main/utils/AppWidget.dart';
+// import 'package:mosq/main/utils/T10Images.dart';
+// import 'package:mosq/main/utils/T10Strings.dart';
 
-import 'package:masjidkita/main.dart';
+import 'package:mosq/main.dart';
 
 class InventarisDetail extends StatelessWidget {
   final InventarisModel inventaris = InventarisModel();
@@ -37,34 +37,33 @@ class InventarisDetail extends StatelessWidget {
     Widget mTag(var value) {
       return Container(
         decoration: boxDecoration(
-            color: t10_view_color,
+            color: mk_view_color,
             bgColor: appStore.scaffoldBackground,
             showShadow: true),
-        padding: EdgeInsets.fromLTRB(spacing_standard_new, spacing_control,
-            spacing_standard_new, spacing_control),
-        child: text(value, textColor: t10_textColorSecondary),
+        padding: EdgeInsets.fromLTRB(16, 4, 16, 4),
+        child: text(value, textColor: mkTextColorSecondary),
       );
     }
 
     Widget mInfo() {
       return Container(
-        margin: EdgeInsets.all(spacing_standard_new),
+        margin: EdgeInsets.all(16),
         color: appStore.scaffoldBackground,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Divider(height: 1, color: t10_view_color),
-            SizedBox(height: spacing_standard_new),
+            Divider(height: 1, color: mk_view_color),
+            SizedBox(height: 16),
             Text("Rincian", style: primaryTextStyle(size: 18)),
-            SizedBox(height: spacing_standard_new),
+            SizedBox(height: 16),
             Text("Harga barang (satuan): ${inventarisC.inventaris.harga}",
                 style: secondaryTextStyle()),
-            SizedBox(height: spacing_standard_new),
+            SizedBox(height: 16),
             Text("Banyaknya stok: ${inventarisC.inventaris.jumlah}",
                 style: secondaryTextStyle()),
-            SizedBox(height: spacing_standard_new),
-            Divider(height: 1, color: t10_view_color),
-            SizedBox(height: spacing_standard_new),
+            SizedBox(height: 16),
+            Divider(height: 1, color: mk_view_color),
+            SizedBox(height: 16),
             Row(
               children: <Widget>[
                 // FloatingActionButton.extended(
@@ -111,13 +110,13 @@ class InventarisDetail extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            T10TopBar("Detail Inventaris"),
+            MosqTopBar("Detail Inventaris"),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.all(spacing_standard_new),
+                      margin: EdgeInsets.all(16),
                       child: Column(
                         children: <Widget>[
                           inventarisC.inventaris.url != ""
@@ -132,7 +131,7 @@ class InventarisDetail extends StatelessWidget {
                               : Container(
                                   child: text("Tidak ada gambar"),
                                 ),
-                          SizedBox(height: spacing_standard_new),
+                          SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
@@ -152,7 +151,7 @@ class InventarisDetail extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               text("Kondisi ${inventarisC.inventaris.kondisi}",
-                                  textColor: t10_textColorSecondary),
+                                  textColor: mkTextColorSecondary),
                               // text(
                               //     "Banyaknya: ${inventarisC.inventaris.jumlah}",
                               //     textColor: t10_textColorSecondary),

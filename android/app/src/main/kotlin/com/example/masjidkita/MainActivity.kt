@@ -1,4 +1,4 @@
-package com.dimas.masjidkita
+package com.langittuju.mosq
 
 import io.flutter.embedding.android.FlutterActivity
 

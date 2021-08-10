@@ -1,20 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/screens/utils/MKColors.dart';
-import 'package:masjidkita/screens/utils/MKStrings.dart';
-import 'package:masjidkita/screens/utils/MKImages.dart';
-import 'package:masjidkita/screens/utils/MKWidget.dart';
-import 'package:masjidkita/screens/utils/widgets/MasjidSlider.dart';
+import 'package:mosq/integrations/controllers.dart';
+import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
+import 'package:mosq/screens/utils/MKWidget.dart';
+import 'package:mosq/screens/widgets/MasjidSlider.dart';
 import 'package:nb_utils/nb_utils.dart';
-
 import '../../main.dart';
-import 'utils/widgets/MasjidList.dart';
+import 'package:mosq/screens/widgets/MasjidList.dart';
 
 class PageListMasjid extends StatelessWidget {
   const PageListMasjid({Key? key}) : super(key: key);

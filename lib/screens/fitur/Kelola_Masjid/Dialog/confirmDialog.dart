@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/main.dart';
-import 'package:masjidkita/main/utils/AppColors.dart';
-import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/routes/route_name.dart';
-import 'package:masjidkita/screens/utils/MKColors.dart';
-import 'package:masjidkita/screens/utils/MKConstant.dart';
-import 'package:masjidkita/screens/utils/MKStrings.dart';
+import 'package:mosq/integrations/controllers.dart';
+import 'package:mosq/main.dart';
+import 'package:mosq/main/utils/AppColors.dart';
+import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/routes/route_name.dart';
+import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class ConfirmDialog extends StatelessWidget {

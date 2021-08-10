@@ -2,9 +2,9 @@ import 'dart:collection';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/integrations/firestore.dart';
-import 'package:masjidkita/models/inventaris.dart';
+import 'package:mosq/integrations/controllers.dart';
+import 'package:mosq/integrations/firestore.dart';
+import 'package:mosq/models/inventaris.dart';
 import 'package:get/get.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -225,7 +225,7 @@ class InventarisController extends GetxController {
     // imageRef.delete();
     // print(imageRef);
     // firebaseStorage
-    //     .refFromURL("gs://masjidkita-2d58e.appspot.com//Inventaris/${foto}")
+    //     .refFromURL("gs://mosq-2d58e.appspot.com//Inventaris/${foto}")
     //     .delete();
     // print(foto);
     Get.back();

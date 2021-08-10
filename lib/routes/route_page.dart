@@ -1,21 +1,17 @@
 import 'package:get/get.dart';
-import 'package:masjidkita/integrations/binding.dart';
-import 'package:masjidkita/models/inventaris.dart';
-import 'package:masjidkita/screens/MKSignUp.dart';
-import 'package:masjidkita/screens/MKSignIn.dart';
-import 'package:masjidkita/screens/MosqDashboard.dart';
-import 'package:masjidkita/screens/MosqProfile.dart';
-import 'package:masjidkita/screens/PageListMasjid.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Form_Inventaris.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Form_Profile.dart';
-// import 'package:masjidkita/screens/PageSiMasjid.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormAddInventaris.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/DetailMasjid.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
-import 'package:masjidkita/screens/utils/widgets/NewMasjid.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabInventaris.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/detailInventaris.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/editInventaris.dart';
+import 'package:mosq/integrations/binding.dart';
+import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/screens/MosqDashboard.dart';
+import 'package:mosq/screens/MosqProfile.dart';
+import 'package:mosq/screens/PageListMasjid.dart';
+import 'package:mosq/screens/authentication/MKSignIn.dart';
+import 'package:mosq/screens/authentication/MKSignUp.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/Form_Inventaris.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Profile/Form_Profile.dart';
+// import 'package:mosq/screens/PageSiMasjid.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/DetailMasjid.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/TMTabInventaris.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/detailInventaris.dart';
 import './route_name.dart';
 
 class AppPage {
@@ -24,13 +20,12 @@ class AppPage {
     GetPage(name: RouteName.sign_in, page: () => T5SignIn()),
     GetPage(name: RouteName.sign_up, page: () => T5SignUp()),
     GetPage(name: RouteName.profile, page: () => MosqProfile()),
-    GetPage(name: RouteName.form_profile, page: () => FormProfile()),
+    GetPage(name: RouteName.form_profile + '/:id', page: () => FormProfile()),
     GetPage(name: RouteName.mkdashboard, page: () => PageListMasjid()),
-    GetPage(name: RouteName.man_masjid, page: () => ManMasjid()),
-    GetPage(name: RouteName.new_masjid, page: () => NewMasjid()),
+    GetPage(name: RouteName.new_masjid, page: () => FormProfile()),
     GetPage(name: RouteName.new_inventaris, page: () => FormInventaris()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),
-    GetPage(name: RouteName.edit_inventaris, page: () => InventarisEdit()),
+    GetPage(name: RouteName.edit_inventaris, page: () => FormInventaris()),
     GetPage(
         name: RouteName.list_masjid,
         page: () => PageListMasjid(),

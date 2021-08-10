@@ -28,7 +28,7 @@ const mkShadowColor = Color(0X95E9EBF0);
 const mkDarkRed = Color(0XFFF06263);
 const mkColorPrimary50 = Color(0X8096B753);
 
-const mk_view_color = Color(0XFFDADADA);
+const mk_view_color = Color(0xFFB4BBC2);
 
 const mkColorScheme = ColorScheme(
     primary: mkColorPrimary,

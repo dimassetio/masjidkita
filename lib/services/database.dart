@@ -1,8 +1,8 @@
 // import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:masjidkita/integrations/firestore.dart';
-import 'package:masjidkita/models/inventaris.dart';
+import 'package:mosq/integrations/firestore.dart';
+import 'package:mosq/models/inventaris.dart';
 // import 'package:path/path.dart';
 
 class Database {
@@ -93,7 +93,7 @@ class Database {
     // imageRef.delete();
     // print(imageRef);
     // firebaseStorage
-    //     .refFromURL("gs://masjidkita-2d58e.appspot.com//Inventaris/${foto}")
+    //     .refFromURL("gs://mosq-2d58e.appspot.com//Inventaris/${foto}")
     //     .delete();
     // print(foto);
   }

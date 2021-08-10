@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/models/inventaris.dart';
-import 'package:masjidkita/services/database.dart';
+import 'package:mosq/integrations/controllers.dart';
+import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/services/database.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:masjidkita/main/utils/AppConstant.dart';
-import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/main.dart';
+import 'package:mosq/main/utils/AppConstant.dart';
+import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/main.dart';
 
 class CustomDelete extends StatelessWidget {
   // final InventarisModel inventaris = InventarisModel();

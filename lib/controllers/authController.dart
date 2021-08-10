@@ -1,19 +1,15 @@
 // @dart=2.9
 import 'package:get_storage/get_storage.dart';
-import 'package:masjidkita/helpers/showLoading.dart';
-import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/models/user.dart';
-import 'package:masjidkita/routes/route_name.dart';
-import 'package:masjidkita/screens/MKSignIn.dart';
-import 'package:masjidkita/screens/authentication/auth.dart';
+import 'package:mosq/helpers/showLoading.dart';
+import 'package:mosq/models/user.dart';
+import 'package:mosq/routes/route_name.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/integrations/firestore.dart';
+import 'package:mosq/integrations/firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:showcaseview/showcaseview.dart';
-// import 'package:masjidkita/screens/inventaris/inventaris_page.dart';
+// import 'package:mosq/screens/inventaris/inventaris_page.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();

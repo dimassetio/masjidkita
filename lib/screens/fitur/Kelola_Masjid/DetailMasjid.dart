@@ -5,23 +5,23 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/controllers/inventarisController.dart';
-import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/models/inventaris.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabKegiatan.dart';
-import 'package:masjidkita/screens/utils/MKColors.dart';
-import 'package:masjidkita/screens/utils/MKImages.dart';
+import 'package:mosq/controllers/inventarisController.dart';
+import 'package:mosq/integrations/controllers.dart';
+import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
+import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:get/get.dart';
-// import 'package:masjidkita/screens/utils/widgets/T5Slider.dart';
+// import 'package:mosq/screens/widgets/T5Slider.dart';
 
-import 'package:masjidkita/main.dart';
+import 'package:mosq/main.dart';
 
-import 'TMTabKas.dart';
-import 'TMTabProfile.dart';
-import 'TMTabTakmir.dart';
-import 'TMTabInventaris.dart';
+import 'Tab_Kas/TMTabKas.dart';
+import 'Tab_Profile/TMTabProfile.dart';
+import 'Tab_Takmir/TMTabTakmir.dart';
+import 'Tab_Inventaris/TMTabInventaris.dart';
 
 class KeMasjid extends StatelessWidget {
   @override

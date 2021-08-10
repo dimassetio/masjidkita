@@ -1,13 +1,13 @@
-import 'package:masjidkita/models/kegiatan.dart';
+import 'package:mosq/models/kegiatan.dart';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/integrations/firestore.dart';
-import 'package:masjidkita/models/user.dart';
-import 'package:masjidkita/services/database.dart';
+import 'package:mosq/integrations/controllers.dart';
+import 'package:mosq/integrations/firestore.dart';
+import 'package:mosq/models/user.dart';
+import 'package:mosq/services/database.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/routes/route_name.dart';
+import 'package:mosq/routes/route_name.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -191,7 +191,7 @@ class KegiatanController extends GetxController {
     // imageRef.delete();
     // print(imageRef);
     // firebaseStorage
-    //     .refFromURL("gs://masjidkita-2d58e.appspot.com//Kegiatan/${foto}")
+    //     .refFromURL("gs://mosq-2d58e.appspot.com//Kegiatan/${foto}")
     //     .delete();
     // print(foto);
     // Get.back();

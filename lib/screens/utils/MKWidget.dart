@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:masjidkita/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/main/utils/dots_indicator/dots_indicator.dart';
+import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/main/utils/dots_indicator/dots_indicator.dart';
 
 import '../../main.dart';
 import 'MKConstant.dart';

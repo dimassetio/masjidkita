@@ -1,9 +1,9 @@
-import 'package:masjidkita/controllers/appController.dart';
-import 'package:masjidkita/controllers/authController.dart';
-import 'package:masjidkita/controllers/inventarisController.dart';
-import 'package:masjidkita/controllers/kegiatanController.dart';
-import 'package:masjidkita/controllers/listMasjidController.dart';
-import 'package:masjidkita/controllers/manMasjidController.dart';
+import 'package:mosq/controllers/appController.dart';
+import 'package:mosq/controllers/authController.dart';
+import 'package:mosq/controllers/inventarisController.dart';
+import 'package:mosq/controllers/kegiatanController.dart';
+import 'package:mosq/controllers/listMasjidController.dart';
+import 'package:mosq/controllers/manMasjidController.dart';
 
 AppController appController = AppController.instance;
 AuthController authController = AuthController.instance;

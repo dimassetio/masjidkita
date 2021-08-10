@@ -5,23 +5,21 @@ import 'package:flutter/painting.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/main/utils/AppConstant.dart';
-// import 'package:masjidkita/controllers/manMasjidController.dart';
-import 'package:masjidkita/main/utils/AppWidget.dart';
-import 'package:masjidkita/routes/route_name.dart';
-import 'package:masjidkita/screens/utils/MKColors.dart';
-import 'package:masjidkita/screens/utils/MKStrings.dart';
-import 'package:masjidkita/screens/utils/widgets/BottomNav.dart';
-import 'package:masjidkita/screens/utils/widgets/ConfirmLogout.dart';
-import 'package:masjidkita/screens/utils/widgets/KegiatanSlider.dart';
-import 'package:masjidkita/screens/utils/widgets/MasjidList.dart';
-import 'package:masjidkita/screens/utils/widgets/MasjidSlider.dart';
-import 'package:masjidkita/screens/utils/widgets/UserTopBar.dart';
+import 'package:mosq/integrations/controllers.dart';
+import 'package:mosq/main/utils/AppConstant.dart';
+// import 'package:mosq/controllers/manMasjidController.dart';
+import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/routes/route_name.dart';
+import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:mosq/screens/widgets/BottomNav.dart';
+import 'package:mosq/screens/widgets/ConfirmLogout.dart';
+import 'package:mosq/screens/widgets/KegiatanSlider.dart';
+import 'package:mosq/screens/widgets/MasjidSlider.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:showcaseview/showcaseview.dart';
 
-// import 'package:masjidkita/theme5/utils/widgets/T5Slider.dart';
+// import 'package:mosq/theme5/widgets/T5Slider.dart';
 
 import '../../main.dart';
 

@@ -1,5 +1,5 @@
-import 'package:masjidkita/integrations/firestore.dart';
-import 'package:masjidkita/models/user.dart';
+import 'package:mosq/integrations/firestore.dart';
+import 'package:mosq/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 

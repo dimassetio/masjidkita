@@ -6,20 +6,19 @@ import 'package:path/path.dart';
 
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:masjidkita/controllers/authController.dart';
-import 'package:masjidkita/integrations/controllers.dart';
-import 'package:masjidkita/models/manMasjid.dart';
+// import 'package:mosq/controllers/authController.dart';
+import 'package:mosq/integrations/controllers.dart';
+import 'package:mosq/models/manMasjid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/integrations/firestore.dart';
-// import 'package:masjidkita/models/user.dart';
-import 'package:masjidkita/routes/route_name.dart';
-// import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/cekLog.dart';
-// import 'package:masjidkita/screens/utils/widgets/AddOrJoin.dart';
+import 'package:mosq/integrations/firestore.dart';
+// import 'package:mosq/models/user.dart';
+import 'package:mosq/routes/route_name.dart';
+// import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/cekLog.dart';
+// import 'package:mosq/screens/widgets/AddOrJoin.dart';
 // import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:showcaseview/showcaseview.dart';
 
 class ManMasjidController extends GetxController {
   static ManMasjidController instance = Get.find();
@@ -37,6 +36,7 @@ class ManMasjidController extends GetxController {
   TextEditingController luasBangunan = TextEditingController();
   // TextEditingController statusTanah = TextEditingController();
   // TextEditingController legalitas = TextEditingController();
+
   String? legalitas;
   String? statusTanah;
 
@@ -66,6 +66,10 @@ class ManMasjidController extends GetxController {
       locale: "id",
       // decimalDigits: 0,
     ).format(value);
+  }
+
+  removeFormat(String text) {
+    return text.replaceAll('.', '');
   }
 
   @override
@@ -101,45 +105,50 @@ class ManMasjidController extends GetxController {
   //   // print(haveMasjid.value);
   // }
 
-  addMasjidToFirestore(String userId) async {
-    await firebaseFirestore.collection(masjidCollection).doc(userId).set({
-      "nama": nama.text.trim(),
-      "id": userId,
-      "alamat": alamat.text.trim(),
-      "photoUrl": "",
-      "createdAt": DateTime.now(),
+  addMasjidToFirestore(Map<String, dynamic> data) async {
+    await firebaseFirestore
+        .collection(masjidCollection)
+        .doc(authController.user.id)
+        .set(data);
+    await firebaseFirestore
+        .collection(usersCollection)
+        .doc(authController.user.id)
+        .update({
+      "masjid": authController.user.id,
     });
-    await firebaseFirestore.collection(usersCollection).doc(userId).update({
-      "masjid": userId,
-    });
-    // await _getManMasjidModel(authController.user);
-    clearControllers();
   }
 
-  Future updateDataMasjid() async {
+  var count = 0.obs;
+
+  Future updateDataMasjid({String? docID}) async {
     Map<String, dynamic> data = new HashMap();
-    if (nama.text != "") data['nama'] = nama.text;
-    if (alamat.text != "") data["alamat"] = alamat.text;
-    if (photoUrl.text != "") data["photoUrl"] = photoUrl.text;
-    if (deskripsi.text != "") data["deskripsi"] = deskripsi.text;
-    if (kecamatan.text != "") data["kecamatan"] = kecamatan.text;
-    if (kodePos.text != "") data["kodePos"] = kodePos.text;
-    if (kota.text != "") data["kota"] = kota.text;
-    if (provinsi.text != "") data["provinsi"] = provinsi.text;
-    if (tahun.text != "") data["tahun"] = tahun.text;
-    if (luasTanah.text != "") data["luasTanah"] = luasTanah.text;
-    if (luasBangunan.text != "") data["luasBangunan"] = luasBangunan.text;
+    data['nama'] = "Masjid Dummy ${count.value}";
+    // data['nama'] = nama.text;
+    data["alamat"] = alamat.text;
+    data["photoUrl"] = photoUrl.text;
+    data["deskripsi"] = deskripsi.text;
+    data["kecamatan"] = kecamatan.text;
+    data["kodePos"] = kodePos.text;
+    data["kota"] = kota.text;
+    data["provinsi"] = provinsi.text;
+    data["tahun"] = tahun.text;
+    data["luasTanah"] = luasTanah.text;
+    data["luasBangunan"] = luasBangunan.text;
     if (statusTanah != null) data["statusTanah"] = statusTanah;
     if (legalitas != null) data["legalitas"] = legalitas;
     //  data["updatedAt"] = DateTime.now();
 
     print("data = $data");
     isSaving.value = true;
+    print(Get.parameters['id']);
+    String? docID = Get.parameters['id'];
     try {
-      await firebaseFirestore
-          .collection(masjidCollection)
-          .doc(deMasjid.id)
-          .update(data);
+      docID == null
+          ? await addMasjidToFirestore(data)
+          : await firebaseFirestore
+              .collection(masjidCollection)
+              .doc(docID)
+              .update(data);
     } on SocketException catch (_) {
       showDialog(
           context: Get.context!,
@@ -152,7 +161,7 @@ class ManMasjidController extends GetxController {
       print(e);
       toast("Error Saving Data");
     } finally {
-      clearControllers();
+      // clearControllers();
       toast("Data Berhasil Diperbarui");
       isSaving.value = false;
     }
@@ -218,16 +227,16 @@ class ManMasjidController extends GetxController {
   }
 
   checkControllers() {
-    if (nama.text != "" ||
-        alamat.text != "" ||
-        deskripsi.text != "" ||
-        kecamatan.text != "" ||
-        kodePos.text != "" ||
-        kota.text != "" ||
-        provinsi.text != "" ||
-        tahun.text != "" ||
-        luasTanah.text != "" ||
-        luasBangunan.text != "" ||
+    if (nama.text != deMasjid.nama ||
+        alamat.text != deMasjid.alamat ||
+        deskripsi.text != deMasjid.deskripsi ||
+        kecamatan.text != deMasjid.kecamatan ||
+        kodePos.text != deMasjid.kodePos ||
+        kota.text != deMasjid.kota ||
+        provinsi.text != deMasjid.provinsi ||
+        tahun.text != deMasjid.tahun ||
+        luasTanah.text != deMasjid.luasTanah ||
+        luasBangunan.text != deMasjid.luasBangunan ||
         statusTanah != null ||
         legalitas != null) {
       return true;

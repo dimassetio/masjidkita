@@ -1,4 +1,4 @@
-const mainAppName = 'MasjidKita';
+const mainAppName = 'mosq';
 
 const fontRegular = 'Regular';
 const fontMedium = 'Medium';

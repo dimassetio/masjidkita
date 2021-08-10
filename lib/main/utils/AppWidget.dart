@@ -5,12 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
-import 'package:masjidkita/main/utils/shimmer/shimmer.dart';
-import 'package:masjidkita/screens/utils/MKColors.dart';
+import 'package:mosq/main/utils/shimmer/shimmer.dart';
+import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:nb_utils/nb_utils.dart';
-// import 'package:masjidkita/integrations/utils/common.dart';
-import 'package:masjidkita/main.dart';
-import 'package:masjidkita/main/model/ListModels.dart';
+// import 'package:mosq/integrations/utils/common.dart';
+import 'package:mosq/main.dart';
 
 import 'AppColors.dart';
 import 'AppConstant.dart';
@@ -194,32 +193,32 @@ AppBar appBar(BuildContext context, String title,
   );
 }
 
-class ExampleItemWidget extends StatelessWidget {
-  final ListModel tabBarType;
-  final Function onTap;
-  final bool showTrailing;
+// class ExampleItemWidget extends StatelessWidget {
+//   final ListModel tabBarType;
+//   final Function onTap;
+//   final bool showTrailing;
 
-  ExampleItemWidget(this.tabBarType,
-      {required this.onTap, this.showTrailing = false});
+//   ExampleItemWidget(this.tabBarType,
+//       {required this.onTap, this.showTrailing = false});
 
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: appStore.appBarColor,
-      margin: EdgeInsets.fromLTRB(12, 12, 12, 0),
-      elevation: 2.0,
-      shadowColor: Colors.black,
-      child: ListTile(
-        onTap: () => onTap(),
-        title: Text(tabBarType.name!, style: boldTextStyle()),
-        trailing: showTrailing
-            ? Icon(Icons.arrow_forward_ios,
-                size: 15, color: appStore.textPrimaryColor)
-            : null,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       color: appStore.appBarColor,
+//       margin: EdgeInsets.fromLTRB(12, 12, 12, 0),
+//       elevation: 2.0,
+//       shadowColor: Colors.black,
+//       child: ListTile(
+//         onTap: () => onTap(),
+//         title: Text(tabBarType.name!, style: boldTextStyle()),
+//         trailing: showTrailing
+//             ? Icon(Icons.arrow_forward_ios,
+//                 size: 15, color: appStore.textPrimaryColor)
+//             : null,
+//       ),
+//     );
+//   }
+// }
 
 String convertDate(date) {
   try {

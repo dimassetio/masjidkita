@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:masjidkita/models/manMasjid.dart';
+import 'package:mosq/models/manMasjid.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/integrations/firestore.dart';
-import 'package:masjidkita/screens/utils/MKStrings.dart';
+import 'package:mosq/integrations/firestore.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class ListMasjidController extends GetxController {

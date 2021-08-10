@@ -1,4 +1,4 @@
-const mkapp_name = " MasjidKita";
+const mkapp_name = " mosq";
 
 const mk_sign_in = " Sign In";
 const mk_log_in = " Log In";

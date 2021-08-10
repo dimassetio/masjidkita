@@ -12,11 +12,12 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
     int value = int.parse(newValue.text);
 
-    final formatter = NumberFormat.simpleCurrency(
-      locale: "id ",
-    );
+    // final formatter = NumberFormat.simpleCurrency(
+    //   locale: "id ",
+    // );
+    final formatter = NumberFormat.decimalPattern("id ");
 
-    String newText = formatter.format(value / 100);
+    String newText = formatter.format(value);
 
     return newValue.copyWith(
         text: newText,

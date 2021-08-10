@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:masjidkita/controllers/authController.dart';
-import 'package:masjidkita/controllers/inventarisController.dart';
-import 'package:masjidkita/controllers/kegiatanController.dart';
-import 'package:masjidkita/controllers/listMasjidController.dart';
-import 'package:masjidkita/controllers/manMasjidController.dart';
+import 'package:mosq/controllers/authController.dart';
+import 'package:mosq/controllers/inventarisController.dart';
+import 'package:mosq/controllers/kegiatanController.dart';
+import 'package:mosq/controllers/listMasjidController.dart';
+import 'package:mosq/controllers/manMasjidController.dart';
 
 class InitBinding extends Bindings {
   @override

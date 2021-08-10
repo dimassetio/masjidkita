@@ -1,5 +1,5 @@
-// import 'package:masjidkita/models/device.dart';
-// import 'package:masjidkita/screens/home/widgets/devices_draggable.dart';
+// import 'package:mosq/models/device.dart';
+// import 'package:mosq/screens/home/widgets/devices_draggable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

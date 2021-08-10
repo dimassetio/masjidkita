@@ -1,4 +1,4 @@
-import 'package:masjidkita/main/utils/AppConstant.dart';
+import 'package:mosq/main/utils/AppConstant.dart';
 
 const mk_net_img = "$BaseUrl/images/theme1/t1_ic_user1.png";
 
