@@ -1,18 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:mosq/controllers/inventarisController.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/models/inventaris.dart';
-import 'package:mosq/routes/route_name.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
-import 'package:mosq/screens/utils/MKImages.dart';
-import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/widgets/MosqTopBar.dart';
-import 'package:mosq/services/database.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 // import 'package:mosq/main/utils/T10Images.dart';
@@ -82,22 +75,22 @@ class InventarisDetail extends StatelessWidget {
                 //       // Get.to(CustomDelete());
                 //     }),
                 // 10.width,
-                FloatingActionButton.extended(
-                    heroTag: '1',
-                    // heroTag: '5',
-                    label: Text(
-                      "Hapus",
-                      style: primaryTextStyle(color: Colors.white),
-                    ),
-                    backgroundColor: Colors.redAccent,
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Get.to(() => CustomDelete());
-                      // Database().deleteInventaris(inventaris.inventarisID);
-                    }),
+                // FloatingActionButton.extended(
+                //     heroTag: '1',
+                //     // heroTag: '5',
+                //     label: Text(
+                //       "Hapus",
+                //       style: primaryTextStyle(color: Colors.white),
+                //     ),
+                //     backgroundColor: Colors.redAccent,
+                //     icon: Icon(
+                //       Icons.delete,
+                //       color: Colors.white,
+                //     ),
+                //     onPressed: () {
+                //       Get.to(() => CustomDelete());
+                //       // Database().deleteInventaris(inventaris.inventarisID);
+                //     }),
               ],
             )
           ],
@@ -126,7 +119,7 @@ class InventarisDetail extends StatelessWidget {
                                   imageUrl: "$imageURL",
                                   width: width,
                                   height: width * 0.7,
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                 )
                               : Container(
                                   child: text("Tidak ada gambar"),

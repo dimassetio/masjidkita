@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mosq/controllers/inventarisController.dart';
-import 'package:mosq/controllers/manMasjidController.dart';
-import 'package:mosq/controllers/userController.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/integrations/firestore.dart';
+// import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/models/inventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
-import 'package:mosq/screens/utils/MKImages.dart';
-import 'package:mosq/screens/utils/MKConstant.dart';
-import 'package:mosq/services/database.dart';
-import 'package:mosq/screens/utils/MKColors.dart';
+// import 'package:mosq/screens/utils/MKImages.dart';
+// import 'package:mosq/screens/utils/MKConstant.dart';
+// import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:get/get.dart';
 import 'package:mosq/routes/route_name.dart';
@@ -125,53 +122,59 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                     physics: ScrollPhysics(),
                     itemBuilder: (_, index) {
                       final item = inventarisC.inventariss[index];
-                      return Dismissible(
-                        key: Key(item.inventarisID!),
-                        child: InventarisCard(inventarisC.inventariss[index]),
-                        background: slideRightBackground(),
-                        secondaryBackground: slideLeftBackground(),
-                        confirmDismiss: (direction) async {
-                          final bool? res;
-                          if (direction == DismissDirection.startToEnd) {
-                            try {
-                              await inventarisC.getInventarisModel(
-                                  inventarisC.inventariss[index].inventarisID ??
-                                      "");
-                              print(
-                                  inventarisC.inventariss[index].inventarisID);
-                              res = false;
-                            } finally {
-                              Get.toNamed(RouteName.edit_inventaris);
-                            }
-                          } else if (direction == DismissDirection.endToStart) {
-                            return res = await showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    CustomDelete());
-                          } else
-                            res = false;
-                          return res;
-                        },
-                        onDismissed: (direction) {
-                          setState(() {
-                            inventarisC.inventariss.removeAt(index);
-                          });
-                          // if (direction == DismissDirection.startToEnd) {
-                          // ScaffoldMessengerState().showSnackBar(
-                          //     SnackBar(content: Text("Swipe to left")));
-                          //   setState(() {
-                          //     inventarisC.inventariss.removeAt(index);
-                          //     Get.toNamed(RouteName.detail_inventaris);
-                          //   });
-                          // } else if (direction == DismissDirection.endToStart) {
-                          // userList.removeAt(index);d
-                          // ScaffoldMessengerState().showSnackBar(
-                          //     SnackBar(content: Text("Swipe to right")));
+                      return Obx(() => manMasjidC.myMasjid.value
+                          ? Dismissible(
+                              key: Key(item.inventarisID!),
+                              child: InventarisCard(
+                                  inventarisC.inventariss[index]),
+                              background: slideRightBackground(),
+                              secondaryBackground: slideLeftBackground(),
+                              confirmDismiss: (direction) async {
+                                final bool? res;
+                                if (direction == DismissDirection.startToEnd) {
+                                  try {
+                                    await inventarisC.getInventarisModel(
+                                        inventarisC.inventariss[index]
+                                                .inventarisID ??
+                                            "");
+                                    print(inventarisC
+                                        .inventariss[index].inventarisID);
+                                    res = false;
+                                  } finally {
+                                    Get.toNamed(RouteName.edit_inventaris +
+                                        '/${inventarisC.inventaris.inventarisID}');
+                                  }
+                                } else if (direction ==
+                                    DismissDirection.endToStart) {
+                                  return res = await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          CustomDelete());
+                                } else
+                                  res = false;
+                                return res;
+                              },
+                              onDismissed: (direction) {
+                                setState(() {
+                                  inventarisC.inventariss.removeAt(index);
+                                });
+                                // if (direction == DismissDirection.startToEnd) {
+                                // ScaffoldMessengerState().showSnackBar(
+                                //     SnackBar(content: Text("Swipe to left")));
+                                //   setState(() {
+                                //     inventarisC.inventariss.removeAt(index);
+                                //     Get.toNamed(RouteName.detail_inventaris);
+                                //   });
+                                // } else if (direction == DismissDirection.endToStart) {
+                                // userList.removeAt(index);d
+                                // ScaffoldMessengerState().showSnackBar(
+                                //     SnackBar(content: Text("Swipe to right")));
 
-                          // Get.to(() => CustomDelete());
-                          // }
-                        },
-                      );
+                                // Get.to(() => CustomDelete());
+                                // }
+                              },
+                            )
+                          : SizedBox());
                     }),
           ),
         ],
