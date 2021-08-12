@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:masjidkita/routes/route_name.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/DetailKegiatan.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:get/get.dart';
 
 import '../../../main.dart';
 import '../MKConstant.dart';
@@ -12,20 +15,26 @@ class KegiatanCard extends StatelessWidget {
     Key? key,
     required this.width,
     required this.dataKegiatan,
+    required this.openContainer,
   }) : super(key: key);
 
+  final VoidCallback? openContainer;
   final double width;
   final dataKegiatan;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      // openBuilder: (context, openContainer) => const DetailsPage(),
       margin: EdgeInsets.all(16),
       decoration: boxDecoration(
           radius: 16, showShadow: true, bgColor: appStore.scaffoldBackground),
       width: width,
       child: GestureDetector(
-        onTap: () => toast("Go To Kegiatan Detail"),
+        // onTap: () => toast("Go To Kegiatan Detail"),
+        onTap: () async {
+          // Get.toNamed(RouteName.detail_kegiatan);
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -53,7 +62,8 @@ class KegiatanCard extends StatelessWidget {
                       textColor: appStore.textPrimaryColor,
                       fontSize: textSizeLargeMedium,
                       fontFamily: fontMedium),
-                  text(mk_long_text, maxLine: 2, fontSize: textSizeSMedium),
+                  text(dataKegiatan.deskripsi,
+                      maxLine: 2, fontSize: textSizeSMedium),
                   Align(
                       alignment: Alignment.bottomRight,
                       child: text(

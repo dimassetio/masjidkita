@@ -9,7 +9,6 @@ import 'package:masjidkita/routes/route_name.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
 import 'package:masjidkita/screens/utils/MKImages.dart';
 import 'package:masjidkita/screens/utils/MKStrings.dart';
-import 'package:masjidkita/services/database.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:masjidkita/main/utils/AppWidget.dart';
 import 'package:masjidkita/main/utils/T10Colors.dart';
@@ -83,22 +82,22 @@ class InventarisDetail extends StatelessWidget {
                 //       // Get.to(CustomDelete());
                 //     }),
                 // 10.width,
-                FloatingActionButton.extended(
-                    heroTag: '1',
-                    // heroTag: '5',
-                    label: Text(
-                      "Hapus",
-                      style: primaryTextStyle(color: Colors.white),
-                    ),
-                    backgroundColor: Colors.redAccent,
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Get.to(() => CustomDelete());
-                      // Database().deleteInventaris(inventaris.inventarisID);
-                    }),
+                // FloatingActionButton.extended(
+                //     heroTag: '1',
+                //     // heroTag: '5',
+                //     label: Text(
+                //       "Hapus",
+                //       style: primaryTextStyle(color: Colors.white),
+                //     ),
+                //     backgroundColor: Colors.redAccent,
+                //     icon: Icon(
+                //       Icons.delete,
+                //       color: Colors.white,
+                //     ),
+                //     onPressed: () {
+                //       Get.to(() => CustomDelete());
+                //       // Database().deleteInventaris(inventaris.inventarisID);
+                //     }),
               ],
             )
           ],
@@ -127,7 +126,7 @@ class InventarisDetail extends StatelessWidget {
                                   imageUrl: "$imageURL",
                                   width: width,
                                   height: width * 0.7,
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                 )
                               : Container(
                                   child: text("Tidak ada gambar"),

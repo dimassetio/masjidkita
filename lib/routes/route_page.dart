@@ -7,14 +7,17 @@ import 'package:masjidkita/screens/MosqDashboard.dart';
 import 'package:masjidkita/screens/MosqProfile.dart';
 import 'package:masjidkita/screens/PageListMasjid.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Form_Inventaris.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Form_Kegiatan.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Form_Profile.dart';
 // import 'package:masjidkita/screens/PageSiMasjid.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/FormAddInventaris.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/DetailMasjid.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/ManMasjid.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabKegiatan.dart';
 import 'package:masjidkita/screens/utils/widgets/NewMasjid.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/TMTabInventaris.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/detailInventaris.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/DetailKegiatan.dart';
 import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/editInventaris.dart';
 import './route_name.dart';
 
@@ -29,8 +32,12 @@ class AppPage {
     GetPage(name: RouteName.man_masjid, page: () => ManMasjid()),
     GetPage(name: RouteName.new_masjid, page: () => NewMasjid()),
     GetPage(name: RouteName.new_inventaris, page: () => FormInventaris()),
+    GetPage(name: RouteName.new_kegiatan, page: () => FormKegiatan()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),
-    GetPage(name: RouteName.edit_inventaris, page: () => InventarisEdit()),
+    GetPage(
+        name: RouteName.edit_inventaris + '/:id', page: () => FormInventaris()),
+    // GetPage(
+    //     name: RouteName.edit_kegiatan + '/:id', page: () => FormKegiatan()),
     GetPage(
         name: RouteName.list_masjid,
         page: () => PageListMasjid(),
@@ -44,5 +51,6 @@ class AppPage {
     GetPage(
         name: RouteName.inventaris,
         page: () => TMTabInventaris(InventarisModel())),
+    GetPage(name: RouteName.detail_kegiatan, page: () => TMTabKegiatan()),
   ];
 }

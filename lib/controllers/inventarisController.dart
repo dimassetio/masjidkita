@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class InventarisController extends GetxController {
+  var isSaving = false.obs;
   final TextEditingController namaController = TextEditingController();
   final TextEditingController jumlahController = TextEditingController();
   final TextEditingController kondisiController = TextEditingController();
@@ -33,30 +34,37 @@ class InventarisController extends GetxController {
   InventarisModel get inventaris => _inventarisModel.value;
 
   addInventaris(String userId) async {
+    Map<String, dynamic> data = new HashMap();
+    DateTime now = DateTime.now();
     String harga = hargaController.text;
     String result = harga.replaceAll('Rp ', '');
     String finalHarga = result.replaceAll('.', '');
     int price = finalHarga.toInt();
     int jumlah = jumlahController.text.toInt();
     int totalPrice = price * jumlah;
-    print("Nama = ${namaController.text}");
-    DateTime now = DateTime.now();
-    // int hargaTotal = jumlah!;
+    if (namaController.text != "") data['nama'] = namaController.text;
+    if (jumlahController.text != "") data["jumlah"] = jumlah;
+    if (kondisiController.text != "") data["kondisi"] = kondisiController.text;
+    if (urlController.text != "") data["url"] = urlController.text;
+    if (hargaController.text != "") data["harga"] = price;
+    if (fotoController.text != "") data["foto"] = fotoController.text;
+    data["hargaTotal"] = totalPrice;
+    data["updatedAt"] = now;
+    String? docID = Get.parameters['id'];
+
     try {
-      await firebaseFirestore
-          .collection("masjid")
-          .doc(userId)
-          .collection("inventaris")
-          .add({
-        'nama': namaController.text,
-        'foto': fotoController.text,
-        'url': urlController.text,
-        'jumlah': jumlahController.text.toInt(),
-        'kondisi': kondisiController.text,
-        'createdAt': now,
-        'harga': finalHarga.toInt(),
-        'hargaTotal': totalPrice,
-      });
+      docID == null
+          ? await firebaseFirestore
+              .collection(masjidCollection)
+              .doc(userId)
+              .collection(inventarisCollection)
+              .add(data)
+          : await firebaseFirestore
+              .collection(masjidCollection)
+              .doc(userId)
+              .collection(inventarisCollection)
+              .doc(docID)
+              .update(data);
     } catch (e) {
       print(e);
       rethrow;
@@ -64,37 +72,6 @@ class InventarisController extends GetxController {
     clearController();
     Get.back(); // Get.toNamed(RouteName.kelolamasjid);
   }
-
-  // Future getImage(bool isCam) async {
-  //   final XFile? pickImage = await _picker.pickImage(
-  //       source: isCam ? ImageSource.camera : ImageSource.gallery);
-  //     String downloadUrl, fileName, filePath;
-  //   if (pickImage != null) {
-  //     fileName = pickImage.name;
-  //     filePath = pickImage.path;
-  //     Reference refFeedBuckets = firebaseStorage
-  //         .ref()
-  //         .child(masjidCollection)
-  //         .child(deMasjid.id!)
-  //         .child("Foto Profil");
-  //     var file = File(filePath);
-
-  //     TaskSnapshot uploadedFile = await refFeedBuckets.putFile(file);
-
-  //     if (uploadedFile.state == TaskState.running) toast("Loading Image");
-
-  //     if (uploadedFile.state == TaskState.success) {
-  //       downloadUrl.value = await refFeedBuckets.getDownloadURL();
-  //       photoUrl.text = downloadUrl.value;
-  //       await firebaseFirestore
-  //           .collection(masjidCollection)
-  //           .doc(deMasjid.id)
-  //           .update({'photoUrl': downloadUrl.value});
-  //     } else {
-  //       print(message);
-  //     }
-  //   }
-  // }
 
   clearController() {
     namaController.clear();
@@ -165,46 +142,39 @@ class InventarisController extends GetxController {
     if (fotoController.text != "") data["foto"] = fotoController.text;
     data["hargaTotal"] = totalPrice;
     data["updatedAt"] = now;
-    print(data);
-    // print("data = $data");
-    await firebaseFirestore
-        .collection(masjidCollection)
-        .doc(manMasjidC.deMasjid.id)
-        .collection(inventarisCollection)
-        .doc(inventaris.inventarisID)
-        .update(data);
-    clearControllers();
-    Get.back();
+    // await firebaseFirestore
+    //     .collection(masjidCollection)
+    //     .doc(manMasjidC.deMasjid.id)
+    //     .collection(inventarisCollection)
+    //     .doc(inventaris.inventarisID)
+    //     .update(data);
+    // clearControllers();
 
-    // String harga = hargaController.text;
-    // String result = harga.replaceAll('Rp ', '');
-    // String finalHarga = result.replaceAll('.', '');
-    // int price = finalHarga.toInt();
-    // int jumlah = jumlahController.text.toInt();
-    // int totalPrice = price * jumlah;
-    // DateTime now = DateTime.now();
+    isSaving.value = true;
+    try {
+      await firebaseFirestore
+          .collection(masjidCollection)
+          .doc(manMasjidC.deMasjid.id)
+          .collection(inventarisCollection)
+          .doc(inventaris.inventarisID)
+          .update(data);
+    } on SocketException catch (_) {
+      showDialog(
+          context: Get.context!,
+          builder: (context) => AlertDialog(
+                title: Text("Connection Error !"),
+                content: Text("Please connect to the internet."),
+              ));
+      toast("value");
+    } catch (e) {
+      print(e);
+      toast("Error Saving Data");
+    } finally {
+      clearControllers();
+      toast("Data Berhasil Diperbarui");
+      isSaving.value = false;
+    }
 
-    // try {
-    //   await firebaseFirestore
-    //       .collection("masjid")
-    //       .doc(userId)
-    //       .collection("inventaris")
-    //       .doc(inventaris.inventarisID)
-    //       .update({
-    //     'nama': namaController.text,
-    //     'foto': fotoController.text,
-    //     'url': urlController.text,
-    //     'jumlah': jumlahController.text.toInt(),
-    //     'kondisi': kondisiController.text,
-    //     'createdAt': now,
-    //     'harga': finalHarga.toInt(),
-    //     'hargaTotal': totalPrice,
-    //   });
-    // } catch (e) {
-    //   print(e);
-    //   rethrow;
-    // }
-    // clearController();
     // Get.back();
   }
 
@@ -228,7 +198,7 @@ class InventarisController extends GetxController {
     //     .refFromURL("gs://masjidkita-2d58e.appspot.com//Inventaris/${foto}")
     //     .delete();
     // print(foto);
-    Get.back();
+    // Get.back();
     // Get.toNamed(RouteName.inventaris);
   }
 
@@ -246,25 +216,16 @@ class InventarisController extends GetxController {
   }
 
   checkControllers() {
-    if (namaController.text != "" ||
-        jumlahController.text != "" ||
-        kondisiController.text != "" ||
-        fotoController.text != "" ||
-        urlController.text != "" ||
-        hargaController.text != "") {
+    if (namaController.text != inventaris.nama ||
+        jumlahController.text != inventaris.jumlah.toString() ||
+        kondisiController.text != inventaris.kondisi ||
+        // fotoController.text != inventaris.foto ||
+        // urlController.text != inventaris.url ||
+        hargaController.text != inventaris.harga.toString()) {
       return true;
     } else
       return false;
   }
-
-  // gotoDetail(inventarisID) async {
-  //   try {
-  //     inventarisModel.bindStream(streamDetailMasjid(mID));
-  //   } finally {
-  //     await isMyMasjid(mID);
-  //     await Get.toNamed(RouteName.detail);
-  //   }
-  // }
 
   PickedFile? pickImage;
   String fileName = '', filePath = '';
