@@ -1,10 +1,12 @@
 // import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:mosq/helpers/CurrencyInputFormatter.dart';
+import 'package:mosq/helpers/Validator.dart';
+import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppConstant.dart';
 import 'package:mosq/routes/route_name.dart';
@@ -12,6 +14,7 @@ import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.d
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
@@ -99,71 +102,35 @@ class _StepperBodyState extends State<StepperBody> {
         state: StepState.indexed,
         content: Column(
           children: [
-            TextFormField(
-              enabled: !manMasjidC.isSaving.value,
-              // focusNode: FocusNode(),
-              maxLines: 1,
-              autocorrect: false,
-              // initialValue: manMasjidC.deMasjid.nama,
-              // onChanged: (newValue) {
-              //   manMasjidC.nama.text = newValue;
-              // },
-              controller: manMasjidC.nama,
-              textInputAction: TextInputAction.next,
-              cursorColor: appStore.textPrimaryColor,
-              // style: primaryTextStyle(),
-              keyboardType: TextInputType.name,
-              inputFormatters: [
-                FilteringTextInputFormatter.singleLineFormatter
-              ],
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              decoration: InputDecoration(
-                labelText: mk_lbl_nama_masjid,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_hint_nama_masjid,
-                icon: Icon(Icons.home,
-                    color: manMasjidC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty) {
-                  return '$mk_lbl_nama_masjid $mk_is_required';
-                }
-
-                return null;
-              },
+            EditText(
+              isEnabled: !manMasjidC.isSaving.value,
+              mController: manMasjidC.nama,
+              validator: (value) =>
+                  (Validator(attributeName: mk_lbl_nama_masjid, value: value)
+                        ..required())
+                      .getError(),
+              label: mk_lbl_nama_masjid,
+              hint: mk_hint_nama_masjid,
+              icon: Icon(Icons.home,
+                  color: manMasjidC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
             ),
-            TextFormField(
-              enabled: !manMasjidC.isSaving.value,
-              maxLines: 3,
-              autocorrect: false,
-
-              controller: manMasjidC.deskripsi,
-              textInputAction: TextInputAction.next,
-              cursorColor: appStore.textPrimaryColor,
-              // style: primaryTextStyle(),
+            EditText(
+              isEnabled: !manMasjidC.isSaving.value,
+              mController: manMasjidC.deskripsi,
+              validator: (value) =>
+                  (Validator(attributeName: mk_lbl_deskripsi, value: value)
+                        ..required())
+                      .getError(),
+              label: mk_lbl_deskripsi,
+              hint: mk_hint_deskripsi,
+              icon: Icon(Icons.home,
+                  color: manMasjidC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
+              maxLine: 3,
               keyboardType: TextInputType.multiline,
-              // inputFormatters: [
-              //   FilteringTextInputFormatter.singleLineFormatter
-              // ],
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              decoration: InputDecoration(
-                labelText: mk_hint_deskripsi,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_lbl_enter + mk_lbl_deskripsi,
-                icon: Icon(Icons.home,
-                    color: manMasjidC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty)
-                  return '$mk_lbl_deskripsi $mk_is_required';
-                return null;
-              },
             ),
           ],
         ),
@@ -174,149 +141,81 @@ class _StepperBodyState extends State<StepperBody> {
         state: StepState.indexed,
         content: Column(
           children: [
-            TextFormField(
-              enabled: !manMasjidC.isSaving.value,
-              maxLines: 1,
-              autocorrect: false,
-              controller: manMasjidC.alamat,
-              textInputAction: TextInputAction.next,
-              cursorColor: appStore.textPrimaryColor,
-              // style: primaryTextStyle(),
-              keyboardType: TextInputType.name,
-              // inputFormatters: [
-              //   FilteringTextInputFormatter.singleLineFormatter
-              // ],
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              decoration: InputDecoration(
-                labelText: mk_lbl_alamat,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_hint_alamat,
-                icon: Icon(Icons.edit_location,
-                    color: manMasjidC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty) return '$mk_lbl_alamat $mk_is_required';
-                return null;
-              },
+            EditText(
+              isEnabled: !manMasjidC.isSaving.value,
+              mController: manMasjidC.alamat,
+              validator: (value) =>
+                  (Validator(attributeName: mk_lbl_alamat, value: value)
+                        ..required())
+                      .getError(),
+              label: mk_lbl_alamat,
+              hint: mk_hint_alamat,
+              keyboardType: TextInputType.streetAddress,
+              icon: Icon(Icons.edit_location,
+                  color: manMasjidC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
             ),
-            TextFormField(
-              enabled: !manMasjidC.isSaving.value,
-              maxLines: 1,
-              autocorrect: false,
-              controller: manMasjidC.kecamatan,
-              textInputAction: TextInputAction.next,
-              cursorColor: appStore.textPrimaryColor,
-              // style: primaryTextStyle(),
-              keyboardType: TextInputType.name,
-              // inputFormatters: [
-              //   FilteringTextInputFormatter.singleLineFormatter
-              // ],
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              decoration: InputDecoration(
-                labelText: mk_kecamatan,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_hint_kecamatan,
-                icon: Icon(Icons.edit_location,
-                    color: manMasjidC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty) return '$mk_kecamatan $mk_is_required';
-                return null;
-              },
+            EditText(
+              isEnabled: !manMasjidC.isSaving.value,
+              mController: manMasjidC.kecamatan,
+              validator: (value) =>
+                  (Validator(attributeName: mk_kecamatan, value: value)
+                        ..required())
+                      .getError(),
+              label: mk_kecamatan,
+              hint: mk_hint_kecamatan,
+              icon: Icon(Icons.edit_location,
+                  color: manMasjidC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
             ),
-            TextFormField(
-              enabled: !manMasjidC.isSaving.value,
-              maxLines: 1,
-              autocorrect: false,
-              controller: manMasjidC.kodePos,
-
-              textInputAction: TextInputAction.next,
-              cursorColor: appStore.textPrimaryColor,
-              // style: primaryTextStyle(),
-              keyboardType: TextInputType.number,
+            EditText(
+              isEnabled: !manMasjidC.isSaving.value,
+              mController: manMasjidC.kodePos,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(5)
               ],
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              decoration: InputDecoration(
-                labelText: mk_kode_pos,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_hint_kode_pos,
-                icon: Icon(Icons.edit_location,
-                    color: manMasjidC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty) return '$mk_kode_pos $mk_is_required';
-                return null;
-              },
+              keyboardType: TextInputType.number,
+              validator: (value) =>
+                  (Validator(attributeName: mk_kode_pos, value: value)
+                        ..required()
+                        ..minLength(5))
+                      .getError(),
+              label: mk_kode_pos,
+              hint: mk_hint_kode_pos,
+              icon: Icon(Icons.edit_location,
+                  color: manMasjidC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
             ),
-            TextFormField(
-              enabled: !manMasjidC.isSaving.value,
-              maxLines: 1,
-              autocorrect: false,
-              controller: manMasjidC.kota,
-
-              textInputAction: TextInputAction.next,
-              cursorColor: appStore.textPrimaryColor,
-              // style: primaryTextStyle(),
-              keyboardType: TextInputType.name,
-              // inputFormatters: [
-              //   FilteringTextInputFormatter.singleLineFormatter
-              // ],
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              decoration: InputDecoration(
-                labelText: mk_kota,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_hint_kota,
-                icon: Icon(Icons.edit_location,
-                    color: manMasjidC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty) return '$mk_kota $mk_is_required';
-                return null;
-              },
+            EditText(
+              isEnabled: !manMasjidC.isSaving.value,
+              mController: manMasjidC.kota,
+              validator: (value) =>
+                  (Validator(attributeName: mk_kota, value: value)..required())
+                      .getError(),
+              label: mk_kota,
+              hint: mk_hint_kota,
+              icon: Icon(Icons.edit_location,
+                  color: manMasjidC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
             ),
-            TextFormField(
-              enabled: !manMasjidC.isSaving.value,
-              maxLines: 1,
-              autocorrect: false,
-              controller: manMasjidC.provinsi,
-
-              textInputAction: TextInputAction.next,
-              cursorColor: appStore.textPrimaryColor,
-              // style: primaryTextStyle(),
-              keyboardType: TextInputType.name,
-              // inputFormatters: [
-              //   FilteringTextInputFormatter.singleLineFormatter
-              // ],
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              decoration: InputDecoration(
-                labelText: mk_provinsi,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_hint_provinsi,
-                icon: Icon(Icons.edit_location,
-                    color: manMasjidC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty) return '$mk_provinsi $mk_is_required';
-                return null;
-              },
+            EditText(
+              isEnabled: !manMasjidC.isSaving.value,
+              mController: manMasjidC.provinsi,
+              validator: (value) =>
+                  (Validator(attributeName: mk_provinsi, value: value)
+                        ..required())
+                      .getError(),
+              label: mk_provinsi,
+              hint: mk_hint_provinsi,
+              icon: Icon(Icons.edit_location,
+                  color: manMasjidC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
             ),
           ],
         ),
@@ -327,102 +226,63 @@ class _StepperBodyState extends State<StepperBody> {
         state: StepState.indexed,
         content: Column(
           children: [
-            TextFormField(
-              enabled: !manMasjidC.isSaving.value,
-              maxLines: 1,
-              autocorrect: false,
-              controller: manMasjidC.tahun,
-
-              textInputAction: TextInputAction.next,
-              cursorColor: appStore.textPrimaryColor,
-              // style: primaryTextStyle(),
+            EditText(
+              isEnabled: !manMasjidC.isSaving.value,
+              mController: manMasjidC.tahun,
+              validator: (value) =>
+                  (Validator(attributeName: mk_tahun, value: value)
+                        ..required()
+                        ..minLength(4))
+                      .getError(),
+              label: mk_tahun,
+              hint: mk_hint_tahun,
+              icon: Icon(Icons.house,
+                  color: manMasjidC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(4)
               ],
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              decoration: InputDecoration(
-                labelText: mk_tahun,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_hint_tahun,
-                icon: Icon(Icons.house,
-                    color: manMasjidC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty) return '$mk_tahun $mk_is_required';
-                if (s.trim().toInt() <= 1400 ||
-                    s.trim().toInt() > DateTime.now().year)
-                  return '$mk_tahun tidak valid';
-                return null;
-              },
             ),
-            TextFormField(
-              enabled: !manMasjidC.isSaving.value,
-              maxLines: 1,
-              autocorrect: false,
-              controller: manMasjidC.luasTanah,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(6),
-                CurrencyInputFormatter()
-              ],
-              textInputAction: TextInputAction.next,
-              cursorColor: appStore.textPrimaryColor,
-              // style: primaryTextStyle(),
-              keyboardType: TextInputType.number,
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              decoration: InputDecoration(
-                labelText: mk_LT,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_hint_LT,
-                suffix: text("M\u00B2"),
-                suffixStyle: boldTextStyle(size: textSizeSMedium.toInt()),
-                icon: Icon(Icons.house,
-                    color: manMasjidC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty) return '$mk_LT $mk_is_required';
-                return null;
-              },
-            ),
-            TextFormField(
-              enabled: !manMasjidC.isSaving.value,
-              maxLines: 1,
-              autocorrect: false,
-              controller: manMasjidC.luasBangunan,
-              textInputAction: TextInputAction.next,
-              cursorColor: appStore.textPrimaryColor,
-              // style: primaryTextStyle(),
+            EditText(
+              isEnabled: !manMasjidC.isSaving.value,
+              mController: manMasjidC.luasTanah,
+              validator: (value) =>
+                  (Validator(attributeName: mk_LT, value: value)..required())
+                      .getError(),
+              label: mk_LT,
+              hint: mk_hint_LT,
+              icon: Icon(Icons.house,
+                  color: manMasjidC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(6),
-                CurrencyInputFormatter()
+                DecimalInputFormatter()
               ],
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              decoration: InputDecoration(
-                labelText: mk_LB,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_hint_LB,
-                suffix: text("M\u00B2"),
-                suffixStyle: boldTextStyle(size: textSizeSMedium.toInt()),
-                icon: Icon(Icons.house,
-                    color: manMasjidC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty) return '$mk_LB $mk_is_required';
-                return null;
-              },
+            ),
+            EditText(
+              isEnabled: !manMasjidC.isSaving.value,
+              mController: manMasjidC.luasBangunan,
+              validator: (value) =>
+                  (Validator(attributeName: mk_LB, value: value)..required())
+                      .getError(),
+              label: mk_LB,
+              hint: mk_hint_LB,
+              icon: Icon(Icons.house,
+                  color: manMasjidC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(6),
+                DecimalInputFormatter()
+              ],
             ),
             DropdownButtonFormField<String>(
               validator: (value) =>
