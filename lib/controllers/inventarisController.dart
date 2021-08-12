@@ -20,7 +20,7 @@ class InventarisController extends GetxController {
   final TextEditingController urlController = TextEditingController();
   var hargaController = MoneyMaskedTextController(
       precision: 3,
-      leftSymbol: 'Rp ',
+      leftSymbol: 'Rp',
       decimalSeparator: '.',
       // initialValue: 0,
       thousandSeparator: '.');

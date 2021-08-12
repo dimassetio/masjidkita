@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:mosq/helpers/validator.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/integrations/controllers.dart';
@@ -101,70 +103,60 @@ class _StepperBodyState extends State<StepperBody> {
       Step(
         title: Text("Data inventaris"),
         content: Column(children: <Widget>[
+          // Padding(
+          // padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          EditText(
+            fontSize: textSizeMedium,
+            mController: inventarisC.namaController,
+            hint: mk_hint_nama_inventaris,
+            label: mk_lbl_nama_inventaris,
+            // validator: (s) {
+            //   if (s!.trim().isEmpty)
+            //     return '$mk_lbl_nama_inventaris $mk_is_required';
+            //   return null;
+            // },
+            validator: (value) =>
+                (Validator(attributeName: mk_lbl_nama_inventaris, value: value)
+                      ..required())
+                    .getError(),
+          ),
+          // ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextFormField(
-              controller: inventarisC.namaController,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'ex: Karpet',
-                labelText: 'Nama Barang',
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty)
-                  return '$mk_lbl_nama_inventaris $mk_is_required';
-                return null;
-              },
+            child: EditText(
+              mController: inventarisC.kondisiController,
+              hint: mk_hint_kondisi_inventaris,
+              label: mk_lbl_kondisi_inventaris,
+              validator: (value) => (Validator(
+                      attributeName: mk_lbl_kondisi_inventaris, value: value)
+                    ..required())
+                  .getError(),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextFormField(
-              controller: inventarisC.kondisiController,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'ex: Baik',
-                labelText: 'Kondisi barang',
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty)
-                  return '$mk_lbl_kondisi_inventaris $mk_is_required';
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextFormField(
-              controller: inventarisC.hargaController,
+            child: EditText(
+              mController: inventarisC.hargaController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'misal: Rp. 15.000,-',
-                labelText: 'Masukkan Harga barang (satuan)',
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty)
-                  return '$mk_lbl_harga_inventaris $mk_is_required';
-                return null;
-              },
+              hint: mk_hint_harga_inventaris,
+              label: mk_lbl_harga_inventaris,
+              validator: (value) => (Validator(
+                      attributeName: mk_lbl_harga_inventaris, value: value)
+                    ..required())
+                  .getError(),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextFormField(
-              controller: inventarisC.jumlahController,
+            child: EditText(
+              mController: inventarisC.jumlahController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'ex: 20',
-                labelText: 'Masukkan Jumlah barang',
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty)
-                  return '$mk_lbl_jumlah_inventaris $mk_is_required';
-                return null;
-              },
+              hint: mk_hint_jumlah_inventaris,
+              label: mk_lbl_jumlah_inventaris,
+              validator: (value) => (Validator(
+                      attributeName: mk_lbl_jumlah_inventaris, value: value)
+                    ..required())
+                  .getError(),
             ),
           ),
         ]),
@@ -198,11 +190,11 @@ class _StepperBodyState extends State<StepperBody> {
                   enabled: false,
                   controller: inventarisC.fotoController,
                   decoration: InputDecoration(hintText: inventarisC.message),
-                  validator: (s) {
-                    if (s!.trim().isEmpty)
-                      return '$mk_lbl_foto_inventaris $mk_is_required';
-                    return null;
-                  },
+                  // validator: (s) {
+                  //   if (s!.trim().isEmpty)
+                  //     return '$mk_lbl_foto_inventaris $mk_is_required';
+                  //   return null;
+                  // },
                 ),
               ),
               ElevatedButton(
@@ -407,7 +399,7 @@ class _StepperBodyState extends State<StepperBody> {
               //           // toast("Data Berhasil di Update");
 
               //           Get.back();
-              //           // manMasjidC.clearControllers();
+              //           // maninvenmk_lbl_nama_inventarisC.clearControllers();
               //         } else {
               //           _formKey.currentState!.validate();
               //         }
