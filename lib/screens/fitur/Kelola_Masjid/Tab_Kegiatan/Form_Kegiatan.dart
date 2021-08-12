@@ -1,15 +1,15 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
-import 'package:masjidkita/screens/utils/MKColors.dart';
-import 'package:masjidkita/screens/utils/MKConstant.dart';
-import 'package:masjidkita/screens/utils/MKStrings.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
+import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:masjidkita/main.dart';
-import 'package:masjidkita/integrations/controllers.dart';
+import 'package:mosq/main.dart';
+import 'package:mosq/integrations/controllers.dart';
 import 'package:get/get.dart';
-import 'package:masjidkita/main/utils/AppWidget.dart';
+import 'package:mosq/main/utils/AppWidget.dart';
 
 DateTime selectedDate = DateTime.now();
 TimeOfDay selectedTime = TimeOfDay.now();
