@@ -81,23 +81,27 @@ class _MosqDashboardState extends State<MosqDashboard> {
                       actions: [
                         Showcase(
                             key: scOne,
-                            child: IconButton(
-                                onPressed: () {
-                                  print(authController.isLoggedIn.value);
-                                  authController.isLoggedIn.value
-                                      ? showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              ConfirmLogout())
-                                      // authController.signOut()
-                                      : Get.toNamed(RouteName.sign_in);
-                                },
-                                icon: Icon(
-                                  Icons.person,
-                                  color: appStore.isDarkModeOn
-                                      ? appStore.iconColor
-                                      : mkWhite,
-                                )),
+                            child: Obx(
+                              () => IconButton(
+                                  onPressed: () {
+                                    print(authController.isLoggedIn.value);
+                                    authController.isLoggedIn.value
+                                        ? showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                ConfirmLogout())
+                                        // authController.signOut()
+                                        : Get.toNamed(RouteName.sign_in);
+                                  },
+                                  icon: Icon(
+                                    authController.isLoggedIn.value
+                                        ? Icons.logout
+                                        : Icons.person,
+                                    color: appStore.isDarkModeOn
+                                        ? appStore.iconColor
+                                        : mkWhite,
+                                  )),
+                            ),
                             title: 'Login',
                             description:
                                 'Jika anda seorang pengurus masjid dan ingin membuka halaman pengelola masjid, silahkan mendaftar atau login ke akun yang sudah anda buat')

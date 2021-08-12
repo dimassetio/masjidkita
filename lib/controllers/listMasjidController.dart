@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:mosq/models/manMasjid.dart';
+import 'package:mosq/models/masjid.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
@@ -10,17 +10,17 @@ import 'package:nb_utils/nb_utils.dart';
 class ListMasjidController extends GetxController {
   static ListMasjidController instance = Get.find();
 
-  RxList<ListMasjidModel> listMasjid = RxList<ListMasjidModel>();
-  List<ListMasjidModel> get masjids => listMasjid.value;
+  RxList<MasjidModel> listMasjid = RxList<MasjidModel>();
+  List<MasjidModel> get masjids => listMasjid.value;
 
-  // Rx<ListMasjidModel> selectMasjid = ListMasjidModel().obs;
-  // ListMasjidModel get selected => selectMasjid.value;
+  // Rx<MasjidModel> selectMasjid = MasjidModel().obs;
+  // MasjidModel get selected => selectMasjid.value;
 
-  RxList<FavoritMasjidModel> favoritMasjid = RxList<FavoritMasjidModel>();
-  List<FavoritMasjidModel> get favMasjids => favoritMasjid.value;
+  RxList<MasjidModel> favoritMasjid = RxList<MasjidModel>();
+  List<MasjidModel> get favMasjids => favoritMasjid.value;
 
-  RxList<ListMasjidModel> resultsList = RxList<ListMasjidModel>();
-  List<ListMasjidModel> get filteredMasjid => resultsList.value;
+  RxList<MasjidModel> resultsList = RxList<MasjidModel>();
+  List<MasjidModel> get filteredMasjid => resultsList.value;
 
   TextEditingController searchController = TextEditingController();
   // Rx<TextEditingController> rxSearchController = TextEditingController().obs;
@@ -46,7 +46,7 @@ class ListMasjidController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    getInitialMasjid();
+    // getInitialMasjid();
     listMasjid.bindStream(masjidStream());
     searchController.addListener(_onSearchChanged);
     readStr();
@@ -76,7 +76,7 @@ class ListMasjidController extends GetxController {
   }
 
   searchResultsList() {
-    List<ListMasjidModel> showResults = [];
+    List<MasjidModel> showResults = [];
 
     if (searchController.text != "") {
       for (var masjidSnapshot in masjids) {
@@ -141,42 +141,42 @@ class ListMasjidController extends GetxController {
     favoritMasjid.bindStream(masjidFavoritStream());
   }
 
-  getInitialMasjid() async {
-    await firebaseFirestore
-        .collection(masjidCollection)
-        .orderBy('nama')
-        .get()
-        .then((value) => value.docs.forEach((element) {
-              listMasjid.add(ListMasjidModel.fromDocumentSnapshot(element));
-            }));
-    searchResultsList();
-  }
+  // getInitialMasjid() async {
+  //   await firebaseFirestore
+  //       .collection(masjidCollection)
+  //       .orderBy('nama')
+  //       .get()
+  //       .then((value) => value.docs.forEach((element) {
+  //             listMasjid.add(MasjidModel.fromDocumentSnapshot(element));
+  //           }));
+  //   searchResultsList();
+  // }
 
-  Stream<List<ListMasjidModel>> masjidStream() async* {
+  Stream<List<MasjidModel>> masjidStream() async* {
     yield* firebaseFirestore
         .collection(masjidCollection)
         .orderBy('nama')
         .snapshots()
         .map((QuerySnapshot query) {
-      List<ListMasjidModel> retVal = [];
+      List<MasjidModel> retVal = [];
       query.docs.forEach((element) {
-        retVal.add(ListMasjidModel.fromDocumentSnapshot(element));
+        retVal.add(MasjidModel.fromSnapshot(element));
       });
       return retVal;
     });
     searchResultsList();
   }
 
-  Stream<List<FavoritMasjidModel>> masjidFavoritStream() {
+  Stream<List<MasjidModel>> masjidFavoritStream() {
     // var idFav = idFavorit.value;
     return firebaseFirestore
         .collection(masjidCollection)
         .where("id", whereIn: idFav)
         .snapshots()
         .map((QuerySnapshot query) {
-      List<FavoritMasjidModel> retVal = [];
+      List<MasjidModel> retVal = [];
       query.docs.forEach((element) {
-        retVal.add(FavoritMasjidModel.fromDocumentSnapshot(element));
+        retVal.add(MasjidModel.fromSnapshot(element));
       });
       return retVal;
     });

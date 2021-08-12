@@ -25,7 +25,7 @@ class AuthController extends GetxController {
   set user(UserModel value) => this.userModel.value = value;
   RxBool isLoggedIn = false.obs;
 
-  final googleSignIn = GoogleSignIn();
+  // final googleSignIn = GoogleSignIn();
 
   final box = GetStorage();
   var isFirstLaunch = false.obs;
@@ -35,8 +35,7 @@ class AuthController extends GetxController {
     super.onReady();
     firebaseUser = Rx<User>(auth.currentUser);
     firebaseUser.bindStream(auth.userChanges());
-    // isLoggedIn = changeStatus();
-    // _setUserModel;
+
     ever(firebaseUser, _setLogStatus);
     ever(firebaseUser, _setUserModel);
 
@@ -51,9 +50,6 @@ class AuthController extends GetxController {
       await box.write('first_launch', false);
     }
     print("${box.read('first_launch')} fl box");
-
-    // print("Obs: ${isFirstLaunch.value}");
-    // print("box:  ${box.read('first_launch')}");
   }
 
   _setLogStatus(User user) {
@@ -73,45 +69,46 @@ class AuthController extends GetxController {
     }
   }
 
-  // _setInitialScreen(User user) {
-  //   if (user == null) {
-  //     // Get.offAll(() => T5SignIn());
-  //     print("user.displayName");
-  //     Get.offAndToNamed(RouteName.sign_in);
-  //   } else {
-  //     Get.toNamed(RouteName.kelolamasjid);
-  //     print(user);
-  //   }
-  // }
-
-  void signIn() async {
-    // final userRef = firebaseFirestore.collection(usersCollection).doc(userId);
-    // final userRef = _db.collection("users").doc(user.uid);
-    // if ((await userRef.get()).exists) {
-    //   await userRef.update({
-    //     "last_login":
-    //         auth.currentUser.metadata.lastSignInTime.millisecondsSinceEpoch,
-    //   });
-    // }
+  signIn() async {
     try {
-      // showLoading();
       await auth
           .signInWithEmailAndPassword(
               email: email.text.trim(), password: password.text.trim())
           .then((result) {
         String _userId = result.user.uid;
         _initializeUserModel(_userId);
-        // userRef.set({
-        //   "last_login": auth.currentUser.metadata.lastSignInTime,
-        // });
+
         _clearControllers();
         print(firebaseUser);
-        toast("Sign In Success");
         Get.back();
+        toast("Sign In Success");
       });
+    } on FirebaseAuthException catch (e) {
+      String error;
+      switch (e.code) {
+        case 'wrong-password':
+          error = 'Wrong password.';
+          break;
+        case 'user-not-found':
+          error = 'Wrong username or password,';
+          break;
+        case 'user-disabled':
+          error = 'User is disabled, please contact administrator.';
+          break;
+        case 'invalid-email':
+          error = 'Invalid email';
+          break;
+        case 'network-request-failed':
+          error = 'Connection error';
+
+          print(e.code + 'iki error cok');
+          break;
+        default:
+          error = e.code;
+      }
+      return Get.snackbar('Sign In Failed', error);
     } catch (e) {
-      debugPrint(e.toString());
-      Get.snackbar("Sign In Failed", "Try again");
+      return Get.snackbar("Sign In Failed", "Try again");
     }
   }
 
@@ -188,79 +185,6 @@ class AuthController extends GetxController {
       }
     }
   }
-
-  // Future googleLogin() async {
-  //   final googleUser = await googleSignIn.signIn();
-  //   if (googleUser == null) return;
-  //   _user = googleUser;
-
-  //   final googleAuth = await googleUser.authentication;
-
-  //   final credential = GoogleAuthProvider.credential(
-  //     accessToken: googleAuth.accessToken,
-  //     idToken: googleAuth.idToken,
-  //   );
-
-  //   await FirebaseAuth.instance.signInWithCredential(credential);
-
-  //   notifyListeners();
-  // }
-
-  // static Future<User> signInWithGoogle({BuildContext context}) async {
-  //   FirebaseAuth auth = FirebaseAuth.instance;
-  //   User user;
-
-  //   final GoogleSignIn googleSignIn = GoogleSignIn();
-
-  //   final GoogleSignInAccount googleSignInAccount =
-  //       await googleSignIn.signIn(); //////////////////////////////////////////
-
-  //   if (googleSignInAccount != null) {
-  //     final GoogleSignInAuthentication googleSignInAuthentication =
-  //         await googleSignInAccount.authentication;
-
-  //     final AuthCredential credential = GoogleAuthProvider.credential(
-  //       accessToken: googleSignInAuthentication.accessToken,
-  //       idToken: googleSignInAuthentication.idToken,
-  //     );
-
-  //     try {
-  //       final UserCredential userCredential =
-  //           await auth.signInWithCredential(credential);
-
-  //       user = userCredential.user;
-  //     } on FirebaseAuthException catch (e) {
-  //       if (e.code == 'account-exists-with-different-credential') {
-  //         // ScaffoldMessenger.of(context).showSnackBar(
-  //         //   Authentication.customSnackBar(
-  //         //     content:
-  //         //         'The account already exists with a different credential.',
-  //         //   ),
-  //         // );
-  //         debugPrint(e.toString());
-  //         Get.snackbar("Login failed",
-  //             "The account already exists with a different credential");
-  //       } else if (e.code == 'invalid-credential') {
-  //         // ScaffoldMessenger.of(context).showSnackBar(
-  //         //   Get.snackbar("Error occurred while accessing credentials", "Try again");
-  //         // );
-  //         debugPrint(e.toString());
-  //         Get.snackbar(
-  //             "Error occurred while accessing credentials", "Try again");
-  //       }
-  //     } catch (e) {
-  //       // ScaffoldMessenger.of(context).showSnackBar(
-  //       //   Authentication.customSnackBar(
-  //       //     content: 'Error occurred using Google Sign-In. Try again.',
-  //       //   ),
-  //       // );
-  //       debugPrint(e.toString());
-  //       Get.snackbar("Error occurred using Google Sign-In", "Try again");
-  //     }
-  //   }
-
-  //   return user;
-  // }
 
   void signOut() async {
     userModel.value = UserModel();

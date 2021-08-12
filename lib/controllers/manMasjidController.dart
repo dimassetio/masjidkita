@@ -4,19 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path/path.dart';
 
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:mosq/controllers/authController.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/models/manMasjid.dart';
+import 'package:mosq/models/masjid.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/firestore.dart';
-// import 'package:mosq/models/user.dart';
 import 'package:mosq/routes/route_name.dart';
-// import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/cekLog.dart';
-// import 'package:mosq/screens/widgets/AddOrJoin.dart';
-// import 'package:nb_utils/nb_utils.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -34,8 +28,6 @@ class ManMasjidController extends GetxController {
   TextEditingController tahun = TextEditingController();
   TextEditingController luasTanah = TextEditingController();
   TextEditingController luasBangunan = TextEditingController();
-  // TextEditingController statusTanah = TextEditingController();
-  // TextEditingController legalitas = TextEditingController();
 
   String? legalitas;
   String? statusTanah;
@@ -44,9 +36,9 @@ class ManMasjidController extends GetxController {
   // ManMasjidModel get keMasjid => keMasjidModel.value;
   // set keMasjid(ManMasjidModel value) => this.keMasjidModel.value = value;
 
-  Rx<DetailMasjidModel> deMasjidModel = DetailMasjidModel().obs;
-  DetailMasjidModel get deMasjid => deMasjidModel.value;
-  set deMasjid(DetailMasjidModel value) => this.deMasjidModel.value = value;
+  Rx<MasjidModel> deMasjidModel = MasjidModel().obs;
+  MasjidModel get deMasjid => deMasjidModel.value;
+  set deMasjid(MasjidModel value) => this.deMasjidModel.value = value;
 
   var haveMasjid = false.obs;
   var myMasjid = false.obs;
@@ -96,15 +88,6 @@ class ManMasjidController extends GetxController {
     }
   }
 
-  // _setHaveMasjid() {
-  //   if (keMasjid.nama == null) {
-  //     haveMasjid.value = false;
-  //   } else {
-  //     haveMasjid.value = true;
-  //   }
-  //   // print(haveMasjid.value);
-  // }
-
   addMasjidToFirestore(Map<String, dynamic> data) async {
     await firebaseFirestore
         .collection(masjidCollection)
@@ -120,10 +103,9 @@ class ManMasjidController extends GetxController {
 
   var count = 0.obs;
 
-  Future updateDataMasjid({String? docID}) async {
+  Future updateDataMasjid() async {
     Map<String, dynamic> data = new HashMap();
-    data['nama'] = "Masjid Dummy ${count.value}";
-    // data['nama'] = nama.text;
+    data['nama'] = nama.text;
     data["alamat"] = alamat.text;
     data["photoUrl"] = photoUrl.text;
     data["deskripsi"] = deskripsi.text;
@@ -136,7 +118,6 @@ class ManMasjidController extends GetxController {
     data["luasBangunan"] = luasBangunan.text;
     if (statusTanah != null) data["statusTanah"] = statusTanah;
     if (legalitas != null) data["legalitas"] = legalitas;
-    //  data["updatedAt"] = DateTime.now();
 
     print("data = $data");
     isSaving.value = true;
@@ -161,7 +142,7 @@ class ManMasjidController extends GetxController {
       print(e);
       toast("Error Saving Data");
     } finally {
-      // clearControllers();
+      clearControllers();
       toast("Data Berhasil Diperbarui");
       isSaving.value = false;
     }
@@ -177,22 +158,22 @@ class ManMasjidController extends GetxController {
   //         .collection(masjidCollection)
   //         .doc(mID)
   //         .get()
-  //         .then((doc) => DetailMasjidModel.fromSnapshot(doc));
+  //         .then((doc) => MasjidModel.fromSnapshot(doc));
   //   } catch (e) {
-  //     deMasjidModel.value = DetailMasjidModel();
+  //     deMasjidModel.value = MasjidModel();
   //   }
   //   await isMyMasjid(deMasjid.id!);
   //   print(myMasjid.value);
   // }
 
-  Stream<DetailMasjidModel> streamDetailMasjid(mID) {
+  Stream<MasjidModel> streamDetailMasjid(mID) {
     // try {
     // print(mID);
     return firebaseFirestore
         .collection(masjidCollection)
         .doc(mID)
         .snapshots()
-        .map((event) => DetailMasjidModel.fromSnapshot(event));
+        .map((event) => MasjidModel.fromSnapshot(event));
     // } catch (e) {
     //   return keMasjidModel.value = ManMasjidModel();
     // }

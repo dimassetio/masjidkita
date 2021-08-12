@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
@@ -11,26 +12,45 @@ import 'MKConstant.dart';
 class EditText extends StatefulWidget {
   var isPassword;
   var isSecure;
+  var isEnabled;
   var fontSize;
   var textColor;
   var fontFamily;
   var text;
   var hint;
+  var label;
   var maxLine;
+  var isBordered;
+  String? Function(String?)? validator;
   TextEditingController? mController;
+  AutovalidateMode? autovalidateMode;
+  List<TextInputFormatter>? inputFormatters;
+  TextInputAction? textInputAction;
+  TextInputType? keyboardType;
+  Icon? icon;
 
   VoidCallback? onPressed;
 
-  EditText(
-      {var this.fontSize = textSizeNormal,
-      var this.textColor = mkTextColorSecondary,
-      var this.fontFamily = fontRegular,
-      var this.isPassword = true,
-      var this.hint = "",
-      var this.isSecure = false,
-      var this.text = "",
-      var this.mController,
-      var this.maxLine = 1});
+  EditText({
+    var this.fontSize = textSizeNormal,
+    var this.textColor = mkTextColorSecondary,
+    var this.fontFamily = fontRegular,
+    var this.isPassword = false,
+    var this.hint = "",
+    var this.isSecure = false,
+    var this.isEnabled = true,
+    var this.text = "",
+    var this.mController,
+    var this.maxLine = 1,
+    var this.validator,
+    var this.icon,
+    var this.label,
+    var this.inputFormatters,
+    var this.keyboardType,
+    var this.autovalidateMode = AutovalidateMode.onUserInteraction,
+    var this.isBordered = false,
+    var this.textInputAction = TextInputAction.next,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -42,13 +62,21 @@ class EditTextState extends State<EditText> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: widget.isEnabled,
+      autovalidateMode: widget.autovalidateMode,
+      validator: widget.validator,
       controller: widget.mController,
       obscureText: widget.isPassword,
+      inputFormatters: widget.inputFormatters,
+      textInputAction: widget.textInputAction,
+      keyboardType: widget.keyboardType,
+      maxLines: widget.maxLine,
       style: TextStyle(
           color: appStore.textPrimaryColor,
-          fontSize: textSizeLargeMedium,
+          fontSize: textSizeMedium,
           fontFamily: fontRegular),
       decoration: InputDecoration(
+        icon: widget.icon,
         suffixIcon: widget.isSecure
             ? GestureDetector(
                 onTap: () {
@@ -62,17 +90,29 @@ class EditTextState extends State<EditText> {
                 ),
               )
             : null,
-        contentPadding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+        contentPadding: widget.isBordered ? EdgeInsets.all(12) : null,
         hintText: widget.hint,
-        hintStyle: TextStyle(color: mkTextColorThird),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4),
-          borderSide: const BorderSide(color: mkViewColor, width: 0.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4),
-          borderSide: const BorderSide(color: mkViewColor, width: 0.0),
-        ),
+        hintStyle: secondaryTextStyle(color: mkColorPrimaryDark),
+        labelText: widget.label,
+        labelStyle: secondaryTextStyle(color: mkColorPrimaryDark),
+        enabledBorder: widget.isBordered
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4),
+                borderSide: const BorderSide(color: mkViewColor, width: 0.0),
+              )
+            : null,
+        errorBorder: widget.isBordered
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4),
+                borderSide: const BorderSide(color: mkViewColor, width: 0.0),
+              )
+            : null,
+        focusedBorder: widget.isBordered
+            ? OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4),
+                borderSide: const BorderSide(color: mkViewColor, width: 0.0),
+              )
+            : null,
       ),
     );
   }
@@ -80,8 +120,9 @@ class EditTextState extends State<EditText> {
 
 TextFormField editTextStyle(var hintText, {isPassword = true}) {
   return TextFormField(
-    style: TextStyle(fontSize: textSizeLargeMedium, fontFamily: fontRegular),
     obscureText: isPassword,
+    inputFormatters: [FilteringTextInputFormatter.singleLineFormatter],
+    style: primaryTextStyle(color: appStore.textPrimaryColor),
     decoration: InputDecoration(
       contentPadding: EdgeInsets.fromLTRB(16, 10, 16, 10),
       hintText: hintText,
