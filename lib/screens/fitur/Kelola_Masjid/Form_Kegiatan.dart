@@ -1,19 +1,72 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
-import 'package:mosq/screens/utils/MKColors.dart';
-import 'package:mosq/screens/utils/MKConstant.dart';
-import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:masjidkita/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
+import 'package:masjidkita/screens/utils/MKColors.dart';
+import 'package:masjidkita/screens/utils/MKConstant.dart';
+import 'package:masjidkita/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:mosq/main.dart';
-import 'package:mosq/integrations/controllers.dart';
+import 'package:masjidkita/main.dart';
+import 'package:masjidkita/integrations/controllers.dart';
 import 'package:get/get.dart';
-import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/controllers/inventarisController.dart';
+import 'package:masjidkita/main/utils/AppWidget.dart';
 
-class FormInventaris extends StatelessWidget {
-  static const tag = '/FormInventaris';
+DateTime selectedDate = DateTime.now();
+TimeOfDay selectedTime = TimeOfDay.now();
+
+// @override
+// void initState() {
+//   super.initState();
+//   init();
+//   print(selectedTime.period);
+// }
+
+Future<void> _selectDate(BuildContext context) async {
+  final DateTime? picked = await showDatePicker(
+      helpText: 'Select your Booking date',
+      cancelText: 'Not Now',
+      confirmText: "Book",
+      fieldLabelText: 'Booking Date',
+      fieldHintText: 'Month/Date/Year',
+      errorFormatText: 'Enter valid date',
+      errorInvalidText: 'Enter date in valid range',
+      context: context,
+      builder: (BuildContext context, Widget? child) {
+        return CustomTheme(
+          child: child,
+        );
+      },
+      initialDate: selectedDate,
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2101));
+  // if (picked != null && picked != selectedDate)
+  //   setState(() {
+  //     print(picked);
+  //     selectedDate = picked;
+  //   });
+}
+
+Future<Null> _selectTime(BuildContext context) async {
+  final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+      builder: (BuildContext context, Widget? child) {
+        return CustomTheme(
+          child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            child: child!,
+          ),
+        );
+      });
+
+  // if (picked != null)
+  //   setState(() {
+  //     selectedTime = picked;
+  //   });
+}
+
+class FormKegiatan extends StatelessWidget {
+  static const tag = '/FormKegiatan';
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +77,7 @@ class FormInventaris extends StatelessWidget {
             backgroundColor: appStore.appBarColor,
             leading: IconButton(
               onPressed: () {
-                inventarisC.checkControllers()
+                kegiatanC.checkControllers()
                     ? showDialog(
                         context: Get.context!,
                         builder: (BuildContext context) => ConfirmDialog(),
@@ -34,17 +87,14 @@ class FormInventaris extends StatelessWidget {
               icon: Icon(Icons.arrow_back,
                   color: appStore.isDarkModeOn ? white : black),
             ),
-            title: appBarTitleWidget(
-              context,
-              mk_add_inventaris,
-            ),
+            title: appBarTitleWidget(context, mk_add_kegiatan),
             actions: <Widget>[
               Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
                   onTap: () {
-                    inventarisC
-                        .addInventaris(authController.firebaseUser.value.uid);
+                    kegiatanC
+                        .addKegiatan(authController.firebaseUser.value.uid);
                   },
                   child: Icon(
                     Icons.check,
@@ -77,118 +127,200 @@ class _StepperBodyState extends State<StepperBody> {
   void initState() {
     super.initState();
     if (Get.parameters['id'] != null) {
-      inventarisC.namaController.text = inventarisC.inventaris.nama ?? "";
-      inventarisC.kondisiController.text = inventarisC.inventaris.kondisi ?? "";
-      inventarisC.fotoController.text = inventarisC.inventaris.foto ?? "";
-      inventarisC.urlController.text = inventarisC.inventaris.url ?? "";
-      inventarisC.hargaController.text =
-          inventarisC.inventaris.harga.toString();
-      inventarisC.jumlahController.text =
-          inventarisC.inventaris.jumlah.toString();
+      kegiatanC.namaController.text = kegiatanC.kegiatan.nama ?? "";
+      kegiatanC.deskripsiController.text = kegiatanC.kegiatan.deskripsi ?? "";
+      // kegiatanC.tanggalController.text = kegiatanC.kegiatan.tanggal ?? "";
+      kegiatanC.fotoController.text = kegiatanC.kegiatan.foto ?? "";
+      kegiatanC.urlController.text = kegiatanC.kegiatan.url ?? "";
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    inventarisC.clearControllers();
-    inventarisC.downloadUrl.value = "";
+    kegiatanC.clearControllers();
+    kegiatanC.downloadUrl.value = "";
   }
 
   @override
   Widget build(BuildContext context) {
     List<Step> steps = [
       Step(
-        title: Text("Data inventaris"),
+        title: Text("Data kegiatan"),
         content: Column(children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
             child: TextFormField(
-              controller: inventarisC.namaController,
+              controller: kegiatanC.namaController,
               decoration: InputDecoration(
                 border: UnderlineInputBorder(),
-                hintText: 'ex: Karpet',
-                labelText: 'Nama Barang',
+                hintText: 'ex: Istighosah',
+                labelText: 'Nama Kegiatan',
               ),
               validator: (s) {
                 if (s!.trim().isEmpty)
-                  return '$mk_lbl_nama_inventaris $mk_is_required';
+                  return '$mk_lbl_nama_kegiatan $mk_is_required';
                 return null;
               },
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextFormField(
-              controller: inventarisC.kondisiController,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'ex: Baik',
-                labelText: 'Kondisi barang',
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty)
-                  return '$mk_lbl_kondisi_inventaris $mk_is_required';
-                return null;
-              },
-            ),
+          SizedBox(
+            height: 20,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextFormField(
-              controller: inventarisC.hargaController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'misal: Rp. 15.000,-',
-                labelText: 'Masukkan Harga barang (satuan)',
+          // Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          //   child: TextFormField(
+          //     controller: kegiatanC.deskripsiController,
+          //     decoration: InputDecoration(
+          //       border: UnderlineInputBorder(),
+          //       hintText: 'ex: Baik',
+          //       labelText: 'Kondisi barang',
+          //     ),
+          //     validator: (s) {
+          //       if (s!.trim().isEmpty)
+          //         return '$mk_lbl_deskripsi_kegiatan $mk_is_required';
+          //       return null;
+          //     },
+          //   ),
+          // ),
+          TextFormField(
+            style: primaryTextStyle(),
+            controller: kegiatanC.deskripsiController,
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: mkColorPrimary),
               ),
-              validator: (s) {
-                if (s!.trim().isEmpty)
-                  return '$mk_lbl_harga_inventaris $mk_is_required';
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextFormField(
-              controller: inventarisC.jumlahController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'ex: 20',
-                labelText: 'Masukkan Jumlah barang',
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(width: 1, color: mkColorPrimary),
               ),
-              validator: (s) {
-                if (s!.trim().isEmpty)
-                  return '$mk_lbl_jumlah_inventaris $mk_is_required';
-                return null;
-              },
+              labelText: "Rincian kegiatan",
+              hintText: "deskripsikan...",
+              hintStyle: TextStyle(color: appStore.textSecondaryColor),
+              labelStyle: TextStyle(color: appStore.textSecondaryColor),
+              alignLabelWithHint: true,
+              // filled: true,
             ),
+            cursorColor: appStore.isDarkModeOn ? white : blackColor,
+            keyboardType: TextInputType.multiline,
+            maxLines: 12,
+            textInputAction: TextInputAction.done,
+            validator: (s) {
+              if (s!.trim().isEmpty)
+                return '$mk_lbl_deskripsi_kegiatan $mk_is_required';
+              return null;
+            },
           ),
         ]),
         isActive: currStep == 0,
+        // state: StepState.complete
+      ),
+      Step(
+        title: Text("Waktu & Tempat"),
+        content: Column(children: <Widget>[
+          Card(
+              elevation: 4,
+              child: ListTile(
+                onTap: () {
+                  _selectDate(context);
+                },
+                title: Text(
+                  'Pilih tanggal acara',
+                  style: primaryTextStyle(),
+                ),
+                subtitle: Text(
+                  "${selectedDate.toLocal()}".split(' ')[0],
+                  style: secondaryTextStyle(),
+                ),
+                trailing: IconButton(
+                  icon: Icon(
+                    Icons.date_range,
+                    color: mkColorPrimary,
+                  ),
+                  onPressed: () {
+                    _selectDate(context);
+                  },
+                ),
+              )),
+          SizedBox(height: 20),
+          Card(
+              elevation: 4,
+              child: ListTile(
+                onTap: () {
+                  _selectTime(context);
+                },
+                title: Text(
+                  'Pilih waktu acara',
+                  style: primaryTextStyle(),
+                ),
+                subtitle: Text(
+                  "${selectedTime.hour < 10 ? "0${selectedTime.hour}" : "${selectedTime.hour}"} : ${selectedTime.minute < 10 ? "0${selectedTime.minute}" : "${selectedTime.minute}"} ${selectedTime.period != DayPeriod.am ? 'PM' : 'AM'}   ",
+                  style: secondaryTextStyle(),
+                ),
+                trailing: IconButton(
+                  icon: Icon(
+                    Icons.schedule,
+                    color: mkColorPrimary,
+                  ),
+                  onPressed: () {
+                    _selectTime(context);
+                  },
+                ),
+              )),
+          SizedBox(height: 20),
+          TextFormField(
+            controller: kegiatanC.tanggalController,
+            // focusNode: addressFocus,
+            style: primaryTextStyle(),
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                Icons.location_on,
+                color: mkColorPrimary,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(color: mkColorPrimary),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: BorderSide(width: 1, color: mkColorPrimary),
+              ),
+              labelText: 'Tempat acara',
+              labelStyle: secondaryTextStyle(),
+              alignLabelWithHint: true,
+            ),
+            maxLines: 3,
+            cursorColor: appStore.isDarkModeOn ? white : blackColor,
+            keyboardType: TextInputType.multiline,
+            validator: (s) {
+              if (s!.trim().isEmpty) return 'Address is required';
+              return null;
+            },
+          ),
+        ]),
+        isActive: currStep == 1,
+        // state: StepState.complete
       ),
       Step(
           title: Text("Foto"),
           content: Column(
             children: <Widget>[
-              Obx(() => inventarisC.inventaris.url != "" &&
-                      inventarisC.inventaris.url != null
-                  ? Container(
-                      alignment: Alignment.center,
-                      child: CachedNetworkImage(
-                        width: Get.width - 40,
-                        placeholder: placeholderWidgetFn() as Widget Function(
-                            BuildContext, String)?,
-                        imageUrl: inventarisC.downloadUrl.value.isEmpty
-                            ? inventarisC.inventaris.url.toString()
-                            : inventarisC.downloadUrl.value,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
+              Obx(() =>
+                  kegiatanC.kegiatan.url != "" && kegiatanC.kegiatan.url != null
+                      ? Container(
+                          alignment: Alignment.center,
+                          child: CachedNetworkImage(
+                            width: Get.width - 40,
+                            placeholder: placeholderWidgetFn() as Widget
+                                Function(BuildContext, String)?,
+                            imageUrl: kegiatanC.downloadUrl.value.isEmpty
+                                ? kegiatanC.kegiatan.url.toString()
+                                : kegiatanC.downloadUrl.value,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
                 child: TextFormField(
@@ -196,11 +328,11 @@ class _StepperBodyState extends State<StepperBody> {
                   enableInteractiveSelection: false,
                   // style: GoogleFonts.poppins(),
                   enabled: false,
-                  controller: inventarisC.fotoController,
-                  decoration: InputDecoration(hintText: inventarisC.message),
+                  controller: kegiatanC.fotoController,
+                  decoration: InputDecoration(hintText: kegiatanC.message),
                   validator: (s) {
                     if (s!.trim().isEmpty)
-                      return '$mk_lbl_foto_inventaris $mk_is_required';
+                      return '$mk_lbl_foto_kegiatan $mk_is_required';
                     return null;
                   },
                 ),
@@ -221,7 +353,7 @@ class _StepperBodyState extends State<StepperBody> {
                             height: 250.0,
                             padding: EdgeInsets.all(16),
                             child: Obx(
-                              () => inventarisC.isLoadingImage.value
+                              () => kegiatanC.isLoadingImage.value
                                   ? Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -237,11 +369,11 @@ class _StepperBodyState extends State<StepperBody> {
                                           height: 10,
                                         ),
                                         LinearProgressIndicator(
-                                          value: inventarisC
-                                              .uploadPrecentage.value,
+                                          value:
+                                              kegiatanC.uploadPrecentage.value,
                                         ),
                                         text(
-                                            "${(inventarisC.uploadPrecentage.value * 100).toInt()} %"),
+                                            "${(kegiatanC.uploadPrecentage.value * 100).toInt()} %"),
                                       ],
                                     )
                                   : Column(
@@ -261,7 +393,7 @@ class _StepperBodyState extends State<StepperBody> {
                                         TextButton.icon(
                                             // style: ,
                                             onPressed: () {
-                                              inventarisC.uploadImage(false);
+                                              kegiatanC.uploadImage(false);
                                             },
                                             icon: Icon(
                                               Icons.image_sharp,
@@ -275,7 +407,7 @@ class _StepperBodyState extends State<StepperBody> {
                                         TextButton.icon(
                                             // style: ,
                                             onPressed: () async {
-                                              inventarisC.uploadImage(true);
+                                              kegiatanC.uploadImage(true);
                                             },
                                             icon: Icon(
                                               Icons.camera,
@@ -290,7 +422,7 @@ class _StepperBodyState extends State<StepperBody> {
                                     ),
                             ));
                       });
-                  // inventarisC.inventarisage(image!);
+                  // kegiatanC.kegiatanage(image!);
                 },
               ),
               Opacity(
@@ -300,7 +432,7 @@ class _StepperBodyState extends State<StepperBody> {
                   enableInteractiveSelection: false,
                   // style: GoogleFonts.poppins(),
                   enabled: false,
-                  controller: inventarisC.urlController,
+                  controller: kegiatanC.urlController,
                 ),
               ),
               // Opacity(
@@ -310,13 +442,13 @@ class _StepperBodyState extends State<StepperBody> {
               //     enableInteractiveSelection: false,
               //     // style: GoogleFonts.poppins(),
               //     enabled: false,
-              //     controller: inventarisC.fotoController,
+              //     controller: kegiatanC.fotoController,
               //   ),
               // ),
               // ElevatedButton(
               //   onPressed: () {
-              //     inventarisC
-              //         .addInventaris(authController.firebaseUser.value.uid);
+              //     kegiatanC
+              //         .addkegiatan(authController.firebaseUser.value.uid);
               //   },
               //   child: text("Tambahkan",
               //       textColor: mkWhite, fontSize: textSizeMedium),
@@ -326,7 +458,7 @@ class _StepperBodyState extends State<StepperBody> {
               // ).center()
             ],
           ),
-          isActive: currStep == 1,
+          isActive: currStep == 2,
           state: StepState.disabled),
     ];
 
@@ -397,12 +529,12 @@ class _StepperBodyState extends State<StepperBody> {
               // Obx(
               //   () => GestureDetector(
               //     onTap: () async {
-              //       if (inventarisC.isSaving.value == false) {
+              //       if (kegiatanC.isSaving.value == false) {
               //         if (_formKey.currentState!.validate()) {
               //           // _formKey.currentState!.deactivate();
               //           // _formKey.currentState!.save();
               //           setState(() {});
-              //           await inventarisC.updateInventaris();
+              //           await kegiatanC.updatekegiatan();
               //           // setState(() {});
               //           // toast("Data Berhasil di Update");
 
@@ -419,13 +551,13 @@ class _StepperBodyState extends State<StepperBody> {
               //       height: 50,
               //       margin: EdgeInsets.all(10),
               //       decoration: boxDecoration(
-              //           bgColor: inventarisC.isSaving.value
+              //           bgColor: kegiatanC.isSaving.value
               //               ? mkColorPrimaryLight
               //               : mkColorPrimary,
               //           radius: 10),
               //       padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
               //       child: Center(
-              //         child: inventarisC.isSaving.value
+              //         child: kegiatanC.isSaving.value
               //             ? CircularProgressIndicator()
               //             : Text(mk_submit,
               //                 style: boldTextStyle(color: white, size: 18)),

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
-import 'package:mosq/screens/utils/MKStrings.dart';
-import 'package:nb_utils/nb_utils.dart';
 
-import '../../../main.dart';
+import 'package:mosq/main.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 
 class KegiatanCard extends StatelessWidget {
@@ -12,20 +10,26 @@ class KegiatanCard extends StatelessWidget {
     Key? key,
     required this.width,
     required this.dataKegiatan,
+    required this.openContainer,
   }) : super(key: key);
 
+  final VoidCallback? openContainer;
   final double width;
   final dataKegiatan;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      // openBuilder: (context, openContainer) => const DetailsPage(),
       margin: EdgeInsets.all(16),
       decoration: boxDecoration(
           radius: 16, showShadow: true, bgColor: appStore.scaffoldBackground),
       width: width,
       child: GestureDetector(
-        onTap: () => toast("Go To Kegiatan Detail"),
+        // onTap: () => toast("Go To Kegiatan Detail"),
+        onTap: () async {
+          // Get.toNamed(RouteName.detail_kegiatan);
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -53,7 +57,8 @@ class KegiatanCard extends StatelessWidget {
                       textColor: appStore.textPrimaryColor,
                       fontSize: textSizeLargeMedium,
                       fontFamily: fontMedium),
-                  text(mk_long_text, maxLine: 2, fontSize: textSizeSMedium),
+                  text(dataKegiatan.deskripsi,
+                      maxLine: 2, fontSize: textSizeSMedium),
                   Align(
                       alignment: Alignment.bottomRight,
                       child: text(

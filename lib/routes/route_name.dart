@@ -14,4 +14,6 @@ abstract class RouteName {
   static const inventaris = '/inventaris';
   static const detail_inventaris = '/detail_inventaris';
   static const edit_inventaris = '/edit_inventaris';
+  static const detail_kegiatan = '/detail_kegiatan';
+  static const new_kegiatan = '/new_kegiatan';
 }
