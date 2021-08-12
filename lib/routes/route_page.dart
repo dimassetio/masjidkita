@@ -6,7 +6,7 @@ import 'package:mosq/screens/MosqProfile.dart';
 import 'package:mosq/screens/PageListMasjid.dart';
 import 'package:mosq/screens/authentication/MKSignIn.dart';
 import 'package:mosq/screens/authentication/MKSignUp.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Form_Kegiatan.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/Form_Kegiatan.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/Form_Inventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Profile/Form_Profile.dart';

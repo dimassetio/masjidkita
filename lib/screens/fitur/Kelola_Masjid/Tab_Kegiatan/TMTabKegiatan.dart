@@ -5,7 +5,7 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppConstant.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/routes/route_name.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/DetailKegiatan.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/DetailKegiatan.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/widgets/KegiatanCard.dart';
 // import 'package:mosq/screens/widgets/KegiatanSlider.dart';
