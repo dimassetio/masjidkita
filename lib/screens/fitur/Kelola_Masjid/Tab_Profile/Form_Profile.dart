@@ -119,6 +119,7 @@ class _StepperBodyState extends State<StepperBody> {
             EditText(
               isEnabled: !manMasjidC.isSaving.value,
               mController: manMasjidC.deskripsi,
+              textInputAction: TextInputAction.newline,
               validator: (value) =>
                   (Validator(attributeName: mk_lbl_deskripsi, value: value)
                         ..required())
@@ -484,14 +485,6 @@ class _StepperBodyState extends State<StepperBody> {
                     ),
                   ),
                 ),
-                IconButton(
-                    onPressed: () {
-                      print(
-                          "COK ${Get.routing.current} ${RouteName.new_masjid}");
-
-                      print("GET ${Get.routing.current}");
-                    },
-                    icon: Icon(Icons.play_arrow)),
                 Obx(
                   () => GestureDetector(
                     onTap: () async {

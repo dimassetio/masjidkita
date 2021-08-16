@@ -1,13 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main/utils/AppConstant.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/main.dart';
 
 class CustomDelete extends StatelessWidget {
+  const CustomDelete({required this.titleName, required this.subtitleName});
+  final String titleName;
+  final String subtitleName;
   // final InventarisModel inventaris = InventarisModel();
   // CustomDelete(int index);
   @override
@@ -44,14 +49,14 @@ class CustomDelete extends StatelessWidget {
                   fit: BoxFit.cover),
             ),
             24.height,
-            Text('Hapus inventaris?',
+            Text('Hapus $titleName?',
                 style:
                     boldTextStyle(color: appStore.textPrimaryColor, size: 18)),
             16.height,
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: Text(
-                  "This will also permanently delete file inside the folder",
+                  "$titleName $subtitleName Akan dihapus permanen dari database, anda yakin?",
                   style:
                       secondaryTextStyle(color: appStore.textSecondaryColor)),
             ),
@@ -77,7 +82,7 @@ class CustomDelete extends StatelessWidget {
                                       child: Icon(Icons.close,
                                           color: Colors.blueAccent, size: 18))),
                               TextSpan(
-                                  text: "Cancel",
+                                  text: mk_lbl_batal,
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.blueAccent,
@@ -107,7 +112,7 @@ class CustomDelete extends StatelessWidget {
                                       child: Icon(Icons.delete,
                                           color: Colors.white, size: 18))),
                               TextSpan(
-                                  text: "Delete",
+                                  text: mk_lbl_delete,
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.white,
@@ -117,20 +122,7 @@ class CustomDelete extends StatelessWidget {
                         ),
                       ),
                     ).onTap(() async {
-                      // Database().deleteInventaris(
-                      //   inventaris.inventarisID,
-                      //   // inventaris.foto
-                      // );
-                      // inventarisC.deleteInventaris(
-                      //     inventarisC.inventaris.inventarisID);
-                      // inventarisC.inventariss.removeAt(index);
-
-                      await inventarisC.deleteInventaris(
-                          inventarisC.inventaris.inventarisID,
-                          inventarisC.inventaris.url);
-                      finish(context);
-
-                      return true;
+                      Get.back(result: true);
                     }),
                   )
                 ],

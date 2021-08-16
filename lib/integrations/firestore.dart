@@ -16,3 +16,4 @@ const usersCollection = "users";
 const masjidCollection = "masjid";
 const inventarisCollection = "inventaris";
 const kegiatanCollection = "kegiatan";
+const takmirCollection = "takmir";

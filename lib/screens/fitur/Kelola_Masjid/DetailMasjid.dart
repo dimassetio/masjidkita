@@ -20,7 +20,7 @@ import 'package:mosq/main.dart';
 
 import 'Tab_Kas/TMTabKas.dart';
 import 'Tab_Profile/TMTabProfile.dart';
-import 'Tab_Takmir/TMTabTakmir.dart';
+import 'Tab_Takmir/index.dart';
 import 'Tab_Inventaris/TMTabInventaris.dart';
 
 class KeMasjid extends StatelessWidget {
@@ -60,14 +60,14 @@ class KeMasjid extends StatelessWidget {
                   flexibleSpace: Obx(
                     () => FlexibleSpaceBar(
                       centerTitle: true,
-                      background: manMasjidC.deMasjid.photoUrl != ""
-                          ? CachedNetworkImage(
+                      background: manMasjidC.deMasjid.photoUrl.isEmptyOrNull
+                          ? Image.asset(mk_contoh_image, fit: BoxFit.cover)
+                          : CachedNetworkImage(
                               placeholder: placeholderWidgetFn() as Widget
                                   Function(BuildContext, String)?,
                               imageUrl: manMasjidC.deMasjid.photoUrl ?? "",
                               fit: BoxFit.cover,
-                            )
-                          : Image.asset(mk_contoh_image, fit: BoxFit.cover),
+                            ),
                       // Image.network(
                       //   manMasjidC.deMasjid.photoUrl ?? "",
                       //   fit: BoxFit.cover,

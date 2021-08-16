@@ -79,11 +79,15 @@ class ManMasjidController extends GetxController {
     // _setHaveMasjid();
   }
 
-  gotoDetail(mID) async {
+  gotoDetail(MasjidModel dataMasjid) async {
     try {
-      deMasjidModel.bindStream(streamDetailMasjid(mID));
+      // deMasjidModel.bindStream(streamDetailMasjid(mID));
+      deMasjid = dataMasjid;
+      takmirC.getTakmirStream(dataMasjid.id!);
+    } catch (e) {
+      toast(e.toString());
     } finally {
-      await isMyMasjid(mID);
+      await isMyMasjid(deMasjid.id!);
       await Get.toNamed(RouteName.detail);
     }
   }
@@ -143,6 +147,7 @@ class ManMasjidController extends GetxController {
       toast("Error Saving Data");
     } finally {
       clearControllers();
+      Get.back();
       toast("Data Berhasil Diperbarui");
       isSaving.value = false;
     }
@@ -227,13 +232,13 @@ class ManMasjidController extends GetxController {
 
   PickedFile? pickImage;
   String fileName = '', filePath = '';
-  final ImagePicker _picker = ImagePicker();
   String message = "Belum ada gambar";
   var downloadUrl = "".obs;
   var isLoadingImage = false.obs;
   PickedFile? pickedFile;
   var uploadPrecentage = 0.0.obs;
   XFile? pickedImage;
+  final ImagePicker _picker = ImagePicker();
 
   uploadImage(bool isCam) async {
     pickedImage = await manMasjidC.getImage(isCam);
@@ -287,5 +292,17 @@ class ManMasjidController extends GetxController {
     } else {
       toast('No Image Picked');
     }
+  }
+
+  deleteMasjid(masjidID) async {
+    try {
+      await firebaseFirestore
+          .collection(masjidCollection)
+          .doc(masjidID)
+          .delete();
+    } catch (e) {
+      return e.toString();
+    }
+    return 'Success deleted';
   }
 }

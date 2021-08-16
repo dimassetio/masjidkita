@@ -6,6 +6,7 @@ import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/models/inventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/widgets/DismissibleBackground.dart';
 // import 'package:mosq/screens/utils/MKImages.dart';
 // import 'package:mosq/screens/utils/MKConstant.dart';
 // import 'package:mosq/screens/utils/MKColors.dart';
@@ -43,58 +44,6 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
-  }
-
-  Widget slideRightBackground() {
-    return Container(
-      color: Colors.green,
-      child: Align(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            20.width,
-            Icon(
-              Icons.edit,
-              color: Colors.white,
-            ),
-            Text(
-              " Edit",
-              style: primaryTextStyle(
-                color: Colors.white,
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ],
-        ),
-        alignment: Alignment.centerLeft,
-      ),
-    );
-  }
-
-  Widget slideLeftBackground() {
-    return Container(
-      color: Colors.red,
-      child: Align(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Icon(
-              Icons.delete,
-              color: Colors.white,
-            ),
-            Text(
-              " Delete",
-              style: primaryTextStyle(
-                color: Colors.white,
-              ),
-              textAlign: TextAlign.right,
-            ),
-            20.width,
-          ],
-        ),
-        alignment: Alignment.centerRight,
-      ),
-    );
   }
 
   Widget generateItemList() {
@@ -149,14 +98,21 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                                   return res = await showDialog(
                                       context: context,
                                       builder: (BuildContext context) =>
-                                          CustomDelete());
+                                          CustomDelete(
+                                            titleName: 'Inventaris',
+                                            subtitleName: item.nama!,
+                                          ));
                                 } else
                                   res = false;
                                 return res;
                               },
                               onDismissed: (direction) {
-                                setState(() {
+                                setState(() async {
                                   inventarisC.inventariss.removeAt(index);
+                                  await inventarisC.deleteInventaris(
+                                      inventarisC.inventaris.inventarisID,
+                                      inventarisC.inventaris.url);
+                                  finish(context);
                                 });
                                 // if (direction == DismissDirection.startToEnd) {
                                 // ScaffoldMessengerState().showSnackBar(

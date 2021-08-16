@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/models/masjid.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
@@ -18,7 +19,7 @@ class MasjidCard2 extends StatelessWidget {
     required this.width,
   }) : super(key: key);
 
-  final dataMasjid;
+  final MasjidModel dataMasjid;
   final double width;
 
   @override
@@ -39,28 +40,27 @@ class MasjidCard2 extends StatelessWidget {
           child: Row(
             children: <Widget>[
               ClipRRect(
-                child:
-                    // dataMasjid.photoUrl != "" && dataMasjid.photoUrl != null
-                    //     ? CachedNetworkImage(
-                    //         placeholder: placeholderWidgetFn() as Widget Function(
-                    //             BuildContext, String)?,
-                    //         imageUrl: dataMasjid.photoUrl ?? "",
-                    //         width: width / 3,
-                    //         height: width / 3.2,
-                    //         fit: BoxFit.fill,
-                    //       )
-                    //     : Image.asset(
-                    //         mk_contoh_image,
-                    //         width: width / 3,
-                    //         height: width / 3.2,
-                    //         fit: BoxFit.fill,
-                    //       ),
-                    Image.asset(
-                  mk_contoh_image,
-                  width: width / 3,
-                  height: width / 3.2,
-                  fit: BoxFit.fill,
-                ),
+                child: dataMasjid.photoUrl != "" && dataMasjid.photoUrl != null
+                    ? CachedNetworkImage(
+                        placeholder: placeholderWidgetFn() as Widget Function(
+                            BuildContext, String)?,
+                        imageUrl: dataMasjid.photoUrl ?? "",
+                        width: width / 3,
+                        height: width / 3.2,
+                        fit: BoxFit.fill,
+                      )
+                    : Image.asset(
+                        mk_contoh_image,
+                        width: width / 3,
+                        height: width / 3.2,
+                        fit: BoxFit.fill,
+                      ),
+                //     Image.asset(
+                //   mk_contoh_image,
+                //   width: width / 3,
+                //   height: width / 3.2,
+                //   fit: BoxFit.fill,
+                // ),
                 borderRadius: BorderRadius.circular(10),
               ),
               Expanded(
@@ -101,7 +101,8 @@ class MasjidCard2 extends StatelessWidget {
                                   size: 25,
                                 ),
                                 onPressed: () {
-                                  toast("fitur on progress");
+                                  // manMasjidC.deleteMasjid(dataMasjid.id);
+                                  toast("On Progress");
                                 },
                               ),
                             ],

@@ -4,7 +4,6 @@ abstract class RouteName {
   static const mkdashboard = '/mkdashboard';
   static const list_masjid = '/list_masjid';
   static const home = '/home';
-  static const kelolamasjid = '/kelolamasjid';
   static const man_masjid = '/manajemen_masjid';
   static const new_masjid = '/new_masjid';
   static const detail = '/detail';
@@ -16,4 +15,6 @@ abstract class RouteName {
   static const edit_inventaris = '/edit_inventaris';
   static const detail_kegiatan = '/detail_kegiatan';
   static const new_kegiatan = '/new_kegiatan';
+  static const new_takmir = '/new_takmir';
+  static const edit_takmir = '/edit_takmir';
 }

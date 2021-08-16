@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/models/masjid.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/widgets/MasjidCarouselSlider.dart';
@@ -14,7 +15,7 @@ import '../../../main.dart';
 
 // ignore: must_be_immutable
 class MasjidSliderWidget extends StatelessWidget {
-  List mSliderList;
+  List<MasjidModel> mSliderList;
   bool infinite;
 
   MasjidSliderWidget(this.mSliderList, {this.infinite: true});
@@ -41,7 +42,7 @@ class MasjidSliderWidget extends StatelessWidget {
               width: Get.width,
               child: GestureDetector(
                 onTap: () async {
-                  manMasjidC.gotoDetail(slider.id);
+                  manMasjidC.gotoDetail(slider);
                   // await manMasjidC.getDetailMasjid(slider.id);
                   // Get.toNamed(RouteName.detail);
                 },

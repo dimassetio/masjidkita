@@ -5,6 +5,7 @@ import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/integrations/controllers.dart';
@@ -119,13 +120,10 @@ class _StepperBodyState extends State<StepperBody> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextFormField(
-              controller: inventarisC.kondisiController,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'ex: Baik',
-                labelText: 'Kondisi barang',
-              ),
+            child: EditText(
+              mController: inventarisC.kondisiController,
+              hint: 'Ex: baik',
+              label: 'Kondisi Barang',
               validator: (s) {
                 if (s!.trim().isEmpty)
                   return '$mk_lbl_kondisi_inventaris $mk_is_required';

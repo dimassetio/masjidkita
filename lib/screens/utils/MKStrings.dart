@@ -62,6 +62,8 @@ const mk_addjoin_desc =
 const mk_add = "Buat Baru";
 const mk_add_masjid = "Buat Masjid Baru";
 const mk_join = "Bergabung";
+const mk_add_takmir = "Tambah Takmir";
+const mk_edit_takmir = "Edit Takmir";
 
 const mk_masjid_fav = "Masjid Favorit";
 const mk_masjid_fav_null =
@@ -87,3 +89,10 @@ const mk_lbl_nama_kegiatan = "Nama Kegiatan";
 const mk_lbl_deskripsi_kegiatan = "Deskripsi";
 const mk_lbl_tanggal_kegiatan = "Tanggal";
 const mk_lbl_foto_kegiatan = "Foto";
+
+const mk_lbl_delete = "Hapus";
+const mk_lbl_edit = "Edit";
+
+const mk_lbl_foto_profil = "Foto Profil";
+const mk_lbl_profil = "Profil";
+const mk_lbl_jabatan = "Jabatan";

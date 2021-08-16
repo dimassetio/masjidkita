@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/models/inventaris.dart';
@@ -14,6 +15,7 @@ import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Profile/Form_Profile.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/DetailMasjid.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/TMTabInventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/detailInventaris.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Takmir/form_takmir.dart';
 import './route_name.dart';
 
 class AppPage {
@@ -34,14 +36,18 @@ class AppPage {
         page: () => PageListMasjid(),
         binding: ListMasjidBinding()),
     GetPage(
-      name: RouteName.kelolamasjid,
+      name: RouteName.detail,
       page: () => KeMasjid(),
-      // binding: KeMasjidBinding(),
+      // binding: DetailMasjidBinding(),
     ),
-    GetPage(name: RouteName.detail, page: () => KeMasjid()),
     GetPage(
         name: RouteName.inventaris,
         page: () => TMTabInventaris(InventarisModel())),
     GetPage(name: RouteName.detail_kegiatan, page: () => TMTabKegiatan()),
+    GetPage(name: RouteName.new_takmir, page: () => FormTakmir()),
+    GetPage(
+      name: RouteName.edit_takmir,
+      page: () => FormTakmir(),
+    ),
   ];
 }
