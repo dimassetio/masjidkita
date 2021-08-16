@@ -17,20 +17,25 @@ class InventarisCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-          color: appStore.scaffoldBackground,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () async {
-                  await inventarisC
-                      .getInventarisModel(inventaris.inventarisID ?? "");
-                  Get.toNamed(RouteName.detail_inventaris);
-                },
-                child: Row(
+        GestureDetector(
+          onTap: () async {
+            await inventarisC.getInventarisModel(inventaris.inventarisID ?? "");
+            Get.toNamed(RouteName.detail_inventaris);
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+            color: appStore.scaffoldBackground,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // GestureDetector(
+                //   onTap: () async {
+                //     await inventarisC
+                //         .getInventarisModel(inventaris.inventarisID ?? "");
+                //     Get.toNamed(RouteName.detail_inventaris);
+                //   },
+                Row(
                   children: <Widget>[
                     // CircleAvatar(
                     //   backgroundImage:
@@ -54,8 +59,9 @@ class InventarisCard extends StatelessWidget {
                     )
                   ],
                 ),
-              ),
-            ],
+                // ),
+              ],
+            ),
           ),
         ),
         Divider()

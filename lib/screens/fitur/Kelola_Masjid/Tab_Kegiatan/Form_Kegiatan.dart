@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:mosq/helpers/validator.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/integrations/controllers.dart';
@@ -150,18 +152,14 @@ class _StepperBodyState extends State<StepperBody> {
         content: Column(children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-            child: TextFormField(
-              controller: kegiatanC.namaController,
-              decoration: InputDecoration(
-                border: UnderlineInputBorder(),
-                hintText: 'ex: Istighosah',
-                labelText: 'Nama Kegiatan',
-              ),
-              validator: (s) {
-                if (s!.trim().isEmpty)
-                  return '$mk_lbl_nama_kegiatan $mk_is_required';
-                return null;
-              },
+            child: EditText(
+              mController: kegiatanC.namaController,
+              hint: mk_hint_nama_kegiatan,
+              label: mk_lbl_nama_kegiatan,
+              validator: (value) =>
+                  (Validator(attributeName: mk_lbl_nama_kegiatan, value: value)
+                        ..required())
+                      .getError(),
             ),
           ),
           SizedBox(
