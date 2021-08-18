@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/helpers/validator.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -19,6 +21,7 @@ class FormInventaris extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<FormState> _formKey = GlobalKey();
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
@@ -73,7 +76,6 @@ class _StepperBodyState extends State<StepperBody> {
   var currentStep = 0.obs;
   int get currStep => currentStep.value;
   set currStep(int value) => this.currentStep.value = value;
-  GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   void initState() {
@@ -106,7 +108,7 @@ class _StepperBodyState extends State<StepperBody> {
           // Padding(
           // padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           EditText(
-            fontSize: textSizeMedium,
+            fontSize: textSizeLargeMedium,
             mController: inventarisC.namaController,
             hint: mk_hint_nama_inventaris,
             label: mk_lbl_nama_inventaris,
@@ -119,6 +121,11 @@ class _StepperBodyState extends State<StepperBody> {
                 (Validator(attributeName: mk_lbl_nama_inventaris, value: value)
                       ..required())
                     .getError(),
+            isEnabled: !inventarisC.isSaving.value,
+            icon: Icon(Icons.dns,
+                color: inventarisC.isSaving.value
+                    ? mkColorPrimaryLight
+                    : mkColorPrimaryDark),
           ),
           // ),
           Padding(
@@ -131,12 +138,21 @@ class _StepperBodyState extends State<StepperBody> {
                       attributeName: mk_lbl_kondisi_inventaris, value: value)
                     ..required())
                   .getError(),
+              isEnabled: !inventarisC.isSaving.value,
+              icon: Icon(Icons.add_task,
+                  color: inventarisC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
               mController: inventarisC.hargaController,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                CurrrencyInputFormatter()
+              ],
               keyboardType: TextInputType.number,
               hint: mk_hint_harga_inventaris,
               label: mk_lbl_harga_inventaris,
@@ -144,12 +160,21 @@ class _StepperBodyState extends State<StepperBody> {
                       attributeName: mk_lbl_harga_inventaris, value: value)
                     ..required())
                   .getError(),
+              isEnabled: !inventarisC.isSaving.value,
+              icon: Icon(Icons.money,
+                  color: inventarisC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
               mController: inventarisC.jumlahController,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(4)
+              ],
               keyboardType: TextInputType.number,
               hint: mk_hint_jumlah_inventaris,
               label: mk_lbl_jumlah_inventaris,
@@ -157,6 +182,11 @@ class _StepperBodyState extends State<StepperBody> {
                       attributeName: mk_lbl_jumlah_inventaris, value: value)
                     ..required())
                   .getError(),
+              isEnabled: !inventarisC.isSaving.value,
+              icon: Icon(Icons.play_for_work,
+                  color: inventarisC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
             ),
           ),
         ]),
@@ -188,6 +218,7 @@ class _StepperBodyState extends State<StepperBody> {
                   enableInteractiveSelection: false,
                   // style: GoogleFonts.poppins(),
                   enabled: false,
+                  // enabled: !inventarisC.isSaving.value,
                   controller: inventarisC.fotoController,
                   decoration: InputDecoration(hintText: inventarisC.message),
                   // validator: (s) {

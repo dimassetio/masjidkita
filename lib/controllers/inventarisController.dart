@@ -18,12 +18,14 @@ class InventarisController extends GetxController {
   final TextEditingController kondisiController = TextEditingController();
   final TextEditingController fotoController = TextEditingController();
   final TextEditingController urlController = TextEditingController();
-  var hargaController = MoneyMaskedTextController(
-      precision: 3,
-      leftSymbol: 'Rp',
-      decimalSeparator: '.',
-      // initialValue: 0,
-      thousandSeparator: '.');
+  // var hargaController = MoneyMaskedTextController(
+  //     precision: 3,
+  //     leftSymbol: 'Rp',
+  //     decimalSeparator: '.',
+  //     // initialValue: 0,
+  //     thousandSeparator: '.');
+
+  var hargaController = TextEditingController();
 
   static InventarisController instance = Get.find();
 
@@ -37,7 +39,7 @@ class InventarisController extends GetxController {
     Map<String, dynamic> data = new HashMap();
     DateTime now = DateTime.now();
     String harga = hargaController.text;
-    String result = harga.replaceAll('Rp ', '');
+    String result = harga.replaceAll('Rp', '');
     String finalHarga = result.replaceAll('.', '');
     int price = finalHarga.toInt();
     int jumlah = jumlahController.text.toInt();
@@ -129,7 +131,7 @@ class InventarisController extends GetxController {
     Map<String, dynamic> data = new HashMap();
     DateTime now = DateTime.now();
     String harga = hargaController.text;
-    String result = harga.replaceAll('Rp ', '');
+    String result = harga.replaceAll('Rp', '');
     String finalHarga = result.replaceAll('.', '');
     int price = finalHarga.toInt();
     int jumlah = jumlahController.text.toInt();
