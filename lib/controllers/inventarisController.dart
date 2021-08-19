@@ -170,7 +170,7 @@ class InventarisController extends GetxController {
     // Get.back();
   }
 
-  deleteInventaris(inventarisID, url) async {
+  deleteInventaris(inventarisID, url) {
     try {
       firebaseFirestore
           .collection(masjidCollection)

@@ -362,7 +362,7 @@ class _StepperBodyState extends State<StepperBody> {
 
                           if (takmirC.photoLocal != null) {
                             await takmirC.uploadImage(
-                                takmirC.photoLocal, model.id ?? '');
+                                takmirC.photoLocal, model);
                           }
                           isSaving.value = false;
                           Get.back();

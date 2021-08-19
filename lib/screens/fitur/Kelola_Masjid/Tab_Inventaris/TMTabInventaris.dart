@@ -107,11 +107,14 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                               },
                               onDismissed: (direction) {
                                 setState(() async {
-                                  inventarisC.inventariss.removeAt(index);
-                                  await inventarisC.deleteInventaris(
-                                      inventarisC.inventaris.inventarisID,
-                                      inventarisC.inventaris.url);
-                                  finish(context);
+                                  // inventarisC.inventariss.removeAt(index);
+                                  try {
+                                    await inventarisC.deleteInventaris(
+                                        item.inventarisID, item.url);
+                                    // finish(context);
+                                  } catch (e) {
+                                    toast('Error Delete Data');
+                                  }
                                 });
                                 // if (direction == DismissDirection.startToEnd) {
                                 // ScaffoldMessengerState().showSnackBar(
