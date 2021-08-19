@@ -30,7 +30,8 @@ class AppPage {
     GetPage(name: RouteName.new_inventaris, page: () => FormInventaris()),
     GetPage(name: RouteName.new_kegiatan, page: () => FormKegiatan()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),
-    GetPage(name: RouteName.edit_inventaris, page: () => FormInventaris()),
+    GetPage(
+        name: RouteName.edit_inventaris + '/:id', page: () => FormInventaris()),
     GetPage(
         name: RouteName.list_masjid,
         page: () => PageListMasjid(),

@@ -180,7 +180,7 @@ class InventarisController extends GetxController {
     // Get.back();
   }
 
-  deleteInventaris(inventarisID, url) {
+  deleteInventaris(inventarisID, url) async {
     try {
       firebaseFirestore
           .collection(masjidCollection)
@@ -274,7 +274,6 @@ class InventarisController extends GetxController {
 
         if (event.state == TaskState.success) {
           downloadUrl.value = await refFeedBuckets.getDownloadURL();
-          urlController.text = downloadUrl.value;
           fotoController.text = fileName;
           // await firebaseFirestore
           //     .collection(masjidCollection)

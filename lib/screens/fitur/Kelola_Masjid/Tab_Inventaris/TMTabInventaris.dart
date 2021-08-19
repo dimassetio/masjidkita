@@ -56,12 +56,11 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
             () => inventarisC.inventariss.isEmpty
                 ? Container(
                     height: 200,
-                    child:
-                        // text("Masjid belum memiliki Inventaris")
-                        ElevatedButton(
-                      child: text("ew"),
-                      onPressed: inventarisC.tesBind(),
-                    ).center(),
+                    child: text("Masjid belum memiliki Inventaris").center(),
+                    //     ElevatedButton(
+                    //   child: text("ew"),
+                    //   onPressed: inventarisC.tesBind(),
+                    // )
                   )
                 : ListView.builder(
                     padding: EdgeInsets.symmetric(),

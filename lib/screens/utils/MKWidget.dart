@@ -21,6 +21,7 @@ class EditText extends StatefulWidget {
   var label;
   var maxLine;
   var isBordered;
+  var isReadOnly;
   String? Function(String?)? validator;
   TextEditingController? mController;
   AutovalidateMode? autovalidateMode;
@@ -50,6 +51,7 @@ class EditText extends StatefulWidget {
     var this.autovalidateMode = AutovalidateMode.onUserInteraction,
     var this.isBordered = false,
     var this.textInputAction = TextInputAction.next,
+    var this.isReadOnly = false,
   });
 
   @override
@@ -62,6 +64,7 @@ class EditTextState extends State<EditText> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: widget.isReadOnly,
       enabled: widget.isEnabled,
       autovalidateMode: widget.autovalidateMode,
       validator: widget.validator,

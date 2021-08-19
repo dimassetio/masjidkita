@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,72 +9,25 @@ import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:mosq/main.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:get/get.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/controllers/inventarisController.dart';
+import 'package:mosq/main.dart';
 
-class FormInventaris extends StatelessWidget {
-  static const tag = '/FormInventaris';
-
+class FormInventaris extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    GlobalKey<FormState> _formKey = GlobalKey();
-    return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: appStore.appBarColor,
-            leading: IconButton(
-              onPressed: () {
-                inventarisC.checkControllers()
-                    ? showDialog(
-                        context: Get.context!,
-                        builder: (BuildContext context) => ConfirmDialog(),
-                      )
-                    : finish(context);
-              },
-              icon: Icon(Icons.arrow_back,
-                  color: appStore.isDarkModeOn ? white : black),
-            ),
-            title: appBarTitleWidget(
-              context,
-              mk_add_inventaris,
-            ),
-            actions: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    inventarisC
-                        .addInventaris(authController.firebaseUser.value.uid);
-                  },
-                  child: Icon(
-                    Icons.check,
-                    size: 26.0,
-                    color: mkColorPrimary,
-                  ),
-                ),
-              )
-            ],
-            // actions: actions,
-          ),
-          // appBar: appBar(context, manMasjidC.deMasjid.nama ?? mk_add_masjid),
-          body: StepperBody()),
-    );
-  }
+  _FormInventarisState createState() => _FormInventarisState();
 }
 
-class StepperBody extends StatefulWidget {
-  @override
-  _StepperBodyState createState() => _StepperBodyState();
-}
-
-class _StepperBodyState extends State<StepperBody> {
+class _FormInventarisState extends State<FormInventaris> {
   var currentStep = 0.obs;
   int get currStep => currentStep.value;
   set currStep(int value) => this.currentStep.value = value;
+  GlobalKey<FormState> formKey = GlobalKey();
+
+  var isSaving = false.obs;
+
+  // GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   void initState() {
@@ -101,31 +53,28 @@ class _StepperBodyState extends State<StepperBody> {
 
   @override
   Widget build(BuildContext context) {
+    // GlobalKey<FormState> formKey = GlobalKey();
     List<Step> steps = [
       Step(
         title: Text("Data inventaris"),
         content: Column(children: <Widget>[
-          // Padding(
-          // padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          EditText(
-            fontSize: textSizeLargeMedium,
-            mController: inventarisC.namaController,
-            hint: mk_hint_nama_inventaris,
-            label: mk_lbl_nama_inventaris,
-            // validator: (s) {
-            //   if (s!.trim().isEmpty)
-            //     return '$mk_lbl_nama_inventaris $mk_is_required';
-            //   return null;
-            // },
-            validator: (value) =>
-                (Validator(attributeName: mk_lbl_nama_inventaris, value: value)
-                      ..required())
-                    .getError(),
-            isEnabled: !inventarisC.isSaving.value,
-            icon: Icon(Icons.dns,
-                color: inventarisC.isSaving.value
-                    ? mkColorPrimaryLight
-                    : mkColorPrimaryDark),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: EditText(
+              fontSize: textSizeLargeMedium,
+              mController: inventarisC.namaController,
+              hint: mk_hint_nama_inventaris,
+              label: mk_lbl_nama_inventaris,
+              validator: (value) => (Validator(
+                      attributeName: mk_lbl_nama_inventaris, value: value)
+                    ..required())
+                  .getError(),
+              isEnabled: !isSaving.value,
+              icon: Icon(Icons.dns,
+                  color: isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
+            ),
           ),
           // ),
           Padding(
@@ -138,9 +87,9 @@ class _StepperBodyState extends State<StepperBody> {
                       attributeName: mk_lbl_kondisi_inventaris, value: value)
                     ..required())
                   .getError(),
-              isEnabled: !inventarisC.isSaving.value,
+              isEnabled: !isSaving.value,
               icon: Icon(Icons.add_task,
-                  color: inventarisC.isSaving.value
+                  color: isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
@@ -160,9 +109,9 @@ class _StepperBodyState extends State<StepperBody> {
                       attributeName: mk_lbl_harga_inventaris, value: value)
                     ..required())
                   .getError(),
-              isEnabled: !inventarisC.isSaving.value,
+              isEnabled: !isSaving.value,
               icon: Icon(Icons.money,
-                  color: inventarisC.isSaving.value
+                  color: isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
@@ -182,9 +131,9 @@ class _StepperBodyState extends State<StepperBody> {
                       attributeName: mk_lbl_jumlah_inventaris, value: value)
                     ..required())
                   .getError(),
-              isEnabled: !inventarisC.isSaving.value,
+              isEnabled: !isSaving.value,
               icon: Icon(Icons.play_for_work,
-                  color: inventarisC.isSaving.value
+                  color: isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
@@ -196,8 +145,7 @@ class _StepperBodyState extends State<StepperBody> {
           title: Text("Foto"),
           content: Column(
             children: <Widget>[
-              Obx(() => inventarisC.inventaris.url != "" &&
-                      inventarisC.inventaris.url != null
+              Obx(() => inventarisC.downloadUrl.value != ""
                   ? Container(
                       alignment: Alignment.center,
                       child: CachedNetworkImage(
@@ -213,19 +161,24 @@ class _StepperBodyState extends State<StepperBody> {
                   : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                child: TextFormField(
-                  focusNode: FocusNode(),
-                  enableInteractiveSelection: false,
+                child: EditText(
+                  // focusNode: FocusNode(),
+                  // enableInteractiveSelection: false,
                   // style: GoogleFonts.poppins(),
-                  enabled: false,
-                  // enabled: !inventarisC.isSaving.value,
-                  controller: inventarisC.fotoController,
-                  decoration: InputDecoration(hintText: inventarisC.message),
+                  isReadOnly: true,
+                  // enabled: !isSaving.value,
+                  mController: inventarisC.fotoController,
+                  // decoration: InputDecoration(hintText: inventarisC.message),
                   // validator: (s) {
                   //   if (s!.trim().isEmpty)
                   //     return '$mk_lbl_foto_inventaris $mk_is_required';
                   //   return null;
                   // },
+                  hint: inventarisC.message,
+                  validator: (value) => (Validator(
+                          attributeName: mk_lbl_foto_inventaris, value: value)
+                        ..required())
+                      .getError(),
                 ),
               ),
               ElevatedButton(
@@ -352,111 +305,186 @@ class _StepperBodyState extends State<StepperBody> {
           isActive: currStep == 1,
           state: StepState.disabled),
     ];
-
     return SafeArea(
       child: Scaffold(
-        body: Theme(
-          data: ThemeData(colorScheme: mkColorScheme),
-          child: Column(
-            children: [
-              Expanded(
-                child: Stepper(
-                  steps: steps,
-                  type: StepperType.horizontal,
-                  currentStep: this.currStep,
-                  controlsBuilder: (BuildContext context,
-                      {VoidCallback? onStepContinue,
-                      VoidCallback? onStepCancel}) {
-                    return Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        currStep != 0
-                            ? TextButton(
-                                onPressed: onStepCancel,
-                                child: Text(mk_sebelum,
-                                    style: secondaryTextStyle(),
-                                    textAlign: TextAlign.start),
-                              )
-                            : 10.width,
-                        currStep < steps.length - 1
-                            ? TextButton(
-                                onPressed: onStepContinue,
-                                child: Text(mk_berikut,
-                                    style: secondaryTextStyle(),
-                                    textAlign: TextAlign.end),
-                              )
-                            : 10.width,
-                      ],
-                    );
-                  },
-                  onStepContinue: () {
-                    setState(() {
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: appStore.appBarColor,
+          leading: IconButton(
+            onPressed: () {
+              inventarisC.checkControllers()
+                  ? showDialog(
+                      context: Get.context!,
+                      builder: (BuildContext context) => ConfirmDialog(),
+                    )
+                  : finish(context);
+            },
+            icon: Icon(Icons.arrow_back,
+                color: appStore.isDarkModeOn ? white : black),
+          ),
+          title: appBarTitleWidget(
+            context,
+            mk_add_inventaris,
+          ),
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () async {
+                  if (isSaving.value == false) {
+                    if (formKey.currentState!.validate()) {
                       if (currStep < steps.length - 1) {
                         currStep = currStep + 1;
                       } else {
-                        //currStep = 0;
-                        finish(context);
-                      }
-                    });
-                  },
-                  onStepCancel: () {
-                    // finish(context);
-                    setState(() {
-                      if (currStep > 0) {
-                        currStep = currStep - 1;
-                      } else {
-                        currStep = 0;
-                      }
-                    });
-                  },
-                  onStepTapped: (step) {
-                    setState(() {
-                      currStep = step;
-                    });
-                  },
-                ),
-              ),
-              // Obx(
-              //   () => GestureDetector(
-              //     onTap: () async {
-              //       if (inventarisC.isSaving.value == false) {
-              //         if (_formKey.currentState!.validate()) {
-              //           // _formKey.currentState!.deactivate();
-              //           // _formKey.currentState!.save();
-              //           setState(() {});
-              //           await inventarisC.updateInventaris();
-              //           // setState(() {});
-              //           // toast("Data Berhasil di Update");
+                        isSaving.value = true;
+                        setState(() {});
+                        await inventarisC.addInventaris(
+                            authController.firebaseUser.value.uid);
 
-              //           Get.back();
-              //           // maninvenmk_lbl_nama_inventarisC.clearControllers();
-              //         } else {
-              //           _formKey.currentState!.validate();
-              //         }
-              //       }
-              //       // finish(context);
-              //     },
-              //     child: Container(
-              //       width: MediaQuery.of(context).size.width,
-              //       height: 50,
-              //       margin: EdgeInsets.all(10),
-              //       decoration: boxDecoration(
-              //           bgColor: inventarisC.isSaving.value
-              //               ? mkColorPrimaryLight
-              //               : mkColorPrimary,
-              //           radius: 10),
-              //       padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-              //       child: Center(
-              //         child: inventarisC.isSaving.value
-              //             ? CircularProgressIndicator()
-              //             : Text(mk_submit,
-              //                 style: boldTextStyle(color: white, size: 18)),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ],
+                        isSaving.value = false;
+                      }
+                    } else {
+                      formKey.currentState!.validate();
+                    }
+                  }
+                },
+                child: isSaving.value
+                    ? Container(
+                        padding: EdgeInsets.all(13),
+                        width: 55.0,
+                        child: CircularProgressIndicator())
+                    : Icon(
+                        Icons.check,
+                        size: 26.0,
+                        color: mkColorPrimary,
+                      ),
+              ),
+            )
+          ],
+          // actions: actions,
+        ),
+        // appBar: appBar(context, manMasjidC.deMasjid.nama ?? mk_add_masjid),
+        body: Theme(
+          data: ThemeData(colorScheme: mkColorScheme),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Stepper(
+                    steps: steps,
+                    type: StepperType.horizontal,
+                    currentStep: this.currStep,
+                    controlsBuilder: (BuildContext context,
+                        {VoidCallback? onStepContinue,
+                        VoidCallback? onStepCancel}) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          currStep != 0
+                              ? TextButton(
+                                  onPressed: onStepCancel,
+                                  child: Text(mk_sebelum,
+                                      style: secondaryTextStyle(),
+                                      textAlign: TextAlign.start),
+                                )
+                              : 10.width,
+                          currStep < steps.length - 1
+                              ? TextButton(
+                                  // onPressed: () {
+                                  //   if(formKey.currentState!.validate(),
+                                  //   onStepContinue;
+                                  // }
+                                  onPressed: onStepContinue,
+                                  child: Text(mk_berikut,
+                                      style: secondaryTextStyle(),
+                                      textAlign: TextAlign.end),
+                                )
+                              : 10.width,
+                        ],
+                      );
+                    },
+                    onStepContinue: () {
+                      if (formKey.currentState!.validate()) {
+                        setState(() {
+                          if (currStep < steps.length - 1) {
+                            currStep = currStep + 1;
+                          } else {
+                            //currStep = 0;
+                            finish(context);
+                          }
+                        });
+                      }
+                      // setState(() {
+                      //   if (currStep < steps.length - 1) {
+                      //     currStep = currStep + 1;
+                      //   } else {
+                      //     //currStep = 0;
+                      //     finish(context);
+                      //   }
+                      // }
+                      // );
+                    },
+                    onStepCancel: () {
+                      // finish(context);
+                      setState(() {
+                        if (currStep > 0) {
+                          currStep = currStep - 1;
+                        } else {
+                          currStep = 0;
+                        }
+                      });
+                    },
+                    onStepTapped: (step) {
+                      setState(() {
+                        currStep = step;
+                      });
+                    },
+                  ),
+                ),
+                // Obx(
+                //   () => GestureDetector(
+                //     onTap: () async {
+                //       if (isSaving.value == false) {
+                //         if (formKey.currentState!.validate()) {
+                //           // formKey.currentState!.deactivate();
+                //           // formKey.currentState!.save();
+                //           setState(() {});
+                //           await inventarisC.addInventaris(
+                //               authController.firebaseUser.value.uid);
+                //           // setState(() {});
+                //           // toast("Data Berhasil di Update");
+
+                //           Get.back();
+                //           // maninvenmk_lbl_nama_inventarisC.clearControllers();
+                //         } else {
+                //           formKey.currentState!.validate();
+                //         }
+                //       }
+                //       // finish(context);
+                //     },
+                //     child: Container(
+                //       width: MediaQuery.of(context).size.width,
+                //       height: 50,
+                //       margin: EdgeInsets.all(10),
+                //       decoration: boxDecoration(
+                //           bgColor: isSaving.value
+                //               ? mkColorPrimaryLight
+                //               : mkColorPrimary,
+                //           radius: 10),
+                //       padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                //       child: Center(
+                //         child: isSaving.value
+                //             ? CircularProgressIndicator()
+                //             : Text(mk_submit,
+                //                 style: boldTextStyle(color: white, size: 18)),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),
