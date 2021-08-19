@@ -387,8 +387,8 @@ class _StepperBodyState extends State<StepperBody> {
                     ),
                     builder: (builder) {
                       return ImageSourceBottomSheet(
-                        isLoading: manMasjidC.isLoadingImage.value,
-                        uploadPrecentage: manMasjidC.uploadPrecentage.value,
+                        isLoading: manMasjidC.isLoadingImage,
+                        uploadPrecentage: manMasjidC.uploadPrecentage,
                         isSaving: manMasjidC.isSaving.value,
                         fromCamera: () {
                           manMasjidC.uploadImage(true);

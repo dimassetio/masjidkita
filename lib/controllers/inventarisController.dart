@@ -18,12 +18,6 @@ class InventarisController extends GetxController {
   final TextEditingController kondisiController = TextEditingController();
   final TextEditingController fotoController = TextEditingController();
   final TextEditingController urlController = TextEditingController();
-  // var hargaController = MoneyMaskedTextController(
-  //     precision: 3,
-  //     leftSymbol: 'Rp',
-  //     decimalSeparator: '.',
-  //     // initialValue: 0,
-  //     thousandSeparator: '.');
 
   var hargaController = TextEditingController();
 
@@ -67,10 +61,26 @@ class InventarisController extends GetxController {
               .collection(inventarisCollection)
               .doc(docID)
               .update(data);
+    } on SocketException catch (_) {
+      showDialog(
+          context: Get.context!,
+          builder: (context) => AlertDialog(
+                title: Text("Connection Error !"),
+                content: Text("Please connect to the internet."),
+              ));
+      toast("value");
     } catch (e) {
       print(e);
-      rethrow;
+      toast("Error Saving Data");
+    } finally {
+      clearControllers();
+      toast("Data Berhasil Diperbarui");
+      isSaving.value = false;
     }
+    // catch (e) {
+    //   print(e);
+    //   rethrow;
+    // }
     clearController();
     Get.back(); // Get.toNamed(RouteName.kelolamasjid);
   }
@@ -90,10 +100,6 @@ class InventarisController extends GetxController {
 
   set inventaris(InventarisModel value) => this._inventarisModel.value = value;
 
-  // void getInventaris(inventarisID) async {
-  //   inventaris = await Database().getInventaris(inventarisID);
-  //   // inventarisList.bindStream(Database().inventarisStream());
-  // }
   getInventarisModel(inventarisID) async {
     try {
       // print(mID);
@@ -110,22 +116,6 @@ class InventarisController extends GetxController {
       _inventarisModel.value = InventarisModel();
     }
   }
-  // Future<InventarisModel> getInventaris(String inventarisID) async {
-  //   DocumentSnapshot doc = await firebaseFirestore
-  //       .collection("inventaris")
-  //       .doc(inventarisID)
-  //       .get();
-  //   return InventarisModel.fromDocumentSnapshot(doc);
-  //   // try {
-  //   //   DocumentSnapshot doc = await firebaseFirestore
-  //   //       .collection("inventaris")
-  //   //       .doc(inventarisID)
-  //   //       .get();
-  //   //   return InventarisModel.fromDocumentSnapshot();
-  //   // } catch (e) {
-  //   //   print(e);
-  //   // }
-  // }
 
   updateInventaris() async {
     Map<String, dynamic> data = new HashMap();

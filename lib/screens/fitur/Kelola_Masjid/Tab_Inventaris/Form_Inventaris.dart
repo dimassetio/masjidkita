@@ -21,7 +21,7 @@ class FormInventaris extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> _formKey = GlobalKey();
+    // GlobalKey<FormState> _formKey = GlobalKey();
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(

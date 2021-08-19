@@ -61,71 +61,53 @@ class TakmirCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: Key(dataTakmir.id!),
-      direction: manMasjidC.myMasjid.value
-          ? DismissDirection.horizontal
-          : DismissDirection.none,
-      background: slideRightBackground(),
-      secondaryBackground: slideLeftBackground(),
-      confirmDismiss: (direction) async {
-        if (direction == DismissDirection.startToEnd) {
-          Get.toNamed(RouteName.edit_takmir, arguments: dataTakmir);
-          return false;
-        } else if (direction == DismissDirection.endToStart) {
-          // toast("Delete data");
-          return await showDialog(
-              context: context,
-              builder: (BuildContext context) => CustomDelete(
-                    titleName: 'Takmir',
-                    subtitleName: dataTakmir.nama!,
-                  ));
-        }
-      },
-      onDismissed: (direction) async {
-        try {
-          takmirC.delete(dataTakmir, manMasjidC.deMasjid.id!);
-        } catch (e) {
-          toast('Error Delete Data');
-          rethrow;
-        }
-      },
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
-            color: appStore.scaffoldBackground,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    CircleAvatar(
-                      // backgroundImage:
-                      //     CachedNetworkImageProvider(mk_net_img),
-                      radius: MediaQuery.of(context).size.width * 0.08,
-                    ),
-                    SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        text(dataTakmir.nama,
-                            textColor: appStore.textPrimaryColor,
-                            fontFamily: fontMedium),
-                        SizedBox(width: 4),
-                        text(dataTakmir.jabatan,
-                            textColor: appStore.textSecondaryColor),
-                      ],
-                    )
-                  ],
-                ),
-              ],
+    return Column(children: [
+      Dismissible(
+          key: Key(dataTakmir.id!),
+          direction: manMasjidC.myMasjid.value
+              ? DismissDirection.horizontal
+              : DismissDirection.none,
+          background: slideRightBackground(),
+          secondaryBackground: slideLeftBackground(),
+          confirmDismiss: (direction) async {
+            if (direction == DismissDirection.startToEnd) {
+              Get.toNamed(RouteName.edit_takmir, arguments: dataTakmir);
+              return false;
+            } else if (direction == DismissDirection.endToStart) {
+              // toast("Delete data");
+              return await showDialog(
+                  context: context,
+                  builder: (BuildContext context) => CustomDelete(
+                        titleName: 'Takmir',
+                        subtitleName: dataTakmir.nama ?? "",
+                      ));
+            }
+          },
+          onDismissed: (direction) async {
+            try {
+              takmirC.delete(dataTakmir, manMasjidC.deMasjid.id!);
+            } catch (e) {
+              toast('Error Delete Data');
+              rethrow;
+            }
+          },
+          child: ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            leading: CircleAvatar(
+              backgroundImage: AssetImage(mk_profile_pic),
+              foregroundImage:
+                  CachedNetworkImageProvider(dataTakmir.photoUrl ?? ""),
+              backgroundColor: mkColorPrimary,
+              radius: MediaQuery.of(context).size.width * 0.08,
             ),
-          ),
-          Divider()
-        ],
-      ),
-    );
+            onTap: () =>
+                Get.toNamed(RouteName.detail_takmir, arguments: dataTakmir),
+            title: text(dataTakmir.nama,
+                textColor: appStore.textPrimaryColor, fontFamily: fontMedium),
+            subtitle: text(dataTakmir.jabatan,
+                textColor: appStore.textSecondaryColor),
+          )),
+      Divider()
+    ]);
   }
 }

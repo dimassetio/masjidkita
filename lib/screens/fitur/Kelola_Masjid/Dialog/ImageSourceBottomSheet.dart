@@ -14,8 +14,8 @@ class ImageSourceBottomSheet extends StatelessWidget {
     required this.fromGaleri,
     required this.fromCamera,
   });
-  final bool isLoading;
-  final double uploadPrecentage;
+  final RxBool isLoading;
+  final RxDouble uploadPrecentage;
   final bool isSaving;
   final void Function() fromGaleri;
   final void Function() fromCamera;
@@ -26,7 +26,7 @@ class ImageSourceBottomSheet extends StatelessWidget {
         height: 250.0,
         padding: EdgeInsets.all(16),
         child: Obx(
-          () => isLoading
+          () => isLoading.value
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,9 +42,7 @@ class ImageSourceBottomSheet extends StatelessWidget {
                     LinearProgressIndicator(
                       color: mkColorPrimary,
                       valueColor: AlwaysStoppedAnimation<Color>(mkColorPrimary),
-                      value: uploadPrecentage,
-                      // semanticsLabel:
-                      //     '${(manMasjidC.uploadPrecentage.value * 100).toInt()}%',
+                      value: uploadPrecentage.value,
                     ),
                     text("${(uploadPrecentage * 100).toInt()} %"),
                   ],
