@@ -4,19 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
-import 'package:mosq/models/inventaris.dart';
 import 'package:mosq/models/takmir.dart';
 import 'package:get/get.dart';
-import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:uuid/uuid.dart';
 
 class TakmirController extends GetxController {
-  var isSaving = false.obs;
-  final TextEditingController namaC = TextEditingController();
-  final TextEditingController jabatanC = TextEditingController();
   String? photoUrlC;
 
   XFile? photoLocal;
@@ -84,6 +78,7 @@ class TakmirController extends GetxController {
 
   Future updateTakmir(TakmirModel model, String masjidID) async {
     await collections(masjidID).doc(model.id).set(getData(model));
+    return model.id;
   }
 
   Future delete(TakmirModel model, String masjidID) async {
@@ -93,7 +88,9 @@ class TakmirController extends GetxController {
   getImage(bool isCam) async {
     photoLocal = await _picker.pickImage(
         source: isCam ? ImageSource.camera : ImageSource.gallery);
-    if (photoLocal != null) photoPath = photoLocal!.path;
+    if (photoLocal != null) {
+      photoPath = photoLocal!.path;
+    }
     Get.back();
   }
 
@@ -119,39 +116,34 @@ class TakmirController extends GetxController {
       uploadTask.snapshotEvents.listen((event) async {
         print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
         uploadPrecentage.value = event.bytesTransferred / event.totalBytes;
-        // if (event.state == TaskState.running) {
 
-        // }
         if (event.state == TaskState.success) {
           photoUrlC = await pathStorage.getDownloadURL();
-          updateTakmir(
-              TakmirModel(photoUrl: photoUrlC), manMasjidC.deMasjid.id!);
+          updateTakmir(TakmirModel(photoUrl: photoUrlC, id: takmirID),
+              manMasjidC.deMasjid.id!);
           // await collections(manMasjidC.deMasjid.id!)
           //     .doc(deMasjid.id)
           //     .update({'photoUrl': photoUrlC});
-          // isLoadingImage.value = false;
-          Get.back();
-        } else {
-          isLoadingImage.value = true;
-        }
+          isLoadingImage.value = false;
+        } else {}
       });
     } else {
       toast('No Image Picked');
     }
   }
 
-  checkControllers(TakmirModel data) {
-    if (namaC.text != data.nama ||
-        jabatanC.text != data.jabatan ||
-        photoLocal != null) {
-      return true;
-    } else
-      return false;
-  }
+  // checkControllers(TakmirModel data) {
+  //   if (namaC.text != data.nama ||
+  //       jabatanC.text != data.jabatan ||
+  //       photoLocal != null) {
+  //     return true;
+  //   } else
+  //     return false;
+  // }
 
   clearControllers() {
-    namaC.clear();
-    jabatanC.clear();
+    // namaC.clear();
+    // jabatanC.clear();
     photoUrlC = null;
     jabatan = "";
     photoLocal = null;

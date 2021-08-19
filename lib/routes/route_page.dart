@@ -15,6 +15,7 @@ import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Profile/Form_Profile.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/DetailMasjid.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/TMTabInventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/detailInventaris.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Takmir/detail.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Takmir/form_takmir.dart';
 import './route_name.dart';
 
@@ -39,13 +40,13 @@ class AppPage {
     GetPage(
       name: RouteName.detail,
       page: () => KeMasjid(),
-      // binding: DetailMasjidBinding(),
     ),
     GetPage(
         name: RouteName.inventaris,
         page: () => TMTabInventaris(InventarisModel())),
     GetPage(name: RouteName.detail_kegiatan, page: () => TMTabKegiatan()),
     GetPage(name: RouteName.new_takmir, page: () => FormTakmir()),
+    GetPage(name: RouteName.detail_takmir, page: () => DetailTakmir()),
     GetPage(
       name: RouteName.edit_takmir,
       page: () => FormTakmir(),

@@ -1,6 +1,7 @@
 // import 'dart:math';
 
 import 'dart:io';
+import 'dart:collection';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,16 +16,18 @@ import 'package:mosq/models/inventaris.dart';
 import 'package:mosq/models/takmir.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 
+import 'package:image_picker/image_picker.dart';
+
 class FormTakmir extends StatelessWidget {
-  final TakmirModel? dataTakmir = Get.arguments;
+  final TakmirModel dataTakmir = Get.arguments;
   static const tag = '/FormTakmir';
 
   @override
@@ -76,23 +79,34 @@ class _StepperBodyState extends State<StepperBody> {
   var currentStep = 0.obs;
   int get currStep => currentStep.value;
   set currStep(int value) => this.currentStep.value = value;
+
   GlobalKey<FormState> _formKey = GlobalKey();
+
   List<String> jabatanList = ['Ketua', 'Sekretaris', 'Bendahara', 'Lainnya'];
   String? jabatan;
-  bool isEdit = Get.currentRoute == RouteName.edit_takmir ? true : false;
+  var isOtherJabatan = false.obs;
+
+  bool isEdit = Get.currentRoute == RouteName.edit_takmir;
+  var isSaving = false.obs;
+
+  final TextEditingController namaC = TextEditingController();
+  final TextEditingController jabatanC = TextEditingController();
+  XFile? pickedImage;
 
   TakmirModel dataTakmir = Get.arguments;
-  // =
-  //  TakmirModel(id: "", jabatan: "", nama: "", photoUrl: "");
+
   @override
   void initState() {
     super.initState();
     if (isEdit == true) {
-      takmirC.namaC.text = dataTakmir.nama ?? "";
-      takmirC.jabatanC.text = dataTakmir.jabatan ?? "";
-      takmirC.jabatan = dataTakmir.jabatan ?? "";
+      namaC.text = dataTakmir.nama ?? "";
+      jabatanC.text = dataTakmir.jabatan ?? "";
       takmirC.photoUrlC = dataTakmir.photoUrl ?? "";
+      jabatanList.contains(dataTakmir.jabatan)
+          ? jabatan = dataTakmir.jabatan ?? ""
+          : jabatan = "Lainnya";
     }
+    jabatan == 'Lainnya' ? isOtherJabatan.value = true : null;
   }
 
   @override
@@ -114,8 +128,8 @@ class _StepperBodyState extends State<StepperBody> {
         content: Column(
           children: [
             EditText(
-              isEnabled: !takmirC.isSaving.value,
-              mController: takmirC.namaC,
+              isEnabled: !isSaving.value,
+              mController: namaC,
               validator: (value) =>
                   (Validator(attributeName: mk_lbl_nama, value: value)
                         ..required())
@@ -123,7 +137,7 @@ class _StepperBodyState extends State<StepperBody> {
               // inputFormatters: [CurrrencyInputFormatter()],
               label: mk_lbl_nama,
               icon: Icon(Icons.person,
-                  color: takmirC.isSaving.value
+                  color: isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
@@ -134,25 +148,26 @@ class _StepperBodyState extends State<StepperBody> {
                       .getError(),
               style: primaryTextStyle(color: appStore.textPrimaryColor),
               alignment: Alignment.centerLeft,
-              value: jabatanList.contains(takmirC.jabatanC.text)
-                  ? takmirC.jabatanC.text
-                  : jabatan,
+              value: jabatan,
               decoration: InputDecoration(
                 labelText: mk_lbl_jabatan,
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_lbl_enter + mk_lbl_jabatan,
                 icon: Icon(Icons.person,
-                    color: takmirC.isSaving.value
+                    color: isSaving.value
                         ? mkColorPrimaryLight
                         : mkColorPrimaryDark),
               ),
               dropdownColor: appStore.appBarColor,
-              onChanged: takmirC.isSaving.value
+              onChanged: isSaving.value
                   ? null
                   : (String? newValue) {
                       setState(() {
-                        takmirC.jabatanC.text = newValue ?? "";
+                        jabatan = newValue ?? "";
+                        jabatan == 'Lainnya'
+                            ? isOtherJabatan.value = true
+                            : isOtherJabatan.value = false;
                       });
                     },
               items: jabatanList.map<DropdownMenuItem<String>>((String value) {
@@ -166,22 +181,22 @@ class _StepperBodyState extends State<StepperBody> {
                 );
               }).toList(),
             ),
-            jabatanList.contains(takmirC.jabatanC.text) == false ||
-                    takmirC.jabatanC.text == 'Lainnya'
+            // !jabatanList.contains(jabatanC.text) ||
+            isOtherJabatan.value
                 ? EditText(
-                    isEnabled: !takmirC.isSaving.value,
-                    mController: takmirC.jabatanC,
+                    isEnabled: !isSaving.value,
+                    mController: jabatanC,
                     validator: (value) =>
                         (Validator(attributeName: mk_lbl_jabatan, value: value)
                               ..required())
                             .getError(),
                     label: mk_lbl_jabatan + ' lainnya',
                     icon: Icon(Icons.person,
-                        color: takmirC.isSaving.value
+                        color: isSaving.value
                             ? mkColorPrimaryLight
                             : mkColorPrimaryDark),
                   )
-                : SizedBox()
+                : SizedBox(),
           ],
         ),
       ),
@@ -190,40 +205,24 @@ class _StepperBodyState extends State<StepperBody> {
           isActive: currStep == 3,
           state: StepState.indexed,
           content: Column(children: [
-            Container(
-              height: 200,
-              width: 200,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Obx(() => takmirC.photoPath.isNotEmpty
-                        ? Image.file(
-                            File(takmirC.photoPath),
-                            fit: BoxFit.cover,
-                          )
-                        : takmirC.photoUrlC.isEmptyOrNull
-                            ? Container(
-                                color: mkTextColorGrey.withOpacity(0.3),
-                                child: Icon(
-                                  Icons.person,
-                                  size: 200,
-                                  color: mkTextColorGrey,
-                                ),
-                              )
-                            : SizedBox()
-                    // CachedNetworkImage(
-                    //   placeholder: placeholderWidgetFn() as Widget
-                    //       Function(BuildContext, String)?,
-                    //   imageUrl: dataTakmir.photoUrl ?? "",
-                    //   fit: BoxFit.cover,
-                    // )
-                    ),
-              ),
+            CircleAvatar(
+              backgroundImage: AssetImage(mk_profile_pic),
+              child: isEdit && !dataTakmir.photoUrl.isEmptyOrNull
+                  ? Container(
+                      decoration: BoxDecoration(
+                          color: mkColorAccent,
+                          borderRadius: BorderRadius.circular(100),
+                          image: DecorationImage(
+                              image: CachedNetworkImageProvider(
+                                  dataTakmir.photoUrl ?? ""),
+                              fit: BoxFit.cover)),
+                    )
+                  : null,
+              foregroundImage: FileImage(File(takmirC.photoPath)),
+              backgroundColor: mkColorPrimary,
+              radius: 100,
             ),
-            // Obx(() => takmirC.uploadPrecentage.value > 0.0
-            //     ? LinearProgressIndicator(
-            //         value: takmirC.uploadPrecentage.value,
-            //       )
-            //     : SizedBox()),
+            16.height,
             ElevatedButton(
               child: text("Upload Foto", textColor: mkWhite),
               onPressed: () {
@@ -236,14 +235,23 @@ class _StepperBodyState extends State<StepperBody> {
                     ),
                     builder: (builder) {
                       return ImageSourceBottomSheet(
-                        isLoading: takmirC.isLoadingImage.value,
-                        uploadPrecentage: takmirC.uploadPrecentage.value,
-                        isSaving: takmirC.isSaving.value,
+                        isLoading: takmirC.isLoadingImage,
+                        uploadPrecentage: takmirC.uploadPrecentage,
+                        isSaving: isSaving.value,
                         fromCamera: () {
                           takmirC.getImage(true);
+                          FocusScopeNode currentFocus = FocusScope.of(context);
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
                         },
-                        fromGaleri: () {
-                          takmirC.getImage(false);
+                        fromGaleri: () async {
+                          await takmirC.getImage(false);
+                          if (takmirC.photoLocal != null) {}
+                          FocusScopeNode currentFocus = FocusScope.of(context);
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
                         },
                       );
                     });
@@ -265,7 +273,7 @@ class _StepperBodyState extends State<StepperBody> {
           data: ThemeData(colorScheme: mkColorScheme),
           child: Form(
             key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
+            // autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               children: [
                 Expanded(
@@ -282,7 +290,7 @@ class _StepperBodyState extends State<StepperBody> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            // text("Saving = ${takmirC.isSaving}"),
+                            // text("Saving = ${isSaving}"),
 
                             currStep != 0
                                 ? TextButton(
@@ -335,29 +343,29 @@ class _StepperBodyState extends State<StepperBody> {
                 Obx(
                   () => GestureDetector(
                     onTap: () async {
-                      if (takmirC.isSaving.value == false) {
+                      if (isSaving.value == false) {
                         if (_formKey.currentState!.validate()) {
-                          // _formKey.currentState!.deactivate();
-                          // _formKey.currentState!.save();
-                          takmirC.isSaving.value = true;
+                          isSaving.value = true;
                           setState(() {});
                           TakmirModel model = TakmirModel(
-                              id: isEdit ? dataTakmir.id : null,
-                              jabatan: takmirC.jabatanC.text,
-                              nama: takmirC.namaC.text,
-                              photoUrl: takmirC.photoPath);
-                          isEdit
+                            id: isEdit ? dataTakmir.id : null,
+                            jabatan:
+                                jabatan == 'Lainnya' ? jabatanC.text : jabatan,
+                            nama: namaC.text,
+                          );
+
+                          model.id = isEdit
                               ? await takmirC.updateTakmir(
                                   model, manMasjidC.deMasjid.id!)
-                              : model.id = await takmirC.store(
+                              : await takmirC.store(
                                   model, manMasjidC.deMasjid.id!);
 
-                          // if (takmirC.photoLocal != null) {
-                          //   await takmirC.uploadImage(
-                          //       takmirC.photoLocal, model.id ?? 'Error');
-                          // }
-                          takmirC.isSaving.value = false;
-                          // Get.back();
+                          if (takmirC.photoLocal != null) {
+                            await takmirC.uploadImage(
+                                takmirC.photoLocal, model.id ?? '');
+                          }
+                          isSaving.value = false;
+                          Get.back();
                           // setState(() {});
                           // toast("Data Berhasil di Update");
 
@@ -373,13 +381,13 @@ class _StepperBodyState extends State<StepperBody> {
                       height: 50,
                       margin: EdgeInsets.all(10),
                       decoration: boxDecoration(
-                          bgColor: takmirC.isSaving.value
+                          bgColor: isSaving.value
                               ? mkColorPrimaryLight
                               : mkColorPrimary,
                           radius: 10),
                       padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                       child: Center(
-                        child: takmirC.isSaving.value
+                        child: isSaving.value
                             ? CircularProgressIndicator()
                             : Text(mk_submit,
                                 style: boldTextStyle(color: white, size: 18)),
