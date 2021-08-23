@@ -7,12 +7,13 @@ import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:mosq/main/utils/shimmer/shimmer.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:nb_utils/nb_utils.dart';
 // import 'package:mosq/integrations/utils/common.dart';
 import 'package:mosq/main.dart';
 
 import 'AppColors.dart';
-import 'AppConstant.dart';
+
 import 'clusteringGoogleMaps/lat_lang_geohash.dart';
 
 Widget text(
@@ -223,7 +224,7 @@ AppBar appBar(BuildContext context, String title,
 String convertDate(date) {
   try {
     return date != null
-        ? DateFormat(dateFormat).format(DateTime.parse(date))
+        ? DateFormat('MM dd yyyy').format(DateTime.parse(date))
         : '';
   } catch (e) {
     print(e);
@@ -259,13 +260,13 @@ Widget placeholderWidget() => Shimmer.fromColors(
     highlightColor: appStore.isDarkModeOn ? Colors.white12 : Colors.grey[100],
     child: Image.asset('images/LikeButton/image/grey.jpg', fit: BoxFit.cover));
 
-BoxConstraints dynamicBoxConstraints({double? maxWidth}) {
-  return BoxConstraints(maxWidth: maxWidth ?? applicationMaxWidth);
-}
+// BoxConstraints dynamicBoxConstraints({double? maxWidth}) {
+//   return BoxConstraints(maxWidth: maxWidth ?? applicationMaxWidth);
+// }
 
-double dynamicWidth(BuildContext context) {
-  return isMobile ? context.width() : applicationMaxWidth;
-}
+// double dynamicWidth(BuildContext context) {
+//   return isMobile ? context.width() : applicationMaxWidth;
+// }
 
 /*class ContainerX extends StatelessWidget {
   static String tag = '/ContainerX';
@@ -289,69 +290,69 @@ double dynamicWidth(BuildContext context) {
   }
 }*/
 
-String? getBannerAdUnitId() {
-  if (kReleaseMode) {
-    if (Platform.isIOS) {
-      return bannerAdIdForIos;
-    } else if (Platform.isAndroid) {
-      return bannerAdIdForAndroidRelease;
-    }
-  } else {
-    if (Platform.isIOS) {
-      return bannerAdIdForIos;
-    } else if (Platform.isAndroid) {
-      return bannerAdIdForAndroid;
-    }
-  }
-  return null;
-}
+// String? getBannerAdUnitId() {
+//   if (kReleaseMode) {
+//     if (Platform.isIOS) {
+//       return bannerAdIdForIos;
+//     } else if (Platform.isAndroid) {
+//       return bannerAdIdForAndroidRelease;
+//     }
+//   } else {
+//     if (Platform.isIOS) {
+//       return bannerAdIdForIos;
+//     } else if (Platform.isAndroid) {
+//       return bannerAdIdForAndroid;
+//     }
+//   }
+//   return null;
+// }
 
-String? getInterstitialAdUnitId() {
-  if (kReleaseMode) {
-    if (Platform.isIOS) {
-      return interstitialAdIdForIos;
-    } else if (Platform.isAndroid) {
-      return InterstitialAdIdForAndroidRelease;
-    }
-  } else {
-    if (Platform.isIOS) {
-      return interstitialAdIdForIos;
-    } else if (Platform.isAndroid) {
-      return InterstitialAdIdForAndroid;
-    }
-  }
-  return null;
-}
+// String? getInterstitialAdUnitId() {
+//   if (kReleaseMode) {
+//     if (Platform.isIOS) {
+//       return interstitialAdIdForIos;
+//     } else if (Platform.isAndroid) {
+//       return InterstitialAdIdForAndroidRelease;
+//     }
+//   } else {
+//     if (Platform.isIOS) {
+//       return interstitialAdIdForIos;
+//     } else if (Platform.isAndroid) {
+//       return InterstitialAdIdForAndroid;
+//     }
+//   }
+//   return null;
+// }
 
 String parseHtmlString(String? htmlString) {
   return parse(parse(htmlString).body!.text).documentElement!.text;
 }
 
-class ContainerX extends StatelessWidget {
-  final Widget? mobile;
-  final Widget? web;
-  final bool? useFullWidth;
+// class ContainerX extends StatelessWidget {
+//   final Widget? mobile;
+//   final Widget? web;
+//   final bool? useFullWidth;
 
-  ContainerX({this.mobile, this.web, this.useFullWidth});
+//   ContainerX({this.mobile, this.web, this.useFullWidth});
 
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        if (constraints.device == DeviceSize.mobile) {
-          return mobile ?? SizedBox();
-        } else {
-          return Container(
-            alignment: Alignment.topCenter,
-            child: Container(
-              constraints: useFullWidth.validate()
-                  ? null
-                  : dynamicBoxConstraints(maxWidth: context.width() * 0.9),
-              child: web ?? SizedBox(),
-            ),
-          );
-        }
-      },
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return LayoutBuilder(
+//       builder: (_, constraints) {
+//         if (constraints.device == DeviceSize.mobile) {
+//           return mobile ?? SizedBox();
+//         } else {
+//           return Container(
+//             alignment: Alignment.topCenter,
+//             child: Container(
+//               constraints: useFullWidth.validate()
+//                   ? null
+//                   : dynamicBoxConstraints(maxWidth: context.width() * 0.9),
+//               child: web ?? SizedBox(),
+//             ),
+//           );
+//         }
+//       },
+//     );
+//   }
+// }

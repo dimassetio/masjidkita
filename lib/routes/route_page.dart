@@ -10,7 +10,8 @@ import 'package:mosq/screens/authentication/MKSignUp.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/Form_Kegiatan.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/Form_Inventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Profile/Form_Profile.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Profile/create.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Profile/edit.dart';
 // import 'package:mosq/screens/PageSiMasjid.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/DetailMasjid.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/TMTabInventaris.dart';
@@ -22,12 +23,12 @@ import './route_name.dart';
 class AppPage {
   static final pages = [
     GetPage(name: RouteName.home, page: () => MosqDashboard()),
-    GetPage(name: RouteName.sign_in, page: () => T5SignIn()),
-    GetPage(name: RouteName.sign_up, page: () => T5SignUp()),
+    GetPage(name: RouteName.sign_in, page: () => MKSignIn()),
+    GetPage(name: RouteName.sign_up, page: () => MKSignUp()),
     GetPage(name: RouteName.profile, page: () => MosqProfile()),
-    GetPage(name: RouteName.form_profile + '/:id', page: () => FormProfile()),
+    GetPage(name: RouteName.form_profile + '/:id', page: () => EditProfile()),
     GetPage(name: RouteName.mkdashboard, page: () => PageListMasjid()),
-    GetPage(name: RouteName.new_masjid, page: () => FormProfile()),
+    GetPage(name: RouteName.new_masjid, page: () => NewProfile()),
     GetPage(name: RouteName.new_inventaris, page: () => FormInventaris()),
     GetPage(name: RouteName.new_kegiatan, page: () => FormKegiatan()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),

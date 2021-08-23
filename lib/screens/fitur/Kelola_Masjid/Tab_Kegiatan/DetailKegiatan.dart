@@ -1,9 +1,10 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/main/utils/AppConstant.dart';
+
 import 'package:mosq/integrations/controllers.dart';
 
 class DetailsPage extends StatelessWidget {
@@ -54,7 +55,7 @@ class _DetailsListTile extends StatelessWidget {
         color: appStore.appBarColor,
         child: Row(
           children: [
-            Image.network(SampleImageUrl, height: height, fit: BoxFit.cover)
+            Image.network(mk_net_img, height: height, fit: BoxFit.cover)
                 .expand(),
             Expanded(
               child: Padding(

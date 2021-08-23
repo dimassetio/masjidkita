@@ -1,12 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/main/utils/dots_indicator/dots_indicator.dart';
 
 import '../../main.dart';
 import 'MKConstant.dart';
+
+class DropDownMenu extends StatefulWidget {
+  var label;
+  var value;
+  bool? isSaving;
+  bool? isOtherValue;
+  Icon? icon;
+  List<String> valueList;
+  String? Function(String?)? validator;
+  void Function(String?)? onChanged;
+
+  DropDownMenu({
+    required this.label,
+    required this.value,
+    required this.valueList,
+    var this.validator,
+    var this.icon,
+    var this.onChanged,
+    var this.isSaving = false,
+    var this.isOtherValue = false,
+  });
+
+  @override
+  _DropDownMenuState createState() => _DropDownMenuState();
+}
+
+class _DropDownMenuState extends State<DropDownMenu> {
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField<String>(
+      validator: widget.validator,
+      style: primaryTextStyle(color: appStore.textPrimaryColor),
+      alignment: Alignment.centerLeft,
+      value: widget.value,
+      decoration: InputDecoration(
+        labelText: widget.label,
+        hintStyle: secondaryTextStyle(),
+        labelStyle: secondaryTextStyle(),
+        hintText: mk_lbl_enter + widget.label,
+        icon: widget.icon,
+      ),
+      dropdownColor: appStore.appBarColor,
+      onChanged:
+          // widget.isSaving!
+          //     ? null
+          //     :
+          (String? newValue) {
+        setState(() {
+          widget.value = newValue ?? "Cok";
+          // widget.value == mk_lbl_lainnya
+          //     ? widget.isOtherValue = true
+          //     : widget.isOtherValue = false;
+        });
+      },
+      items: widget.valueList.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Tooltip(
+              message: value,
+              child: Container(
+                  margin: EdgeInsets.only(left: 4, right: 4),
+                  child: Text(value, style: primaryTextStyle()))),
+        );
+      }).toList(),
+    );
+  }
+}
 
 // ignore: must_be_immutable
 class EditText extends StatefulWidget {
@@ -379,7 +448,6 @@ Row rowHeading(var label) {
     ],
   );
 }
-
 
 // Widget checkbox(String title, bool? boolValue) {
 //   return Row(

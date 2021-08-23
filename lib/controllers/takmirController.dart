@@ -99,7 +99,7 @@ class TakmirController extends GetxController {
       Reference pathStorage = firebaseStorage
           .ref()
           .child(masjidCollection)
-          .child(manMasjidC.deMasjid.id!)
+          .child(authController.user.masjid!)
           .child(takmirCollection)
           .child(takmir.id ?? "");
       var file = File(pickImage.path);
@@ -120,8 +120,8 @@ class TakmirController extends GetxController {
         if (event.state == TaskState.success) {
           photoUrlC = await pathStorage.getDownloadURL();
           takmir.photoUrl = photoUrlC;
-          updateTakmir(takmir, manMasjidC.deMasjid.id!);
-          // await collections(manMasjidC.deMasjid.id!)
+          updateTakmir(takmir, authController.user.masjid!);
+          // await collections(authController.user.masjid!)
           //     .doc(deMasjid.id)
           //     .update({'photoUrl': photoUrlC});
           isLoadingImage.value = false;

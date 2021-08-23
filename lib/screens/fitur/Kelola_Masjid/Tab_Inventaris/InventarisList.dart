@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mosq/controllers/inventarisController.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/main/utils/AppConstant.dart';
+
 import 'package:mosq/models/inventaris.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/main.dart';
 import 'package:get/get.dart';
 import 'package:mosq/routes/route_name.dart';
+import 'package:mosq/screens/utils/MKConstant.dart';
 
 class InventarisCard extends StatelessWidget {
   final InventarisModel inventaris;

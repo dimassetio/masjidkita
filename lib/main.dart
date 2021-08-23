@@ -7,12 +7,12 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/screens/MosqDashboard.dart';
+import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main/store/AppStore.dart';
 import 'package:mosq/main/utils/AppTheme.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'integrations/controllers.dart';
-import 'main/utils/AppConstant.dart';
 import 'routes/route_page.dart';
 //endregion
 

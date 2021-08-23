@@ -17,17 +17,17 @@ import 'package:firebase_storage/firebase_storage.dart';
 class ManMasjidController extends GetxController {
   static ManMasjidController instance = Get.find();
 
-  TextEditingController nama = TextEditingController();
-  TextEditingController alamat = TextEditingController();
-  TextEditingController photoUrl = TextEditingController();
-  TextEditingController deskripsi = TextEditingController();
-  TextEditingController kecamatan = TextEditingController();
-  TextEditingController kodePos = TextEditingController();
-  TextEditingController kota = TextEditingController();
-  TextEditingController provinsi = TextEditingController();
-  TextEditingController tahun = TextEditingController();
-  TextEditingController luasTanah = TextEditingController();
-  TextEditingController luasBangunan = TextEditingController();
+  // TextEditingController nama = TextEditingController();
+  // TextEditingController alamat = TextEditingController();
+  // TextEditingController photoUrl = TextEditingController();
+  // TextEditingController deskripsi = TextEditingController();
+  // TextEditingController kecamatan = TextEditingController();
+  // TextEditingController kodePos = TextEditingController();
+  // TextEditingController kota = TextEditingController();
+  // TextEditingController provinsi = TextEditingController();
+  // TextEditingController tahun = TextEditingController();
+  // TextEditingController luasTanah = TextEditingController();
+  // TextEditingController luasBangunan = TextEditingController();
 
   String? legalitas;
   String? statusTanah;
@@ -40,7 +40,6 @@ class ManMasjidController extends GetxController {
   MasjidModel get deMasjid => deMasjidModel.value;
   set deMasjid(MasjidModel value) => this.deMasjidModel.value = value;
 
-  var haveMasjid = false.obs;
   var myMasjid = false.obs;
   var isSaving = false.obs;
 
@@ -92,48 +91,54 @@ class ManMasjidController extends GetxController {
     }
   }
 
-  addMasjidToFirestore(Map<String, dynamic> data) async {
+  Map<String, dynamic> getData(MasjidModel model) {
+    return {
+      'id': model.id,
+      'nama': model.nama,
+      'alamat': model.alamat,
+      'photoUrl': model.photoUrl,
+      'deskripsi': model.deskripsi,
+      'kecamatan': model.kecamatan,
+      'kodePos': model.kodePos,
+      'kota': model.kota,
+      'provinsi': model.provinsi,
+      'tahun': model.tahun,
+      'luasTanah': model.luasTanah,
+      'luasBangunan': model.luasBangunan,
+      'statusTanah': model.statusTanah,
+      'legalitas': model.legalitas,
+    };
+  }
+
+  addMasjidToFirestore(MasjidModel data) async {
     await firebaseFirestore
         .collection(masjidCollection)
         .doc(authController.user.id)
-        .set(data);
+        .set(getData(data));
     await firebaseFirestore
         .collection(usersCollection)
         .doc(authController.user.id)
         .update({
       "masjid": authController.user.id,
     });
+    listMasjidC.addFav(authController.user.id);
   }
 
   var count = 0.obs;
 
-  Future updateDataMasjid() async {
-    Map<String, dynamic> data = new HashMap();
-    data['nama'] = nama.text;
-    data["alamat"] = alamat.text;
-    data["photoUrl"] = photoUrl.text;
-    data["deskripsi"] = deskripsi.text;
-    data["kecamatan"] = kecamatan.text;
-    data["kodePos"] = kodePos.text;
-    data["kota"] = kota.text;
-    data["provinsi"] = provinsi.text;
-    data["tahun"] = tahun.text;
-    data["luasTanah"] = luasTanah.text;
-    data["luasBangunan"] = luasBangunan.text;
-    if (statusTanah != null) data["statusTanah"] = statusTanah;
-    if (legalitas != null) data["legalitas"] = legalitas;
-
-    print("data = $data");
+  Future updateDataMasjid(MasjidModel model) async {
     isSaving.value = true;
     print(Get.parameters['id']);
     String? docID = Get.parameters['id'];
+    print(getData(model));
     try {
       docID == null
-          ? await addMasjidToFirestore(data)
+          ? await addMasjidToFirestore(model)
           : await firebaseFirestore
               .collection(masjidCollection)
               .doc(docID)
-              .update(data);
+              .update(getData(model));
+      uploadToStorage();
     } on SocketException catch (_) {
       showDialog(
           context: Get.context!,
@@ -147,13 +152,9 @@ class ManMasjidController extends GetxController {
       toast("Error Saving Data");
     } finally {
       clearControllers();
-      Get.back();
       toast("Data Berhasil Diperbarui");
       isSaving.value = false;
     }
-
-    // await _getManMasjidModel(deMasjid);
-    // await getDetailMasjid(deMasjid.id);
   }
 
   // getDetailMasjid(mID) async {
@@ -197,34 +198,34 @@ class ManMasjidController extends GetxController {
   }
 
   clearControllers() {
-    nama.clear();
-    alamat.clear();
-    deskripsi.clear();
-    kecamatan.clear();
-    kodePos.clear();
-    kota.clear();
-    provinsi.clear();
-    tahun.clear();
-    luasTanah.clear();
-    luasBangunan.clear();
+    // nama.clear();
+    // alamat.clear();
+    // deskripsi.clear();
+    // kecamatan.clear();
+    // kodePos.clear();
+    // kota.clear();
+    // provinsi.clear();
+    // tahun.clear();
+    // luasTanah.clear();
+    // luasBangunan.clear();
     statusTanah = null;
     legalitas = null;
     // photo_url.clear();
   }
 
   checkControllers() {
-    if (nama.text != deMasjid.nama ||
-        alamat.text != deMasjid.alamat ||
-        deskripsi.text != deMasjid.deskripsi ||
-        kecamatan.text != deMasjid.kecamatan ||
-        kodePos.text != deMasjid.kodePos ||
-        kota.text != deMasjid.kota ||
-        provinsi.text != deMasjid.provinsi ||
-        tahun.text != deMasjid.tahun ||
-        luasTanah.text != deMasjid.luasTanah ||
-        luasBangunan.text != deMasjid.luasBangunan ||
-        statusTanah != null ||
-        legalitas != null) {
+    if (
+        // nama.text != deMasjid.nama ||
+        //   alamat.text != deMasjid.alamat ||
+        //   deskripsi.text != deMasjid.deskripsi ||
+        //   kecamatan.text != deMasjid.kecamatan ||
+        //   kodePos.text != deMasjid.kodePos ||
+        //   kota.text != deMasjid.kota ||
+        //   provinsi.text != deMasjid.provinsi ||
+        //   tahun.text != deMasjid.tahun ||
+        //   luasTanah.text != deMasjid.luasTanah ||
+        //   luasBangunan.text != deMasjid.luasBangunan ||
+        statusTanah != null || legalitas != null) {
       return true;
     } else
       return false;
@@ -238,26 +239,31 @@ class ManMasjidController extends GetxController {
   PickedFile? pickedFile;
   var uploadPrecentage = 0.0.obs;
   XFile? pickedImage;
+  var photoPath = "".obs;
+
   final ImagePicker _picker = ImagePicker();
 
   uploadImage(bool isCam) async {
     pickedImage = await manMasjidC.getImage(isCam);
-    await uploadToStorage(pickedImage);
+    // await uploadToStorage(pickedImage);
   }
 
   Future getImage(bool isCam) async {
-    return pickedImage = await _picker.pickImage(
+    pickedImage = await _picker.pickImage(
         source: isCam ? ImageSource.camera : ImageSource.gallery);
+    if (pickedImage != null) {
+      photoPath.value = pickedImage!.path;
+    }
   }
 
-  Future uploadToStorage(XFile? pickImage) async {
-    if (pickImage != null) {
-      fileName = pickImage.name;
-      filePath = pickImage.path;
+  Future uploadToStorage() async {
+    if (pickedImage != null) {
+      fileName = pickedImage!.name;
+      filePath = pickedImage!.path;
       Reference refFeedBuckets = firebaseStorage
           .ref()
           .child(masjidCollection)
-          .child(deMasjid.id!)
+          .child(authController.user.id!)
           .child("Foto Profil");
       var file = File(filePath);
       final metadata = SettableMetadata(
@@ -278,20 +284,21 @@ class ManMasjidController extends GetxController {
         // }
         if (event.state == TaskState.success) {
           downloadUrl.value = await refFeedBuckets.getDownloadURL();
-          photoUrl.text = downloadUrl.value;
+          // photoUrl.text = downloadUrl.value;
           await firebaseFirestore
               .collection(masjidCollection)
-              .doc(deMasjid.id)
+              .doc(authController.user.id)
               .update({'photoUrl': downloadUrl.value});
           isLoadingImage.value = false;
-          Get.back();
+          print('$downloadUrl sss');
         } else {
           isLoadingImage.value = true;
         }
       });
-    } else {
-      toast('No Image Picked');
     }
+    // else {
+    // toast('No Image Picked');
+    // }
   }
 
   deleteMasjid(masjidID) async {
