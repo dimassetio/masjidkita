@@ -91,8 +91,11 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                                       .inventariss[index].inventarisID);
                                   res = false;
                                 } finally {
-                                  Get.toNamed(RouteName.edit_inventaris +
-                                      '/${inventarisC.inventaris.inventarisID}');
+                                  Get.toNamed(
+                                      RouteName.edit_inventaris +
+                                          '/${inventarisC.inventaris.inventarisID}',
+                                      arguments:
+                                          inventarisC.inventariss[index]);
                                 }
                               } else if (direction ==
                                   DismissDirection.endToStart) {

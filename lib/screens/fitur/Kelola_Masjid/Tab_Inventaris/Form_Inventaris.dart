@@ -35,34 +35,56 @@ class _FormInventarisState extends State<FormInventaris> {
   InventarisModel dataInventaris = Get.arguments;
   // GlobalKey<FormState> formKey = GlobalKey();
 
+  final TextEditingController namaController = TextEditingController();
+  final TextEditingController jumlahController = TextEditingController();
+  final TextEditingController kondisiController = TextEditingController();
+  final TextEditingController fotoController = TextEditingController();
+  final TextEditingController urlController = TextEditingController();
+  var hargaController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     if (Get.parameters['id'] != null) {
-      inventarisC.namaController.text = inventarisC.inventaris.nama ?? "";
-      inventarisC.kondisiController.text = inventarisC.inventaris.kondisi ?? "";
-      inventarisC.fotoController.text = inventarisC.inventaris.foto ?? "";
-      inventarisC.urlController.text = inventarisC.inventaris.url ?? "";
-      inventarisC.hargaController.text =
-          inventarisC.inventaris.harga.toString();
-      inventarisC.jumlahController.text =
-          inventarisC.inventaris.jumlah.toString();
+      namaController.text = dataInventaris.nama ?? "";
+      kondisiController.text = dataInventaris.kondisi ?? "";
+      fotoController.text = dataInventaris.foto ?? "";
+      urlController.text = dataInventaris.url ?? "";
+      hargaController.text = dataInventaris.harga.toString();
+      jumlahController.text = dataInventaris.jumlah.toString();
     }
-    // if (isEdit == true) {
-    //   inventarisC.namaController.text = dataInventaris.nama ?? "";
-    //   inventarisC.kondisiController.text = dataInventaris.kondisi ?? "";
-    //   inventarisC.fotoController.text = dataInventaris.foto ?? "";
-    //   inventarisC.urlController.text = dataInventaris.url ?? "";
-    //   inventarisC.hargaController.text = dataInventaris.harga.toString();
-    //   inventarisC.jumlahController.text = dataInventaris.jumlah.toString();
-    // }
+    if (isEdit == true) {}
+  }
+
+  checkControllers() {
+    if (isEdit) {
+      if (namaController.text != dataInventaris.nama ||
+          jumlahController.text != dataInventaris.jumlah.toString() ||
+          kondisiController.text != dataInventaris.kondisi ||
+          // fotoController.text != inventaris.foto ||
+          // urlController.text != inventaris.url ||
+          hargaController.text != dataInventaris.harga.toString()) {
+        return true;
+      } else
+        return false;
+    } else {
+      if (namaController.text != "" ||
+          jumlahController.text != "" ||
+          kondisiController.text != "" ||
+          // fotoController.text != inventaris.foto ||
+          // urlController.text != inventaris.url ||
+          hargaController.text != "") {
+        return true;
+      } else
+        return false;
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
-    inventarisC.clearControllers();
     inventarisC.downloadUrl.value = "";
+    inventarisC.photoPath = "";
   }
 
   @override
@@ -76,7 +98,7 @@ class _FormInventarisState extends State<FormInventaris> {
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
               fontSize: textSizeLargeMedium,
-              mController: inventarisC.namaController,
+              mController: namaController,
               hint: mk_hint_nama_inventaris,
               label: mk_lbl_nama_inventaris,
               validator: (value) => (Validator(
@@ -94,7 +116,7 @@ class _FormInventarisState extends State<FormInventaris> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
-              mController: inventarisC.kondisiController,
+              mController: kondisiController,
               hint: mk_hint_kondisi_inventaris,
               label: mk_lbl_kondisi_inventaris,
               validator: (value) => (Validator(
@@ -111,7 +133,8 @@ class _FormInventarisState extends State<FormInventaris> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
-              mController: inventarisC.hargaController,
+              textAlign: TextAlign.end,
+              mController: hargaController,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 CurrrencyInputFormatter()
@@ -133,7 +156,8 @@ class _FormInventarisState extends State<FormInventaris> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
-              mController: inventarisC.jumlahController,
+              textAlign: TextAlign.end,
+              mController: jumlahController,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(4)
@@ -159,20 +183,20 @@ class _FormInventarisState extends State<FormInventaris> {
           title: Text("Foto"),
           content: Column(
             children: <Widget>[
-              Obx(() => inventarisC.downloadUrl.value != ""
-                  ? Container(
-                      alignment: Alignment.center,
-                      child: CachedNetworkImage(
-                        width: Get.width - 40,
-                        placeholder: placeholderWidgetFn() as Widget Function(
-                            BuildContext, String)?,
-                        imageUrl: inventarisC.downloadUrl.value.isEmpty
-                            ? inventarisC.inventaris.url.toString()
-                            : inventarisC.downloadUrl.value,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
+              // Obx(() => inventarisC.downloadUrl.value != ""
+              //     ? Container(
+              //         alignment: Alignment.center,
+              //         child: CachedNetworkImage(
+              //           width: Get.width - 40,
+              //           placeholder: placeholderWidgetFn() as Widget Function(
+              //               BuildContext, String)?,
+              //           imageUrl: inventarisC.downloadUrl.value.isEmpty
+              //               ? inventarisC.inventaris.url.toString()
+              //               : inventarisC.downloadUrl.value,
+              //           fit: BoxFit.cover,
+              //         ),
+              //       )
+              //     : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
               // CircleAvatar(
               //   backgroundImage: AssetImage(mk_profile_pic),
               //   child: isEdit && !dataInventaris.url.isEmptyOrNull
@@ -190,45 +214,56 @@ class _FormInventarisState extends State<FormInventaris> {
               //   backgroundColor: mkColorPrimary,
               //   radius: 100,
               // ),
-              // ClipRRect(
-              //   borderRadius: BorderRadius.circular(15.0),
-              //   child: isEdit && !dataInventaris.url.isEmptyOrNull
-              //       ? Container(
-              //           height: 200,
-              //           width: 200,
-              //           decoration: BoxDecoration(
-              //               color: mkColorAccent,
-              //               borderRadius: BorderRadius.circular(10),
-              //               image: DecorationImage(
-              //                   image: AssetImage(mk_login),
-              //                   // CachedNetworkImageProvider(
-              //                   //     dataInventaris.url ?? ""),
-              //                   fit: BoxFit.cover)),
-              //         )
-              //       : null,
-              // ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                child: EditText(
-                  // focusNode: FocusNode(),
-                  // enableInteractiveSelection: false,
-                  // style: GoogleFonts.poppins(),
-                  isReadOnly: true,
-                  // enabled: !isSaving.value,
-                  mController: inventarisC.fotoController,
-                  // decoration: InputDecoration(hintText: inventarisC.message),
-                  // validator: (s) {
-                  //   if (s!.trim().isEmpty)
-                  //     return '$mk_lbl_foto_inventaris $mk_is_required';
-                  //   return null;
-                  // },
-                  hint: inventarisC.message,
-                  // validator: (value) => (Validator(
-                  //         attributeName: mk_lbl_foto_inventaris, value: value)
-                  //       ..required())
-                  //     .getError(),
+
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(bottom: 16),
+                decoration: boxDecoration(
+                    radius: 10.0, showShadow: true, color: mkColorPrimary),
+                width: 300,
+                height: 300,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  child: Obx(() => inventarisC.photoPath != ""
+                      ? Image.file(File(inventarisC.photoPath))
+                      : isEdit
+                          ? inventarisC.inventaris.url != "" &&
+                                  inventarisC.inventaris.url != null
+                              ? CachedNetworkImage(
+                                  placeholder: placeholderWidgetFn() as Widget
+                                      Function(BuildContext, String)?,
+                                  imageUrl: inventarisC.inventaris.url ?? "",
+                                  fit: BoxFit.cover,
+                                )
+                              : text('Belum Ada Gambar',
+                                  fontSize: textSizeSMedium)
+                          : text('Belum Ada Gambar',
+                              fontSize: textSizeSMedium)),
                 ),
               ),
+
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+              //   child: EditText(
+              //     // focusNode: FocusNode(),
+              //     // enableInteractiveSelection: false,
+              //     // style: GoogleFonts.poppins(),
+              //     isReadOnly: true,
+              //     // enabled: !isSaving.value,
+              //     mController: fotoController,
+              //     // decoration: InputDecoration(hintText: inventarisC.message),
+              //     // validator: (s) {
+              //     //   if (s!.trim().isEmpty)
+              //     //     return '$mk_lbl_foto_inventaris $mk_is_required';
+              //     //   return null;
+              //     // },
+              //     hint: inventarisC.message,
+              //     // validator: (value) => (Validator(
+              //     //         attributeName: mk_lbl_foto_inventaris, value: value)
+              //     //       ..required())
+              //     //     .getError(),
+              //   ),
+              // ),
               ElevatedButton(
                 child: text("Upload Foto",
                     textColor: mkWhite, fontSize: textSizeSMedium),
@@ -273,7 +308,7 @@ class _FormInventarisState extends State<FormInventaris> {
                   enableInteractiveSelection: false,
                   // style: GoogleFonts.poppins(),
                   enabled: false,
-                  controller: inventarisC.urlController,
+                  controller: urlController,
                 ),
               ),
               // Opacity(
@@ -309,7 +344,7 @@ class _FormInventarisState extends State<FormInventaris> {
           backgroundColor: appStore.appBarColor,
           leading: IconButton(
             onPressed: () {
-              inventarisC.checkControllers()
+              checkControllers()
                   ? showDialog(
                       context: Get.context!,
                       builder: (BuildContext context) => ConfirmDialog(),
@@ -333,11 +368,22 @@ class _FormInventarisState extends State<FormInventaris> {
                 onTap: () async {
                   if (isSaving.value == false) {
                     if (formKey.currentState!.validate()) {
+                      int jumlah = jumlahController.text.toInt();
+                      int harga = hargaController.text
+                          .replaceAll('Rp', '')
+                          .replaceAll('.', '')
+                          .toInt();
                       InventarisModel model = InventarisModel(
-                        inventarisID:
-                            isEdit ? dataInventaris.inventarisID : null,
-                        nama: inventarisC.namaController.text,
-                      );
+                          inventarisID: isEdit
+                              ? inventarisC.inventaris.inventarisID
+                              : null,
+                          nama: namaController.text,
+                          kondisi: kondisiController.text,
+                          foto: fotoController.text,
+                          url: urlController.text,
+                          harga: harga,
+                          jumlah: jumlah,
+                          hargaTotal: harga * jumlah);
 
                       if (currStep < steps.length - 1) {
                         currStep = currStep + 1;
@@ -345,7 +391,7 @@ class _FormInventarisState extends State<FormInventaris> {
                         isSaving.value = true;
                         setState(() {});
                         await inventarisC.addInventaris(
-                            authController.firebaseUser.value.uid);
+                            model, authController.firebaseUser.value.uid);
 
                         if (inventarisC.photoLocal != null) {
                           await inventarisC.uploadToStorage(
