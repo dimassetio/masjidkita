@@ -1,6 +1,7 @@
 const mkapp_name = "MosQ";
 
 const mk_sign_in = " Sign In";
+const mk_sign_up = " Sign Up";
 const mk_log_in = " Log In";
 const mk_log_out = "Log Out";
 const mk_log_out_desc = "Anda Akan Log Out Dari Akun Ini?";
@@ -11,9 +12,12 @@ const mk_lbl_registration = " Registration";
 const mk_continue = " Continue";
 const mk_lanjut = " Lanjut";
 const mk_batal = " Batal";
-const mk_register = "Don't Have Account? Register";
+const mk_register = "MosQ Registration";
+const mk_to_register = "Don't Have Account? Register";
+const mk_to_login = "Already Have an Account? Login";
 const mk_heading_login = " Digital Wallets";
 const mk_hint_password = " Password";
+const mk_confirm_password = "Confirm Password";
 const mk_lbl_verification = " Verification";
 const mk_forgot_pswd = "Forgot Password?";
 
@@ -101,3 +105,4 @@ const mk_lbl_edit = "Edit";
 const mk_lbl_foto_profil = "Foto Profil";
 const mk_lbl_profil = "Profil";
 const mk_lbl_jabatan = "Jabatan";
+const mk_lbl_lainnya = "Lainnya";

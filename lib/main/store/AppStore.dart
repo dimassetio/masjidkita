@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main/utils/AppColors.dart';
-import 'package:mosq/main/utils/AppConstant.dart';
 
 part 'AppStore.g.dart';
 

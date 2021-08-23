@@ -1,5 +1,7 @@
 // import 'dart:math';
 
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,86 +10,76 @@ import 'package:get/get.dart';
 import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/main/utils/AppConstant.dart';
+import 'package:mosq/models/masjid.dart';
+
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 
-class FormProfile extends StatelessWidget {
-  static const tag = '/FormProfile';
-
+class FormMasjid extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: appStore.appBarColor,
-            leading: IconButton(
-              onPressed: () {
-                manMasjidC.checkControllers()
-                    ? showDialog(
-                        context: Get.context!,
-                        builder: (BuildContext context) => ConfirmDialog(),
-                      )
-                    : finish(context);
-              },
-              icon: Icon(Icons.arrow_back,
-                  color: appStore.isDarkModeOn ? white : black),
-            ),
-            title: appBarTitleWidget(
-              context,
-              manMasjidC.deMasjid.nama ?? mk_add_masjid,
-            ),
-            // actions: actions,
-          ),
-          // appBar: appBar(context, manMasjidC.deMasjid.nama ?? mk_add_masjid),
-          body: StepperBody()),
-    );
-  }
+  _FormMasjidState createState() => _FormMasjidState();
 }
 
-// class StepperBody extends StatelessWidget {
-class StepperBody extends StatefulWidget {
-  @override
-  _StepperBodyState createState() => _StepperBodyState();
-}
-
-class _StepperBodyState extends State<StepperBody> {
+class _FormMasjidState extends State<FormMasjid> {
   var currentStep = 0.obs;
   int get currStep => currentStep.value;
   set currStep(int value) => this.currentStep.value = value;
-  GlobalKey<FormState> _formKey = GlobalKey();
+  GlobalKey<FormState> formKey = GlobalKey();
+
+  List<String> statusTanahList = ['Wakaf', mk_lbl_lainnya];
+  List<String> legalitasList = [
+    'Hak Milik',
+    'Hak Guna Bangunan',
+  ];
+  String? statusTanah;
+  String? legalitas;
+  TextEditingController nama = TextEditingController();
+  TextEditingController alamat = TextEditingController();
+  TextEditingController photoUrl = TextEditingController();
+  TextEditingController deskripsi = TextEditingController();
+  TextEditingController kecamatan = TextEditingController();
+  TextEditingController kodePos = TextEditingController();
+  TextEditingController kota = TextEditingController();
+  TextEditingController provinsi = TextEditingController();
+  TextEditingController tahun = TextEditingController();
+  TextEditingController luasTanah = TextEditingController();
+  TextEditingController luasBangunan = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     if (Get.routing.current != RouteName.new_masjid) {
-      manMasjidC.nama.text = manMasjidC.deMasjid.nama ?? "";
-      manMasjidC.alamat.text = manMasjidC.deMasjid.alamat ?? "";
-      manMasjidC.photoUrl.text = manMasjidC.deMasjid.photoUrl ?? "";
-      manMasjidC.deskripsi.text = manMasjidC.deMasjid.deskripsi ?? "";
-      manMasjidC.kecamatan.text = manMasjidC.deMasjid.kecamatan ?? "";
-      manMasjidC.kodePos.text = manMasjidC.deMasjid.kodePos ?? "";
-      manMasjidC.kota.text = manMasjidC.deMasjid.kota ?? "";
-      manMasjidC.provinsi.text = manMasjidC.deMasjid.provinsi ?? "";
-      manMasjidC.tahun.text = manMasjidC.deMasjid.tahun ?? "";
-      manMasjidC.luasTanah.text = manMasjidC.deMasjid.luasTanah ?? "";
-      manMasjidC.luasBangunan.text = manMasjidC.deMasjid.luasBangunan ?? "";
-      print("PP ${Get.routing.current} ${RouteName.new_masjid}");
+      nama.text = manMasjidC.deMasjid.nama ?? "";
+      alamat.text = manMasjidC.deMasjid.alamat ?? "";
+      photoUrl.text = manMasjidC.deMasjid.photoUrl ?? "";
+      deskripsi.text = manMasjidC.deMasjid.deskripsi ?? "";
+      kecamatan.text = manMasjidC.deMasjid.kecamatan ?? "";
+      kodePos.text = manMasjidC.deMasjid.kodePos ?? "";
+      kota.text = manMasjidC.deMasjid.kota ?? "";
+      provinsi.text = manMasjidC.deMasjid.provinsi ?? "";
+      tahun.text = manMasjidC.deMasjid.tahun ?? "";
+      luasTanah.text = manMasjidC.deMasjid.luasTanah ?? "";
+      luasBangunan.text = manMasjidC.deMasjid.luasBangunan ?? "";
+      if (statusTanahList.contains(manMasjidC.deMasjid.statusTanah)) {
+        statusTanah = manMasjidC.deMasjid.statusTanah;
+      }
+      if (legalitasList.contains(manMasjidC.deMasjid.legalitas)) {
+        legalitas = manMasjidC.deMasjid.legalitas;
+      }
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    manMasjidC.clearControllers();
     manMasjidC.downloadUrl.value = "";
     // showDialog(
     //     context: context, builder: (BuildContext context) => ConfirmDialog());
@@ -104,7 +96,7 @@ class _StepperBodyState extends State<StepperBody> {
           children: [
             EditText(
               isEnabled: !manMasjidC.isSaving.value,
-              mController: manMasjidC.nama,
+              mController: nama,
               validator: (value) =>
                   (Validator(attributeName: mk_lbl_nama_masjid, value: value)
                         ..required())
@@ -118,7 +110,7 @@ class _StepperBodyState extends State<StepperBody> {
             ),
             EditText(
               isEnabled: !manMasjidC.isSaving.value,
-              mController: manMasjidC.deskripsi,
+              mController: deskripsi,
               textInputAction: TextInputAction.newline,
               validator: (value) =>
                   (Validator(attributeName: mk_lbl_deskripsi, value: value)
@@ -144,7 +136,7 @@ class _StepperBodyState extends State<StepperBody> {
           children: [
             EditText(
               isEnabled: !manMasjidC.isSaving.value,
-              mController: manMasjidC.alamat,
+              mController: alamat,
               validator: (value) =>
                   (Validator(attributeName: mk_lbl_alamat, value: value)
                         ..required())
@@ -159,7 +151,7 @@ class _StepperBodyState extends State<StepperBody> {
             ),
             EditText(
               isEnabled: !manMasjidC.isSaving.value,
-              mController: manMasjidC.kecamatan,
+              mController: kecamatan,
               validator: (value) =>
                   (Validator(attributeName: mk_kecamatan, value: value)
                         ..required())
@@ -173,7 +165,7 @@ class _StepperBodyState extends State<StepperBody> {
             ),
             EditText(
               isEnabled: !manMasjidC.isSaving.value,
-              mController: manMasjidC.kodePos,
+              mController: kodePos,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(5)
@@ -193,7 +185,7 @@ class _StepperBodyState extends State<StepperBody> {
             ),
             EditText(
               isEnabled: !manMasjidC.isSaving.value,
-              mController: manMasjidC.kota,
+              mController: kota,
               validator: (value) =>
                   (Validator(attributeName: mk_kota, value: value)..required())
                       .getError(),
@@ -206,7 +198,7 @@ class _StepperBodyState extends State<StepperBody> {
             ),
             EditText(
               isEnabled: !manMasjidC.isSaving.value,
-              mController: manMasjidC.provinsi,
+              mController: provinsi,
               validator: (value) =>
                   (Validator(attributeName: mk_provinsi, value: value)
                         ..required())
@@ -229,7 +221,7 @@ class _StepperBodyState extends State<StepperBody> {
           children: [
             EditText(
               isEnabled: !manMasjidC.isSaving.value,
-              mController: manMasjidC.tahun,
+              mController: tahun,
               validator: (value) =>
                   (Validator(attributeName: mk_tahun, value: value)
                         ..required()
@@ -249,7 +241,7 @@ class _StepperBodyState extends State<StepperBody> {
             ),
             EditText(
               isEnabled: !manMasjidC.isSaving.value,
-              mController: manMasjidC.luasTanah,
+              mController: luasTanah,
               validator: (value) =>
                   (Validator(attributeName: mk_LT, value: value)..required())
                       .getError(),
@@ -268,7 +260,7 @@ class _StepperBodyState extends State<StepperBody> {
             ),
             EditText(
               isEnabled: !manMasjidC.isSaving.value,
-              mController: manMasjidC.luasBangunan,
+              mController: luasBangunan,
               validator: (value) =>
                   (Validator(attributeName: mk_LB, value: value)..required())
                       .getError(),
@@ -290,7 +282,7 @@ class _StepperBodyState extends State<StepperBody> {
                   value == null ? '$mk_status_tanah $mk_is_required' : null,
               style: primaryTextStyle(color: appStore.textPrimaryColor),
               alignment: Alignment.centerLeft,
-              value: manMasjidC.deMasjid.statusTanah,
+              value: statusTanah,
               decoration: InputDecoration(
                 labelText: mk_status_tanah,
                 hintStyle: secondaryTextStyle(),
@@ -307,7 +299,7 @@ class _StepperBodyState extends State<StepperBody> {
                   : (String? newValue) {
                       // setState(() {
                       // toast(newValue);
-                      manMasjidC.statusTanah = newValue ?? "";
+                      statusTanah = newValue ?? "";
                       // });
                     },
               items: <String>['Wakaf', 'Lainnya']
@@ -327,7 +319,7 @@ class _StepperBodyState extends State<StepperBody> {
                   value == null ? '$mk_legalitas $mk_is_required' : null,
               style: primaryTextStyle(color: appStore.textPrimaryColor),
               alignment: Alignment.centerLeft,
-              value: manMasjidC.deMasjid.legalitas,
+              value: legalitas,
               decoration: InputDecoration(
                 labelText: mk_legalitas,
                 hintStyle: secondaryTextStyle(),
@@ -343,7 +335,7 @@ class _StepperBodyState extends State<StepperBody> {
                   ? null
                   : (String? newValue) {
                       // setState(() {
-                      manMasjidC.legalitas = newValue ?? "";
+                      legalitas = newValue ?? "";
                       // });
                     },
               items: <String>['Hak Milik', 'Hak Guna Bangunan', 'Lainnya']
@@ -366,15 +358,17 @@ class _StepperBodyState extends State<StepperBody> {
           isActive: currStep == 3,
           state: StepState.indexed,
           content: Column(children: [
-            Obx(() => manMasjidC.deMasjid.photoUrl != "" &&
-                    manMasjidC.deMasjid.photoUrl != null
-                ? CachedNetworkImage(
-                    placeholder: placeholderWidgetFn() as Widget Function(
-                        BuildContext, String)?,
-                    imageUrl: manMasjidC.deMasjid.photoUrl ?? "",
-                    fit: BoxFit.fill,
-                  )
-                : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
+            Obx(() => manMasjidC.photoPath.value != ""
+                ? Image.file(File(manMasjidC.photoPath.value))
+                : manMasjidC.deMasjid.photoUrl != "" &&
+                        manMasjidC.deMasjid.photoUrl != null
+                    ? CachedNetworkImage(
+                        placeholder: placeholderWidgetFn() as Widget Function(
+                            BuildContext, String)?,
+                        imageUrl: manMasjidC.deMasjid.photoUrl ?? "",
+                        fit: BoxFit.fill,
+                      )
+                    : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
             ElevatedButton(
               child: text("Upload Foto", textColor: mkWhite),
               onPressed: () {
@@ -391,10 +385,12 @@ class _StepperBodyState extends State<StepperBody> {
                         uploadPrecentage: manMasjidC.uploadPrecentage,
                         isSaving: manMasjidC.isSaving.value,
                         fromCamera: () {
-                          manMasjidC.uploadImage(true);
+                          manMasjidC.getImage(true);
+                          Get.back();
                         },
                         fromGaleri: () {
-                          manMasjidC.uploadImage(false);
+                          manMasjidC.getImage(false);
+                          Get.back();
                         },
                       );
                     });
@@ -417,8 +413,7 @@ class _StepperBodyState extends State<StepperBody> {
       child: Theme(
           data: ThemeData(colorScheme: mkColorScheme),
           child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: formKey,
             child: Column(
               children: [
                 Expanded(
@@ -458,12 +453,6 @@ class _StepperBodyState extends State<StepperBody> {
                         setState(() {
                           if (currStep < steps.length - 1) {
                             currStep = currStep + 1;
-                          } else {
-                            manMasjidC.updateDataMasjid();
-                            manMasjidC.clearControllers();
-                            // currStep = 0;
-
-                            finish(context);
                           }
                         });
                       },
@@ -489,21 +478,30 @@ class _StepperBodyState extends State<StepperBody> {
                   () => GestureDetector(
                     onTap: () async {
                       if (manMasjidC.isSaving.value == false) {
-                        if (_formKey.currentState!.validate()) {
-                          // _formKey.currentState!.deactivate();
-                          // _formKey.currentState!.save();
-                          setState(() {});
-                          await manMasjidC.updateDataMasjid();
-                          // setState(() {});
-                          // toast("Data Berhasil di Update");
-
-                          // Get.back();
-                          // manMasjidC.clearControllers();
+                        if (formKey.currentState!.validate()) {
+                          var model = MasjidModel(
+                              id: Get.routing.current != RouteName.new_masjid
+                                  ? manMasjidC.deMasjid.id
+                                  : null,
+                              alamat: alamat.text,
+                              deskripsi: deskripsi.text,
+                              kecamatan: kecamatan.text,
+                              kodePos: kodePos.text,
+                              kota: kota.text,
+                              legalitas: legalitas,
+                              luasBangunan: luasBangunan.text,
+                              luasTanah: luasTanah.text,
+                              nama: nama.text,
+                              photoUrl: manMasjidC.downloadUrl.value,
+                              provinsi: provinsi.text,
+                              statusTanah: statusTanah,
+                              tahun: tahun.text);
+                          await manMasjidC.updateDataMasjid(model);
+                          Get.back();
                         } else {
-                          _formKey.currentState!.validate();
+                          formKey.currentState!.validate();
                         }
                       }
-                      // finish(context);
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width,

@@ -1,18 +1,13 @@
 // import 'dart:math';
 
 import 'dart:io';
-import 'dart:collection';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mosq/helpers/Validator.dart';
-import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/main/utils/AppConstant.dart';
-import 'package:mosq/models/inventaris.dart';
 import 'package:mosq/models/takmir.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
@@ -82,7 +77,12 @@ class _StepperBodyState extends State<StepperBody> {
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
-  List<String> jabatanList = ['Ketua', 'Sekretaris', 'Bendahara', 'Lainnya'];
+  List<String> jabatanList = [
+    'Ketua',
+    'Sekretaris',
+    'Bendahara',
+    mk_lbl_lainnya
+  ];
   String? jabatan;
   var isOtherJabatan = false.obs;
 
@@ -100,13 +100,15 @@ class _StepperBodyState extends State<StepperBody> {
     super.initState();
     if (isEdit == true) {
       namaC.text = dataTakmir.nama ?? "";
-      jabatanC.text = dataTakmir.jabatan ?? "";
+      if (jabatanList.contains(dataTakmir.jabatan)) {
+        jabatan = dataTakmir.jabatan ?? "";
+      } else {
+        jabatanC.text = dataTakmir.jabatan ?? "";
+        jabatan = "Lainnya";
+      }
       takmirC.photoUrlC = dataTakmir.photoUrl ?? "";
-      jabatanList.contains(dataTakmir.jabatan)
-          ? jabatan = dataTakmir.jabatan ?? ""
-          : jabatan = "Lainnya";
     }
-    jabatan == 'Lainnya' ? isOtherJabatan.value = true : null;
+    jabatan == 'Lainnya' ? isOtherJabatan.value = true : false;
   }
 
   @override
@@ -181,7 +183,6 @@ class _StepperBodyState extends State<StepperBody> {
                 );
               }).toList(),
             ),
-            // !jabatanList.contains(jabatanC.text) ||
             isOtherJabatan.value
                 ? EditText(
                     isEnabled: !isSaving.value,
@@ -190,7 +191,7 @@ class _StepperBodyState extends State<StepperBody> {
                         (Validator(attributeName: mk_lbl_jabatan, value: value)
                               ..required())
                             .getError(),
-                    label: mk_lbl_jabatan + ' lainnya',
+                    label: "$mk_lbl_jabatan $mk_lbl_lainnya",
                     icon: Icon(Icons.person,
                         color: isSaving.value
                             ? mkColorPrimaryLight
@@ -210,7 +211,6 @@ class _StepperBodyState extends State<StepperBody> {
               child: isEdit && !dataTakmir.photoUrl.isEmptyOrNull
                   ? Container(
                       decoration: BoxDecoration(
-                          color: mkColorAccent,
                           borderRadius: BorderRadius.circular(100),
                           image: DecorationImage(
                               image: CachedNetworkImageProvider(
@@ -223,6 +223,13 @@ class _StepperBodyState extends State<StepperBody> {
               radius: 100,
             ),
             16.height,
+            // FormField(
+            //   autovalidateMode: AutovalidateMode.onUserInteraction,
+            //   validator: (String? value) =>
+            //       (Validator(attributeName: mk_lbl_foto_profil, value: value)
+            //             ..required())
+            //           .getError(),
+            //   builder: (FormFieldState imageForm) =>
             ElevatedButton(
               child: text("Upload Foto", textColor: mkWhite),
               onPressed: () {
@@ -257,6 +264,7 @@ class _StepperBodyState extends State<StepperBody> {
                     });
               },
             ),
+            // ),
           ]))
     ];
 
@@ -341,51 +349,51 @@ class _StepperBodyState extends State<StepperBody> {
                   ),
                 ),
                 Obx(
-                  () => GestureDetector(
-                    onTap: () async {
-                      if (isSaving.value == false) {
-                        if (_formKey.currentState!.validate()) {
-                          isSaving.value = true;
-                          setState(() {});
-                          TakmirModel model = TakmirModel(
-                            id: isEdit ? dataTakmir.id : null,
-                            jabatan:
-                                jabatan == 'Lainnya' ? jabatanC.text : jabatan,
-                            nama: namaC.text,
-                          );
+                  () => Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    margin: EdgeInsets.all(10),
+                    decoration: boxDecoration(
+                        bgColor: isSaving.value
+                            ? mkColorPrimaryLight
+                            : mkColorPrimary,
+                        radius: 10),
+                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    child: InkWell(
+                      onTap: () async {
+                        if (isSaving.value == false) {
+                          if (_formKey.currentState!.validate()) {
+                            isSaving.value = true;
+                            TakmirModel model = TakmirModel(
+                                id: isEdit ? dataTakmir.id : null,
+                                jabatan: jabatan == 'Lainnya'
+                                    ? jabatanC.text
+                                    : jabatan,
+                                nama: namaC.text,
+                                photoUrl: dataTakmir.photoUrl);
 
-                          model.id = isEdit
-                              ? await takmirC.updateTakmir(
-                                  model, manMasjidC.deMasjid.id!)
-                              : await takmirC.store(
-                                  model, manMasjidC.deMasjid.id!);
+                            model.id = isEdit
+                                ? await takmirC.updateTakmir(
+                                    model, manMasjidC.deMasjid.id!)
+                                : await takmirC.store(
+                                    model, manMasjidC.deMasjid.id!);
 
-                          if (takmirC.photoLocal != null) {
-                            await takmirC.uploadImage(
-                                takmirC.photoLocal, model);
+                            if (takmirC.photoLocal != null) {
+                              await takmirC.uploadImage(
+                                  takmirC.photoLocal, model);
+                            }
+                            isSaving.value = false;
+                            Get.back();
+                            // setState(() {});
+                            // toast("Data Berhasil di Update");
+
+                            // takmirC.clearControllers();
+                          } else {
+                            _formKey.currentState!.validate();
                           }
-                          isSaving.value = false;
-                          Get.back();
-                          // setState(() {});
-                          // toast("Data Berhasil di Update");
-
-                          // takmirC.clearControllers();
-                        } else {
-                          _formKey.currentState!.validate();
                         }
-                      }
-                      // finish(context);
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      margin: EdgeInsets.all(10),
-                      decoration: boxDecoration(
-                          bgColor: isSaving.value
-                              ? mkColorPrimaryLight
-                              : mkColorPrimary,
-                          radius: 10),
-                      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        // finish(context);
+                      },
                       child: Center(
                         child: isSaving.value
                             ? CircularProgressIndicator()

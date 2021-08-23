@@ -1,5 +1,3 @@
-import 'package:mosq/main/utils/AppConstant.dart';
-
 const mk_net_img =
     "https://firebasestorage.googleapis.com/v0/b/masjidkita-2d58e.appspot.com/o/masjid%2FAtrwobk1pnUz4wKdYct5kTkKxTd2%2FFoto%20Profil?alt=media&token=59fe1d41-df3d-4061-846d-ba031219e0f9";
 

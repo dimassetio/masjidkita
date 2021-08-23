@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:nb_utils/src/extensions/string_extensions.dart';
 
 class Validator {
   String? error;
@@ -34,6 +35,22 @@ class Validator {
     if (!isDone && value != null && value!.isNotEmpty) {
       if (!EmailValidator.validate(value.toString())) {
         _setDone('$attributeName is not a valid email');
+      }
+    }
+  }
+
+  void email22() {
+    if (!isDone && value != null && value!.isNotEmpty) {
+      if (!EmailValidator.validate(value.toString())) {
+        _setDone('$attributeName is not a valid email');
+      }
+    }
+  }
+
+  void matchTo(String firstAttribute) {
+    if (!isDone && !value.isEmptyOrNull) {
+      if (value != firstAttribute) {
+        _setDone("$attributeName doesn't match to  $firstAttribute");
       }
     }
   }

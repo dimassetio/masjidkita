@@ -6,11 +6,12 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/main/utils/AppConstant.dart';
+
 // import 'package:mosq/controllers/manMasjidController.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/widgets/BottomNav.dart';
 import 'package:mosq/screens/widgets/ConfirmLogout.dart';
@@ -55,6 +56,10 @@ class _MosqDashboardState extends State<MosqDashboard> {
               ? ShowCaseWidget.of(myContext)!.startShowCase([scOne, scTwo])
               : null);
     });
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      Future.delayed(Duration(milliseconds: 300),
+          () => ShowCaseWidget.of(myContext)!.startShowCase([scThree]));
+    });
   }
 
   @override
@@ -78,7 +83,25 @@ class _MosqDashboardState extends State<MosqDashboard> {
 
                   return <Widget>[
                     SliverAppBar(
+                      automaticallyImplyLeading: false,
                       actions: [
+                        Obx(() => authController.user.masjid.isEmptyOrNull &&
+                                authController.isLoggedIn.value
+                            ? Showcase(
+                                title: 'Buat Masjid',
+                                description:
+                                    'Anda belum memiliki masjid. silahkan isi formulir berikut untuk membuat profil masjid baru',
+                                key: scThree,
+                                child: IconButton(
+                                    onPressed: () {
+                                      // toast('Go to add profile');
+                                      Get.toNamed(RouteName.new_masjid);
+                                    },
+                                    icon: Icon(
+                                      Icons.add_business,
+                                      color: mkWhite,
+                                    )))
+                            : SizedBox()),
                         Showcase(
                             key: scOne,
                             child: Obx(
@@ -165,33 +188,38 @@ class _MosqDashboardState extends State<MosqDashboard> {
                       child: Column(
                         children: <Widget>[
                           // Experimen
-                          text('testing', fontSize: textSizeSMedium),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              // Obx(
-                              //   () => text(
-                              //       "is FL : ${authController.isFirstLaunch.value}"),
-                              // ),
-                              TextButton.icon(
-                                  label: text("First Launch Status",
-                                      fontSize: textSizeSMedium),
-                                  onPressed: () async {
-                                    await authController.box
-                                        .remove('first_launch');
-                                  },
-                                  icon: Icon(Icons.delete)),
-                              TextButton.icon(
-                                  label: text("ToolTip"),
-                                  onPressed: () {
-                                    // authController.box.remove('first_launch');
-                                    ShowCaseWidget.of(context)!
-                                        .startShowCase([scOne, scTwo]);
-                                    print("P!");
-                                  },
-                                  icon: Icon(Icons.play_circle)),
-                            ],
+                          Obx(
+                            () => text(
+                                'Have Masjid : ${!authController.user.masjid.isEmptyOrNull}',
+                                fontSize: textSizeSMedium),
                           ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //   children: [
+                          //     // Obx(
+                          //     //   () => text(
+                          //     //       "is FL : ${authController.isFirstLaunch.value}"),
+                          //     // ),
+                          //     TextButton.icon(
+                          //         label: text("First Launch Status",
+                          //             fontSize: textSizeSMedium),
+                          //         onPressed: () async {
+                          //           await authController.box
+                          //               .remove('first_launch');
+                          //         },
+                          //         icon: Icon(Icons.delete)),
+                          //     TextButton.icon(
+                          //         label: text("ToolTip"),
+                          //         onPressed: () {
+                          //           // authController.box.remove('first_launch');
+                          //           ShowCaseWidget.of(context)!
+                          //               .startShowCase([scOne, scTwo]);
+                          //           print("P!");
+                          //         },
+                          //         icon: Icon(Icons.play_circle)),
+                          //   ],
+                          // ),
+
                           Container(
                             alignment: Alignment.topLeft,
                             padding: EdgeInsets.only(left: 15, bottom: 5),

@@ -70,69 +70,70 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                     physics: ScrollPhysics(),
                     itemBuilder: (_, index) {
                       final item = inventarisC.inventariss[index];
-                      return Obx(() => manMasjidC.myMasjid.value
-                          ? Dismissible(
-                              key: Key(item.inventarisID!),
-                              child: InventarisCard(
-                                  inventarisC.inventariss[index]),
-                              background: slideRightBackground(),
-                              secondaryBackground: slideLeftBackground(),
-                              confirmDismiss: (direction) async {
-                                final bool? res;
-                                if (direction == DismissDirection.startToEnd) {
-                                  try {
-                                    await inventarisC.getInventarisModel(
-                                        inventarisC.inventariss[index]
-                                                .inventarisID ??
-                                            "");
-                                    print(inventarisC
-                                        .inventariss[index].inventarisID);
-                                    res = false;
-                                  } finally {
-                                    Get.toNamed(RouteName.edit_inventaris +
-                                        '/${inventarisC.inventaris.inventarisID}');
-                                  }
-                                } else if (direction ==
-                                    DismissDirection.endToStart) {
-                                  return res = await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          CustomDelete(
-                                            titleName: 'Inventaris',
-                                            subtitleName: item.nama!,
-                                          ));
-                                } else
+                      return Obx(() => Dismissible(
+                            key: Key(item.inventarisID!),
+                            direction: manMasjidC.myMasjid.value
+                                ? DismissDirection.horizontal
+                                : DismissDirection.none,
+                            child:
+                                InventarisCard(inventarisC.inventariss[index]),
+                            background: slideRightBackground(),
+                            secondaryBackground: slideLeftBackground(),
+                            confirmDismiss: (direction) async {
+                              final bool? res;
+                              if (direction == DismissDirection.startToEnd) {
+                                try {
+                                  await inventarisC.getInventarisModel(
+                                      inventarisC.inventariss[index]
+                                              .inventarisID ??
+                                          "");
+                                  print(inventarisC
+                                      .inventariss[index].inventarisID);
                                   res = false;
-                                return res;
-                              },
-                              onDismissed: (direction) {
-                                setState(() async {
-                                  // inventarisC.inventariss.removeAt(index);
-                                  try {
-                                    await inventarisC.deleteInventaris(
-                                        item.inventarisID, item.url);
-                                    // finish(context);
-                                  } catch (e) {
-                                    toast('Error Delete Data');
-                                  }
-                                });
-                                // if (direction == DismissDirection.startToEnd) {
-                                // ScaffoldMessengerState().showSnackBar(
-                                //     SnackBar(content: Text("Swipe to left")));
-                                //   setState(() {
-                                //     inventarisC.inventariss.removeAt(index);
-                                //     Get.toNamed(RouteName.detail_inventaris);
-                                //   });
-                                // } else if (direction == DismissDirection.endToStart) {
-                                // userList.removeAt(index);d
-                                // ScaffoldMessengerState().showSnackBar(
-                                //     SnackBar(content: Text("Swipe to right")));
+                                } finally {
+                                  Get.toNamed(RouteName.edit_inventaris +
+                                      '/${inventarisC.inventaris.inventarisID}');
+                                }
+                              } else if (direction ==
+                                  DismissDirection.endToStart) {
+                                return res = await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        CustomDelete(
+                                          titleName: 'Inventaris',
+                                          subtitleName: item.nama!,
+                                        ));
+                              } else
+                                res = false;
+                              return res;
+                            },
+                            onDismissed: (direction) {
+                              setState(() async {
+                                // inventarisC.inventariss.removeAt(index);
+                                try {
+                                  await inventarisC.deleteInventaris(
+                                      item.inventarisID, item.url);
+                                  // finish(context);
+                                } catch (e) {
+                                  toast('Error Delete Data');
+                                }
+                              });
+                              // if (direction == DismissDirection.startToEnd) {
+                              // ScaffoldMessengerState().showSnackBar(
+                              //     SnackBar(content: Text("Swipe to left")));
+                              //   setState(() {
+                              //     inventarisC.inventariss.removeAt(index);
+                              //     Get.toNamed(RouteName.detail_inventaris);
+                              //   });
+                              // } else if (direction == DismissDirection.endToStart) {
+                              // userList.removeAt(index);d
+                              // ScaffoldMessengerState().showSnackBar(
+                              //     SnackBar(content: Text("Swipe to right")));
 
-                                // Get.to(() => CustomDelete());
-                                // }
-                              },
-                            )
-                          : SizedBox());
+                              // Get.to(() => CustomDelete());
+                              // }
+                            },
+                          ));
                     }),
           ),
         ],

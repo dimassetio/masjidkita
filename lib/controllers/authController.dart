@@ -14,10 +14,6 @@ import 'package:nb_utils/nb_utils.dart';
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
 
-  TextEditingController name = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
-
   Rx<User> firebaseUser;
   Rx<UserModel> userModel = UserModel().obs;
 
@@ -69,18 +65,16 @@ class AuthController extends GetxController {
     }
   }
 
-  signIn() async {
+  signIn(String email, String password) async {
     try {
       await auth
-          .signInWithEmailAndPassword(
-              email: email.text.trim(), password: password.text.trim())
+          .signInWithEmailAndPassword(email: email, password: password)
           .then((result) {
         String _userId = result.user.uid;
         _initializeUserModel(_userId);
 
-        _clearControllers();
         print(firebaseUser);
-        Get.back();
+        Get.offAllNamed(RouteName.home);
         toast("Sign In Success");
       });
     } on FirebaseAuthException catch (e) {
@@ -112,23 +106,49 @@ class AuthController extends GetxController {
     }
   }
 
-  void signUp() async {
+  signUpWithEmail(String name, String email, String password) async {
     try {
-      await auth
-          .createUserWithEmailAndPassword(
-              email: email.text.trim(), password: password.text.trim())
-          .then((result) {
+      UserCredential result = await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      if (result.user != null) {
         String _userId = result.user.uid;
-        _addUserToFirestore(_userId);
+        _addUserToFirestore(
+          _userId,
+          name,
+          email,
+        );
         _initializeUserModel(_userId);
-        _clearControllers();
-      });
+        Get.offAllNamed(RouteName.home);
+        toast("Sign Up Success");
+      } else {
+        Get.snackbar('Sign Up Failed', 'Unknown Error');
+      }
+    } on FirebaseAuthException catch (e) {
+      String error = "";
+      switch (e.code) {
+        case 'weak-password':
+          error = 'Please use stronger password';
+          break;
+        case 'email-already-in-use':
+          error = 'Email already in use';
+          break;
+        case 'invalid-email':
+          error = 'Invalid email';
+          break;
+        case 'operation-not-allowed':
+          error = 'Operation not allowed';
+          break;
+        case 'network-request-failed':
+          error = 'Connection error';
+          break;
+        default:
+          error = 'Try Again';
+          print(e.code);
+      }
+      Get.snackbar('Sign Up Failed', error);
     } catch (e) {
       debugPrint(e.toString());
       Get.snackbar("Sign Up Failed", "Try again");
-    } finally {
-      Get.toNamed(RouteName.home);
-      toast("Sign Up Success");
     }
   }
 
@@ -192,11 +212,11 @@ class AuthController extends GetxController {
     toast("Sign Out Success");
   }
 
-  _addUserToFirestore(String userId) {
+  _addUserToFirestore(String userId, String name, String email) {
     firebaseFirestore.collection(usersCollection).doc(userId).set({
-      "name": name.text.trim(),
+      "name": name,
       "id": userId,
-      "email": email.text.trim(),
+      "email": email,
       "role": "user",
       "masjid": ""
     });
@@ -213,16 +233,20 @@ class AuthController extends GetxController {
   // }
 
   _initializeUserModel(String userId) async {
-    userModel.value = await firebaseFirestore
+    userModel.bindStream(firebaseFirestore
         .collection(usersCollection)
         .doc(userId)
-        .get()
-        .then((doc) => UserModel.fromSnapshot(doc));
+        .snapshots()
+        .map((event) => UserModel.fromSnapshot(event)));
+
+    // .get()
+    // .then((doc) => UserModel.fromSnapshot(doc));
   }
 
-  _clearControllers() {
-    name.clear();
-    email.clear();
-    password.clear();
-  }
+  // _clearControllers() {
+  //   name.clear();
+  //   email.clear();
+  //   password.clear();
+  //   confirmPassword.clear();
+  // }
 }

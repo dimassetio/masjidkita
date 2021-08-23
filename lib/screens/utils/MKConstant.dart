@@ -14,3 +14,5 @@ const textSizeXLarge = 28.0;
 const textSizeXXLarge = 30.0;
 
 const profileImage = 'assets/images/profile.png';
+const isDarkModeOnPref = 'isDarkModeOnPref';
+const mainAppName = 'MosQ';
