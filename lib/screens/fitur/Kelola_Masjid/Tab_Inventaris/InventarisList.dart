@@ -17,7 +17,7 @@ class InventarisCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        GestureDetector(
+        InkWell(
           onTap: () async {
             await inventarisC.getInventarisModel(inventaris.inventarisID ?? "");
             Get.toNamed(RouteName.detail_inventaris);

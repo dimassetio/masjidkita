@@ -11,7 +11,7 @@ class InventarisModel {
   int? hargaTotal;
 
   InventarisModel({
-    // @required this.inventarisID,
+    this.inventarisID,
     this.nama,
     this.foto,
     this.url,

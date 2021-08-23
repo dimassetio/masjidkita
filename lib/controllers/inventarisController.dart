@@ -29,6 +29,25 @@ class InventarisController extends GetxController {
   Rx<InventarisModel> _inventarisModel = InventarisModel().obs;
   InventarisModel get inventaris => _inventarisModel.value;
 
+  CollectionReference collections(String masjidID) {
+    return firebaseFirestore
+        .collection(masjidCollection)
+        .doc(masjidID)
+        .collection(inventarisCollection);
+  }
+
+  Map<String, dynamic> getData(InventarisModel model) {
+    return {
+      'nama': model.nama,
+      'kondisi': model.kondisi,
+      'id': model.inventarisID,
+      'url': model.url,
+      'foto': model.foto,
+      'harga': model.harga,
+      'jumlah': model.jumlah,
+    };
+  }
+
   addInventaris(String userId) async {
     Map<String, dynamic> data = new HashMap();
     DateTime now = DateTime.now();
@@ -117,68 +136,81 @@ class InventarisController extends GetxController {
     }
   }
 
-  updateInventaris() async {
-    Map<String, dynamic> data = new HashMap();
-    DateTime now = DateTime.now();
-    String harga = hargaController.text;
-    String result = harga.replaceAll('Rp', '');
-    String finalHarga = result.replaceAll('.', '');
-    int price = finalHarga.toInt();
-    int jumlah = jumlahController.text.toInt();
-    int totalPrice = price * jumlah;
-    if (namaController.text != "") data['nama'] = namaController.text;
-    if (jumlahController.text != "") data["jumlah"] = jumlah;
-    if (kondisiController.text != "") data["kondisi"] = kondisiController.text;
-    if (urlController.text != "") data["url"] = urlController.text;
-    if (hargaController.text != "") data["harga"] = price;
-    if (fotoController.text != "") data["foto"] = fotoController.text;
-    data["hargaTotal"] = totalPrice;
-    data["updatedAt"] = now;
-    // await firebaseFirestore
-    //     .collection(masjidCollection)
-    //     .doc(manMasjidC.deMasjid.id)
-    //     .collection(inventarisCollection)
-    //     .doc(inventaris.inventarisID)
-    //     .update(data);
-    // clearControllers();
+  // updateInventaris() async {
+  //   Map<String, dynamic> data = new HashMap();
+  //   DateTime now = DateTime.now();
+  //   String harga = hargaController.text;
+  //   String result = harga.replaceAll('Rp', '');
+  //   String finalHarga = result.replaceAll('.', '');
+  //   int price = finalHarga.toInt();
+  //   int jumlah = jumlahController.text.toInt();
+  //   int totalPrice = price * jumlah;
+  //   if (namaController.text != "") data['nama'] = namaController.text;
+  //   if (jumlahController.text != "") data["jumlah"] = jumlah;
+  //   if (kondisiController.text != "") data["kondisi"] = kondisiController.text;
+  //   if (urlController.text != "") data["url"] = urlController.text;
+  //   if (hargaController.text != "") data["harga"] = price;
+  //   if (fotoController.text != "") data["foto"] = fotoController.text;
+  //   data["hargaTotal"] = totalPrice;
+  //   data["updatedAt"] = now;
+  //   // await firebaseFirestore
+  //   //     .collection(masjidCollection)
+  //   //     .doc(manMasjidC.deMasjid.id)
+  //   //     .collection(inventarisCollection)
+  //   //     .doc(inventaris.inventarisID)
+  //   //     .update(data);
+  //   // clearControllers();
 
-    isSaving.value = true;
-    try {
-      await firebaseFirestore
-          .collection(masjidCollection)
-          .doc(manMasjidC.deMasjid.id)
-          .collection(inventarisCollection)
-          .doc(inventaris.inventarisID)
-          .update(data);
-    } on SocketException catch (_) {
-      showDialog(
-          context: Get.context!,
-          builder: (context) => AlertDialog(
-                title: Text("Connection Error !"),
-                content: Text("Please connect to the internet."),
-              ));
-      toast("value");
-    } catch (e) {
-      print(e);
-      toast("Error Saving Data");
-    } finally {
-      clearControllers();
-      toast("Data Berhasil Diperbarui");
-      isSaving.value = false;
-    }
+  //   isSaving.value = true;
+  //   try {
+  //     await firebaseFirestore
+  //         .collection(masjidCollection)
+  //         .doc(manMasjidC.deMasjid.id)
+  //         .collection(inventarisCollection)
+  //         .doc(inventaris.inventarisID)
+  //         .update(data);
+  //   } on SocketException catch (_) {
+  //     showDialog(
+  //         context: Get.context!,
+  //         builder: (context) => AlertDialog(
+  //               title: Text("Connection Error !"),
+  //               content: Text("Please connect to the internet."),
+  //             ));
+  //     toast("value");
+  //   } catch (e) {
+  //     print(e);
+  //     toast("Error Saving Data");
+  //   } finally {
+  //     clearControllers();
+  //     toast("Data Berhasil Diperbarui");
+  //     isSaving.value = false;
+  //   }
 
-    // Get.back();
+  //   // Get.back();
+  // }
+
+  Future updateInventaris(InventarisModel model, String masjidID) async {
+    await collections(masjidID).doc(model.inventarisID).set(getData(model));
+    return model.inventarisID;
   }
 
   deleteInventaris(inventarisID, url) {
     try {
-      firebaseFirestore
-          .collection(masjidCollection)
-          .doc(manMasjidC.deMasjid.id)
-          .collection(inventarisCollection)
-          .doc(inventarisID)
-          .delete();
-      firebaseStorage.refFromURL(url).delete();
+      if (url != null) {
+        firebaseFirestore
+            .collection(masjidCollection)
+            .doc(manMasjidC.deMasjid.id)
+            .collection(inventarisCollection)
+            .doc(inventarisID)
+            .delete();
+        firebaseStorage.refFromURL(url).delete();
+      } else
+        firebaseFirestore
+            .collection(masjidCollection)
+            .doc(manMasjidC.deMasjid.id)
+            .collection(inventarisCollection)
+            .doc(inventarisID)
+            .delete();
     } finally {
       toast("Successfully Deleted");
     }
@@ -221,6 +253,11 @@ class InventarisController extends GetxController {
 
   PickedFile? pickImage;
   String fileName = '', filePath = '';
+  XFile? photoLocal;
+  var rxPhotoPath = "".obs;
+  String get photoPath => rxPhotoPath.value;
+  set photoPath(String value) => this.rxPhotoPath.value = value;
+
   final ImagePicker _picker = ImagePicker();
   String message = "Belum ada gambar";
   var downloadUrl = "".obs;
@@ -229,17 +266,26 @@ class InventarisController extends GetxController {
   XFile? pickedImage;
   var uploadPrecentage = 0.0.obs;
 
-  uploadImage(bool isCam) async {
-    pickedImage = await inventarisC.getImage(isCam);
-    await uploadToStorage(pickedImage);
-  }
+  // uploadImage(bool isCam) async {
+  //   pickedImage = await inventarisC.getImage(isCam);
+  //   await uploadToStorage(pickedImage);
+  // }
 
-  Future getImage(bool isCam) async {
-    return pickedImage = await _picker.pickImage(
+  // Future getImage(bool isCam) async {
+  //   return pickedImage = await _picker.pickImage(
+  //       source: isCam ? ImageSource.camera : ImageSource.gallery);
+  // }
+
+  getImage(bool isCam) async {
+    photoLocal = await _picker.pickImage(
         source: isCam ? ImageSource.camera : ImageSource.gallery);
+    if (photoLocal != null) {
+      photoPath = photoLocal!.path;
+    }
+    Get.back();
   }
 
-  Future uploadToStorage(XFile? pickImage) async {
+  Future uploadToStorage(XFile? pickImage, InventarisModel inventaris) async {
     if (pickImage != null) {
       fileName = pickImage.name;
       filePath = pickImage.path;
@@ -264,7 +310,9 @@ class InventarisController extends GetxController {
 
         if (event.state == TaskState.success) {
           downloadUrl.value = await refFeedBuckets.getDownloadURL();
+          inventaris.url = downloadUrl.value;
           fotoController.text = fileName;
+          updateInventaris(inventaris, manMasjidC.deMasjid.id!);
           // await firebaseFirestore
           //     .collection(masjidCollection)
           //     .doc(manMasjidC.deMasjid.id)
@@ -272,7 +320,7 @@ class InventarisController extends GetxController {
           //     .doc(inventarisC.inventaris.inventarisID)
           //     .update({'url': downloadUrl.value});
           isLoadingImage.value = false;
-          Get.back();
+          // Get.back();
         } else {
           isLoadingImage.value = true;
         }
