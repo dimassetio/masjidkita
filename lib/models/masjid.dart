@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mosq/integrations/databases/masjid_database.dart';
 
 class MasjidModel {
   String? id;
@@ -15,6 +16,7 @@ class MasjidModel {
   String? luasBangunan;
   String? statusTanah;
   String? legalitas;
+  MasjidDatabase dao = new MasjidDatabase();
 
   MasjidModel({
     this.id,
@@ -48,5 +50,17 @@ class MasjidModel {
     luasBangunan = snapshot.data()?["luasBangunan"];
     statusTanah = snapshot.data()?["statusTanah"];
     legalitas = snapshot.data()?["legalitas"];
+  }
+
+  save() async {
+    if (this.id == null) {
+      return await this.dao.store(this);
+    } else {
+      return await this.dao.update(this);
+    }
+  }
+
+  delete() async {
+    return await this.dao.delete(this);
   }
 }

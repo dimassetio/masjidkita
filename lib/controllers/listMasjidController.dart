@@ -4,8 +4,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:mosq/models/masjid.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/firestore.dart';
-import 'package:mosq/screens/utils/MKStrings.dart';
-import 'package:nb_utils/nb_utils.dart';
 
 class ListMasjidController extends GetxController {
   static ListMasjidController instance = Get.find();
