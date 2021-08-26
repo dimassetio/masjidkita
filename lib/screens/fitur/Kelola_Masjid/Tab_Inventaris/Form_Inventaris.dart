@@ -1,11 +1,17 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/helpers/validator.dart';
+import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/routes/route_name.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -24,31 +30,61 @@ class _FormInventarisState extends State<FormInventaris> {
   int get currStep => currentStep.value;
   set currStep(int value) => this.currentStep.value = value;
   GlobalKey<FormState> formKey = GlobalKey();
-
+  bool isEdit = Get.currentRoute != RouteName.new_inventaris;
   var isSaving = false.obs;
-
+  InventarisModel dataInventaris = Get.arguments;
   // GlobalKey<FormState> formKey = GlobalKey();
+
+  final TextEditingController namaController = TextEditingController();
+  final TextEditingController jumlahController = TextEditingController();
+  final TextEditingController kondisiController = TextEditingController();
+  final TextEditingController fotoController = TextEditingController();
+  final TextEditingController urlController = TextEditingController();
+  var hargaController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     if (Get.parameters['id'] != null) {
-      inventarisC.namaController.text = inventarisC.inventaris.nama ?? "";
-      inventarisC.kondisiController.text = inventarisC.inventaris.kondisi ?? "";
-      inventarisC.fotoController.text = inventarisC.inventaris.foto ?? "";
-      inventarisC.urlController.text = inventarisC.inventaris.url ?? "";
-      inventarisC.hargaController.text =
-          inventarisC.inventaris.harga.toString();
-      inventarisC.jumlahController.text =
-          inventarisC.inventaris.jumlah.toString();
+      namaController.text = dataInventaris.nama ?? "";
+      kondisiController.text = dataInventaris.kondisi ?? "";
+      fotoController.text = dataInventaris.foto ?? "";
+      urlController.text = dataInventaris.url ?? "";
+      hargaController.text = dataInventaris.harga.toString();
+      jumlahController.text = dataInventaris.jumlah.toString();
+    }
+    if (isEdit == true) {}
+  }
+
+  checkControllers() {
+    if (isEdit) {
+      if (namaController.text != dataInventaris.nama ||
+          jumlahController.text != dataInventaris.jumlah.toString() ||
+          kondisiController.text != dataInventaris.kondisi ||
+          // fotoController.text != inventaris.foto ||
+          // urlController.text != inventaris.url ||
+          hargaController.text != dataInventaris.harga.toString()) {
+        return true;
+      } else
+        return false;
+    } else {
+      if (namaController.text != "" ||
+          jumlahController.text != "" ||
+          kondisiController.text != "" ||
+          // fotoController.text != inventaris.foto ||
+          // urlController.text != inventaris.url ||
+          hargaController.text != "") {
+        return true;
+      } else
+        return false;
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    inventarisC.clearControllers();
     inventarisC.downloadUrl.value = "";
+    inventarisC.photoPath = "";
   }
 
   @override
@@ -62,7 +98,7 @@ class _FormInventarisState extends State<FormInventaris> {
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
               fontSize: textSizeLargeMedium,
-              mController: inventarisC.namaController,
+              mController: namaController,
               hint: mk_hint_nama_inventaris,
               label: mk_lbl_nama_inventaris,
               validator: (value) => (Validator(
@@ -80,7 +116,7 @@ class _FormInventarisState extends State<FormInventaris> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
-              mController: inventarisC.kondisiController,
+              mController: kondisiController,
               hint: mk_hint_kondisi_inventaris,
               label: mk_lbl_kondisi_inventaris,
               validator: (value) => (Validator(
@@ -97,7 +133,8 @@ class _FormInventarisState extends State<FormInventaris> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
-              mController: inventarisC.hargaController,
+              textAlign: TextAlign.end,
+              mController: hargaController,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 CurrrencyInputFormatter()
@@ -119,7 +156,8 @@ class _FormInventarisState extends State<FormInventaris> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
-              mController: inventarisC.jumlahController,
+              textAlign: TextAlign.end,
+              mController: jumlahController,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(4)
@@ -145,42 +183,87 @@ class _FormInventarisState extends State<FormInventaris> {
           title: Text("Foto"),
           content: Column(
             children: <Widget>[
-              Obx(() => inventarisC.downloadUrl.value != ""
-                  ? Container(
-                      alignment: Alignment.center,
-                      child: CachedNetworkImage(
-                        width: Get.width - 40,
-                        placeholder: placeholderWidgetFn() as Widget Function(
-                            BuildContext, String)?,
-                        imageUrl: inventarisC.downloadUrl.value.isEmpty
-                            ? inventarisC.inventaris.url.toString()
-                            : inventarisC.downloadUrl.value,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                child: EditText(
-                  // focusNode: FocusNode(),
-                  // enableInteractiveSelection: false,
-                  // style: GoogleFonts.poppins(),
-                  isReadOnly: true,
-                  // enabled: !isSaving.value,
-                  mController: inventarisC.fotoController,
-                  // decoration: InputDecoration(hintText: inventarisC.message),
-                  // validator: (s) {
-                  //   if (s!.trim().isEmpty)
-                  //     return '$mk_lbl_foto_inventaris $mk_is_required';
-                  //   return null;
-                  // },
-                  hint: inventarisC.message,
-                  validator: (value) => (Validator(
-                          attributeName: mk_lbl_foto_inventaris, value: value)
-                        ..required())
-                      .getError(),
+              // Obx(() => inventarisC.downloadUrl.value != ""
+              //     ? Container(
+              //         alignment: Alignment.center,
+              //         child: CachedNetworkImage(
+              //           width: Get.width - 40,
+              //           placeholder: placeholderWidgetFn() as Widget Function(
+              //               BuildContext, String)?,
+              //           imageUrl: inventarisC.downloadUrl.value.isEmpty
+              //               ? inventarisC.inventaris.url.toString()
+              //               : inventarisC.downloadUrl.value,
+              //           fit: BoxFit.cover,
+              //         ),
+              //       )
+              //     : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
+              // CircleAvatar(
+              //   backgroundImage: AssetImage(mk_profile_pic),
+              //   child: isEdit && !dataInventaris.url.isEmptyOrNull
+              //       ? Container(
+              //           decoration: BoxDecoration(
+              //               color: mkColorAccent,
+              //               borderRadius: BorderRadius.circular(100),
+              //               image: DecorationImage(
+              //                   image: CachedNetworkImageProvider(
+              //                       dataInventaris.url ?? ""),
+              //                   fit: BoxFit.cover)),
+              //         )
+              //       : null,
+              //   foregroundImage: FileImage(File(takmirC.photoPath)),
+              //   backgroundColor: mkColorPrimary,
+              //   radius: 100,
+              // ),
+
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(bottom: 16),
+                decoration: boxDecoration(
+                    radius: 10.0, showShadow: true, color: mkColorPrimary),
+                width: 300,
+                height: 300,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  child: Obx(() => inventarisC.photoPath != ""
+                      ? Image.file(File(inventarisC.photoPath))
+                      : isEdit
+                          ? inventarisC.inventaris.url != "" &&
+                                  inventarisC.inventaris.url != null
+                              ? CachedNetworkImage(
+                                  placeholder: placeholderWidgetFn() as Widget
+                                      Function(BuildContext, String)?,
+                                  imageUrl: inventarisC.inventaris.url ?? "",
+                                  fit: BoxFit.cover,
+                                )
+                              : text('Belum Ada Gambar',
+                                  fontSize: textSizeSMedium)
+                          : text('Belum Ada Gambar',
+                              fontSize: textSizeSMedium)),
                 ),
               ),
+
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+              //   child: EditText(
+              //     // focusNode: FocusNode(),
+              //     // enableInteractiveSelection: false,
+              //     // style: GoogleFonts.poppins(),
+              //     isReadOnly: true,
+              //     // enabled: !isSaving.value,
+              //     mController: fotoController,
+              //     // decoration: InputDecoration(hintText: inventarisC.message),
+              //     // validator: (s) {
+              //     //   if (s!.trim().isEmpty)
+              //     //     return '$mk_lbl_foto_inventaris $mk_is_required';
+              //     //   return null;
+              //     // },
+              //     hint: inventarisC.message,
+              //     // validator: (value) => (Validator(
+              //     //         attributeName: mk_lbl_foto_inventaris, value: value)
+              //     //       ..required())
+              //     //     .getError(),
+              //   ),
+              // ),
               ElevatedButton(
                 child: text("Upload Foto",
                     textColor: mkWhite, fontSize: textSizeSMedium),
@@ -193,78 +276,27 @@ class _FormInventarisState extends State<FormInventaris> {
                             BorderRadius.vertical(top: Radius.circular(25.0)),
                       ),
                       builder: (builder) {
-                        return Container(
-                            height: 250.0,
-                            padding: EdgeInsets.all(16),
-                            child: Obx(
-                              () => inventarisC.isLoadingImage.value
-                                  ? Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        CircularProgressIndicator(),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        text("Loading..."),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        LinearProgressIndicator(
-                                          value: inventarisC
-                                              .uploadPrecentage.value,
-                                        ),
-                                        text(
-                                            "${(inventarisC.uploadPrecentage.value * 100).toInt()} %"),
-                                      ],
-                                    )
-                                  : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Upload Foto dari",
-                                          style: boldTextStyle(
-                                              color: appStore.textPrimaryColor),
-                                        ),
-                                        16.height,
-                                        Divider(
-                                          height: 5,
-                                        ),
-                                        16.height,
-                                        TextButton.icon(
-                                            // style: ,
-                                            onPressed: () {
-                                              inventarisC.uploadImage(false);
-                                            },
-                                            icon: Icon(
-                                              Icons.image_sharp,
-                                              color: mkColorPrimaryDark,
-                                            ),
-                                            label: text(
-                                              "Galeri",
-                                              textColor: mkColorPrimaryDark,
-                                            )),
-                                        Divider(),
-                                        TextButton.icon(
-                                            // style: ,
-                                            onPressed: () async {
-                                              inventarisC.uploadImage(true);
-                                            },
-                                            icon: Icon(
-                                              Icons.camera,
-                                              color: mkColorPrimaryDark,
-                                            ),
-                                            label: text(
-                                              "Kamera",
-                                              textColor: mkColorPrimaryDark,
-                                            )),
-                                        8.height,
-                                      ],
-                                    ),
-                            ));
+                        return ImageSourceBottomSheet(
+                            isLoading: inventarisC.isLoadingImage,
+                            uploadPrecentage: inventarisC.uploadPrecentage,
+                            isSaving: isSaving.value,
+                            fromCamera: () {
+                              inventarisC.getImage(true);
+                              FocusScopeNode currentFocus =
+                                  FocusScope.of(context);
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
+                            },
+                            fromGaleri: () async {
+                              await inventarisC.getImage(false);
+                              if (inventarisC.photoLocal != null) {}
+                              FocusScopeNode currentFocus =
+                                  FocusScope.of(context);
+                              if (!currentFocus.hasPrimaryFocus) {
+                                currentFocus.unfocus();
+                              }
+                            });
                       });
                   // inventarisC.inventarisage(image!);
                 },
@@ -276,7 +308,7 @@ class _FormInventarisState extends State<FormInventaris> {
                   enableInteractiveSelection: false,
                   // style: GoogleFonts.poppins(),
                   enabled: false,
-                  controller: inventarisC.urlController,
+                  controller: urlController,
                 ),
               ),
               // Opacity(
@@ -312,7 +344,7 @@ class _FormInventarisState extends State<FormInventaris> {
           backgroundColor: appStore.appBarColor,
           leading: IconButton(
             onPressed: () {
-              inventarisC.checkControllers()
+              checkControllers()
                   ? showDialog(
                       context: Get.context!,
                       builder: (BuildContext context) => ConfirmDialog(),
@@ -324,22 +356,47 @@ class _FormInventarisState extends State<FormInventaris> {
           ),
           title: appBarTitleWidget(
             context,
-            mk_add_inventaris,
+            // mk_add_inventaris,
+            Get.currentRoute == RouteName.new_inventaris
+                ? mk_add_inventaris
+                : mk_edit_inventaris,
           ),
           actions: <Widget>[
             Padding(
               padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
+              child: InkWell(
                 onTap: () async {
                   if (isSaving.value == false) {
                     if (formKey.currentState!.validate()) {
+                      int jumlah = jumlahController.text.toInt();
+                      int harga = hargaController.text
+                          .replaceAll('Rp', '')
+                          .replaceAll('.', '')
+                          .toInt();
+                      InventarisModel model = InventarisModel(
+                          inventarisID: isEdit
+                              ? inventarisC.inventaris.inventarisID
+                              : null,
+                          nama: namaController.text,
+                          kondisi: kondisiController.text,
+                          foto: fotoController.text,
+                          url: urlController.text,
+                          harga: harga,
+                          jumlah: jumlah,
+                          hargaTotal: harga * jumlah);
+
                       if (currStep < steps.length - 1) {
                         currStep = currStep + 1;
                       } else {
                         isSaving.value = true;
                         setState(() {});
                         await inventarisC.addInventaris(
-                            authController.firebaseUser.value.uid);
+                            model, authController.firebaseUser.value.uid);
+
+                        if (inventarisC.photoLocal != null) {
+                          await inventarisC.uploadToStorage(
+                              inventarisC.photoLocal, model);
+                        }
 
                         isSaving.value = false;
                       }

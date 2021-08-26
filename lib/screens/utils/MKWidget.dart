@@ -98,6 +98,7 @@ class EditText extends StatefulWidget {
   TextInputAction? textInputAction;
   TextInputType? keyboardType;
   Icon? icon;
+  TextAlign textAlign;
 
   VoidCallback? onPressed;
 
@@ -114,6 +115,7 @@ class EditText extends StatefulWidget {
     var this.maxLine = 1,
     var this.validator,
     var this.icon,
+    var this.textAlign = TextAlign.start,
     var this.label,
     var this.inputFormatters,
     var this.keyboardType,
@@ -133,6 +135,7 @@ class EditTextState extends State<EditText> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textAlign: widget.textAlign,
       readOnly: widget.isReadOnly,
       enabled: widget.isEnabled,
       autovalidateMode: widget.autovalidateMode,
