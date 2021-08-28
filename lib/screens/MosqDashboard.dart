@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 
-// import 'package:mosq/controllers/manMasjidController.dart';
+// import 'package:mosq/controllers/manmasjid_controller.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';

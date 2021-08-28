@@ -5,16 +5,16 @@ import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/models/inventaris.dart';
 import 'package:mosq/screens/MosqDashboard.dart';
 import 'package:mosq/screens/MosqProfile.dart';
-import 'package:mosq/screens/PageListMasjid.dart';
+import 'package:mosq/modules/masjid/views/index.dart';
 import 'package:mosq/screens/authentication/MKSignIn.dart';
 import 'package:mosq/screens/authentication/MKSignUp.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/Form_Kegiatan.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/Form_Inventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Profile/create.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Profile/edit.dart';
+import 'package:mosq/modules/profile/views/create.dart';
+import 'package:mosq/modules/profile/views/edit.dart';
 // import 'package:mosq/screens/PageSiMasjid.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/DetailMasjid.dart';
+import 'package:mosq/modules/masjid/views/show.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/TMTabInventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/detailInventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Takmir/detail.dart';
@@ -42,7 +42,7 @@ class AppPage {
         binding: ListMasjidBinding()),
     GetPage(
       name: RouteName.detail,
-      page: () => KeMasjid(),
+      page: () => DetailMasjid(),
     ),
     GetPage(
         name: RouteName.inventaris,

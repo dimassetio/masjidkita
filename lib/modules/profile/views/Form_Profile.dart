@@ -10,11 +10,10 @@ import 'package:get/get.dart';
 import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/models/masjid.dart';
+import 'package:mosq/modules/profile/models/masjid_model.dart';
 
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
@@ -24,6 +23,7 @@ import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 
 class FormMasjid extends StatefulWidget {
+  const FormMasjid({MasjidModel? model});
   @override
   _FormMasjidState createState() => _FormMasjidState();
 }
@@ -39,6 +39,8 @@ class _FormMasjidState extends State<FormMasjid> {
     'Hak Milik',
     'Hak Guna Bangunan',
   ];
+  MasjidModel? model;
+
   String? statusTanah;
   String? legalitas;
   TextEditingController nama = TextEditingController();
@@ -56,6 +58,7 @@ class _FormMasjidState extends State<FormMasjid> {
   @override
   void initState() {
     super.initState();
+    model = widget.model;
     if (Get.routing.current != RouteName.new_masjid) {
       nama.text = manMasjidC.deMasjid.nama ?? "";
       alamat.text = manMasjidC.deMasjid.alamat ?? "";
@@ -67,6 +70,7 @@ class _FormMasjidState extends State<FormMasjid> {
       provinsi.text = manMasjidC.deMasjid.provinsi ?? "";
       tahun.text = manMasjidC.deMasjid.tahun ?? "";
       luasTanah.text = manMasjidC.deMasjid.luasTanah ?? "";
+      manMasjidC.downloadUrl.value = manMasjidC.deMasjid.photoUrl ?? "";
       luasBangunan.text = manMasjidC.deMasjid.luasBangunan ?? "";
       if (statusTanahList.contains(manMasjidC.deMasjid.statusTanah)) {
         statusTanah = manMasjidC.deMasjid.statusTanah;
@@ -480,23 +484,24 @@ class _FormMasjidState extends State<FormMasjid> {
                       if (manMasjidC.isSaving.value == false) {
                         if (formKey.currentState!.validate()) {
                           var model = MasjidModel(
-                              id: Get.routing.current != RouteName.new_masjid
-                                  ? manMasjidC.deMasjid.id
-                                  : null,
-                              alamat: alamat.text,
-                              deskripsi: deskripsi.text,
-                              kecamatan: kecamatan.text,
-                              kodePos: kodePos.text,
-                              kota: kota.text,
-                              legalitas: legalitas,
-                              luasBangunan: luasBangunan.text,
-                              luasTanah: luasTanah.text,
-                              nama: nama.text,
-                              photoUrl: manMasjidC.downloadUrl.value,
-                              provinsi: provinsi.text,
-                              statusTanah: statusTanah,
-                              tahun: tahun.text);
-                          await manMasjidC.updateDataMasjid(model);
+                            id: Get.routing.current != RouteName.new_masjid
+                                ? manMasjidC.deMasjid.id
+                                : null,
+                            alamat: alamat.text,
+                            deskripsi: deskripsi.text,
+                            kecamatan: kecamatan.text,
+                            kodePos: kodePos.text,
+                            kota: kota.text,
+                            legalitas: legalitas,
+                            luasBangunan: luasBangunan.text,
+                            luasTanah: luasTanah.text,
+                            nama: nama.text,
+                            photoUrl: manMasjidC.downloadUrl.value,
+                            provinsi: provinsi.text,
+                            statusTanah: statusTanah,
+                            tahun: tahun.text,
+                          );
+                          await manMasjidC.saveMasjid(model, null);
                           Get.back();
                         } else {
                           formKey.currentState!.validate();

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:cached_network_image/src/cached_image_widget.dart';
-import 'package:mosq/models/masjid.dart';
+import 'package:mosq/modules/profile/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/widgets/MasjidCard2.dart';
 import '../../../main.dart';
