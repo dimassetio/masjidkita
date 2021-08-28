@@ -9,6 +9,7 @@ import 'package:mosq/controllers/inventarisController.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/modules/profile/models/masjid_model.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
@@ -18,12 +19,13 @@ import 'package:get/get.dart';
 
 import 'package:mosq/main.dart';
 
-import 'Tab_Kas/TMTabKas.dart';
-import 'Tab_Profile/TMTabProfile.dart';
-import 'Tab_Takmir/index.dart';
-import 'Tab_Inventaris/TMTabInventaris.dart';
+import '../../../screens/fitur/Kelola_Masjid/Tab_Kas/TMTabKas.dart';
+import '../../profile/views/TabProfile.dart';
+import '../../../screens/fitur/Kelola_Masjid/Tab_Takmir/index.dart';
+import '../../../screens/fitur/Kelola_Masjid/Tab_Inventaris/TMTabInventaris.dart';
 
-class KeMasjid extends StatelessWidget {
+class DetailMasjid extends StatelessWidget {
+  MasjidModel model = Get.arguments as MasjidModel;
   @override
   Widget build(BuildContext context) {
     // Get.put(InventarisController().onInit());
@@ -49,8 +51,7 @@ class KeMasjid extends StatelessWidget {
                   expandedHeight: 220.0,
                   floating: true,
                   centerTitle: true,
-                  title: Obx(() => Text(
-                      manMasjidC.deMasjid.nama ?? "Nama Masjid",
+                  title: Obx(() => Text(model.nama ?? "Nama Masjid",
                       style:
                           primaryTextStyle(color: appStore.textPrimaryColor))),
                   pinned: true,
@@ -60,38 +61,14 @@ class KeMasjid extends StatelessWidget {
                   flexibleSpace: Obx(
                     () => FlexibleSpaceBar(
                       centerTitle: true,
-                      background: manMasjidC.deMasjid.photoUrl.isEmptyOrNull
+                      background: model.photoUrl.isEmptyOrNull
                           ? Image.asset(mk_contoh_image, fit: BoxFit.cover)
                           : CachedNetworkImage(
                               placeholder: placeholderWidgetFn() as Widget
                                   Function(BuildContext, String)?,
-                              imageUrl: manMasjidC.deMasjid.photoUrl ?? "",
+                              imageUrl: model.photoUrl ?? "",
                               fit: BoxFit.cover,
                             ),
-                      // Image.network(
-                      //   manMasjidC.deMasjid.photoUrl ?? "",
-                      //   fit: BoxFit.cover,
-                      //   loadingBuilder: (BuildContext context, Widget child,
-                      //       ImageChunkEvent? loadingProgress) {
-                      //     if (loadingProgress == null) {
-                      //       return child;
-                      //     }
-                      //     return Center(
-                      //       child: CircularProgressIndicator(
-                      //         value: loadingProgress.expectedTotalBytes !=
-                      //                 null
-                      //             ? loadingProgress.cumulativeBytesLoaded /
-                      //                 loadingProgress.expectedTotalBytes!
-                      //             : null,
-                      //       ),
-                      //     );
-                      //   },
-                      //   errorBuilder: (BuildContext context, Object exception,
-                      //       StackTrace? stackTrace) {
-                      //     return Image.asset(mk_contoh_image,
-                      //         fit: BoxFit.cover);
-                      //   },
-                      // ),
                     ),
                   ),
                 ),
@@ -124,7 +101,6 @@ class KeMasjid extends StatelessWidget {
                 TMTabKas(),
                 TMTabInventaris(InventarisModel()),
                 TMTabKegiatan(),
-                // TMTabKegiatan(),
               ],
             )),
       ),
@@ -155,9 +131,6 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         color: appStore.isDarkModeOn
             ? appStore.scaffoldBackground
             : mkColorPrimaryLight,
-        // bgColor: appStore.isDarkModeOn
-        //     ? appStore.scaffoldBackground
-        //     : mkColorPrimaryLight,
         boxShadow: [BoxShadow()],
         // showShadow: true
       ),

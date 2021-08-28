@@ -4,17 +4,14 @@ import 'package:get/get.dart';
 import 'package:mosq/controllers/authController.dart';
 import 'package:mosq/controllers/inventarisController.dart';
 import 'package:mosq/controllers/kegiatanController.dart';
-import 'package:mosq/controllers/listMasjidController.dart';
-import 'package:mosq/controllers/manMasjidController.dart';
 import 'package:mosq/controllers/takmirController.dart';
+import 'package:mosq/modules/masjid/controlllers/masjid_controller.dart';
 
 class InitBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(AuthController(), permanent: true);
-    Get.lazyPut(() => ManMasjidController());
-    Get.lazyPut(() => ManMasjidController());
-    Get.lazyPut(() => ListMasjidController());
+    Get.lazyPut(() => MasjidController());
     Get.lazyPut(() => InventarisController(), fenix: true);
     Get.lazyPut(() => KegiatanController(), fenix: true);
     Get.lazyPut(() => TakmirController(), fenix: true);
@@ -24,9 +21,7 @@ class InitBinding extends Bindings {
 class ListMasjidBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(ListMasjidController());
-    // Get.put(InventarisController());
-    // Get.put(TakmirController());
+    Get.put(MasjidController());
   }
 }
 

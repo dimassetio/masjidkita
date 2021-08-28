@@ -1,22 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:mosq/integrations/controllers.dart';
+// import 'package:mosq/integrations/controllers.dart';
+import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/modules/masjid/controlllers/masjid_controller.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
-import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:mosq/screens/widgets/MasjidSlider.dart';
 import 'package:nb_utils/nb_utils.dart';
-import '../../main.dart';
 import 'package:mosq/screens/widgets/MasjidList.dart';
 
-class PageListMasjid extends StatelessWidget {
+class PageListMasjid extends GetView<MasjidController> {
   const PageListMasjid({Key? key}) : super(key: key);
 
   @override
@@ -51,7 +50,7 @@ class PageListMasjid extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             Get.back();
-                            listMasjidC.clearController();
+                            controller.clearController();
                           },
                           child: CircleAvatar(
                               backgroundColor: Colors.white30,
@@ -70,7 +69,7 @@ class PageListMasjid extends StatelessWidget {
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             TextField(
-                              controller: listMasjidC.searchController,
+                              controller: controller.searchController,
                               decoration: InputDecoration(
                                 filled: true,
                                 fillColor: mkWhite,
@@ -91,10 +90,10 @@ class PageListMasjid extends StatelessWidget {
                               ),
                             ),
                             Obx(
-                              () => listMasjidC.isSearching.value
+                              () => controller.isSearching.value
                                   ? GestureDetector(
                                       onTap: () {
-                                        listMasjidC.searchController.clear();
+                                        controller.searchController.clear();
                                         FocusScopeNode currentFocus =
                                             FocusScope.of(context);
 
@@ -116,7 +115,10 @@ class PageListMasjid extends StatelessWidget {
                         ),
                       ),
                     ]),
-                // Main Column
+
+                15.height,
+                // Obx(() =>
+                //     text(manMasjidC.deMasjid.nama ?? "kosong")), // Main Column
                 Expanded(
                   child: Container(
                     // margin: EdgeInsets.only(top: 100),
@@ -130,23 +132,23 @@ class PageListMasjid extends StatelessWidget {
                             topRight: Radius.circular(24))),
                     child: SingleChildScrollView(
                       child: Obx(
-                        () => listMasjidC.isSearching.value
+                        () => controller.isSearching.value
                             // If Searching
                             ? Column(
                                 children: [
-                                  listMasjidC.isSearching.value
+                                  controller.isSearching.value
                                       ? Container(
                                           alignment: Alignment.topLeft,
                                           padding: EdgeInsets.only(
                                               left: 15, bottom: 5),
                                           child: Text(
-                                            "${listMasjidC.filteredMasjid.length} Masjid ditemukan, dari total ${listMasjidC.masjids.length}",
+                                            "${controller.filteredMasjid.length} Masjid ditemukan, dari total ${controller.masjids.length}",
                                             style: TextStyle(fontSize: 18),
                                           ),
                                         )
                                       : Container(),
                                   MasjidListing(
-                                    mListings: listMasjidC.filteredMasjid,
+                                    mListings: controller.filteredMasjid,
                                   ),
                                 ],
                               )
@@ -164,11 +166,11 @@ class PageListMasjid extends StatelessWidget {
                                   ),
 
                                   Obx(
-                                    () => listMasjidC.favMasjids.isEmpty
+                                    () => controller.favMasjids.isEmpty
                                         ? text(mk_masjid_fav_null,
                                             isLongText: true, isCentered: true)
                                         : MasjidSliderWidget(
-                                            listMasjidC.favMasjids),
+                                            controller.favMasjids),
                                   ),
                                   // SizedBox(height: 40),
                                   Container(
@@ -182,7 +184,7 @@ class PageListMasjid extends StatelessWidget {
                                   ),
                                   Obx(
                                     () => MasjidListing(
-                                      mListings: listMasjidC.masjids,
+                                      mListings: controller.masjids,
                                     ),
                                   ),
                                 ],
