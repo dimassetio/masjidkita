@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mosq/services/inventaris_database.dart';
 
 class UserModel {
   static const ID = "id";
@@ -13,6 +14,7 @@ class UserModel {
   String? email;
   String? role;
   String? masjid;
+  InventarisDatabase? dao;
   // String last_login;
 
   UserModel({this.id, this.name, this.email, this.role, this.masjid});

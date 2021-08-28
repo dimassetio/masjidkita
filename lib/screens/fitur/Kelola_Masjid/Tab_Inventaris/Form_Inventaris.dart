@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/helpers/validator.dart';
 import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/models/user.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
@@ -21,6 +22,8 @@ import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/main.dart';
 
 class FormInventaris extends StatefulWidget {
+  // final InventarisModel model;
+  // const FormInventaris({Key? key, required this.model}) : super(key: key);
   @override
   _FormInventarisState createState() => _FormInventarisState();
 }
@@ -362,6 +365,62 @@ class _FormInventarisState extends State<FormInventaris> {
                 : mk_edit_inventaris,
           ),
           actions: <Widget>[
+            // Padding(
+            //   padding: EdgeInsets.only(right: 20.0),
+            //   child: InkWell(
+            //     onTap: () async {
+            //       if (isSaving.value == false) {
+            //         if (formKey.currentState!.validate()) {
+            //           int jumlah = jumlahController.text.toInt();
+            //           int harga = hargaController.text
+            //               .replaceAll('Rp', '')
+            //               .replaceAll('.', '')
+            //               .toInt();
+            //           InventarisModel model = InventarisModel(
+            //               inventarisID: isEdit
+            //                   ? inventarisC.inventaris.inventarisID
+            //                   : null,
+            //               nama: namaController.text,
+            //               kondisi: kondisiController.text,
+            //               foto: fotoController.text,
+            //               url: urlController.text,
+            //               harga: harga,
+            //               jumlah: jumlah,
+            //               hargaTotal: harga * jumlah);
+
+            //           if (currStep < steps.length - 1) {
+            //             currStep = currStep + 1;
+            //           } else {
+            //             isSaving.value = true;
+            //             setState(() {});
+            //             await inventarisC.addInventaris(
+            //                 model, authController.firebaseUser.value.uid);
+
+            //             if (inventarisC.photoLocal != null) {
+            //               await inventarisC.uploadToStorage(
+            //                   inventarisC.photoLocal, model);
+            //             }
+
+            //             isSaving.value = false;
+            //           }
+            //         } else {
+            //           formKey.currentState!.validate();
+            //         }
+            //       }
+            //     },
+            //     child: isSaving.value
+            //         ? Container(
+            //             padding: EdgeInsets.all(13),
+            //             width: 55.0,
+            //             child: CircularProgressIndicator())
+            //         : Icon(
+            //             Icons.check,
+            //             size: 26.0,
+            //             color: mkColorPrimary,
+            //           ),
+            //   ),
+            // )
+
             Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: InkWell(
@@ -390,8 +449,10 @@ class _FormInventarisState extends State<FormInventaris> {
                       } else {
                         isSaving.value = true;
                         setState(() {});
-                        await inventarisC.addInventaris(
-                            model, authController.firebaseUser.value.uid);
+                        // await inventarisC.addInventaris(
+                        //     model, authController.firebaseUser.value.uid);
+
+                        await model.save();
 
                         if (inventarisC.photoLocal != null) {
                           await inventarisC.uploadToStorage(

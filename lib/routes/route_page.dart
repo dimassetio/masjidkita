@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
@@ -30,6 +31,7 @@ class AppPage {
     GetPage(name: RouteName.mkdashboard, page: () => PageListMasjid()),
     GetPage(name: RouteName.new_masjid, page: () => NewProfile()),
     GetPage(name: RouteName.new_inventaris, page: () => FormInventaris()),
+    // GetPage(name: RouteName.new_inventaris, page: () => FormInventaris(model: model)),
     GetPage(name: RouteName.new_kegiatan, page: () => FormKegiatan()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),
     GetPage(
