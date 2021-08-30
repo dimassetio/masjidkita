@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mosq/controllers/inventarisController.dart';
+import 'package:mosq/modules/inventaris/controllers/inventarisController.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/models/takmir.dart';

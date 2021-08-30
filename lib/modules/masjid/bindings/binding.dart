@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:mosq/modules/masjid/controlllers/masjid_controller.dart';
+import 'package:mosq/modules/masjid/controllers/masjid_controller.dart';
 
 class ListMasjidBinding extends Bindings {
   @override

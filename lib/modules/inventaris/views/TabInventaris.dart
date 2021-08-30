@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mosq/controllers/inventarisController.dart';
+import 'package:mosq/modules/inventaris/controllers/inventarisController.dart';
 import 'package:mosq/integrations/controllers.dart';
 // import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
@@ -16,19 +16,18 @@ import 'package:get/get.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'InventarisList.dart';
 
-import '../../../../../main.dart';
+import '../../../../main.dart';
 
 class TMTabInventaris extends StatefulWidget {
   @override
   _TMTabInventarisState createState() => _TMTabInventarisState();
-  final InventarisModel inventaris;
+  final InventarisModel model;
   // final UserModel user;
   // final ManMasjidModel masjid;
-  TMTabInventaris(
-    this.inventaris,
-    // this.user,
-    // this.masjid,
-  );
+  const TMTabInventaris(this.model
+      // this.user,
+      // this.masjid,
+      );
 }
 
 class _TMTabInventarisState extends State<TMTabInventaris> {
@@ -115,8 +114,11 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                               setState(() async {
                                 // inventarisC.inventariss.removeAt(index);
                                 try {
-                                  await inventarisC.deleteInventaris(
-                                      item.inventarisID, item.url);
+                                  // await inventarisC.deleteInventaris(
+                                  //     item.inventarisID, item.url);
+
+                                  await InventarisModel().delete();
+
                                   // finish(context);
                                 } catch (e) {
                                   toast('Error Delete Data');

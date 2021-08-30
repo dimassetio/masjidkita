@@ -6,13 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/helpers/validator.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
-import 'package:mosq/models/user.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirmDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
-import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -35,48 +34,48 @@ class _FormInventarisState extends State<FormInventaris> {
   GlobalKey<FormState> formKey = GlobalKey();
   bool isEdit = Get.currentRoute != RouteName.new_inventaris;
   var isSaving = false.obs;
-  InventarisModel dataInventaris = Get.arguments;
+  InventarisModel model = Get.arguments ?? MasjidModel();
   // GlobalKey<FormState> formKey = GlobalKey();
 
-  final TextEditingController namaController = TextEditingController();
-  final TextEditingController jumlahController = TextEditingController();
-  final TextEditingController kondisiController = TextEditingController();
-  final TextEditingController fotoController = TextEditingController();
-  final TextEditingController urlController = TextEditingController();
-  var hargaController = TextEditingController();
+  final TextEditingController nama = TextEditingController();
+  final TextEditingController jumlah = TextEditingController();
+  final TextEditingController kondisi = TextEditingController();
+  final TextEditingController foto = TextEditingController();
+  final TextEditingController url = TextEditingController();
+  var harga = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     if (Get.parameters['id'] != null) {
-      namaController.text = dataInventaris.nama ?? "";
-      kondisiController.text = dataInventaris.kondisi ?? "";
-      fotoController.text = dataInventaris.foto ?? "";
-      urlController.text = dataInventaris.url ?? "";
-      hargaController.text = dataInventaris.harga.toString();
-      jumlahController.text = dataInventaris.jumlah.toString();
+      nama.text = model.nama ?? "";
+      kondisi.text = model.kondisi ?? "";
+      foto.text = model.foto ?? "";
+      url.text = model.url ?? "";
+      harga.text = model.harga.toString();
+      jumlah.text = model.jumlah.toString();
     }
     if (isEdit == true) {}
   }
 
   checkControllers() {
     if (isEdit) {
-      if (namaController.text != dataInventaris.nama ||
-          jumlahController.text != dataInventaris.jumlah.toString() ||
-          kondisiController.text != dataInventaris.kondisi ||
-          // fotoController.text != inventaris.foto ||
-          // urlController.text != inventaris.url ||
-          hargaController.text != dataInventaris.harga.toString()) {
+      if (nama.text != model.nama ||
+          jumlah.text != model.jumlah.toString() ||
+          kondisi.text != model.kondisi ||
+          // foto.text != inventaris.foto ||
+          // url.text != inventaris.url ||
+          harga.text != model.harga.toString()) {
         return true;
       } else
         return false;
     } else {
-      if (namaController.text != "" ||
-          jumlahController.text != "" ||
-          kondisiController.text != "" ||
-          // fotoController.text != inventaris.foto ||
-          // urlController.text != inventaris.url ||
-          hargaController.text != "") {
+      if (nama.text != "" ||
+          jumlah.text != "" ||
+          kondisi.text != "" ||
+          // foto.text != inventaris.foto ||
+          // url.text != inventaris.url ||
+          harga.text != "") {
         return true;
       } else
         return false;
@@ -101,7 +100,7 @@ class _FormInventarisState extends State<FormInventaris> {
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
               fontSize: textSizeLargeMedium,
-              mController: namaController,
+              mController: nama,
               hint: mk_hint_nama_inventaris,
               label: mk_lbl_nama_inventaris,
               validator: (value) => (Validator(
@@ -119,7 +118,7 @@ class _FormInventarisState extends State<FormInventaris> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
-              mController: kondisiController,
+              mController: kondisi,
               hint: mk_hint_kondisi_inventaris,
               label: mk_lbl_kondisi_inventaris,
               validator: (value) => (Validator(
@@ -137,7 +136,7 @@ class _FormInventarisState extends State<FormInventaris> {
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
               textAlign: TextAlign.end,
-              mController: hargaController,
+              mController: harga,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 CurrrencyInputFormatter()
@@ -160,7 +159,7 @@ class _FormInventarisState extends State<FormInventaris> {
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: EditText(
               textAlign: TextAlign.end,
-              mController: jumlahController,
+              mController: jumlah,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(4)
@@ -202,14 +201,14 @@ class _FormInventarisState extends State<FormInventaris> {
               //     : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
               // CircleAvatar(
               //   backgroundImage: AssetImage(mk_profile_pic),
-              //   child: isEdit && !dataInventaris.url.isEmptyOrNull
+              //   child: isEdit && !model.url.isEmptyOrNull
               //       ? Container(
               //           decoration: BoxDecoration(
               //               color: mkColorAccent,
               //               borderRadius: BorderRadius.circular(100),
               //               image: DecorationImage(
               //                   image: CachedNetworkImageProvider(
-              //                       dataInventaris.url ?? ""),
+              //                       model.url ?? ""),
               //                   fit: BoxFit.cover)),
               //         )
               //       : null,
@@ -253,7 +252,7 @@ class _FormInventarisState extends State<FormInventaris> {
               //     // style: GoogleFonts.poppins(),
               //     isReadOnly: true,
               //     // enabled: !isSaving.value,
-              //     mController: fotoController,
+              //     mController: foto,
               //     // decoration: InputDecoration(hintText: inventarisC.message),
               //     // validator: (s) {
               //     //   if (s!.trim().isEmpty)
@@ -311,7 +310,7 @@ class _FormInventarisState extends State<FormInventaris> {
                   enableInteractiveSelection: false,
                   // style: GoogleFonts.poppins(),
                   enabled: false,
-                  controller: urlController,
+                  controller: url,
                 ),
               ),
               // Opacity(
@@ -321,7 +320,7 @@ class _FormInventarisState extends State<FormInventaris> {
               //     enableInteractiveSelection: false,
               //     // style: GoogleFonts.poppins(),
               //     enabled: false,
-              //     controller: inventarisC.fotoController,
+              //     controller: inventarisC.foto,
               //   ),
               // ),
               // ElevatedButton(
@@ -371,8 +370,8 @@ class _FormInventarisState extends State<FormInventaris> {
             //     onTap: () async {
             //       if (isSaving.value == false) {
             //         if (formKey.currentState!.validate()) {
-            //           int jumlah = jumlahController.text.toInt();
-            //           int harga = hargaController.text
+            //           int jumlah = jumlah.text.toInt();
+            //           int harga = harga.text
             //               .replaceAll('Rp', '')
             //               .replaceAll('.', '')
             //               .toInt();
@@ -380,10 +379,10 @@ class _FormInventarisState extends State<FormInventaris> {
             //               inventarisID: isEdit
             //                   ? inventarisC.inventaris.inventarisID
             //                   : null,
-            //               nama: namaController.text,
-            //               kondisi: kondisiController.text,
-            //               foto: fotoController.text,
-            //               url: urlController.text,
+            //               nama: nama.text,
+            //               kondisi: kondisi.text,
+            //               foto: foto.text,
+            //               url: url.text,
             //               harga: harga,
             //               jumlah: jumlah,
             //               hargaTotal: harga * jumlah);
@@ -427,8 +426,8 @@ class _FormInventarisState extends State<FormInventaris> {
                 onTap: () async {
                   if (isSaving.value == false) {
                     if (formKey.currentState!.validate()) {
-                      int jumlah = jumlahController.text.toInt();
-                      int harga = hargaController.text
+                      int jumlahBarang = jumlah.text.toInt();
+                      int hargaBarang = harga.text
                           .replaceAll('Rp', '')
                           .replaceAll('.', '')
                           .toInt();
@@ -436,13 +435,13 @@ class _FormInventarisState extends State<FormInventaris> {
                           inventarisID: isEdit
                               ? inventarisC.inventaris.inventarisID
                               : null,
-                          nama: namaController.text,
-                          kondisi: kondisiController.text,
-                          foto: fotoController.text,
-                          url: urlController.text,
-                          harga: harga,
-                          jumlah: jumlah,
-                          hargaTotal: harga * jumlah);
+                          nama: nama.text,
+                          kondisi: kondisi.text,
+                          foto: foto.text,
+                          url: url.text,
+                          harga: hargaBarang,
+                          jumlah: jumlahBarang,
+                          hargaTotal: hargaBarang * jumlahBarang);
 
                       if (currStep < steps.length - 1) {
                         currStep = currStep + 1;
@@ -454,10 +453,10 @@ class _FormInventarisState extends State<FormInventaris> {
 
                         await model.save();
 
-                        if (inventarisC.photoLocal != null) {
-                          await inventarisC.uploadToStorage(
-                              inventarisC.photoLocal, model);
-                        }
+                        // if (inventarisC.photoLocal != null) {
+                        //   await inventarisC.uploadToStorage(
+                        //       inventarisC.photoLocal, model);
+                        // }
 
                         isSaving.value = false;
                       }

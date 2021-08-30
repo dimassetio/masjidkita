@@ -12,9 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class InventarisController extends GetxController {
-  var isSaving = false.obs;
-
-  var hargaController = TextEditingController();
+  // var hargaController = TextEditingController();
 
   static InventarisController instance = Get.find();
 
@@ -23,6 +21,9 @@ class InventarisController extends GetxController {
 
   Rx<InventarisModel> _inventarisModel = InventarisModel().obs;
   InventarisModel get inventaris => _inventarisModel.value;
+
+  var isSaving = false.obs;
+  var emptyValue = false.obs;
 
   CollectionReference collections(String masjidID) {
     return firebaseFirestore
@@ -42,6 +43,12 @@ class InventarisController extends GetxController {
       'jumlah': model.jumlah,
       'hargaTotal': model.hargaTotal
     };
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    inventarisList.bindStream(InventarisModel().dao.inventarisStream());
   }
 
   addInventaris(InventarisModel model, String userId) async {
@@ -113,22 +120,22 @@ class InventarisController extends GetxController {
 
   set inventaris(InventarisModel value) => this._inventarisModel.value = value;
 
-  // getInventarisModel(inventarisID) async {
-  //   try {
-  //     // print(mID);
-  //     _inventarisModel.value = await firebaseFirestore
-  //         .collection(masjidCollection)
-  //         .doc(manMasjidC.deMasjid.id)
-  //         .collection(inventarisCollection)
-  //         .doc(inventarisID)
-  //         .get()
-  //         .then((doc) => InventarisModel.fromDocumentSnapshot(doc));
-  //   } catch (e) {
-  //     print(inventarisID);
-  //     print(e);
-  //     _inventarisModel.value = InventarisModel();
-  //   }
-  // }
+  getInventarisModel(inventarisID) async {
+    try {
+      // print(mID);
+      _inventarisModel.value = await firebaseFirestore
+          .collection(masjidCollection)
+          // .doc(masjidC.deMasjid.id)
+          // .collection(inventarisCollection)
+          .doc(inventarisID)
+          .get()
+          .then((doc) => InventarisModel.fromDocumentSnapshot(doc));
+    } catch (e) {
+      print(inventarisID);
+      print(e);
+      _inventarisModel.value = InventarisModel();
+    }
+  }
 
   // updateInventaris() async {
   //   Map<String, dynamic> data = new HashMap();
@@ -300,12 +307,6 @@ class InventarisController extends GetxController {
   //   } else {
   //     toast('error upload data');
   //   }
-  // }
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   inventarisList.bindStream(inventarisStream());
   // }
 
   // Stream<List<InventarisModel>> inventarisStream() {

@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/modules/profile/databases/masjid_database.dart';
-import 'package:mosq/modules/profile/models/masjid_model.dart';
 
 class InventarisDatabase {
   // static final Reference storage = firebaseStorage

@@ -5,11 +5,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:mosq/controllers/inventarisController.dart';
+import 'package:mosq/modules/inventaris/controllers/inventarisController.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
-import 'package:mosq/modules/profile/models/masjid_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -23,7 +22,7 @@ import 'package:mosq/main.dart';
 import '../../../screens/fitur/Kelola_Masjid/Tab_Kas/TMTabKas.dart';
 import '../../profile/views/TabProfile.dart';
 import '../../../screens/fitur/Kelola_Masjid/Tab_Takmir/index.dart';
-import '../../../screens/fitur/Kelola_Masjid/Tab_Inventaris/TMTabInventaris.dart';
+import '../../inventaris/views/TabInventaris.dart';
 
 class DetailMasjid extends StatelessWidget {
   MasjidModel model = Get.arguments as MasjidModel;

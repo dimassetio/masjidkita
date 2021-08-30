@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 // import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/modules/masjid/controlllers/masjid_controller.dart';
+import 'package:mosq/modules/masjid/controllers/masjid_controller.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKImages.dart';

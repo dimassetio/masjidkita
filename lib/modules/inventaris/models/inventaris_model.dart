@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mosq/modules/inventaris/databases/inventaris_database.dart';
+import 'package:mosq/modules/masjid/databases/masjid_database.dart';
 
 class InventarisModel {
   String? inventarisID;
@@ -10,18 +11,19 @@ class InventarisModel {
   String? kondisi;
   int? harga;
   int? hargaTotal;
-  InventarisDatabase dao = new InventarisDatabase();
+  InventarisDatabase dao = new InventarisDatabase(
+      collections: MasjidDatabase.db, storage: MasjidDatabase.storage);
 
-  InventarisModel(
-      {this.inventarisID,
-      this.nama,
-      this.foto,
-      this.url,
-      this.jumlah,
-      this.kondisi,
-      this.harga,
-      this.hargaTotal,
-      this.dao});
+  InventarisModel({
+    this.inventarisID,
+    this.nama,
+    this.foto,
+    this.url,
+    this.jumlah,
+    this.kondisi,
+    this.harga,
+    this.hargaTotal,
+  });
 
   static attributeName(String attribute) {
     var lang = {
@@ -38,14 +40,14 @@ class InventarisModel {
 
   save() async {
     if (this.inventarisID == null) {
-      return await dao!.store(this);
+      return await dao.store(this);
     } else {
-      return await dao!.update(this);
+      return await dao.update(this);
     }
   }
 
   delete() async {
-    return await dao!.delete(this);
+    return await dao.delete(this);
   }
 
   calculateTotal() {
