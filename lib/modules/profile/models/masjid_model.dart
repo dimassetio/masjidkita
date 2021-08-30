@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mosq/modules/inventaris/databases/inventaris_database.dart';
 import 'package:mosq/modules/profile/databases/masjid_database.dart';
 
 class MasjidModel {
@@ -19,6 +20,7 @@ class MasjidModel {
   String? statusTanah;
   String? legalitas;
   MasjidDatabase dao = new MasjidDatabase();
+  InventarisDatabase? inventarisDao;
 
   MasjidModel({
     this.id,
@@ -35,7 +37,11 @@ class MasjidModel {
     this.luasBangunan,
     this.statusTanah,
     this.legalitas,
-  });
+  }) {
+    inventarisDao = InventarisDatabase(
+        collections: dao.inventarises(this),
+        storage: dao.inventarisStorage(this));
+  }
 
   MasjidModel.fromSnapshot(DocumentSnapshot snapshot) {
     id = snapshot.id;

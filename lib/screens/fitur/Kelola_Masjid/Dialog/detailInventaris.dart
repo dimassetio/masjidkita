@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/widgets/MosqTopBar.dart';

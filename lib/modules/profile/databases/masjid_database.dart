@@ -13,6 +13,10 @@ class MasjidDatabase {
   static final Reference storage =
       firebaseStorage.ref().child(masjidCollection);
 
+  Reference inventarisStorage(MasjidModel model) {
+    return storage.child(model.id ?? "").child(inventarisCollection);
+  }
+
   CollectionReference inventarises(MasjidModel model) {
     return db.doc(model.id).collection(inventarisCollection);
   }
@@ -48,8 +52,9 @@ class MasjidDatabase {
   Future delete(MasjidModel model) async {
     return await db.doc(model.id).delete();
   }
+
   Future upload(MasjidModel model, File foto) {
-    var path = storage.child(model.id!).child('Foto Profil');
+    var path = storage.child(model.id!);
     return path.putFile(foto);
   }
 }

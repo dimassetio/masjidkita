@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
-import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/screens/MosqDashboard.dart';
 import 'package:mosq/screens/MosqProfile.dart';
 import 'package:mosq/modules/masjid/views/index.dart';
@@ -31,7 +31,6 @@ class AppPage {
     GetPage(name: RouteName.mkdashboard, page: () => PageListMasjid()),
     GetPage(name: RouteName.new_masjid, page: () => NewProfile()),
     GetPage(name: RouteName.new_inventaris, page: () => FormInventaris()),
-    // GetPage(name: RouteName.new_inventaris, page: () => FormInventaris(model: model)),
     GetPage(name: RouteName.new_kegiatan, page: () => FormKegiatan()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),
     GetPage(

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mosq/services/inventaris_database.dart';
+import 'package:mosq/modules/inventaris/databases/inventaris_database.dart';
 
 class InventarisModel {
   String? inventarisID;
@@ -10,7 +10,7 @@ class InventarisModel {
   String? kondisi;
   int? harga;
   int? hargaTotal;
-  InventarisDatabase? dao;
+  InventarisDatabase dao = new InventarisDatabase();
 
   InventarisModel(
       {this.inventarisID,
@@ -63,6 +63,19 @@ class InventarisModel {
     kondisi = documentSnapshot.data()?["kondisi"];
     harga = documentSnapshot.data()?["harga"];
     hargaTotal = documentSnapshot.data()?["hargaTotal"];
+  }
+
+  Map<String, dynamic> toSnapshot() {
+    return {
+      'inventarisID': this.inventarisID,
+      'nama': this.nama,
+      'foto': this.foto,
+      'url': this.url,
+      'jumlah': this.jumlah,
+      'kondisi': this.kondisi,
+      'harga': this.harga,
+      'hargaTotal': this.hargaTotal
+    };
   }
 }
 

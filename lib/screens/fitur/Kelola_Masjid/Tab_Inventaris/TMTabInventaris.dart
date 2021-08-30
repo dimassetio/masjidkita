@@ -3,7 +3,7 @@ import 'package:mosq/controllers/inventarisController.dart';
 import 'package:mosq/integrations/controllers.dart';
 // import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/models/user.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -73,7 +73,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                       final item = inventarisC.inventariss[index];
                       return Obx(() => Dismissible(
                             key: Key(item.inventarisID!),
-                            direction: manMasjidC.myMasjid.value
+                            direction: masjidC.myMasjid.value
                                 ? DismissDirection.horizontal
                                 : DismissDirection.none,
                             child:
@@ -160,7 +160,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
         Container(
             alignment: Alignment.bottomRight,
             padding: EdgeInsets.only(right: 15, bottom: 15),
-            child: Obx(() => manMasjidC.myMasjid.value
+            child: Obx(() => masjidC.myMasjid.value
                 ? FloatingActionButton(
                     // heroTag: '1',
                     // heroTag: '5',

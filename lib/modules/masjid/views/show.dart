@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:mosq/controllers/inventarisController.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/modules/profile/models/masjid_model.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
