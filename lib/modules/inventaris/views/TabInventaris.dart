@@ -47,7 +47,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
   }
 
   Widget generateItemList() {
-    final InventarisController inventarisC = Get.find();
+    // final InventarisController inventarisC = Get.find();
     return Container(
       child: SingleChildScrollView(
           child: Column(
@@ -70,13 +70,17 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                     physics: ScrollPhysics(),
                     itemBuilder: (_, index) {
                       final item = inventarisC.inventariss[index];
+
                       return Obx(() => Dismissible(
                             key: Key(item.inventarisID!),
                             direction: masjidC.myMasjid.value
                                 ? DismissDirection.horizontal
                                 : DismissDirection.none,
                             child:
-                                InventarisCard(inventarisC.inventariss[index]),
+                                // InventarisCard(inventarisC.inventariss[index]),
+                                InventarisCard(
+                              inventaris: inventarisC.inventariss[index],
+                            ),
                             background: slideRightBackground(),
                             secondaryBackground: slideLeftBackground(),
                             confirmDismiss: (direction) async {

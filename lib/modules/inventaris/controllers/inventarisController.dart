@@ -7,11 +7,13 @@ import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:get/get.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class InventarisController extends GetxController {
+  String? photoUrlC;
   // var hargaController = TextEditingController();
 
   static InventarisController instance = Get.find();
@@ -48,7 +50,11 @@ class InventarisController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    inventarisList.bindStream(InventarisModel().dao.inventarisStream());
+    // inventarisList.bindStream(InventarisModel().dao.inventarisStream());
+  }
+
+  getInventarisStream(MasjidModel model) {
+    inventarisList.bindStream(model.inventarisDao!.inventarisStream(model));
   }
 
   addInventaris(InventarisModel model, String userId) async {
@@ -227,15 +233,6 @@ class InventarisController extends GetxController {
   // Get.toNamed(RouteName.inventaris);
   // }
 
-  // clearControllers() {
-  //   namaController.clear();
-  //   jumlahController.clear();
-  //   kondisiController.clear();
-  //   fotoController.clear();
-  //   hargaController.clear();
-  //   // photo_url.clear();
-  // }
-
   void clear() {
     _inventarisModel.value = InventarisModel();
   }
@@ -264,50 +261,57 @@ class InventarisController extends GetxController {
     Get.back();
   }
 
-  // Future uploadToStorage(XFile? pickImage, InventarisModel inventaris) async {
-  //   if (pickImage != null) {
-  //     fileName = pickImage.name;
-  //     filePath = pickImage.path;
-  //     Reference refFeedBuckets = firebaseStorage
-  //         .ref()
-  //         .child(masjidCollection)
-  //         .child(manMasjidC.deMasjid.id!)
-  //         .child(inventarisCollection)
-  //         .child(fileName);
-  //     var file = File(filePath);
-  //     final metadata = SettableMetadata(
-  //         contentType: 'image/jpeg',
-  //         customMetadata: {
-  //           'picked-file-path': filePath,
-  //           'picked-file-name': fileName
-  //         });
+  uploadImage(XFile? pickImage, InventarisModel inventaris) async {
+    if (pickImage != null) {
+      fileName = pickImage.name;
+      filePath = pickImage.path;
+      Reference pathStorage = firebaseStorage
+          .ref()
+          .child(masjidCollection)
+          .child(authController.user.masjid!)
+          .child(inventarisCollection)
+          .child(inventaris.inventarisID ?? "");
+      var file = File(filePath);
+      final metadata = SettableMetadata(
+          contentType: 'image/jpeg',
+          customMetadata: {
+            'picked-file-path': filePath,
+            'picked-file-name': fileName
+          });
 
-  //     UploadTask uploadTask = refFeedBuckets.putFile(file, metadata);
-  //     uploadTask.snapshotEvents.listen((event) async {
-  //       print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
-  //       uploadPrecentage.value = event.bytesTransferred / event.totalBytes;
+      UploadTask uploadTask = pathStorage.putFile(file, metadata);
+      uploadTask.snapshotEvents.listen((event) async {
+        print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
+        uploadPrecentage.value = event.bytesTransferred / event.totalBytes;
 
-  //       if (event.state == TaskState.success) {
-  //         downloadUrl.value = await refFeedBuckets.getDownloadURL();
-  //         inventaris.url = downloadUrl.value;
-  //         // fotoController.text = fileName;
-  //         updateInventaris(inventaris, manMasjidC.deMasjid.id!);
-  //         // await firebaseFirestore
-  //         //     .collection(masjidCollection)
-  //         //     .doc(manMasjidC.deMasjid.id)
-  //         //     .collection(inventarisCollection)
-  //         //     .doc(inventarisC.inventaris.inventarisID)
-  //         //     .update({'url': downloadUrl.value});
-  //         isLoadingImage.value = false;
-  //         // Get.back();
-  //       } else {
-  //         isLoadingImage.value = true;
-  //       }
-  //     });
-  //   } else {
-  //     toast('error upload data');
-  //   }
-  // }
+        if (event.state == TaskState.success) {
+          // downloadUrl.value = await pathStorage.getDownloadURL();
+          // inventaris.url = downloadUrl.value;
+          photoUrlC = await pathStorage.getDownloadURL();
+          inventaris.url = photoUrlC;
+          // fotoController.text = fileName;
+          updateInventaris(inventaris, authController.user.masjid!);
+          // await firebaseFirestore
+          //     .collection(masjidCollection)
+          //     .doc(manMasjidC.deMasjid.id)
+          //     .collection(inventarisCollection)
+          //     .doc(inventarisC.inventaris.inventarisID)
+          //     .update({'url': downloadUrl.value});
+          isLoadingImage.value = false;
+          // Get.back();
+        } else {}
+      });
+    } else {
+      toast('error upload data');
+    }
+  }
+
+  clearControllers() {
+    photoUrlC = null;
+    photoLocal = null;
+    photoPath = "";
+    // photo_url.clear();
+  }
 
   // Stream<List<InventarisModel>> inventarisStream() {
   //   return firebaseFirestore

@@ -42,8 +42,7 @@ class MasjidModel {
     this.legalitas,
   }) {
     inventarisDao = InventarisDatabase(
-        collections: dao.inventarises(this),
-        storage: dao.inventarisStorage(this));
+        db: dao.inventarises(this), storage: dao.inventarisStorage(this));
     takmirDao =
         TakmirDatabase(db: dao.takmirs(this), storage: dao.takmirStorage(this));
   }

@@ -21,7 +21,8 @@ import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/main.dart';
 
 class FormInventaris extends StatefulWidget {
-  // final InventarisModel model;
+  final InventarisModel model = Get.arguments ?? InventarisModel();
+  static const tag = '/FormInventaris';
   // const FormInventaris({Key? key, required this.model}) : super(key: key);
   @override
   _FormInventarisState createState() => _FormInventarisState();

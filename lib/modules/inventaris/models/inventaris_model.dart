@@ -11,8 +11,9 @@ class InventarisModel {
   String? kondisi;
   int? harga;
   int? hargaTotal;
-  InventarisDatabase dao = new InventarisDatabase(
-      collections: MasjidDatabase.db, storage: MasjidDatabase.storage);
+  // InventarisDatabase dao = new InventarisDatabase(
+  //     collections: MasjidDatabase.db, storage: MasjidDatabase.storage);
+  InventarisDatabase? dao;
 
   InventarisModel({
     this.inventarisID,
@@ -23,6 +24,7 @@ class InventarisModel {
     this.kondisi,
     this.harga,
     this.hargaTotal,
+    this.dao,
   });
 
   static attributeName(String attribute) {
@@ -40,14 +42,14 @@ class InventarisModel {
 
   save() async {
     if (this.inventarisID == null) {
-      return await dao.store(this);
+      return await this.dao!.store(this);
     } else {
-      return await dao.update(this);
+      return await this.dao!.update(this);
     }
   }
 
   delete() async {
-    return await dao.delete(this);
+    return await this.dao!.delete(this);
   }
 
   calculateTotal() {
@@ -65,6 +67,21 @@ class InventarisModel {
     kondisi = documentSnapshot.data()?["kondisi"];
     harga = documentSnapshot.data()?["harga"];
     hargaTotal = documentSnapshot.data()?["hargaTotal"];
+  }
+
+  InventarisModel fromSnapshot(
+      DocumentSnapshot snapshot, InventarisDatabase dao) {
+    return InventarisModel(
+      inventarisID: snapshot.id,
+      nama: snapshot.data()?["nama"],
+      foto: snapshot.data()?["foto"],
+      url: snapshot.data()?["url"],
+      jumlah: snapshot.data()?["jumlah"],
+      kondisi: snapshot.data()?["kondisi"],
+      harga: snapshot.data()?["harga"],
+      hargaTotal: snapshot.data()?["hargaTotal"],
+      dao: dao,
+    );
   }
 
   Map<String, dynamic> toSnapshot() {

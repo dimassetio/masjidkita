@@ -11,9 +11,9 @@ import 'package:mosq/screens/utils/MKConstant.dart';
 
 class InventarisCard extends StatelessWidget {
   final InventarisModel inventaris;
-  InventarisCard(
-    this.inventaris,
-  );
+  const InventarisCard({
+    required this.inventaris,
+  });
   @override
   Widget build(BuildContext context) {
     return Column(

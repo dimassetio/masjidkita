@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/modules/profile/databases/masjid_database.dart';
+import 'package:mosq/modules/takmir/models/takmir_model.dart';
 
 class InventarisDatabase {
   // static final Reference storage = firebaseStorage
@@ -17,23 +19,31 @@ class InventarisDatabase {
   //   return MasjidDatabase.db.doc(model.id).collection(inventarisCollection);
   // }
 
-  final CollectionReference collections;
+  final CollectionReference db;
   final Reference storage;
   InventarisDatabase({
-    required this.collections,
+    required this.db,
     required this.storage,
   });
 
   Future<DocumentSnapshot> getInventaris(InventarisModel model) async {
-    return await collections.doc(model.inventarisID).get();
+    return await db.doc(model.inventarisID).get();
   }
 
   ///Stream
-  Stream<List<InventarisModel>> inventarisStream() {
-    return collections.snapshots().map((QuerySnapshot query) {
+  Stream<InventarisModel> streamDetailTakmir(InventarisModel model) {
+    return db
+        .doc(model.inventarisID)
+        .snapshots()
+        .map((event) => InventarisModel().fromSnapshot(event, model.dao!));
+  }
+
+  Stream<List<InventarisModel>> inventarisStream(MasjidModel model) async* {
+    yield* db.snapshots().map((QuerySnapshot query) {
       List<InventarisModel> retVal = [];
       query.docs.forEach((element) {
-        retVal.add(InventarisModel.fromDocumentSnapshot(element));
+        retVal
+            .add(InventarisModel().fromSnapshot(element, model.inventarisDao!));
       });
       return retVal;
     });
@@ -53,31 +63,38 @@ class InventarisDatabase {
   }
 
   // Future store(InventarisModel model) async {
-  //   DocumentReference result = await collections.add(getData(model));
+  //   DocumentReference result = await db.add(getData(model));
   //   model.inventarisID = result.id;
   //   return result;
   // }
 
   Future store(InventarisModel model) async {
-    DocumentReference result = await collections.add(model.toSnapshot());
+    DocumentReference result = await db.add(model.toSnapshot());
     model.inventarisID = result.id;
     return result;
   }
 
   // Future update(InventarisModel model) async {
-  //   return await collections.doc(model.inventarisID).set(getData(model));
+  //   return await db.doc(model.inventarisID).set(getData(model));
   // }
 
   Future update(InventarisModel model) async {
-    return await collections.doc(model.inventarisID).update(model.toSnapshot());
+    return await db.doc(model.inventarisID).update(model.toSnapshot());
   }
 
   Future delete(InventarisModel model) async {
-    return await collections.doc(model.inventarisID).delete();
+    return await db.doc(model.inventarisID).delete();
   }
 
-  Future upload(InventarisModel model, File foto) {
+  Future upload(InventarisModel model, File foto) async {
     var path = storage.child(model.inventarisID!);
-    return path.putFile(foto);
+    UploadTask task = path.putFile(foto);
+    task.snapshotEvents.listen((event) async {
+      if (event.state == TaskState.success) {
+        model.url = await path.getDownloadURL();
+        update(model);
+      }
+    });
+    return task;
   }
 }
