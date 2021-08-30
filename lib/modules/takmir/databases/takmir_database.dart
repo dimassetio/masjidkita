@@ -51,6 +51,11 @@ class TakmirDatabase {
     return await db.doc(model.id).delete();
   }
 
+  Future deleteFromStorage(TakmirModel model) async {
+    print(storage.child(model.id!));
+    return storage.child(model.id!).delete();
+  }
+
   upload(TakmirModel model, File foto) async {
     var path = storage.child(model.id!);
     UploadTask task = path.putFile(foto);

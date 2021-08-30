@@ -30,7 +30,7 @@ class MasjidDatabase {
   }
 
   Reference takmirStorage(MasjidModel model) {
-    return storage.child(model.id ?? "");
+    return storage.child(model.id ?? "").child(takmirCollection);
   }
 
   Stream<MasjidModel> streamDetailMasjid(MasjidModel model) {
