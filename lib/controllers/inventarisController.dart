@@ -118,8 +118,8 @@ class InventarisController extends GetxController {
       // print(mID);
       _inventarisModel.value = await firebaseFirestore
           .collection(masjidCollection)
-          .doc(manMasjidC.deMasjid.id)
-          .collection(inventarisCollection)
+          // .doc(masjidC.deMasjid.id)
+          // .collection(inventarisCollection)
           .doc(inventarisID)
           .get()
           .then((doc) => InventarisModel.fromDocumentSnapshot(doc));
@@ -149,7 +149,7 @@ class InventarisController extends GetxController {
   //   data["updatedAt"] = now;
   //   // await firebaseFirestore
   //   //     .collection(masjidCollection)
-  //   //     .doc(manMasjidC.deMasjid.id)
+  //   //     .doc(masjidC.deMasjid.id)
   //   //     .collection(inventarisCollection)
   //   //     .doc(inventaris.inventarisID)
   //   //     .update(data);
@@ -159,7 +159,7 @@ class InventarisController extends GetxController {
   //   try {
   //     await firebaseFirestore
   //         .collection(masjidCollection)
-  //         .doc(manMasjidC.deMasjid.id)
+  //         .doc(masjidC.deMasjid.id)
   //         .collection(inventarisCollection)
   //         .doc(inventaris.inventarisID)
   //         .update(data);
@@ -193,16 +193,16 @@ class InventarisController extends GetxController {
       if (url != null) {
         firebaseFirestore
             .collection(masjidCollection)
-            .doc(manMasjidC.deMasjid.id)
-            .collection(inventarisCollection)
+            // .doc(masjidC.deMasjid.id)
+            // .collection(inventarisCollection)
             .doc(inventarisID)
             .delete();
         firebaseStorage.refFromURL(url).delete();
       } else
         firebaseFirestore
             .collection(masjidCollection)
-            .doc(manMasjidC.deMasjid.id)
-            .collection(inventarisCollection)
+            // .doc(masjidC.deMasjid.id)
+            // .collection(inventarisCollection)
             .doc(inventarisID)
             .delete();
     } finally {
@@ -274,7 +274,7 @@ class InventarisController extends GetxController {
       Reference refFeedBuckets = firebaseStorage
           .ref()
           .child(masjidCollection)
-          .child(manMasjidC.deMasjid.id!)
+          // .child(masjidC.deMasjid.id!)
           .child(inventarisCollection)
           .child(fileName);
       var file = File(filePath);
@@ -294,10 +294,10 @@ class InventarisController extends GetxController {
           downloadUrl.value = await refFeedBuckets.getDownloadURL();
           inventaris.url = downloadUrl.value;
           // fotoController.text = fileName;
-          updateInventaris(inventaris, manMasjidC.deMasjid.id!);
+          // updateInventaris(inventaris, masjidC.deMasjid.id!);
           // await firebaseFirestore
           //     .collection(masjidCollection)
-          //     .doc(manMasjidC.deMasjid.id)
+          //     .doc(masjidC.deMasjid.id)
           //     .collection(inventarisCollection)
           //     .doc(inventarisC.inventaris.inventarisID)
           //     .update({'url': downloadUrl.value});
@@ -321,8 +321,8 @@ class InventarisController extends GetxController {
   Stream<List<InventarisModel>> inventarisStream() {
     return firebaseFirestore
         .collection(masjidCollection)
-        .doc(manMasjidC.deMasjid.id)
-        .collection("inventaris")
+        // .doc(masjidC.deMasjid.id)
+        // .collection("inventaris")
         .snapshots()
         .map((QuerySnapshot query) {
       List<InventarisModel> retVal = [];

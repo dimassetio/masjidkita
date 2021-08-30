@@ -420,7 +420,7 @@ class _FormInventarisState extends State<FormInventaris> {
           ],
           // actions: actions,
         ),
-        // appBar: appBar(context, manMasjidC.deMasjid.nama ?? mk_add_masjid),
+        // appBar: appBar(context, masjidC.deMasjid.nama ?? mk_add_masjid),
         body: Theme(
           data: ThemeData(colorScheme: mkColorScheme),
           child: Form(

@@ -72,7 +72,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                       final item = inventarisC.inventariss[index];
                       return Obx(() => Dismissible(
                             key: Key(item.inventarisID!),
-                            direction: manMasjidC.myMasjid.value
+                            direction: masjidC.myMasjid.value
                                 ? DismissDirection.horizontal
                                 : DismissDirection.none,
                             child:
@@ -147,7 +147,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
   @override
   Widget build(BuildContext context) {
     // var visible;
-    // if (manMasjidC.deMasjid.id == authControl) {
+    // if (masjidC.deMasjid.id == authControl) {
     //   visible = true;
     // } else {
     //   visible = false;
@@ -159,7 +159,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
         Container(
             alignment: Alignment.bottomRight,
             padding: EdgeInsets.only(right: 15, bottom: 15),
-            child: Obx(() => manMasjidC.myMasjid.value
+            child: Obx(() => masjidC.myMasjid.value
                 ? FloatingActionButton(
                     // heroTag: '1',
                     // heroTag: '5',

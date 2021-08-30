@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
-import 'package:mosq/modules/profile/models/masjid_model.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/models/user.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -13,12 +14,18 @@ class MasjidDatabase {
   static final Reference storage =
       firebaseStorage.ref().child(masjidCollection);
 
+  static final CollectionReference userDB =
+      firebaseFirestore.collection(usersCollection);
+
   CollectionReference inventarises(MasjidModel model) {
     return db.doc(model.id).collection(inventarisCollection);
   }
 
-  Future<DocumentSnapshot> getMasjid(UserModel model) async {
-    return await db.doc(model.masjid).get();
+  Stream<MasjidModel> streamDetailMasjid(MasjidModel model) {
+    return db
+        .doc(model.id)
+        .snapshots()
+        .map((event) => MasjidModel.fromSnapshot(event));
   }
 
   Stream<List<MasjidModel>> masjidStream() async* {
@@ -38,6 +45,7 @@ class MasjidDatabase {
   Future store(MasjidModel model) async {
     DocumentReference result = await db.add(model.toSnapshot());
     model.id = result.id;
+    await userDB.doc(authController.user.id).update({'masjid': result.id});
     return result;
   }
 
@@ -48,6 +56,7 @@ class MasjidDatabase {
   Future delete(MasjidModel model) async {
     return await db.doc(model.id).delete();
   }
+
   Future upload(MasjidModel model, File foto) {
     var path = storage.child(model.id!).child('Foto Profil');
     return path.putFile(foto);

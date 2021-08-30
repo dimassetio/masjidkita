@@ -57,9 +57,9 @@ class MasjidCard extends StatelessWidget {
                 Obx(
                   () => IconButton(
                     onPressed: () {
-                      listMasjidC.addFav(dataMasjid.id);
+                      masjidC.addFav(dataMasjid.id);
                     },
-                    icon: Icon(listMasjidC.idFav.contains(dataMasjid.id)
+                    icon: Icon(masjidC.idFav.contains(dataMasjid.id)
                         ? Icons.star
                         : Icons.star_border),
                     color: mkColorPrimary,

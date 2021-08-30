@@ -82,7 +82,7 @@ class ImageSourceBottomSheet extends StatelessWidget {
                     Divider(height: 5),
                     GestureDetector(
                       onTap: fromCamera
-                      // manMasjidC.uploadImage(true);
+                      // masjidC.uploadImage(true);
 
                       ,
                       child: Container(
@@ -92,13 +92,13 @@ class ImageSourceBottomSheet extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.camera,
-                              color: manMasjidC.isSaving.value
+                              color: masjidC.isSaving.value
                                   ? mkColorPrimaryLight
                                   : mkColorPrimaryDark,
                             ),
                             text(
                               "Kamera",
-                              textColor: manMasjidC.isSaving.value
+                              textColor: masjidC.isSaving.value
                                   ? mkColorPrimaryLight
                                   : mkColorPrimaryDark,
                             ),

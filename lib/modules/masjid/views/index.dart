@@ -118,7 +118,7 @@ class PageListMasjid extends GetView<MasjidController> {
 
                 15.height,
                 // Obx(() =>
-                //     text(manMasjidC.deMasjid.nama ?? "kosong")), // Main Column
+                //     text(masjidC.deMasjid.nama ?? "kosong")), // Main Column
                 Expanded(
                   child: Container(
                     // margin: EdgeInsets.only(top: 100),

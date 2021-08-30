@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/modules/profile/views/Form_Profile.dart';
 import 'package:mosq/screens/MosqDashboard.dart';
 import 'package:mosq/screens/MosqProfile.dart';
 import 'package:mosq/modules/masjid/views/index.dart';
@@ -10,8 +11,6 @@ import 'package:mosq/screens/authentication/MKSignUp.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/Form_Kegiatan.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/Form_Inventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
-import 'package:mosq/modules/profile/views/create.dart';
-import 'package:mosq/modules/profile/views/edit.dart';
 // import 'package:mosq/screens/PageSiMasjid.dart';
 import 'package:mosq/modules/masjid/views/show.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/TMTabInventaris.dart';
@@ -26,9 +25,9 @@ class AppPage {
     GetPage(name: RouteName.sign_in, page: () => MKSignIn()),
     GetPage(name: RouteName.sign_up, page: () => MKSignUp()),
     GetPage(name: RouteName.profile, page: () => MosqProfile()),
-    GetPage(name: RouteName.form_profile + '/:id', page: () => EditProfile()),
+    GetPage(name: RouteName.form_profile + '/:id', page: () => FormMasjid()),
     GetPage(name: RouteName.mkdashboard, page: () => PageListMasjid()),
-    GetPage(name: RouteName.new_masjid, page: () => NewProfile()),
+    GetPage(name: RouteName.new_masjid, page: () => FormMasjid()),
     GetPage(name: RouteName.new_inventaris, page: () => FormInventaris()),
     GetPage(name: RouteName.new_kegiatan, page: () => FormKegiatan()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),

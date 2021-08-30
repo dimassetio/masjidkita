@@ -135,7 +135,7 @@ class ConfirmDialog extends StatelessWidget {
                       //   currentFocus.unfocus();
                       // }
 
-                      manMasjidC.clearControllers();
+                      // masjidC.clearControllers();
                       Get.back(closeOverlays: true);
                       // Get.toNamed(RouteName.sign_in);
                     }),

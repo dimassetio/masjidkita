@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/modules/profile/models/masjid_model.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
@@ -87,10 +87,10 @@ class MasjidCard2 extends StatelessWidget {
                             children: [
                               Obx(() => LikeButton(
                                     size: 25,
-                                    isLiked: listMasjidC.idFavorit
+                                    isLiked: masjidC.idFavorit
                                         .contains(dataMasjid.id),
                                     onTap: (isLiked) async {
-                                      listMasjidC.addFav(dataMasjid.id);
+                                      masjidC.addFav(dataMasjid.id);
                                       return !isLiked;
                                     },
                                   )),
@@ -101,7 +101,7 @@ class MasjidCard2 extends StatelessWidget {
                                   size: 25,
                                 ),
                                 onPressed: () {
-                                  // manMasjidC.deleteMasjid(dataMasjid.id);
+                                  // masjidC.deleteMasjid(dataMasjid.id);
                                   toast("On Progress");
                                 },
                               ),

@@ -108,7 +108,7 @@ class FormKegiatan extends StatelessWidget {
             ],
             // actions: actions,
           ),
-          // appBar: appBar(context, manMasjidC.deMasjid.nama ?? mk_add_masjid),
+          // appBar: appBar(context, masjidC.deMasjid.nama ?? mk_add_masjid),
           body: StepperBody()),
     );
   }
@@ -537,7 +537,7 @@ class _StepperBodyState extends State<StepperBody> {
               //           // toast("Data Berhasil di Update");
 
               //           Get.back();
-              //           // manMasjidC.clearControllers();
+              //           // masjidC.clearControllers();
               //         } else {
               //           _formKey.currentState!.validate();
               //         }
