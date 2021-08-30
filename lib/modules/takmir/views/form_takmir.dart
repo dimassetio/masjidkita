@@ -378,7 +378,8 @@ class _StepperBodyState extends State<StepperBody> {
                           if (_formKey.currentState!.validate()) {
                             isSaving.value = true;
                             model.nama = namaC.text;
-                            model.jabatan = jabatanC.text;
+                            model.jabatan =
+                                jabatan == "Lainnya" ? jabatanC.text : jabatan;
                             if (xfoto.value.path.isNotEmpty) {
                               foto = File(xfoto.value.path);
                             }

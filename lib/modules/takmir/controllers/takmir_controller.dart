@@ -83,8 +83,11 @@ class TakmirController extends GetxController {
     return model.id;
   }
 
-  Future delete(TakmirModel model, String masjidID) async {
-    return await collections(masjidID).doc(model.id).delete();
+  Future delete(TakmirModel model) async {
+    if (model.photoUrl.isEmptyOrNull) {
+      return await model.delete();
+    } else
+      return await model.deleteWithDetails();
   }
 
   getImage(bool isCam) async {

@@ -48,7 +48,8 @@ class TMTabTakmir extends StatelessWidget {
                   ),
                   backgroundColor: mkColorPrimary,
                   onPressed: () {
-                    Get.toNamed(RouteName.new_takmir);
+                    Get.toNamed(RouteName.new_takmir,
+                        arguments: TakmirModel(dao: model.takmirDao));
                   })
               : SizedBox())),
     ]);
@@ -85,7 +86,7 @@ class TakmirCard extends StatelessWidget {
           },
           onDismissed: (direction) async {
             try {
-              // takmirC.delete(dataTakmir, masjidC.deMasjid.id!);
+              takmirC.delete(dataTakmir);
             } catch (e) {
               toast('Error Delete Data');
               rethrow;
@@ -104,7 +105,7 @@ class TakmirCard extends StatelessWidget {
                 Get.toNamed(RouteName.detail_takmir, arguments: dataTakmir),
             title: text(dataTakmir.nama,
                 textColor: appStore.textPrimaryColor, fontFamily: fontMedium),
-            subtitle: text(dataTakmir.dao.toString(),
+            subtitle: text(dataTakmir.jabatan,
                 textColor: appStore.textSecondaryColor),
           )),
       Divider()

@@ -33,6 +33,11 @@ class TakmirModel {
     return await this.dao!.delete(this);
   }
 
+  deleteWithDetails() async {
+    await this.dao!.deleteFromStorage(this);
+    return await this.dao!.delete(this);
+  }
+
   TakmirModel fromSnapshot(DocumentSnapshot snapshot, TakmirDatabase dao) {
     return TakmirModel(
       id: snapshot.id,
