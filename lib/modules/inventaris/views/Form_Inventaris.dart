@@ -34,7 +34,7 @@ class _FormInventarisState extends State<FormInventaris> {
   GlobalKey<FormState> formKey = GlobalKey();
   bool isEdit = Get.currentRoute != RouteName.new_inventaris;
   var isSaving = false.obs;
-  InventarisModel model = Get.arguments ?? MasjidModel();
+  InventarisModel model = Get.arguments ?? InventarisModel();
   // GlobalKey<FormState> formKey = GlobalKey();
 
   final TextEditingController nama = TextEditingController();
