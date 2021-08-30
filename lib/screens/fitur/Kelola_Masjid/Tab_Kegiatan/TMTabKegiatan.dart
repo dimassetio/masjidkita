@@ -98,7 +98,7 @@ class _TMTabKegiatanState extends State<TMTabKegiatan> {
           Container(
               alignment: Alignment.bottomRight,
               padding: EdgeInsets.only(right: 15, bottom: 15),
-              child: Obx(() => manMasjidC.myMasjid.value
+              child: Obx(() => masjidC.myMasjid.value
                   ? FloatingActionButton(
                       // heroTag: '1',
                       // heroTag: '5',

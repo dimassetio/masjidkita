@@ -7,7 +7,7 @@ import 'package:mosq/modules/masjid/controlllers/masjid_controller.dart';
 
 AppController appController = AppController.instance;
 AuthController authController = AuthController.instance;
-// ManMasjidController manMasjidC = ManMasjidController.instance;
+// ManMasjidController masjidC = ManMasjidController.instance;
 MasjidController masjidC = MasjidController.instance;
 InventarisController inventarisC = InventarisController.instance;
 KegiatanController kegiatanC = KegiatanController.instance;

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:mosq/modules/profile/models/masjid_model.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/integrations/controllers.dart';
@@ -205,12 +205,9 @@ class MasjidController extends GetxController {
     // await uploadToStorage(pickedImage);
   }
 
-  Future getImage(bool isCam) async {
-    pickedImage = await _picker.pickImage(
+  getImage(bool isCam) async {
+    return pickedImage = await _picker.pickImage(
         source: isCam ? ImageSource.camera : ImageSource.gallery);
-    if (pickedImage != null) {
-      photoPath.value = pickedImage!.path;
-    }
   }
 
   Future uploadToStorage() async {

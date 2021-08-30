@@ -40,7 +40,7 @@ class TMTabTakmir extends StatelessWidget {
       Container(
           alignment: Alignment.bottomRight,
           padding: EdgeInsets.only(right: 15, bottom: 15),
-          child: Obx(() => manMasjidC.myMasjid.value
+          child: Obx(() => masjidC.myMasjid.value
               ? FloatingActionButton(
                   child: Icon(
                     Icons.edit,
@@ -64,7 +64,7 @@ class TakmirCard extends StatelessWidget {
     return Column(children: [
       Dismissible(
           key: Key(dataTakmir.id!),
-          direction: manMasjidC.myMasjid.value
+          direction: masjidC.myMasjid.value
               ? DismissDirection.horizontal
               : DismissDirection.none,
           background: slideRightBackground(),
@@ -85,7 +85,7 @@ class TakmirCard extends StatelessWidget {
           },
           onDismissed: (direction) async {
             try {
-              takmirC.delete(dataTakmir, manMasjidC.deMasjid.id!);
+              // takmirC.delete(dataTakmir, masjidC.deMasjid.id!);
             } catch (e) {
               toast('Error Delete Data');
               rethrow;

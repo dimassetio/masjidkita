@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
-import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:get/get.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -107,28 +107,28 @@ class InventarisController extends GetxController {
   //   hargaController.clear();
   // }
 
-  tesBind() {
-    inventarisList.bindStream(inventarisStream());
-  }
+  // tesBind() {
+  //   inventarisList.bindStream(inventarisStream());
+  // }
 
   set inventaris(InventarisModel value) => this._inventarisModel.value = value;
 
-  getInventarisModel(inventarisID) async {
-    try {
-      // print(mID);
-      _inventarisModel.value = await firebaseFirestore
-          .collection(masjidCollection)
-          .doc(manMasjidC.deMasjid.id)
-          .collection(inventarisCollection)
-          .doc(inventarisID)
-          .get()
-          .then((doc) => InventarisModel.fromDocumentSnapshot(doc));
-    } catch (e) {
-      print(inventarisID);
-      print(e);
-      _inventarisModel.value = InventarisModel();
-    }
-  }
+  // getInventarisModel(inventarisID) async {
+  //   try {
+  //     // print(mID);
+  //     _inventarisModel.value = await firebaseFirestore
+  //         .collection(masjidCollection)
+  //         .doc(manMasjidC.deMasjid.id)
+  //         .collection(inventarisCollection)
+  //         .doc(inventarisID)
+  //         .get()
+  //         .then((doc) => InventarisModel.fromDocumentSnapshot(doc));
+  //   } catch (e) {
+  //     print(inventarisID);
+  //     print(e);
+  //     _inventarisModel.value = InventarisModel();
+  //   }
+  // }
 
   // updateInventaris() async {
   //   Map<String, dynamic> data = new HashMap();
@@ -188,37 +188,37 @@ class InventarisController extends GetxController {
     return model.inventarisID;
   }
 
-  deleteInventaris(inventarisID, url) {
-    try {
-      if (url != null) {
-        firebaseFirestore
-            .collection(masjidCollection)
-            .doc(manMasjidC.deMasjid.id)
-            .collection(inventarisCollection)
-            .doc(inventarisID)
-            .delete();
-        firebaseStorage.refFromURL(url).delete();
-      } else
-        firebaseFirestore
-            .collection(masjidCollection)
-            .doc(manMasjidC.deMasjid.id)
-            .collection(inventarisCollection)
-            .doc(inventarisID)
-            .delete();
-    } finally {
-      toast("Successfully Deleted");
-    }
-    // var imageRef = firebaseStorage.ref().child(
-    //     'inventaris/18ae6632-7083-49dd-b0d3-e7a617346b564771009612812182052.jpg');
-    // imageRef.delete();
-    // print(imageRef);
-    // firebaseStorage
-    //     .refFromURL("gs://mosq-2d58e.appspot.com//Inventaris/${foto}")
-    //     .delete();
-    // print(foto);
-    // Get.back();
-    // Get.toNamed(RouteName.inventaris);
-  }
+  // deleteInventaris(inventarisID, url) {
+  //   try {
+  //     if (url != null) {
+  //       firebaseFirestore
+  //           .collection(masjidCollection)
+  //           .doc(manMasjidC.deMasjid.id)
+  //           .collection(inventarisCollection)
+  //           .doc(inventarisID)
+  //           .delete();
+  //       firebaseStorage.refFromURL(url).delete();
+  //     } else
+  //       firebaseFirestore
+  //           .collection(masjidCollection)
+  //           .doc(manMasjidC.deMasjid.id)
+  //           .collection(inventarisCollection)
+  //           .doc(inventarisID)
+  //           .delete();
+  //   } finally {
+  //     toast("Successfully Deleted");
+  //   }
+  // var imageRef = firebaseStorage.ref().child(
+  //     'inventaris/18ae6632-7083-49dd-b0d3-e7a617346b564771009612812182052.jpg');
+  // imageRef.delete();
+  // print(imageRef);
+  // firebaseStorage
+  //     .refFromURL("gs://mosq-2d58e.appspot.com//Inventaris/${foto}")
+  //     .delete();
+  // print(foto);
+  // Get.back();
+  // Get.toNamed(RouteName.inventaris);
+  // }
 
   // clearControllers() {
   //   namaController.clear();
@@ -248,16 +248,6 @@ class InventarisController extends GetxController {
   XFile? pickedImage;
   var uploadPrecentage = 0.0.obs;
 
-  // uploadImage(bool isCam) async {
-  //   pickedImage = await inventarisC.getImage(isCam);
-  //   await uploadToStorage(pickedImage);
-  // }
-
-  // Future getImage(bool isCam) async {
-  //   return pickedImage = await _picker.pickImage(
-  //       source: isCam ? ImageSource.camera : ImageSource.gallery);
-  // }
-
   getImage(bool isCam) async {
     photoLocal = await _picker.pickImage(
         source: isCam ? ImageSource.camera : ImageSource.gallery);
@@ -267,69 +257,69 @@ class InventarisController extends GetxController {
     Get.back();
   }
 
-  Future uploadToStorage(XFile? pickImage, InventarisModel inventaris) async {
-    if (pickImage != null) {
-      fileName = pickImage.name;
-      filePath = pickImage.path;
-      Reference refFeedBuckets = firebaseStorage
-          .ref()
-          .child(masjidCollection)
-          .child(manMasjidC.deMasjid.id!)
-          .child(inventarisCollection)
-          .child(fileName);
-      var file = File(filePath);
-      final metadata = SettableMetadata(
-          contentType: 'image/jpeg',
-          customMetadata: {
-            'picked-file-path': filePath,
-            'picked-file-name': fileName
-          });
+  // Future uploadToStorage(XFile? pickImage, InventarisModel inventaris) async {
+  //   if (pickImage != null) {
+  //     fileName = pickImage.name;
+  //     filePath = pickImage.path;
+  //     Reference refFeedBuckets = firebaseStorage
+  //         .ref()
+  //         .child(masjidCollection)
+  //         .child(manMasjidC.deMasjid.id!)
+  //         .child(inventarisCollection)
+  //         .child(fileName);
+  //     var file = File(filePath);
+  //     final metadata = SettableMetadata(
+  //         contentType: 'image/jpeg',
+  //         customMetadata: {
+  //           'picked-file-path': filePath,
+  //           'picked-file-name': fileName
+  //         });
 
-      UploadTask uploadTask = refFeedBuckets.putFile(file, metadata);
-      uploadTask.snapshotEvents.listen((event) async {
-        print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
-        uploadPrecentage.value = event.bytesTransferred / event.totalBytes;
+  //     UploadTask uploadTask = refFeedBuckets.putFile(file, metadata);
+  //     uploadTask.snapshotEvents.listen((event) async {
+  //       print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
+  //       uploadPrecentage.value = event.bytesTransferred / event.totalBytes;
 
-        if (event.state == TaskState.success) {
-          downloadUrl.value = await refFeedBuckets.getDownloadURL();
-          inventaris.url = downloadUrl.value;
-          // fotoController.text = fileName;
-          updateInventaris(inventaris, manMasjidC.deMasjid.id!);
-          // await firebaseFirestore
-          //     .collection(masjidCollection)
-          //     .doc(manMasjidC.deMasjid.id)
-          //     .collection(inventarisCollection)
-          //     .doc(inventarisC.inventaris.inventarisID)
-          //     .update({'url': downloadUrl.value});
-          isLoadingImage.value = false;
-          // Get.back();
-        } else {
-          isLoadingImage.value = true;
-        }
-      });
-    } else {
-      toast('error upload data');
-    }
-  }
+  //       if (event.state == TaskState.success) {
+  //         downloadUrl.value = await refFeedBuckets.getDownloadURL();
+  //         inventaris.url = downloadUrl.value;
+  //         // fotoController.text = fileName;
+  //         updateInventaris(inventaris, manMasjidC.deMasjid.id!);
+  //         // await firebaseFirestore
+  //         //     .collection(masjidCollection)
+  //         //     .doc(manMasjidC.deMasjid.id)
+  //         //     .collection(inventarisCollection)
+  //         //     .doc(inventarisC.inventaris.inventarisID)
+  //         //     .update({'url': downloadUrl.value});
+  //         isLoadingImage.value = false;
+  //         // Get.back();
+  //       } else {
+  //         isLoadingImage.value = true;
+  //       }
+  //     });
+  //   } else {
+  //     toast('error upload data');
+  //   }
+  // }
 
-  @override
-  void onInit() {
-    super.onInit();
-    inventarisList.bindStream(inventarisStream());
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   inventarisList.bindStream(inventarisStream());
+  // }
 
-  Stream<List<InventarisModel>> inventarisStream() {
-    return firebaseFirestore
-        .collection(masjidCollection)
-        .doc(manMasjidC.deMasjid.id)
-        .collection("inventaris")
-        .snapshots()
-        .map((QuerySnapshot query) {
-      List<InventarisModel> retVal = [];
-      query.docs.forEach((element) {
-        retVal.add(InventarisModel.fromDocumentSnapshot(element));
-      });
-      return retVal;
-    });
-  }
+  // Stream<List<InventarisModel>> inventarisStream() {
+  //   return firebaseFirestore
+  //       .collection(masjidCollection)
+  //       .doc(manMasjidC.deMasjid.id)
+  //       .collection("inventaris")
+  //       .snapshots()
+  //       .map((QuerySnapshot query) {
+  //     List<InventarisModel> retVal = [];
+  //     query.docs.forEach((element) {
+  //       retVal.add(InventarisModel.fromDocumentSnapshot(element));
+  //     });
+  //     return retVal;
+  //   });
+  // }
 }

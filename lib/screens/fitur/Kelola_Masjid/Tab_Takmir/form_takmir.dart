@@ -372,12 +372,6 @@ class _StepperBodyState extends State<StepperBody> {
                                 nama: namaC.text,
                                 photoUrl: dataTakmir.photoUrl);
 
-                            model.id = isEdit
-                                ? await takmirC.updateTakmir(
-                                    model, manMasjidC.deMasjid.id!)
-                                : await takmirC.store(
-                                    model, manMasjidC.deMasjid.id!);
-
                             if (takmirC.photoLocal != null) {
                               await takmirC.uploadImage(
                                   takmirC.photoLocal, model);

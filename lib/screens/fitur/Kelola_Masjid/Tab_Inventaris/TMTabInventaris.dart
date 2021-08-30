@@ -148,7 +148,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
   @override
   Widget build(BuildContext context) {
     // var visible;
-    // if (manMasjidC.deMasjid.id == authControl) {
+    // if (masjidC.deMasjid.id == authControl) {
     //   visible = true;
     // } else {
     //   visible = false;

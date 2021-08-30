@@ -36,7 +36,7 @@ class KegiatanController extends GetxController {
     // try {
     //   await firebaseFirestore
     //       .collection(masjidCollection)
-    //       .doc(manMasjidC.deMasjid.id)
+    //       .doc(masjidC.deMasjid.id)
     //       .collection(kegiatanCollection)
     //       .add({
     //     'nama': namaController.text,
@@ -107,8 +107,8 @@ class KegiatanController extends GetxController {
       // print(mID);
       _kegiatanModel.value = await firebaseFirestore
           .collection(masjidCollection)
-          .doc(manMasjidC.deMasjid.id)
-          .collection(kegiatanCollection)
+          // .doc(masjidC.deMasjid.id)
+          // .collection(kegiatanCollection)
           .doc(kegiatanID)
           .get()
           .then((doc) => KegiatanModel.fromDocumentSnapshot(doc));
@@ -128,8 +128,8 @@ class KegiatanController extends GetxController {
 
     await firebaseFirestore
         .collection(masjidCollection)
-        .doc(manMasjidC.deMasjid.id)
-        .collection(kegiatanCollection)
+        // .doc(masjidC.deMasjid.id)
+        // .collection(kegiatanCollection)
         .doc(kegiatan.kegiatanID)
         .update(data);
     clearControllers();
@@ -191,7 +191,7 @@ class KegiatanController extends GetxController {
   var uploadPrecentage = 0.0.obs;
 
   uploadImage(bool isCam) async {
-    pickedImage = await inventarisC.getImage(isCam);
+    pickedImage = await getImage(isCam);
     await uploadToStorage(pickedImage);
   }
 
@@ -206,8 +206,8 @@ class KegiatanController extends GetxController {
       filePath = pickImage.path;
       Reference refFeedBuckets = firebaseStorage
           .ref()
-          .child(masjidCollection)
-          .child(manMasjidC.deMasjid.id!)
+          // .child(masjidCollection)
+          // .child(masjidC.deMasjid.id!)
           .child(kegiatanCollection)
           .child(fileName);
       var file = File(filePath);
@@ -229,7 +229,7 @@ class KegiatanController extends GetxController {
           fotoController.text = fileName;
           // await firebaseFirestore
           //     .collection(masjidCollection)
-          //     .doc(manMasjidC.deMasjid.id)
+          //     .doc(masjidC.deMasjid.id)
           //     .collection(inventarisCollection)
           //     .doc(inventarisC.inventaris.inventarisID)
           //     .update({'url': downloadUrl.value});
@@ -253,8 +253,8 @@ class KegiatanController extends GetxController {
   Stream<List<KegiatanModel>> kegiatanStream() {
     return firebaseFirestore
         .collection(masjidCollection)
-        .doc(manMasjidC.deMasjid.id)
-        .collection(kegiatanCollection)
+        // .doc(masjidC.deMasjid.id)
+        // .collection(kegiatanCollection)
         .snapshots()
         .map((QuerySnapshot query) {
       List<KegiatanModel> retVal = [];

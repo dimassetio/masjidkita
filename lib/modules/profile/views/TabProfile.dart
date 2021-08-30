@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:mosq/integrations/controllers.dart';
 
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/modules/profile/models/masjid_model.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
@@ -18,8 +18,8 @@ import 'package:mosq/main.dart';
 class TMTabProfile extends StatelessWidget {
   // late T9BadgeModel model;
 
-  // const TMTabProfile(MasjidModel model);
-  MasjidModel model = Get.arguments as MasjidModel;
+  const TMTabProfile(this.model);
+  final MasjidModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -30,28 +30,31 @@ class TMTabProfile extends StatelessWidget {
           child: Column(children: [
             // Description
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              alignment: Alignment.topLeft,
-              child: Obx(() => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Divider(),
-                      text(model.nama ?? "Nama Masjid",
-                          textColor: appStore.textPrimaryColor,
-                          fontFamily: fontBold,
-                          fontSize: textSizeLargeMedium),
-                      SizedBox(height: 5),
-                      Row(
-                        children: [
-                          Icon(Icons.pin_drop_outlined, color: mkColorPrimary),
-                          text(model.alamat ?? "Alamat",
-                              isLongText: true, fontSize: textSizeMedium),
-                        ],
-                      ),
-                      SizedBox(height: 5)
-                    ],
-                  )),
-            ),
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                alignment: Alignment.topLeft,
+                child:
+                    // Obx(() =>
+
+                    Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Divider(),
+                    text(model.nama ?? "Nama Masjid",
+                        textColor: appStore.textPrimaryColor,
+                        fontFamily: fontBold,
+                        fontSize: textSizeLargeMedium),
+                    SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Icon(Icons.pin_drop_outlined, color: mkColorPrimary),
+                        text(model.alamat ?? "Alamat",
+                            isLongText: true, fontSize: textSizeMedium),
+                      ],
+                    ),
+                    SizedBox(height: 5)
+                  ],
+                )),
+            // ),
             // Deskripsi
             ExpansionTile(
               iconColor: mkColorPrimary,
@@ -69,8 +72,8 @@ class TMTabProfile extends StatelessWidget {
                     fontSize: textSizeLargeMedium, fontFamily: fontBold),
               ),
               children: <Widget>[
-                Obx(() => text(model.deskripsi ?? "-",
-                    fontSize: textSizeMedium, isLongText: true))
+                text(model.deskripsi ?? "-",
+                    fontSize: textSizeMedium, isLongText: true)
               ],
             ),
 
@@ -107,41 +110,41 @@ class TMTabProfile extends StatelessWidget {
                       textColor: mkTextColorSecondary,
                       fontSize: textSizeMedium,
                     ),
-                    Obx(() => text(
-                          model.kecamatan ?? mk_null,
-                          // textColor: mkTextColorSecondary,
-                          fontSize: textSizeMedium,
-                        )),
+                    text(
+                      model.kecamatan ?? mk_null,
+                      // textColor: mkTextColorSecondary,
+                      fontSize: textSizeMedium,
+                    ),
                     text(
                       mk_kode_pos,
                       textColor: mkTextColorSecondary,
                       fontSize: textSizeMedium,
                     ),
-                    Obx(() => text(
-                          model.kodePos ?? mk_null,
-                          // textColor: mkTextColorSecondary,
-                          fontSize: textSizeMedium,
-                        )),
+                    text(
+                      model.kodePos ?? mk_null,
+                      // textColor: mkTextColorSecondary,
+                      fontSize: textSizeMedium,
+                    ),
                     text(
                       mk_kota,
                       textColor: mkTextColorSecondary,
                       fontSize: textSizeMedium,
                     ),
-                    Obx(() => text(
-                          model.kota ?? mk_null,
-                          // textColor: mkTextColorSecondary,
-                          fontSize: textSizeMedium,
-                        )),
+                    text(
+                      model.kota ?? mk_null,
+                      // textColor: mkTextColorSecondary,
+                      fontSize: textSizeMedium,
+                    ),
                     text(
                       mk_provinsi,
                       textColor: mkTextColorSecondary,
                       fontSize: textSizeMedium,
                     ),
-                    Obx(() => text(
-                          model.provinsi ?? mk_null,
-                          // textColor: mkTextColorSecondary,
-                          fontSize: textSizeMedium,
-                        )),
+                    text(
+                      model.provinsi ?? mk_null,
+                      // textColor: mkTextColorSecondary,
+                      fontSize: textSizeMedium,
+                    ),
                   ],
                 ),
               ],
@@ -180,51 +183,51 @@ class TMTabProfile extends StatelessWidget {
                       textColor: mkTextColorSecondary,
                       fontSize: textSizeMedium,
                     ),
-                    Obx(() => text(
-                          model.tahun ?? mk_null,
-                          // textColor: mkTextColorSecondary,
-                          fontSize: textSizeMedium,
-                        )),
+                    text(
+                      model.tahun ?? mk_null,
+                      // textColor: mkTextColorSecondary,
+                      fontSize: textSizeMedium,
+                    ),
                     text(
                       mk_LT,
                       textColor: mkTextColorSecondary,
                       fontSize: textSizeMedium,
                     ),
-                    Obx(() => text(
-                          "${model.luasTanah} M\u00B2",
-                          // textColor: mkTextColorSecondary,
-                          fontSize: textSizeMedium,
-                        )),
+                    text(
+                      "${model.luasTanah} M\u00B2",
+                      // textColor: mkTextColorSecondary,
+                      fontSize: textSizeMedium,
+                    ),
                     text(
                       mk_LB,
                       textColor: mkTextColorSecondary,
                       fontSize: textSizeMedium,
                     ),
-                    Obx(() => text(
-                          "${model.luasBangunan ?? 0} M\u00B2",
-                          // textColor: mkTextColorSecondary,
-                          fontSize: textSizeMedium,
-                        )),
+                    text(
+                      "${model.luasBangunan ?? 0} M\u00B2",
+                      // textColor: mkTextColorSecondary,
+                      fontSize: textSizeMedium,
+                    ),
                     text(
                       mk_status_tanah,
                       textColor: mkTextColorSecondary,
                       fontSize: textSizeMedium,
                     ),
-                    Obx(() => text(
-                          model.statusTanah ?? mk_null,
-                          // textColor: mkTextColorSecondary,
-                          fontSize: textSizeMedium,
-                        )),
+                    text(
+                      model.statusTanah ?? mk_null,
+                      // textColor: mkTextColorSecondary,
+                      fontSize: textSizeMedium,
+                    ),
                     text(
                       mk_legalitas,
                       textColor: mkTextColorSecondary,
                       fontSize: textSizeMedium,
                     ),
-                    Obx(() => text(
-                          model.legalitas ?? mk_null,
-                          // textColor: mkTextColorSecondary,
-                          fontSize: textSizeMedium,
-                        )),
+                    text(
+                      model.legalitas ?? mk_null,
+                      // textColor: mkTextColorSecondary,
+                      fontSize: textSizeMedium,
+                    ),
                   ],
                 ),
               ],
@@ -245,10 +248,11 @@ class TMTabProfile extends StatelessWidget {
       Container(
           alignment: Alignment.bottomRight,
           padding: EdgeInsets.only(right: 15, bottom: 15),
-          child: Obx(() => manMasjidC.myMasjid.value
+          child: Obx(() => masjidC.myMasjid.value
               ? FloatingActionButton(
                   onPressed: () {
-                    Get.toNamed(RouteName.form_profile + '/${model.id}');
+                    Get.toNamed(RouteName.form_profile + '/${model.id}',
+                        arguments: model);
                   },
                   child: Icon(
                     Icons.edit,

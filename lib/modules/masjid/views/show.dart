@@ -10,6 +10,7 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/modules/profile/models/masjid_model.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
@@ -30,80 +31,84 @@ class DetailMasjid extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get.put(InventarisController().onInit());
     return Scaffold(
-      body: DefaultTabController(
-        length: 5,
-        child: NestedScrollView(
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                  leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    color: appStore.isDarkModeOn
-                        ? appStore.iconColor
-                        : innerBoxIsScrolled
-                            ? blackColor
-                            : lightGrey,
-                    onPressed: () {
-                      Get.back();
-                    },
-                  ),
-                  expandedHeight: 220.0,
-                  floating: true,
-                  centerTitle: true,
-                  title: Obx(() => Text(model.nama ?? "Nama Masjid",
-                      style:
-                          primaryTextStyle(color: appStore.textPrimaryColor))),
-                  pinned: true,
-                  snap: false,
-                  elevation: 50,
-                  backgroundColor: white,
-                  flexibleSpace: Obx(
-                    () => FlexibleSpaceBar(
-                      centerTitle: true,
-                      background: model.photoUrl.isEmptyOrNull
-                          ? Image.asset(mk_contoh_image, fit: BoxFit.cover)
-                          : CachedNetworkImage(
-                              placeholder: placeholderWidgetFn() as Widget
-                                  Function(BuildContext, String)?,
-                              imageUrl: model.photoUrl ?? "",
-                              fit: BoxFit.cover,
-                            ),
-                    ),
-                  ),
-                ),
-                SliverPersistentHeader(
-                  delegate: _SliverAppBarDelegate(
-                    TabBar(
-                      physics: ScrollPhysics(),
-                      isScrollable: true,
-                      labelColor: mkColorPrimaryDark,
-                      indicatorColor: mkColorPrimaryDark,
-                      unselectedLabelColor: appStore.textPrimaryColor,
-                      tabs: [
-                        Tab(text: "Profil"),
-                        Tab(text: "Takmir"),
-                        Tab(text: "Kas"),
-                        Tab(text: "Inventaris"),
-                        Tab(text: "Kegiatan"),
-                        // Tab(text: "Kegiatan"),
-                      ],
-                    ),
-                  ),
-                  pinned: true,
-                ),
-              ];
-            },
-            body: TabBarView(
-              children: [
-                TMTabProfile(),
-                TMTabTakmir(),
-                TMTabKas(),
-                TMTabInventaris(InventarisModel()),
-                TMTabKegiatan(),
-              ],
-            )),
-      ),
+      body: StreamBuilder<MasjidModel>(
+          stream: model.dao.streamDetailMasjid(model),
+          initialData: model,
+          builder: (context, masjidStream) {
+            model = masjidStream.data!;
+            return DefaultTabController(
+              length: 5,
+              child: NestedScrollView(
+                  headerSliverBuilder:
+                      (BuildContext context, bool innerBoxIsScrolled) {
+                    return <Widget>[
+                      SliverAppBar(
+                        leading: IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          color: appStore.isDarkModeOn
+                              ? appStore.iconColor
+                              : innerBoxIsScrolled
+                                  ? blackColor
+                                  : lightGrey,
+                          onPressed: () {
+                            Get.back();
+                          },
+                        ),
+                        expandedHeight: 220.0,
+                        floating: true,
+                        centerTitle: true,
+                        title: Text(model.nama ?? "Nama Masjid",
+                            style: primaryTextStyle(
+                                color: appStore.textPrimaryColor)),
+                        pinned: true,
+                        snap: false,
+                        elevation: 50,
+                        backgroundColor: white,
+                        flexibleSpace: FlexibleSpaceBar(
+                          centerTitle: true,
+                          background: model.photoUrl.isEmptyOrNull
+                              ? Image.asset(mk_contoh_image, fit: BoxFit.cover)
+                              : CachedNetworkImage(
+                                  placeholder: placeholderWidgetFn() as Widget
+                                      Function(BuildContext, String)?,
+                                  imageUrl: model.photoUrl ?? "",
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ),
+                      SliverPersistentHeader(
+                        delegate: _SliverAppBarDelegate(
+                          TabBar(
+                            physics: ScrollPhysics(),
+                            isScrollable: true,
+                            labelColor: mkColorPrimaryDark,
+                            indicatorColor: mkColorPrimaryDark,
+                            unselectedLabelColor: appStore.textPrimaryColor,
+                            tabs: [
+                              Tab(text: "Profil"),
+                              Tab(text: "Takmir"),
+                              Tab(text: "Kas"),
+                              Tab(text: "Inventaris"),
+                              Tab(text: "Kegiatan"),
+                              // Tab(text: "Kegiatan"),
+                            ],
+                          ),
+                        ),
+                        pinned: true,
+                      ),
+                    ];
+                  },
+                  body: TabBarView(
+                    children: [
+                      TMTabProfile(model),
+                      TMTabTakmir(),
+                      TMTabKas(),
+                      TMTabInventaris(InventarisModel()),
+                      TMTabKegiatan(),
+                    ],
+                  )),
+            );
+          }),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mosq/controllers/inventarisController.dart';
 import 'package:mosq/integrations/controllers.dart';
 
-import 'package:mosq/models/inventaris.dart';
+import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/main.dart';
 import 'package:get/get.dart';
