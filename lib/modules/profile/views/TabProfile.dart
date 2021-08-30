@@ -28,14 +28,12 @@ class TMTabProfile extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
           child: Column(children: [
+            text("${model.takmirDao}"),
             // Description
             Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 alignment: Alignment.topLeft,
-                child:
-                    // Obx(() =>
-
-                    Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Divider(),

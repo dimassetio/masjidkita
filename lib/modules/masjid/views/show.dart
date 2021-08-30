@@ -3,10 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:mosq/controllers/inventarisController.dart';
-import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/models/inventaris.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
@@ -21,7 +18,7 @@ import 'package:mosq/main.dart';
 
 import '../../../screens/fitur/Kelola_Masjid/Tab_Kas/TMTabKas.dart';
 import '../../profile/views/TabProfile.dart';
-import '../../../screens/fitur/Kelola_Masjid/Tab_Takmir/index.dart';
+import '../../takmir/views/index.dart';
 import '../../../screens/fitur/Kelola_Masjid/Tab_Inventaris/TMTabInventaris.dart';
 
 class DetailMasjid extends StatelessWidget {
@@ -100,7 +97,7 @@ class DetailMasjid extends StatelessWidget {
                   body: TabBarView(
                     children: [
                       TMTabProfile(model),
-                      TMTabTakmir(),
+                      TMTabTakmir(model),
                       TMTabKas(),
                       TMTabInventaris(InventarisModel()),
                       TMTabKegiatan(),

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/models/takmir.dart';
+import 'package:mosq/modules/takmir/models/takmir_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -22,7 +22,7 @@ import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FormTakmir extends StatelessWidget {
-  final TakmirModel dataTakmir = Get.arguments;
+  final TakmirModel model = Get.arguments ?? TakmirModel();
   static const tag = '/FormTakmir';
 
   @override
@@ -92,21 +92,23 @@ class _StepperBodyState extends State<StepperBody> {
   final TextEditingController namaC = TextEditingController();
   final TextEditingController jabatanC = TextEditingController();
   XFile? pickedImage;
-
-  TakmirModel dataTakmir = Get.arguments;
+  var xfoto = XFile("").obs;
+  File? foto;
+  // String? photoUrl;
+  TakmirModel model = Get.arguments ?? TakmirModel();
 
   @override
   void initState() {
     super.initState();
     if (isEdit == true) {
-      namaC.text = dataTakmir.nama ?? "";
-      if (jabatanList.contains(dataTakmir.jabatan)) {
-        jabatan = dataTakmir.jabatan ?? "";
+      namaC.text = model.nama ?? "";
+      if (jabatanList.contains(model.jabatan)) {
+        jabatan = model.jabatan ?? "";
       } else {
-        jabatanC.text = dataTakmir.jabatan ?? "";
+        jabatanC.text = model.jabatan ?? "";
         jabatan = "Lainnya";
       }
-      takmirC.photoUrlC = dataTakmir.photoUrl ?? "";
+      // photoUrl = model.photoUrl ?? "";
     }
     jabatan == 'Lainnya' ? isOtherJabatan.value = true : false;
   }
@@ -206,21 +208,31 @@ class _StepperBodyState extends State<StepperBody> {
           isActive: currStep == 3,
           state: StepState.indexed,
           content: Column(children: [
-            CircleAvatar(
-              backgroundImage: AssetImage(mk_profile_pic),
-              child: isEdit && !dataTakmir.photoUrl.isEmptyOrNull
-                  ? Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          image: DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                  dataTakmir.photoUrl ?? ""),
-                              fit: BoxFit.cover)),
-                    )
-                  : null,
-              foregroundImage: FileImage(File(takmirC.photoPath)),
-              backgroundColor: mkColorPrimary,
-              radius: 100,
+            // Obx(() => Container(
+            //       decoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(100),
+            //           image: DecorationImage(
+            //               image:
+            //                   CachedNetworkImageProvider(model.photoUrl ?? ""),
+            //               fit: BoxFit.cover)),
+            //     )),
+            Obx(
+              () => CircleAvatar(
+                backgroundImage: AssetImage(mk_profile_pic),
+                child: isEdit && !model.photoUrl.isEmptyOrNull
+                    ? Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            image: DecorationImage(
+                                image: CachedNetworkImageProvider(
+                                    model.photoUrl ?? ""),
+                                fit: BoxFit.cover)),
+                      )
+                    : null,
+                foregroundImage: FileImage(File(xfoto.value.path)),
+                backgroundColor: mkColorPrimary,
+                radius: 100,
+              ),
             ),
             16.height,
             // FormField(
@@ -245,16 +257,17 @@ class _StepperBodyState extends State<StepperBody> {
                         isLoading: takmirC.isLoadingImage,
                         uploadPrecentage: takmirC.uploadPrecentage,
                         isSaving: isSaving.value,
-                        fromCamera: () {
-                          takmirC.getImage(true);
+                        fromCamera: () async {
+                          xfoto.value = await takmirC.getImage(true);
+                          Get.back();
                           FocusScopeNode currentFocus = FocusScope.of(context);
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();
                           }
                         },
                         fromGaleri: () async {
-                          await takmirC.getImage(false);
-                          if (takmirC.photoLocal != null) {}
+                          xfoto.value = await takmirC.getImage(false);
+                          Get.back();
                           FocusScopeNode currentFocus = FocusScope.of(context);
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();
@@ -364,24 +377,14 @@ class _StepperBodyState extends State<StepperBody> {
                         if (isSaving.value == false) {
                           if (_formKey.currentState!.validate()) {
                             isSaving.value = true;
-                            TakmirModel model = TakmirModel(
-                                id: isEdit ? dataTakmir.id : null,
-                                jabatan: jabatan == 'Lainnya'
-                                    ? jabatanC.text
-                                    : jabatan,
-                                nama: namaC.text,
-                                photoUrl: dataTakmir.photoUrl);
-
-                            if (takmirC.photoLocal != null) {
-                              await takmirC.uploadImage(
-                                  takmirC.photoLocal, model);
+                            model.nama = namaC.text;
+                            model.jabatan = jabatanC.text;
+                            if (xfoto.value.path.isNotEmpty) {
+                              foto = File(xfoto.value.path);
                             }
+                            await takmirC.saveTakmir(model, foto);
                             isSaving.value = false;
                             Get.back();
-                            // setState(() {});
-                            // toast("Data Berhasil di Update");
-
-                            // takmirC.clearControllers();
                           } else {
                             _formKey.currentState!.validate();
                           }

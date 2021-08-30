@@ -15,8 +15,8 @@ import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart
 import 'package:mosq/modules/masjid/views/show.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Inventaris/TMTabInventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/detailInventaris.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Takmir/detail.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Takmir/form_takmir.dart';
+import 'package:mosq/modules/takmir/views/detail.dart';
+import 'package:mosq/modules/takmir/views/form_takmir.dart';
 import './route_name.dart';
 
 class AppPage {

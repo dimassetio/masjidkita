@@ -46,7 +46,7 @@ class _FormMasjidState extends State<FormMasjid> {
   String? legalitas;
 
   var photo = XFile("").obs;
-  var photoPath = "".obs;
+  File? foto;
   var photoUrl = "".obs;
   TextEditingController nama = TextEditingController();
   TextEditingController alamat = TextEditingController();
@@ -393,13 +393,13 @@ class _FormMasjidState extends State<FormMasjid> {
                         isLoading: masjidC.isLoadingImage,
                         uploadPrecentage: masjidC.uploadPrecentage,
                         isSaving: masjidC.isSaving.value,
-                        fromCamera: () {
-                          photo.value = masjidC.getImage(true);
+                        fromCamera: () async {
                           Get.back();
+                          photo.value = await masjidC.getImage(true);
                         },
                         fromGaleri: () async {
-                          photo.value = masjidC.getImage(false);
                           Get.back();
+                          photo.value = await masjidC.getImage(false);
                         },
                       );
                     });
@@ -507,40 +507,43 @@ class _FormMasjidState extends State<FormMasjid> {
                   ),
                 ),
                 Obx(
-                  () => GestureDetector(
-                    onTap: () async {
-                      if (masjidC.isSaving.value == false) {
-                        if (formKey.currentState!.validate()) {
-                          model.alamat = alamat.text;
-                          model.deskripsi = deskripsi.text;
-                          model.kecamatan = kecamatan.text;
-                          model.kodePos = kodePos.text;
-                          model.kota = kota.text;
-                          model.legalitas = legalitas;
-                          model.luasBangunan = luasBangunan.text;
-                          model.luasTanah = luasTanah.text;
-                          model.nama = nama.text;
-                          model.photoUrl = masjidC.downloadUrl.value;
-                          model.provinsi = provinsi.text;
-                          model.statusTanah = statusTanah;
-                          model.tahun = tahun.text;
-                          await masjidC.saveMasjid(model, null);
-                          Get.back();
-                        } else {
-                          formKey.currentState!.validate();
+                  () => Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    margin: EdgeInsets.all(10),
+                    decoration: boxDecoration(
+                        bgColor: masjidC.isSaving.value
+                            ? mkColorPrimaryLight
+                            : mkColorPrimary,
+                        radius: 10),
+                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    child: InkWell(
+                      onTap: () async {
+                        if (masjidC.isSaving.value == false) {
+                          if (formKey.currentState!.validate()) {
+                            model.alamat = alamat.text;
+                            model.deskripsi = deskripsi.text;
+                            model.kecamatan = kecamatan.text;
+                            model.kodePos = kodePos.text;
+                            model.kota = kota.text;
+                            model.legalitas = legalitas;
+                            model.luasBangunan = luasBangunan.text;
+                            model.luasTanah = luasTanah.text;
+                            model.nama = nama.text;
+                            model.photoUrl = masjidC.downloadUrl.value;
+                            model.provinsi = provinsi.text;
+                            model.statusTanah = statusTanah;
+                            model.tahun = tahun.text;
+                            if (photo.value.path.isNotEmpty) {
+                              foto = File(photo.value.path);
+                            }
+                            await masjidC.saveMasjid(model, foto);
+                            Get.back();
+                          } else {
+                            formKey.currentState!.validate();
+                          }
                         }
-                      }
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      margin: EdgeInsets.all(10),
-                      decoration: boxDecoration(
-                          bgColor: masjidC.isSaving.value
-                              ? mkColorPrimaryLight
-                              : mkColorPrimary,
-                          radius: 10),
-                      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      },
                       child: Center(
                         child: masjidC.isSaving.value
                             ? CircularProgressIndicator()
