@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mosq/modules/inventaris/databases/inventaris_database.dart';
 import 'package:mosq/modules/masjid/databases/masjid_database.dart';
+import 'package:mosq/modules/takmir/databases/takmir_database.dart';
+import 'package:mosq/modules/takmir/models/takmir_model.dart';
 
 class MasjidModel {
   String? id;
@@ -21,6 +23,7 @@ class MasjidModel {
   String? legalitas;
   MasjidDatabase dao = new MasjidDatabase();
   InventarisDatabase? inventarisDao;
+  TakmirDatabase? takmirDao;
 
   MasjidModel({
     this.id,
@@ -41,24 +44,29 @@ class MasjidModel {
     inventarisDao = InventarisDatabase(
         collections: dao.inventarises(this),
         storage: dao.inventarisStorage(this));
+    takmirDao =
+        TakmirDatabase(db: dao.takmirs(this), storage: dao.takmirStorage(this));
   }
 
-  MasjidModel.fromSnapshot(DocumentSnapshot snapshot) {
-    id = snapshot.id;
-    nama = snapshot.data()?["nama"];
-    alamat = snapshot.data()?["alamat"];
-    photoUrl = snapshot.data()?["photoUrl"];
-    deskripsi = snapshot.data()?["deskripsi"];
-    kecamatan = snapshot.data()?["kecamatan"];
-    kodePos = snapshot.data()?["kodePos"];
-    kota = snapshot.data()?["kota"];
-    provinsi = snapshot.data()?["provinsi"];
-    tahun = snapshot.data()?["tahun"];
-    luasTanah = snapshot.data()?["luasTanah"];
-    luasBangunan = snapshot.data()?["luasBangunan"];
-    statusTanah = snapshot.data()?["statusTanah"];
-    legalitas = snapshot.data()?["legalitas"];
+  MasjidModel fromSnapshot(DocumentSnapshot snapshot) {
+    return MasjidModel(
+      id: snapshot.id,
+      nama: snapshot.data()?["nama"],
+      alamat: snapshot.data()?["alamat"],
+      photoUrl: snapshot.data()?["photoUrl"],
+      deskripsi: snapshot.data()?["deskripsi"],
+      kecamatan: snapshot.data()?["kecamatan"],
+      kodePos: snapshot.data()?["kodePos"],
+      kota: snapshot.data()?["kota"],
+      provinsi: snapshot.data()?["provinsi"],
+      tahun: snapshot.data()?["tahun"],
+      luasTanah: snapshot.data()?["luasTanah"],
+      luasBangunan: snapshot.data()?["luasBangunan"],
+      statusTanah: snapshot.data()?["statusTanah"],
+      legalitas: snapshot.data()?["legalitas"],
+    );
   }
+
   Map<String, dynamic> toSnapshot() {
     return {
       'id': this.id,
@@ -86,19 +94,20 @@ class MasjidModel {
     }
   }
 
-  saveWithDetails(File? foto) async {
+  saveWithDetails(File foto) async {
     if (this.id == null) {
       await this.dao.store(this);
     } else {
       await this.dao.update(this);
     }
-    if (foto != null) {
-      await this.dao.upload(this, foto);
-    }
-    return this;
+    return await this.dao.upload(this, foto);
   }
 
   delete() async {
     return await this.dao.delete(this);
+  }
+
+  Stream<List<TakmirModel>> get takmirs {
+    return takmirDao!.takmirStream(this);
   }
 }

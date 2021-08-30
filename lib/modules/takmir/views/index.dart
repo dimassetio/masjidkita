@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:mosq/modules/inventaris/controllers/inventarisController.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/models/takmir.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
+import 'package:mosq/modules/takmir/models/takmir_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -13,28 +14,27 @@ import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/widgets/DismissibleBackground.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../../../../main.dart';
+import '../../../../main.dart';
 
 class TMTabTakmir extends StatelessWidget {
-  TakmirModel? emptyTakmir;
+  const TMTabTakmir(this.model);
+  final MasjidModel model;
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
       Container(
         child: SingleChildScrollView(
-          child: Obx(
-            () => ListView.builder(
-                padding: EdgeInsets.symmetric(),
-                scrollDirection: Axis.vertical,
-                itemCount: takmirC.takmirs.length,
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return TakmirCard(
-                    dataTakmir: takmirC.takmirs[index],
-                  );
-                }),
-          ),
+          child: Obx(() => ListView.builder(
+              padding: EdgeInsets.symmetric(),
+              scrollDirection: Axis.vertical,
+              itemCount: takmirC.takmirs.length,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemBuilder: (context, index) {
+                return TakmirCard(
+                  dataTakmir: takmirC.takmirs[index],
+                );
+              })),
         ),
       ),
       Container(
@@ -104,7 +104,7 @@ class TakmirCard extends StatelessWidget {
                 Get.toNamed(RouteName.detail_takmir, arguments: dataTakmir),
             title: text(dataTakmir.nama,
                 textColor: appStore.textPrimaryColor, fontFamily: fontMedium),
-            subtitle: text(dataTakmir.jabatan,
+            subtitle: text(dataTakmir.dao.toString(),
                 textColor: appStore.textSecondaryColor),
           )),
       Divider()

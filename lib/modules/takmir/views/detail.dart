@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/models/takmir.dart';
+import 'package:mosq/modules/takmir/models/takmir_model.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKImages.dart';

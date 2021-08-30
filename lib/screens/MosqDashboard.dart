@@ -58,7 +58,7 @@ class _MosqDashboardState extends State<MosqDashboard> {
               : null);
     });
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      Future.delayed(Duration(milliseconds: 300),
+      Future.delayed(Duration(milliseconds: 1000),
           () => ShowCaseWidget.of(myContext)!.startShowCase([scThree]));
     });
   }

@@ -2,8 +2,8 @@ import 'package:mosq/controllers/appController.dart';
 import 'package:mosq/controllers/authController.dart';
 import 'package:mosq/modules/inventaris/controllers/inventarisController.dart';
 import 'package:mosq/controllers/kegiatanController.dart';
-import 'package:mosq/controllers/takmirController.dart';
 import 'package:mosq/modules/masjid/controllers/masjid_controller.dart';
+import 'package:mosq/modules/takmir/controllers/takmir_controller.dart';
 
 AppController appController = AppController.instance;
 AuthController authController = AuthController.instance;

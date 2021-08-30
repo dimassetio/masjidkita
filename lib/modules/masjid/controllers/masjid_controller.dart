@@ -136,17 +136,15 @@ class MasjidController extends GetxController {
         .map((QuerySnapshot query) {
       List<MasjidModel> retVal = [];
       query.docs.forEach((element) {
-        retVal.add(MasjidModel.fromSnapshot(element));
+        retVal.add(MasjidModel().fromSnapshot(element));
       });
       return retVal;
     });
   }
 
-  // FROM MANMASJID
-
   gotoDetail(MasjidModel dataMasjid) async {
     try {
-      takmirC.getTakmirStream(dataMasjid.id!);
+      takmirC.getTakmirStream(dataMasjid);
     } catch (e) {
       toast(e.toString());
     } finally {
@@ -155,11 +153,17 @@ class MasjidController extends GetxController {
     }
   }
 
-  Future saveMasjid(MasjidModel model, File? foto) async {
+  saveMasjid(MasjidModel model, File? foto) async {
     isSaving.value = true;
     try {
-      foto == null ? await model.save() : await model.saveWithDetails(foto);
-      uploadToStorage();
+      var result =
+          foto == null ? await model.save() : await model.saveWithDetails(foto);
+      if (result is UploadTask) {
+        UploadTask task = result;
+        task.snapshotEvents.listen((event) async {
+          print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
+        });
+      }
     } on SocketException catch (_) {
       showDialog(
           context: Get.context!,
@@ -200,55 +204,13 @@ class MasjidController extends GetxController {
 
   final ImagePicker _picker = ImagePicker();
 
-  uploadImage(bool isCam) async {
-    pickedImage = await getImage(isCam);
-    // await uploadToStorage(pickedImage);
-  }
+  // uploadImage(bool isCam) async {
+  //   pickedImage = await getImage(isCam);
+  //   // await uploadToStorage(pickedImage);
+  // }
 
   getImage(bool isCam) async {
     return pickedImage = await _picker.pickImage(
         source: isCam ? ImageSource.camera : ImageSource.gallery);
-  }
-
-  Future uploadToStorage() async {
-    if (pickedImage != null) {
-      fileName = pickedImage!.name;
-      filePath = pickedImage!.path;
-      Reference refFeedBuckets = firebaseStorage
-          .ref()
-          .child(masjidCollection)
-          .child(authController.user.id!)
-          .child("Foto Profil");
-      var file = File(filePath);
-      final metadata = SettableMetadata(
-          contentType: 'image/jpeg',
-          customMetadata: {
-            'picked-file-path': filePath,
-            'picked-file-name': fileName
-          });
-
-      // TaskSnapshot uploadedFile = await refFeedBuckets.putFile(file);
-
-      UploadTask uploadTask = refFeedBuckets.putFile(file, metadata);
-      uploadTask.snapshotEvents.listen((event) async {
-        print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
-        uploadPrecentage.value = event.bytesTransferred / event.totalBytes;
-        // if (event.state == TaskState.running) {
-
-        // }
-        if (event.state == TaskState.success) {
-          downloadUrl.value = await refFeedBuckets.getDownloadURL();
-          // photoUrl.text = downloadUrl.value;
-          await firebaseFirestore
-              .collection(masjidCollection)
-              .doc(authController.user.id)
-              .update({'photoUrl': downloadUrl.value});
-          isLoadingImage.value = false;
-          print('$downloadUrl sss');
-        } else {
-          isLoadingImage.value = true;
-        }
-      });
-    }
   }
 }

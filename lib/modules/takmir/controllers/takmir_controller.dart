@@ -4,8 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
-import 'package:mosq/models/takmir.dart';
 import 'package:get/get.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
+import 'package:mosq/modules/takmir/models/takmir_model.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -44,18 +45,19 @@ class TakmirController extends GetxController {
     // takmirList.bindStream(takmirStream());
   }
 
-  Stream<List<TakmirModel>> takmirStream(String masjidID) async* {
-    yield* collections(masjidID).snapshots().map((QuerySnapshot query) {
-      List<TakmirModel> retVal = [];
-      query.docs.forEach((element) {
-        retVal.add(TakmirModel.fromSnapshot(element));
-      });
-      return retVal;
-    });
-  }
+  // Stream<List<TakmirModel>> takmirStream(String masjidID) async* {
+  //   yield* collections(masjidID).snapshots().map((QuerySnapshot query) {
+  //     List<TakmirModel> retVal = [];
+  //     query.docs.forEach((element) {
+  //       retVal.add(TakmirModel().fromSnapshot(element));
+  //     });
+  //     return retVal;
+  //   });
+  // }
 
-  getTakmirStream(String masjidID) {
-    takmirList.bindStream(takmirStream(masjidID));
+  getTakmirStream(MasjidModel model) {
+    // takmirList.bindStream(takmirStream(model.id!));
+    takmirList.bindStream(model.takmirDao!.takmirStream(model));
   }
 
   //Single
@@ -86,12 +88,33 @@ class TakmirController extends GetxController {
   }
 
   getImage(bool isCam) async {
-    photoLocal = await _picker.pickImage(
+    return pickedImage = await _picker.pickImage(
         source: isCam ? ImageSource.camera : ImageSource.gallery);
-    if (photoLocal != null) {
-      photoPath = photoLocal!.path;
+  }
+
+  saveTakmir(TakmirModel model, File? foto) async {
+    try {
+      var result =
+          foto == null ? await model.save() : await model.saveWithDetails(foto);
+      if (result is UploadTask) {
+        UploadTask task = result;
+        task.snapshotEvents.listen((event) async {
+          print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
+        });
+      }
+    } on SocketException catch (_) {
+      showDialog(
+          context: Get.context!,
+          builder: (context) => AlertDialog(
+                title: Text("Connection Error !"),
+                content: Text("Please connect to the internet."),
+              ));
+    } catch (e) {
+      print(e);
+      toast("Error Saving Data");
+    } finally {
+      toast("Data Berhasil Diperbarui");
     }
-    Get.back();
   }
 
   uploadImage(XFile? pickImage, TakmirModel takmir) async {

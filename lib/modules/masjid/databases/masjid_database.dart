@@ -25,11 +25,19 @@ class MasjidDatabase {
     return storage.child(model.id ?? "").child(inventarisCollection);
   }
 
+  CollectionReference takmirs(MasjidModel model) {
+    return db.doc(model.id).collection(takmirCollection);
+  }
+
+  Reference takmirStorage(MasjidModel model) {
+    return storage.child(model.id ?? "");
+  }
+
   Stream<MasjidModel> streamDetailMasjid(MasjidModel model) {
     return db
         .doc(model.id)
         .snapshots()
-        .map((event) => MasjidModel.fromSnapshot(event));
+        .map((event) => MasjidModel().fromSnapshot(event));
   }
 
   Stream<List<MasjidModel>> masjidStream() async* {
@@ -40,7 +48,7 @@ class MasjidDatabase {
         .map((QuerySnapshot query) {
       List<MasjidModel> list = [];
       query.docs.forEach((element) {
-        list.add(MasjidModel.fromSnapshot(element));
+        list.add(MasjidModel().fromSnapshot(element));
       });
       return list;
     });
@@ -61,8 +69,15 @@ class MasjidDatabase {
     return await db.doc(model.id).delete();
   }
 
-  Future upload(MasjidModel model, File foto) {
-    var path = storage.child(model.id!);
-    return path.putFile(foto);
+  upload(MasjidModel model, File foto) async {
+    var path = storage.child(model.id!).child('Foto Profil');
+    UploadTask task = path.putFile(foto);
+    task.snapshotEvents.listen((event) async {
+      if (event.state == TaskState.success) {
+        model.photoUrl = await path.getDownloadURL();
+        update(model);
+      }
+    });
+    return task;
   }
 }
