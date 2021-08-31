@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
+class Formatter {
+  final currencyFormatter =
+      NumberFormat.simpleCurrency(locale: "id ", decimalDigits: 0);
+}
+
 class DecimalInputFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {

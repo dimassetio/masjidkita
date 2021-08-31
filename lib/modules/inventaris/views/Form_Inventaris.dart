@@ -64,7 +64,7 @@ class _FormInventarisState extends State<FormInventaris> {
       kondisi.text = model.kondisi ?? "";
       foto.text = model.foto ?? "";
       url.text = model.url ?? "";
-      harga.text = model.harga.toString();
+      harga.text = Formatter().currencyFormatter.format(model.harga);
       jumlah.text = model.jumlah.toString();
     }
     // if (isEdit == true) {}
@@ -435,7 +435,6 @@ class _FormInventarisState extends State<FormInventaris> {
                 onTap: () async {
                   if (isSaving.value == false) {
                     if (formKey.currentState!.validate()) {
-                      isSaving.value = true;
                       int jumlahBarang = jumlah.text.toInt();
                       int hargaBarang = harga.text
                           .replaceAll('Rp', '')
