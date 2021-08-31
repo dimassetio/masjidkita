@@ -238,19 +238,15 @@ class _FormInventarisState extends State<FormInventaris> {
                 height: 300,
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Obx(() => inventarisC.photoPath != ""
-                      ? Image.file(File(inventarisC.photoPath))
-                      : isEdit
-                          ? inventarisC.inventaris.url != "" &&
-                                  inventarisC.inventaris.url != null
-                              ? CachedNetworkImage(
-                                  placeholder: placeholderWidgetFn() as Widget
-                                      Function(BuildContext, String)?,
-                                  imageUrl: inventarisC.inventaris.url ?? "",
-                                  fit: BoxFit.cover,
-                                )
-                              : text('Belum Ada Gambar',
-                                  fontSize: textSizeSMedium)
+                  child: Obx(() => xfoto.value.path.isNotEmpty
+                      ? Image.file(File(xfoto.value.path))
+                      : isEdit && !model.url.isEmptyOrNull
+                          ? CachedNetworkImage(
+                              placeholder: placeholderWidgetFn() as Widget
+                                  Function(BuildContext, String)?,
+                              imageUrl: model.url!,
+                              fit: BoxFit.cover,
+                            )
                           : text('Belum Ada Gambar',
                               fontSize: textSizeSMedium)),
                 ),
@@ -294,8 +290,9 @@ class _FormInventarisState extends State<FormInventaris> {
                             isLoading: inventarisC.isLoadingImage,
                             uploadPrecentage: inventarisC.uploadPrecentage,
                             isSaving: isSaving.value,
-                            fromCamera: () {
-                              inventarisC.getImage(true);
+                            fromCamera: () async {
+                              xfoto.value = await inventarisC.getImage(true);
+                              Get.back();
                               FocusScopeNode currentFocus =
                                   FocusScope.of(context);
                               if (!currentFocus.hasPrimaryFocus) {
@@ -303,8 +300,8 @@ class _FormInventarisState extends State<FormInventaris> {
                               }
                             },
                             fromGaleri: () async {
-                              await inventarisC.getImage(false);
-                              if (inventarisC.photoLocal != null) {}
+                              xfoto.value = await inventarisC.getImage(false);
+                              Get.back();
                               FocusScopeNode currentFocus =
                                   FocusScope.of(context);
                               if (!currentFocus.hasPrimaryFocus) {

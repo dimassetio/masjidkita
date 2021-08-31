@@ -267,10 +267,13 @@ class InventarisController extends GetxController {
   getImage(bool isCam) async {
     photoLocal = await _picker.pickImage(
         source: isCam ? ImageSource.camera : ImageSource.gallery);
-    if (photoLocal != null) {
-      photoPath = photoLocal!.path;
+    if (photoLocal is XFile) {
+      return photoLocal;
     }
-    Get.back();
+    // if (photoLocal != null) {
+    //   photoPath = photoLocal!.path;
+    // }
+    // Get.back();
   }
 
   saveInventaris(InventarisModel model, File? fotos) async {

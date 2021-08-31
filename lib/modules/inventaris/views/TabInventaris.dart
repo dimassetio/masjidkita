@@ -102,11 +102,11 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                                   res = false;
                                 } finally {
                                   Get.toNamed(
-                                    RouteName.edit_inventaris +
-                                        '/${inventarisC.inventaris.inventarisID}',
-                                    // RouteName.edit_inventaris,
-                                    // arguments: item);
-                                  );
+                                      // RouteName.edit_inventaris +
+                                      //     '/${inventarisC.inventaris.inventarisID}',
+                                      RouteName.edit_inventaris,
+                                      arguments: dataInventaris);
+                                  // );
                                 }
                               } else if (direction ==
                                   DismissDirection.endToStart) {
@@ -122,20 +122,14 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                               return res;
                             },
                             onDismissed: (direction) {
-                              setState(() async {
-                                // inventarisC.inventariss.removeAt(index);
-                                try {
-                                  // await inventarisC.deleteInventaris(
-                                  //     item.inventarisID, item.url);
+                              // inventarisC.inventariss.removeAt(index);
+                              try {
+                                inventarisC.delete(dataInventaris);
+                              } catch (e) {
+                                toast('Error Delete Data');
+                                rethrow;
+                              }
 
-                                  await inventarisC.delete(widget.item);
-
-                                  // finish(context);
-                                } catch (e) {
-                                  toast('Error Delete Data');
-                                  rethrow;
-                                }
-                              });
                               // if (direction == DismissDirection.startToEnd) {
                               // ScaffoldMessengerState().showSnackBar(
                               //     SnackBar(content: Text("Swipe to left")));
