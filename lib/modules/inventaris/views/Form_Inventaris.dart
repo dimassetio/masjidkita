@@ -18,6 +18,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:get/get.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mosq/main.dart';
 
 class FormInventaris extends StatefulWidget {
@@ -35,7 +36,6 @@ class _FormInventarisState extends State<FormInventaris> {
   GlobalKey<FormState> formKey = GlobalKey();
   bool isEdit = Get.currentRoute != RouteName.new_inventaris;
   var isSaving = false.obs;
-  InventarisModel model = Get.arguments ?? InventarisModel();
   // GlobalKey<FormState> formKey = GlobalKey();
 
   final TextEditingController nama = TextEditingController();
@@ -43,12 +43,23 @@ class _FormInventarisState extends State<FormInventaris> {
   final TextEditingController kondisi = TextEditingController();
   final TextEditingController foto = TextEditingController();
   final TextEditingController url = TextEditingController();
+  InventarisModel model = Get.arguments ?? InventarisModel();
   var harga = TextEditingController();
+  var xfoto = XFile("").obs;
+  File? fotos;
 
   @override
   void initState() {
     super.initState();
-    if (Get.parameters['id'] != null) {
+    // if (model.inventarisID != null) {
+    //   nama.text = model.nama ?? "";
+    //   kondisi.text = model.kondisi ?? "";
+    //   foto.text = model.foto ?? "";
+    //   url.text = model.url ?? "";
+    //   harga.text = model.harga.toString();
+    //   jumlah.text = model.jumlah.toString();
+    // }
+    if (model.inventarisID != null) {
       nama.text = model.nama ?? "";
       kondisi.text = model.kondisi ?? "";
       foto.text = model.foto ?? "";
@@ -56,7 +67,7 @@ class _FormInventarisState extends State<FormInventaris> {
       harga.text = model.harga.toString();
       jumlah.text = model.jumlah.toString();
     }
-    if (isEdit == true) {}
+    // if (isEdit == true) {}
   }
 
   checkControllers() {
@@ -65,7 +76,7 @@ class _FormInventarisState extends State<FormInventaris> {
           jumlah.text != model.jumlah.toString() ||
           kondisi.text != model.kondisi ||
           // foto.text != inventaris.foto ||
-          // url.text != inventaris.url ||
+          url.text != model.url ||
           harga.text != model.harga.toString()) {
         return true;
       } else
@@ -427,22 +438,42 @@ class _FormInventarisState extends State<FormInventaris> {
                 onTap: () async {
                   if (isSaving.value == false) {
                     if (formKey.currentState!.validate()) {
+                      isSaving.value = true;
                       int jumlahBarang = jumlah.text.toInt();
                       int hargaBarang = harga.text
                           .replaceAll('Rp', '')
                           .replaceAll('.', '')
                           .toInt();
-                      InventarisModel model = InventarisModel(
-                          inventarisID: isEdit
-                              ? inventarisC.inventaris.inventarisID
-                              : null,
-                          nama: nama.text,
-                          kondisi: kondisi.text,
-                          foto: foto.text,
-                          url: url.text,
-                          harga: hargaBarang,
-                          jumlah: jumlahBarang,
-                          hargaTotal: hargaBarang * jumlahBarang);
+                      // InventarisModel model = InventarisModel(
+                      //     inventarisID: isEdit
+                      //         ? inventarisC.inventaris.inventarisID
+                      //         : null,
+                      //     nama: nama.text,
+                      //     kondisi: kondisi.text,
+                      //     foto: foto.text,
+                      //     url: url.text,
+                      //     harga: hargaBarang,
+                      //     jumlah: jumlahBarang,
+                      //     hargaTotal: hargaBarang * jumlahBarang);
+
+                      // inventarisID: isEdit
+                      //     ? inventarisC.inventaris.inventarisID
+                      //     : null,
+                      model.nama = nama.text;
+                      model.kondisi = kondisi.text;
+                      model.foto = foto.text;
+                      model.url = url.text;
+                      model.harga = hargaBarang;
+                      model.jumlah = jumlahBarang;
+                      model.hargaTotal = hargaBarang * jumlahBarang;
+
+                      if (xfoto.value.path.isNotEmpty) {
+                        fotos = File(xfoto.value.path);
+                      }
+
+                      // await inventarisC.saveInventaris(model, fotos);
+                      // isSaving.value = false;
+                      // Get.back();
 
                       if (currStep < steps.length - 1) {
                         currStep = currStep + 1;
@@ -452,8 +483,9 @@ class _FormInventarisState extends State<FormInventaris> {
                         // await inventarisC.addInventaris(
                         //     model, authController.firebaseUser.value.uid);
 
-                        await model.save();
+                        await inventarisC.saveInventaris(model, fotos);
 
+                        Get.back();
                         // if (inventarisC.photoLocal != null) {
                         //   await inventarisC.uploadToStorage(
                         //       inventarisC.photoLocal, model);

@@ -5,6 +5,7 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/models/user.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/widgets/DismissibleBackground.dart';
@@ -21,10 +22,11 @@ import '../../../../main.dart';
 class TMTabInventaris extends StatefulWidget {
   @override
   _TMTabInventarisState createState() => _TMTabInventarisState();
-  final InventarisModel model;
-  // final UserModel user;
-  // final ManMasjidModel masjid;
-  const TMTabInventaris(this.model
+  final InventarisModel item;
+  final MasjidModel model;
+  // final Useritem user;
+  // final ManMasjiditem masjid;
+  const TMTabInventaris(this.model, this.item
       // this.user,
       // this.masjid,
       );
@@ -47,6 +49,8 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
   }
 
   Widget generateItemList() {
+    final InventarisModel item;
+    // final InventarisModel item;
     // final InventarisController inventarisC = Get.find();
     return Container(
       child: SingleChildScrollView(
@@ -68,11 +72,13 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                     itemCount: inventarisC.inventariss.length,
                     shrinkWrap: true,
                     physics: ScrollPhysics(),
-                    itemBuilder: (_, index) {
-                      final item = inventarisC.inventariss[index];
+                    itemBuilder: (context, index) {
+                      InventarisModel dataInventaris =
+                          inventarisC.inventariss[index];
+                      // final item = inventarisC.inventariss[index];
 
                       return Obx(() => Dismissible(
-                            key: Key(item.inventarisID!),
+                            key: Key(dataInventaris.inventarisID!),
                             direction: masjidC.myMasjid.value
                                 ? DismissDirection.horizontal
                                 : DismissDirection.none,
@@ -96,10 +102,11 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                                   res = false;
                                 } finally {
                                   Get.toNamed(
-                                      RouteName.edit_inventaris +
-                                          '/${inventarisC.inventaris.inventarisID}',
-                                      arguments:
-                                          inventarisC.inventariss[index]);
+                                    RouteName.edit_inventaris +
+                                        '/${inventarisC.inventaris.inventarisID}',
+                                    // RouteName.edit_inventaris,
+                                    // arguments: item);
+                                  );
                                 }
                               } else if (direction ==
                                   DismissDirection.endToStart) {
@@ -108,7 +115,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                                     builder: (BuildContext context) =>
                                         CustomDelete(
                                           titleName: 'Inventaris',
-                                          subtitleName: item.nama!,
+                                          subtitleName: widget.item.nama ?? "",
                                         ));
                               } else
                                 res = false;
@@ -121,11 +128,12 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                                   // await inventarisC.deleteInventaris(
                                   //     item.inventarisID, item.url);
 
-                                  await InventarisModel().delete();
+                                  await inventarisC.delete(widget.item);
 
                                   // finish(context);
                                 } catch (e) {
                                   toast('Error Delete Data');
+                                  rethrow;
                                 }
                               });
                               // if (direction == DismissDirection.startToEnd) {
@@ -181,7 +189,9 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                     backgroundColor: mkColorPrimary,
                     onPressed: () {
                       // CustomDelete();
-                      Get.toNamed(RouteName.new_inventaris);
+                      Get.toNamed(RouteName.new_inventaris,
+                          arguments:
+                              InventarisModel(dao: widget.model.inventarisDao));
                     })
                 : SizedBox())),
       ],

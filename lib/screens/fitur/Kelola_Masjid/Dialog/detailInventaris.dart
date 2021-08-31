@@ -5,19 +5,21 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/widgets/MosqTopBar.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:get/get.dart';
 // import 'package:mosq/main/utils/T10Images.dart';
 // import 'package:mosq/main/utils/T10Strings.dart';
 
 import 'package:mosq/main.dart';
 
 class InventarisDetail extends StatelessWidget {
-  final InventarisModel inventaris = InventarisModel();
+  InventarisModel model = Get.arguments;
   @override
   Widget build(BuildContext context) {
-    String? imageURL = inventarisC.inventaris.url;
+    String? imageURL = model.url ?? mk_net_img;
     // String noImage = "https://i.postimg.cc/9M4hLrrJ/no-image.png";
     if (imageURL == "") {
       String? imageURL = "https://i.postimg.cc/9M4hLrrJ/no-image.png";
@@ -49,10 +51,10 @@ class InventarisDetail extends StatelessWidget {
             SizedBox(height: 16),
             Text("Rincian", style: primaryTextStyle(size: 18)),
             SizedBox(height: 16),
-            Text("Harga barang (satuan): ${inventarisC.inventaris.harga}",
+            Text("Harga barang (satuan): ${model.harga ?? "Harga"}",
                 style: secondaryTextStyle()),
             SizedBox(height: 16),
-            Text("Banyaknya stok: ${inventarisC.inventaris.jumlah}",
+            Text("Banyaknya stok: ${model.jumlah ?? "Jumlah"}",
                 style: secondaryTextStyle()),
             SizedBox(height: 16),
             Divider(height: 1, color: mk_view_color),
@@ -89,7 +91,7 @@ class InventarisDetail extends StatelessWidget {
                 //     ),
                 //     onPressed: () {
                 //       Get.to(() => CustomDelete());
-                //       // Database().deleteInventaris(inventaris.inventarisID);
+                //       // Database().deleteInventaris(model.inventarisID);
                 //     }),
               ],
             )
@@ -112,7 +114,7 @@ class InventarisDetail extends StatelessWidget {
                       margin: EdgeInsets.all(16),
                       child: Column(
                         children: <Widget>[
-                          inventarisC.inventaris.url != ""
+                          model.url != ""
                               ? CachedNetworkImage(
                                   placeholder: placeholderWidgetFn() as Widget
                                       Function(BuildContext, String)?,
@@ -128,14 +130,14 @@ class InventarisDetail extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              text("${inventarisC.inventaris.nama}",
+                              text("${model.nama ?? "Nama"}",
                                   fontFamily: fontBold,
                                   fontSize: textSizeNormal),
-                              text("Rp. ${inventarisC.inventaris.hargaTotal},-",
+                              text("Rp. ${model.hargaTotal ?? "Harga Total"},-",
                                   fontFamily: fontMedium,
                                   fontSize: textSizeNormal),
                               // text(
-                              //     "Harga satuan: ${inventarisC.inventaris.harga}",
+                              //     "Harga satuan: ${model.harga}",
                               //     fontFamily: fontRegular,
                               //     fontSize: textSizeSmall),
                             ],
@@ -143,10 +145,10 @@ class InventarisDetail extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              text("Kondisi ${inventarisC.inventaris.kondisi}",
+                              text("Kondisi ${model.kondisi ?? "Kondisi"}",
                                   textColor: mkTextColorSecondary),
                               // text(
-                              //     "Banyaknya: ${inventarisC.inventaris.jumlah}",
+                              //     "Banyaknya: ${model.jumlah}",
                               //     textColor: t10_textColorSecondary),
                             ],
                           )

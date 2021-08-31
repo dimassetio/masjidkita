@@ -14,7 +14,6 @@ import 'package:mosq/modules/inventaris/views/Form_Inventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
 // import 'package:mosq/screens/PageSiMasjid.dart';
 import 'package:mosq/modules/masjid/views/show.dart';
-import 'package:mosq/modules/inventaris/views/TabInventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/detailInventaris.dart';
 import 'package:mosq/modules/takmir/views/detail.dart';
 import 'package:mosq/modules/takmir/views/form_takmir.dart';
@@ -32,8 +31,9 @@ class AppPage {
     GetPage(name: RouteName.new_inventaris, page: () => FormInventaris()),
     GetPage(name: RouteName.new_kegiatan, page: () => FormKegiatan()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),
-    GetPage(
-        name: RouteName.edit_inventaris + '/:id', page: () => FormInventaris()),
+    // GetPage(
+    //     name: RouteName.edit_inventaris + '/:id', page: () => FormInventaris()),
+    GetPage(name: RouteName.edit_inventaris, page: () => FormInventaris()),
     GetPage(
         name: RouteName.list_masjid,
         page: () => PageListMasjid(),
@@ -42,9 +42,9 @@ class AppPage {
       name: RouteName.detail,
       page: () => DetailMasjid(),
     ),
-    GetPage(
-        name: RouteName.inventaris,
-        page: () => TMTabInventaris(InventarisModel())),
+    // GetPage(
+    //     name: RouteName.inventaris,
+    //     page: () => TMTabInventaris()),
     GetPage(name: RouteName.detail_kegiatan, page: () => TMTabKegiatan()),
     GetPage(name: RouteName.new_takmir, page: () => FormTakmir()),
     GetPage(name: RouteName.detail_takmir, page: () => DetailTakmir()),

@@ -10,10 +10,10 @@ import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 
 class InventarisCard extends StatelessWidget {
-  final InventarisModel inventaris;
   const InventarisCard({
     required this.inventaris,
   });
+  final InventarisModel inventaris;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,7 +21,7 @@ class InventarisCard extends StatelessWidget {
         InkWell(
           onTap: () async {
             inventarisC.inventaris = inventaris;
-            Get.toNamed(RouteName.detail_inventaris);
+            Get.toNamed(RouteName.detail_inventaris, arguments: inventaris);
           },
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 16, vertical: 3),

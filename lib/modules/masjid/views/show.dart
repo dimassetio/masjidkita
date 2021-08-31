@@ -99,7 +99,7 @@ class DetailMasjid extends StatelessWidget {
                       TMTabProfile(model),
                       TMTabTakmir(model),
                       TMTabKas(),
-                      TMTabInventaris(InventarisModel()),
+                      TMTabInventaris(model, InventarisModel()),
                       TMTabKegiatan(),
                     ],
                   )),

@@ -145,6 +145,7 @@ class MasjidController extends GetxController {
   gotoDetail(MasjidModel dataMasjid) async {
     try {
       takmirC.getTakmirStream(dataMasjid);
+      inventarisC.getInventarisStream(dataMasjid);
     } catch (e) {
       toast(e.toString());
     } finally {

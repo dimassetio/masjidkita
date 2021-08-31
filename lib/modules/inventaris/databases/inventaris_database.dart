@@ -86,6 +86,11 @@ class InventarisDatabase {
     return await db.doc(model.inventarisID).delete();
   }
 
+  Future deleteFromStorage(InventarisModel model) async {
+    print(storage.child(model.inventarisID!));
+    return storage.child(model.inventarisID!).delete();
+  }
+
   Future upload(InventarisModel model, File foto) async {
     var path = storage.child(model.inventarisID!);
     UploadTask task = path.putFile(foto);

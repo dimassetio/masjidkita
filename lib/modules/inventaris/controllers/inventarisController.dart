@@ -57,6 +57,23 @@ class InventarisController extends GetxController {
     inventarisList.bindStream(model.inventarisDao!.inventarisStream(model));
   }
 
+  Future store(InventarisModel model, String masjidID) async {
+    var result = await collections(masjidID).add(getData(model));
+    return result.id;
+  }
+
+  Future updateInventaris(InventarisModel model, String masjidID) async {
+    await collections(masjidID).doc(model.inventarisID).set(getData(model));
+    return model.inventarisID;
+  }
+
+  Future delete(InventarisModel model) async {
+    if (model.url.isEmptyOrNull) {
+      return await model.delete();
+    } else
+      return await model.deleteWithDetails();
+  }
+
   addInventaris(InventarisModel model, String userId) async {
     // Map<String, dynamic> data = new HashMap();
     // DateTime now = DateTime.now();
@@ -196,11 +213,6 @@ class InventarisController extends GetxController {
   //   // Get.back();
   // }
 
-  Future updateInventaris(InventarisModel model, String masjidID) async {
-    await collections(masjidID).doc(model.inventarisID).set(getData(model));
-    return model.inventarisID;
-  }
-
   // deleteInventaris(inventarisID, url) {
   //   try {
   //     if (url != null) {
@@ -261,6 +273,32 @@ class InventarisController extends GetxController {
     Get.back();
   }
 
+  saveInventaris(InventarisModel model, File? fotos) async {
+    try {
+      var result = fotos == null
+          ? await model.save()
+          : await model.saveWithDetails(fotos);
+      if (result is UploadTask) {
+        UploadTask task = result;
+        task.snapshotEvents.listen((event) async {
+          print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
+        });
+      }
+    } on SocketException catch (_) {
+      showDialog(
+          context: Get.context!,
+          builder: (context) => AlertDialog(
+                title: Text("Connection Error !"),
+                content: Text("Please connect to the internet."),
+              ));
+    } catch (e) {
+      print(e);
+      toast("Error saving data");
+    } finally {
+      toast("Data berhasil diperbarui");
+    }
+  }
+
   uploadImage(XFile? pickImage, InventarisModel inventaris) async {
     if (pickImage != null) {
       fileName = pickImage.name;
@@ -302,7 +340,7 @@ class InventarisController extends GetxController {
         } else {}
       });
     } else {
-      toast('error upload data');
+      toast('Batal mengambil gambar');
     }
   }
 
