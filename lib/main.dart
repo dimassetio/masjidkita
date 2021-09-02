@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/screens/MosqDashboard.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
@@ -25,6 +26,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await initialize();
+  initializeDateFormatting('id');
 
   appStore.toggleDarkMode(value: getBoolAsync(isDarkModeOnPref));
 

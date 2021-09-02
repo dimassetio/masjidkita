@@ -5,10 +5,12 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:mosq/helpers/Validator.dart';
+import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/modules/takmir/models/takmir_model.dart';
+import 'package:mosq/modules/kegiatan/models/kegiatan_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dart';
@@ -22,9 +24,8 @@ import 'package:mosq/main/utils/AppWidget.dart';
 
 import 'package:image_picker/image_picker.dart';
 
-class FormTakmir extends StatelessWidget {
-  final TakmirModel model = Get.arguments ?? TakmirModel();
-  static const tag = '/FormTakmir';
+class FormKegiatan extends StatelessWidget {
+  final KegiatanModel model = Get.arguments ?? KegiatanModel();
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +37,13 @@ class FormTakmir extends StatelessWidget {
             leading: BackButton(),
             title: appBarTitleWidget(
               context,
-              Get.currentRoute == RouteName.edit_takmir
-                  ? mk_edit_takmir
-                  : mk_add_takmir,
+              Get.currentRoute == RouteName.new_kegiatan
+                  ? mk_add_kegiatan
+                  : mk_edit_kegiatan,
             ),
             // actions: actions,
           ),
-          // appBar: appBar(context, takmirC.deMasjid.nama ?? mk_add_masjid),
+          // appBar: appBar(context, kegiatanC.deMasjid.nama ?? mk_add_masjid),
           body: StepperBody()),
     );
   }
@@ -63,155 +64,221 @@ class _StepperBodyState extends State<StepperBody> {
   GlobalKey<FormState> _formKey = GlobalKey();
 
   bool isEdit = Get.currentRoute == RouteName.edit_takmir;
-  TakmirModel model = Get.arguments ?? TakmirModel();
+  KegiatanModel model = Get.arguments ?? KegiatanModel();
 
   @override
   void initState() {
     super.initState();
-    takmirC.namaC = TextEditingController();
-    takmirC.jabatanC = TextEditingController();
-    takmirC.jabatan = null;
-
-    if (!model.id.isEmptyOrNull) {
-      takmirC.namaC.text = model.nama ?? "";
-      if (takmirC.jabatanList.contains(model.jabatan)) {
-        takmirC.jabatan = model.jabatan ?? "";
-      } else {
-        takmirC.jabatanC.text = model.jabatan ?? "";
-        takmirC.jabatan = "Lainnya";
-      }
-    }
-    takmirC.jabatan == 'Lainnya' ? takmirC.isOtherJabatan.value = true : null;
   }
 
   @override
   void dispose() {
     super.dispose();
-    takmirC.clear();
+    kegiatanC.clear();
+  }
+
+  // DateTime selectedDate = DateTime.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    var result = await showDatePicker(
+        // helpText: 'Pilih tanggal kegiatan',
+        // cancelText: 'Batal',
+        // confirmText: "Konfirmasi",
+        // fieldLabelText: 'Tanggal Kegiatan',
+        // fieldHintText: 'Bulan/Tanggal/Tahun',
+        // errorFormatText: 'Masukkan tanggal yang valid',
+        // errorInvalidText: 'Masukkan tanggal dalam rentang yang tersedia',
+
+        context: context,
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData(colorScheme: mkColorScheme),
+            child: child!,
+          );
+        },
+        initialDate: kegiatanC.selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (result is DateTime) {
+      kegiatanC.selectedDate = new DateTime(
+        result.year,
+        result.month,
+        result.day,
+        kegiatanC.selectedDate.hour,
+        kegiatanC.selectedDate.minute,
+      );
+    }
+    // if (picked != null && picked != selectedDate)
+    //   setState(() {
+    //     print(picked);
+    //     selectedDate = picked;
+    //   });
+  }
+
+  _selectTime(BuildContext context) async {
+    var picked = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(kegiatanC.selectedDate),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData(colorScheme: mkColorScheme),
+            child: MediaQuery(
+              data:
+                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+              child: child!,
+            ),
+          );
+
+          // return CustomTheme(
+          //   child: MediaQuery(
+          //     data:
+          //         MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          //     child: child!,
+          //   ),
+          // );
+        });
+
+    if (picked is TimeOfDay)
+      kegiatanC.selectedDate = new DateTime(
+        kegiatanC.selectedDate.year,
+        kegiatanC.selectedDate.month,
+        kegiatanC.selectedDate.day,
+        picked.hour,
+        picked.minute,
+      );
   }
 
   @override
   Widget build(BuildContext context) {
     List<Step> steps = [
       Step(
-        title: Text(mk_lbl_profil, style: primaryTextStyle()),
+        title: Text(mk_lbl_kegiatan, style: primaryTextStyle()),
         isActive: currStep == 0,
         state: StepState.indexed,
         content: Column(
           children: [
             EditText(
-              isEnabled: !takmirC.isSaving.value,
-              mController: takmirC.namaC,
+              isEnabled: !kegiatanC.isSaving.value,
+              mController: kegiatanC.namaC,
               validator: (value) =>
-                  (Validator(attributeName: mk_lbl_nama, value: value)
+                  (Validator(attributeName: mk_lbl_nama_kegiatan, value: value)
                         ..required())
                       .getError(),
-              // inputFormatters: [CurrrencyInputFormatter()],
-              label: mk_lbl_nama,
-              icon: Icon(Icons.person,
-                  color: takmirC.isSaving.value
+              label: mk_lbl_nama_kegiatan,
+              hint: mk_hint_nama_kegiatan,
+              icon: Icon(Icons.volunteer_activism,
+                  color: kegiatanC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
-            DropdownButtonFormField<String>(
+            EditText(
+              isEnabled: !kegiatanC.isSaving.value,
+              mController: kegiatanC.deskripsiC,
+              textInputAction: TextInputAction.newline,
               validator: (value) =>
-                  (Validator(attributeName: mk_lbl_jabatan, value: value)
+                  (Validator(attributeName: mk_lbl_deskripsi, value: value)
                         ..required())
                       .getError(),
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              alignment: Alignment.centerLeft,
-              value: takmirC.jabatan,
-              decoration: InputDecoration(
-                labelText: mk_lbl_jabatan,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_lbl_enter + mk_lbl_jabatan,
-                icon: Icon(Icons.person,
-                    color: takmirC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              dropdownColor: appStore.appBarColor,
-              onChanged: takmirC.isSaving.value
-                  ? null
-                  : (String? newValue) {
-                      setState(() {
-                        takmirC.jabatan = newValue ?? "";
-                        takmirC.jabatan == 'Lainnya'
-                            ? takmirC.isOtherJabatan.value = true
-                            : takmirC.isOtherJabatan.value = false;
-                        takmirC.jabatanC.text = "";
-                      });
-                    },
-              items: takmirC.jabatanList
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Tooltip(
-                      message: value,
-                      child: Container(
-                          margin: EdgeInsets.only(left: 4, right: 4),
-                          child: Text(value, style: primaryTextStyle()))),
-                );
-              }).toList(),
+              label: mk_lbl_deskripsi_kegiatan,
+              hint: mk_lbl_deskripsi_kegiatan,
+              icon: Icon(Icons.description,
+                  color: kegiatanC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
+              maxLine: 3,
+              keyboardType: TextInputType.multiline,
             ),
-            takmirC.isOtherJabatan.value
-                ? EditText(
-                    isEnabled: !takmirC.isSaving.value,
-                    mController: takmirC.jabatanC,
-                    validator: (value) =>
-                        (Validator(attributeName: mk_lbl_jabatan, value: value)
-                              ..required())
-                            .getError(),
-                    label: "$mk_lbl_jabatan $mk_lbl_lainnya",
-                    icon: Icon(Icons.person,
-                        color: takmirC.isSaving.value
-                            ? mkColorPrimaryLight
-                            : mkColorPrimaryDark),
-                  )
-                : SizedBox(),
           ],
         ),
       ),
       Step(
-          title: Text(mk_lbl_foto_profil, style: primaryTextStyle()),
-          isActive: currStep == 3,
+        title: Text("Waktu Kegiatan", style: primaryTextStyle()),
+        content: Obx(
+          () => Column(children: <Widget>[
+            Card(
+                elevation: 4,
+                child: ListTile(
+                  onTap: () {
+                    _selectDate(context);
+                  },
+                  title: Text(
+                    'Pilih tanggal acara',
+                    style: primaryTextStyle(),
+                  ),
+                  subtitle: Text(
+                    "${kegiatanC.selectedDate.toLocal()}".split(' ')[0],
+                    style: secondaryTextStyle(),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.date_range,
+                      color: mkColorPrimary,
+                    ),
+                    onPressed: () {
+                      _selectDate(context);
+                    },
+                  ),
+                )),
+            SizedBox(height: 20),
+            Card(
+                elevation: 4,
+                child: ListTile(
+                  onTap: () {
+                    _selectTime(context);
+                  },
+                  title: Text(
+                    'Pilih waktu acara',
+                    style: primaryTextStyle(),
+                  ),
+                  subtitle: Text(
+                    timeFormatter(kegiatanC.selectedDate),
+                    style: secondaryTextStyle(),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.schedule,
+                      color: mkColorPrimary,
+                    ),
+                    onPressed: () {
+                      _selectTime(context);
+                    },
+                  ),
+                )),
+            SizedBox(height: 20),
+          ]),
+        ),
+        isActive: currStep == 1,
+        // state: StepState.complete
+      ),
+      Step(
+          title: Text(mk_lbl_foto_kegiatan, style: primaryTextStyle()),
+          isActive: currStep == 2,
           state: StepState.indexed,
           content: Column(children: [
-            // Obx(() => Container(
-            //       decoration: BoxDecoration(
-            //           borderRadius: BorderRadius.circular(100),
-            //           image: DecorationImage(
-            //               image:
-            //                   CachedNetworkImageProvider(model.photoUrl ?? ""),
-            //               fit: BoxFit.cover)),
-            //     )),
-            Obx(
-              () => CircleAvatar(
-                backgroundImage: AssetImage(mk_profile_pic),
-                child: isEdit && !model.photoUrl.isEmptyOrNull
-                    ? Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            image: DecorationImage(
-                                image: CachedNetworkImageProvider(
-                                    model.photoUrl ?? ""),
-                                fit: BoxFit.cover)),
-                      )
-                    : null,
-                foregroundImage: FileImage(File(takmirC.xfoto.value.path)),
-                backgroundColor: mkColorPrimary,
-                radius: 100,
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(bottom: 16),
+              // decoration: boxDecoration(
+              //     radius: 10.0, showShadow: true, color: mkColorPrimary),
+              width: Get.width,
+              height: Get.width / 1.7,
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                child: Obx(() => kegiatanC.xfoto.value.path.isNotEmpty
+                    ? Image.file(File(kegiatanC.xfoto.value.path))
+                    : isEdit && !model.photoUrl.isEmptyOrNull
+                        ? CachedNetworkImage(
+                            placeholder: placeholderWidgetFn() as Widget
+                                Function(BuildContext, String)?,
+                            imageUrl: model.photoUrl!,
+                            fit: BoxFit.cover,
+                          )
+                        : SvgPicture.asset(
+                            mk_no_image,
+                          )),
               ),
             ),
-            16.height,
-            // FormField(
-            //   autovalidateMode: AutovalidateMode.onUserInteraction,
-            //   validator: (String? value) =>
-            //       (Validator(attributeName: mk_lbl_foto_profil, value: value)
-            //             ..required())
-            //           .getError(),
-            //   builder: (FormFieldState imageForm) =>
+
             ElevatedButton(
               child: text("Upload Foto", textColor: mkWhite),
               onPressed: () {
@@ -224,9 +291,9 @@ class _StepperBodyState extends State<StepperBody> {
                     ),
                     builder: (builder) {
                       return ImageSourceBottomSheet(
-                        isSaving: takmirC.isSaving,
+                        isSaving: kegiatanC.isSaving,
                         fromCamera: () async {
-                          await takmirC.getImage(true);
+                          await kegiatanC.getImage(true);
                           Get.back();
                           FocusScopeNode currentFocus = FocusScope.of(context);
                           if (!currentFocus.hasPrimaryFocus) {
@@ -234,7 +301,7 @@ class _StepperBodyState extends State<StepperBody> {
                           }
                         },
                         fromGaleri: () async {
-                          await takmirC.getImage(false);
+                          await kegiatanC.getImage(false);
                           Get.back();
                           FocusScopeNode currentFocus = FocusScope.of(context);
                           if (!currentFocus.hasPrimaryFocus) {
@@ -248,16 +315,15 @@ class _StepperBodyState extends State<StepperBody> {
             // ),
           ]))
     ];
-
     return WillPopScope(
         onWillPop: () async {
-          return takmirC.checkControllers(model)
-              ? await showDialog(
-                  context: context,
-                  builder: (BuildContext context) => ConfirmDialog())
-              : Future.value(true);
+          // return kegiatanC.checkControllers()
+          //     ? await showDialog(
+          //         context: context,
+          //         builder: (BuildContext context) => ConfirmDialog())
+          //     : Future.value(true);
           // toast("value");
-          // return Future.value(true);
+          return Future.value(true);
         },
         child: Container(
             child: GestureDetector(
@@ -289,8 +355,6 @@ class _StepperBodyState extends State<StepperBody> {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                // text("Saving = ${takmirC.isSaving}"),
-
                                 currStep != 0
                                     ? TextButton(
                                         onPressed: onStepCancel,
@@ -341,16 +405,16 @@ class _StepperBodyState extends State<StepperBody> {
                         height: 50,
                         margin: EdgeInsets.all(10),
                         decoration: boxDecoration(
-                            bgColor: takmirC.isSaving.value
+                            bgColor: kegiatanC.isSaving.value
                                 ? mkColorPrimaryLight
                                 : mkColorPrimary,
                             radius: 10),
                         padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                         child: InkWell(
                           onTap: () async {
-                            if (takmirC.isSaving.value == false) {
+                            if (kegiatanC.isSaving.value == false) {
                               if (_formKey.currentState!.validate()) {
-                                await takmirC.saveTakmir(model);
+                                await kegiatanC.saveKegiatan(model);
                               } else {
                                 _formKey.currentState!.validate();
                               }
@@ -358,7 +422,7 @@ class _StepperBodyState extends State<StepperBody> {
                             // finish(context);
                           },
                           child: Center(
-                            child: takmirC.isSaving.value
+                            child: kegiatanC.isSaving.value
                                 ? CircularProgressIndicator()
                                 : Text(mk_submit,
                                     style:

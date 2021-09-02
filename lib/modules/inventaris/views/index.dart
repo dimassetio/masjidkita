@@ -15,7 +15,7 @@ import 'package:mosq/screens/widgets/DismissibleBackground.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:get/get.dart';
 import 'package:mosq/routes/route_name.dart';
-import 'InventarisList.dart';
+import 'card.dart';
 
 import '../../../../main.dart';
 
@@ -77,75 +77,58 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                           inventarisC.inventariss[index];
                       // final item = inventarisC.inventariss[index];
 
-                      return Obx(() => Dismissible(
-                            key: Key(dataInventaris.inventarisID!),
-                            direction: masjidC.myMasjid.value
-                                ? DismissDirection.horizontal
-                                : DismissDirection.none,
-                            child:
-                                // InventarisCard(inventarisC.inventariss[index]),
-                                InventarisCard(
-                              inventaris: inventarisC.inventariss[index],
-                            ),
-                            background: slideRightBackground(),
-                            secondaryBackground: slideLeftBackground(),
-                            confirmDismiss: (direction) async {
-                              final bool? res;
-                              if (direction == DismissDirection.startToEnd) {
-                                try {
-                                  await inventarisC.getInventarisModel(
-                                      inventarisC.inventariss[index]
-                                              .inventarisID ??
-                                          "");
-                                  print(inventarisC
-                                      .inventariss[index].inventarisID);
+                      return Obx(() => Column(children: [
+                            Dismissible(
+                              key: Key(dataInventaris.inventarisID!),
+                              direction: masjidC.myMasjid.value
+                                  ? DismissDirection.horizontal
+                                  : DismissDirection.none,
+                              child:
+                                  // InventarisCard(inventarisC.inventariss[index]),
+                                  InventarisCard(
+                                inventaris: inventarisC.inventariss[index],
+                              ),
+                              background: slideRightBackground(),
+                              secondaryBackground: slideLeftBackground(),
+                              confirmDismiss: (direction) async {
+                                final bool? res;
+                                if (direction == DismissDirection.startToEnd) {
+                                  try {
+                                    res = false;
+                                  } finally {
+                                    Get.toNamed(
+                                        // RouteName.edit_inventaris +
+                                        //     '/${inventarisC.inventaris.inventarisID}',
+                                        RouteName.edit_inventaris,
+                                        arguments: dataInventaris);
+                                    // );
+                                  }
+                                } else if (direction ==
+                                    DismissDirection.endToStart) {
+                                  return res = await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          CustomDelete(
+                                            titleName: 'Inventaris',
+                                            subtitleName:
+                                                widget.item.nama ?? "",
+                                          ));
+                                } else
                                   res = false;
-                                } finally {
-                                  Get.toNamed(
-                                      // RouteName.edit_inventaris +
-                                      //     '/${inventarisC.inventaris.inventarisID}',
-                                      RouteName.edit_inventaris,
-                                      arguments: dataInventaris);
-                                  // );
+                                return res;
+                              },
+                              onDismissed: (direction) {
+                                // inventarisC.inventariss.removeAt(index);
+                                try {
+                                  inventarisC.delete(dataInventaris);
+                                } catch (e) {
+                                  toast('Error Delete Data');
+                                  rethrow;
                                 }
-                              } else if (direction ==
-                                  DismissDirection.endToStart) {
-                                return res = await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        CustomDelete(
-                                          titleName: 'Inventaris',
-                                          subtitleName: widget.item.nama ?? "",
-                                        ));
-                              } else
-                                res = false;
-                              return res;
-                            },
-                            onDismissed: (direction) {
-                              // inventarisC.inventariss.removeAt(index);
-                              try {
-                                inventarisC.delete(dataInventaris);
-                              } catch (e) {
-                                toast('Error Delete Data');
-                                rethrow;
-                              }
-
-                              // if (direction == DismissDirection.startToEnd) {
-                              // ScaffoldMessengerState().showSnackBar(
-                              //     SnackBar(content: Text("Swipe to left")));
-                              //   setState(() {
-                              //     inventarisC.inventariss.removeAt(index);
-                              //     Get.toNamed(RouteName.detail_inventaris);
-                              //   });
-                              // } else if (direction == DismissDirection.endToStart) {
-                              // userList.removeAt(index);d
-                              // ScaffoldMessengerState().showSnackBar(
-                              //     SnackBar(content: Text("Swipe to right")));
-
-                              // Get.to(() => CustomDelete());
-                              // }
-                            },
-                          ));
+                              },
+                            ),
+                            Divider()
+                          ]));
                     }),
           ),
         ],

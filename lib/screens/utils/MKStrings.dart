@@ -94,6 +94,8 @@ const mk_hint_harga_inventaris = "Ex: Rp. 15.000,-";
 const mk_lbl_foto_inventaris = "Foto";
 
 const mk_add_kegiatan = "Tambah kegiatan";
+const mk_edit_kegiatan = "Edit kegiatan";
+const mk_lbl_kegiatan = "Kegiatan";
 const mk_lbl_nama_kegiatan = "Nama Kegiatan";
 const mk_hint_nama_kegiatan = "Ex: Istighosah";
 const mk_lbl_deskripsi_kegiatan = "Deskripsi";

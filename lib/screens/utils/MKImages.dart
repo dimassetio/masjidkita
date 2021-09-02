@@ -4,6 +4,7 @@ const mk_net_img =
 const mk_ic_search = "images/MK/mk_ic_search.svg";
 const mk_ic_mosque = "images/MK/mk_ic_mosque.svg";
 const mk_ic_mosque_2 = "images/MK/mk_ic_mosque_2.svg";
+const mk_no_image = "images/MK/no_image.svg";
 const mk_ic_add_mosque = "images/MK/mk_ic_add_mosque.svg";
 const mk_ic_tasbih = "images/MK/mk_ic_tasbih.svg";
 const mk_ic_adzan = "images/MK/mk_ic_adzan.svg";

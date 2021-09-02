@@ -14,6 +14,7 @@ import 'package:mosq/modules/masjid/models/masjid_model.dart';
 
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
@@ -35,52 +36,26 @@ class _FormMasjidState extends State<FormMasjid> {
   set currStep(int value) => this.currentStep.value = value;
   GlobalKey<FormState> formKey = GlobalKey();
 
-  List<String> statusTanahList = ['Wakaf', mk_lbl_lainnya];
-  List<String> legalitasList = [
-    'Hak Milik',
-    'Hak Guna Bangunan',
-    mk_lbl_lainnya
-  ];
-
-  String? statusTanah;
-  String? legalitas;
-
-  var photo = XFile("").obs;
-  File? foto;
-  var photoUrl = "".obs;
-  TextEditingController nama = TextEditingController();
-  TextEditingController alamat = TextEditingController();
-  TextEditingController deskripsi = TextEditingController();
-  TextEditingController kecamatan = TextEditingController();
-  TextEditingController kodePos = TextEditingController();
-  TextEditingController kota = TextEditingController();
-  TextEditingController provinsi = TextEditingController();
-  TextEditingController tahun = TextEditingController();
-  TextEditingController luasTanah = TextEditingController();
-  TextEditingController luasBangunan = TextEditingController();
   MasjidModel model = Get.arguments ?? MasjidModel();
-
   @override
   void initState() {
     super.initState();
     if (model.id != null) {
-      nama.text = model.nama ?? "";
-      alamat.text = model.alamat ?? "";
-      photoUrl.value = model.photoUrl ?? "";
-      deskripsi.text = model.deskripsi ?? "";
-      kecamatan.text = model.kecamatan ?? "";
-      kodePos.text = model.kodePos ?? "";
-      kota.text = model.kota ?? "";
-      provinsi.text = model.provinsi ?? "";
-      tahun.text = model.tahun ?? "";
-      luasTanah.text = model.luasTanah ?? "";
-      masjidC.downloadUrl.value = model.photoUrl ?? "";
-      luasBangunan.text = model.luasBangunan ?? "";
-      if (statusTanahList.contains(model.statusTanah)) {
-        statusTanah = model.statusTanah;
+      profilC.nama.text = model.nama ?? "";
+      profilC.alamat.text = model.alamat ?? "";
+      profilC.deskripsi.text = model.deskripsi ?? "";
+      profilC.kecamatan.text = model.kecamatan ?? "";
+      profilC.kodePos.text = model.kodePos ?? "";
+      profilC.kota.text = model.kota ?? "";
+      profilC.provinsi.text = model.provinsi ?? "";
+      profilC.tahun.text = model.tahun ?? "";
+      profilC.luasTanah.text = model.luasTanah ?? "";
+      profilC.luasBangunan.text = model.luasBangunan ?? "";
+      if (profilC.statusTanahList.contains(model.statusTanah)) {
+        profilC.statusTanah = model.statusTanah;
       }
-      if (legalitasList.contains(model.legalitas)) {
-        legalitas = model.legalitas;
+      if (profilC.legalitasList.contains(model.legalitas)) {
+        profilC.legalitas = model.legalitas;
       }
     }
   }
@@ -88,7 +63,7 @@ class _FormMasjidState extends State<FormMasjid> {
   @override
   void dispose() {
     super.dispose();
-    masjidC.downloadUrl.value = "";
+    profilC.clear();
   }
 
   @override
@@ -101,8 +76,8 @@ class _FormMasjidState extends State<FormMasjid> {
         content: Column(
           children: [
             EditText(
-              isEnabled: !masjidC.isSaving.value,
-              mController: nama,
+              isEnabled: !profilC.isSaving.value,
+              mController: profilC.nama,
               validator: (value) =>
                   (Validator(attributeName: mk_lbl_nama_masjid, value: value)
                         ..required())
@@ -110,13 +85,13 @@ class _FormMasjidState extends State<FormMasjid> {
               label: mk_lbl_nama_masjid,
               hint: mk_hint_nama_masjid,
               icon: Icon(Icons.home,
-                  color: masjidC.isSaving.value
+                  color: profilC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
             EditText(
-              isEnabled: !masjidC.isSaving.value,
-              mController: deskripsi,
+              isEnabled: !profilC.isSaving.value,
+              mController: profilC.deskripsi,
               textInputAction: TextInputAction.newline,
               validator: (value) =>
                   (Validator(attributeName: mk_lbl_deskripsi, value: value)
@@ -125,7 +100,7 @@ class _FormMasjidState extends State<FormMasjid> {
               label: mk_lbl_deskripsi,
               hint: mk_hint_deskripsi,
               icon: Icon(Icons.home,
-                  color: masjidC.isSaving.value
+                  color: profilC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
               maxLine: 3,
@@ -141,8 +116,8 @@ class _FormMasjidState extends State<FormMasjid> {
         content: Column(
           children: [
             EditText(
-              isEnabled: !masjidC.isSaving.value,
-              mController: alamat,
+              isEnabled: !profilC.isSaving.value,
+              mController: profilC.alamat,
               validator: (value) =>
                   (Validator(attributeName: mk_lbl_alamat, value: value)
                         ..required())
@@ -151,13 +126,13 @@ class _FormMasjidState extends State<FormMasjid> {
               hint: mk_hint_alamat,
               keyboardType: TextInputType.streetAddress,
               icon: Icon(Icons.edit_location,
-                  color: masjidC.isSaving.value
+                  color: profilC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
             EditText(
-              isEnabled: !masjidC.isSaving.value,
-              mController: kecamatan,
+              isEnabled: !profilC.isSaving.value,
+              mController: profilC.kecamatan,
               validator: (value) =>
                   (Validator(attributeName: mk_kecamatan, value: value)
                         ..required())
@@ -165,13 +140,13 @@ class _FormMasjidState extends State<FormMasjid> {
               label: mk_kecamatan,
               hint: mk_hint_kecamatan,
               icon: Icon(Icons.edit_location,
-                  color: masjidC.isSaving.value
+                  color: profilC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
             EditText(
-              isEnabled: !masjidC.isSaving.value,
-              mController: kodePos,
+              isEnabled: !profilC.isSaving.value,
+              mController: profilC.kodePos,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(5)
@@ -185,26 +160,26 @@ class _FormMasjidState extends State<FormMasjid> {
               label: mk_kode_pos,
               hint: mk_hint_kode_pos,
               icon: Icon(Icons.edit_location,
-                  color: masjidC.isSaving.value
+                  color: profilC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
             EditText(
-              isEnabled: !masjidC.isSaving.value,
-              mController: kota,
+              isEnabled: !profilC.isSaving.value,
+              mController: profilC.kota,
               validator: (value) =>
                   (Validator(attributeName: mk_kota, value: value)..required())
                       .getError(),
               label: mk_kota,
               hint: mk_hint_kota,
               icon: Icon(Icons.edit_location,
-                  color: masjidC.isSaving.value
+                  color: profilC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
             EditText(
-              isEnabled: !masjidC.isSaving.value,
-              mController: provinsi,
+              isEnabled: !profilC.isSaving.value,
+              mController: profilC.provinsi,
               validator: (value) =>
                   (Validator(attributeName: mk_provinsi, value: value)
                         ..required())
@@ -212,7 +187,7 @@ class _FormMasjidState extends State<FormMasjid> {
               label: mk_provinsi,
               hint: mk_hint_provinsi,
               icon: Icon(Icons.edit_location,
-                  color: masjidC.isSaving.value
+                  color: profilC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
@@ -226,8 +201,8 @@ class _FormMasjidState extends State<FormMasjid> {
         content: Column(
           children: [
             EditText(
-              isEnabled: !masjidC.isSaving.value,
-              mController: tahun,
+              isEnabled: !profilC.isSaving.value,
+              mController: profilC.tahun,
               validator: (value) =>
                   (Validator(attributeName: mk_tahun, value: value)
                         ..required()
@@ -236,7 +211,7 @@ class _FormMasjidState extends State<FormMasjid> {
               label: mk_tahun,
               hint: mk_hint_tahun,
               icon: Icon(Icons.house,
-                  color: masjidC.isSaving.value
+                  color: profilC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
               keyboardType: TextInputType.number,
@@ -246,15 +221,15 @@ class _FormMasjidState extends State<FormMasjid> {
               ],
             ),
             EditText(
-              isEnabled: !masjidC.isSaving.value,
-              mController: luasTanah,
+              isEnabled: !profilC.isSaving.value,
+              mController: profilC.luasTanah,
               validator: (value) =>
                   (Validator(attributeName: mk_LT, value: value)..required())
                       .getError(),
               label: mk_LT,
               hint: mk_hint_LT,
               icon: Icon(Icons.house,
-                  color: masjidC.isSaving.value
+                  color: profilC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
               keyboardType: TextInputType.number,
@@ -265,15 +240,15 @@ class _FormMasjidState extends State<FormMasjid> {
               ],
             ),
             EditText(
-              isEnabled: !masjidC.isSaving.value,
-              mController: luasBangunan,
+              isEnabled: !profilC.isSaving.value,
+              mController: profilC.luasBangunan,
               validator: (value) =>
                   (Validator(attributeName: mk_LB, value: value)..required())
                       .getError(),
               label: mk_LB,
               hint: mk_hint_LB,
               icon: Icon(Icons.house,
-                  color: masjidC.isSaving.value
+                  color: profilC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
               keyboardType: TextInputType.number,
@@ -288,24 +263,24 @@ class _FormMasjidState extends State<FormMasjid> {
                   value == null ? '$mk_status_tanah $mk_is_required' : null,
               style: primaryTextStyle(color: appStore.textPrimaryColor),
               alignment: Alignment.centerLeft,
-              value: statusTanah,
+              value: profilC.statusTanah,
               decoration: InputDecoration(
                 labelText: mk_status_tanah,
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_lbl_enter + mk_status_tanah,
                 icon: Icon(Icons.house,
-                    color: masjidC.isSaving.value
+                    color: profilC.isSaving.value
                         ? mkColorPrimaryLight
                         : mkColorPrimaryDark),
               ),
               dropdownColor: appStore.appBarColor,
-              onChanged: masjidC.isSaving.value
+              onChanged: profilC.isSaving.value
                   ? null
                   : (String? newValue) {
                       // setState(() {
                       // toast(newValue);
-                      statusTanah = newValue ?? "";
+                      profilC.statusTanah = newValue ?? "";
                       // });
                     },
               items: <String>['Wakaf', 'Lainnya']
@@ -325,23 +300,23 @@ class _FormMasjidState extends State<FormMasjid> {
                   value == null ? '$mk_legalitas $mk_is_required' : null,
               style: primaryTextStyle(color: appStore.textPrimaryColor),
               alignment: Alignment.centerLeft,
-              value: legalitas,
+              value: profilC.legalitas,
               decoration: InputDecoration(
                 labelText: mk_legalitas,
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_lbl_enter + mk_legalitas,
                 icon: Icon(Icons.house,
-                    color: masjidC.isSaving.value
+                    color: profilC.isSaving.value
                         ? mkColorPrimaryLight
                         : mkColorPrimaryDark),
               ),
               dropdownColor: appStore.appBarColor,
-              onChanged: masjidC.isSaving.value
+              onChanged: profilC.isSaving.value
                   ? null
                   : (String? newValue) {
                       // setState(() {
-                      legalitas = newValue ?? "";
+                      profilC.legalitas = newValue ?? "";
                       // });
                     },
               items: <String>['Hak Milik', 'Hak Guna Bangunan', 'Lainnya']
@@ -367,8 +342,8 @@ class _FormMasjidState extends State<FormMasjid> {
             Container(
               width: Get.width,
               height: Get.width / 1.7,
-              child: Obx(() => photo.value.path != ""
-                  ? Image.file(File(photo.value.path))
+              child: Obx(() => profilC.xfoto.value.path != ""
+                  ? Image.file(File(profilC.xfoto.value.path))
                   : !model.photoUrl.isEmptyOrNull
                       ? CachedNetworkImage(
                           placeholder: placeholderWidgetFn() as Widget Function(
@@ -390,21 +365,27 @@ class _FormMasjidState extends State<FormMasjid> {
                     ),
                     builder: (builder) {
                       return ImageSourceBottomSheet(
-                        isLoading: masjidC.isLoadingImage,
-                        uploadPrecentage: masjidC.uploadPrecentage,
-                        isSaving: masjidC.isSaving.value,
+                        isSaving: profilC.isSaving,
                         fromCamera: () async {
+                          await profilC.getImage(true);
                           Get.back();
-                          photo.value = await masjidC.getImage(true);
+                          FocusScopeNode currentFocus = FocusScope.of(context);
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
                         },
                         fromGaleri: () async {
+                          await profilC.getImage(false);
                           Get.back();
-                          photo.value = await masjidC.getImage(false);
+                          FocusScopeNode currentFocus = FocusScope.of(context);
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
                         },
                       );
                     });
 
-                // masjidC.uploadImage(image!);
+                // profilC.uploadImage(image!);
               },
             ),
           ]))
@@ -412,150 +393,135 @@ class _FormMasjidState extends State<FormMasjid> {
 
     return SafeArea(
         child: Scaffold(
-            // appBar: AppBar(
-            //   automaticallyImplyLeading: false,
-            //   backgroundColor: appStore.appBarColor,
-            //   leading: IconButton(
-            //     onPressed: () {
-            //       // masjidC.checkControllers()
-            //       //     ? showDialog(
-            //       //         context: Get.context!,
-            //       //         builder: (BuildContext context) => ConfirmDialog(),
-            //       //       )
-            //       //     : finish(context);
-            //     },
-            //     icon: Icon(Icons.arrow_back,
-            //         color: appStore.isDarkModeOn ? white : black),
-            //   ),
-            //   title: appBarTitleWidget(
-            //     context,
-            //     model.nama ?? mk_add_masjid,
-            //   ),
-            //   // actions: actions,
-            // ),
-            body: Container(
-                child: GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Theme(
-          data: ThemeData(colorScheme: mkColorScheme),
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Obx(
-                    () => Stepper(
-                      steps: steps,
-                      type: StepperType.vertical,
-                      currentStep: currStep,
-                      physics: ScrollPhysics(),
-                      controlsBuilder: (BuildContext context,
-                          {VoidCallback? onStepContinue,
-                          VoidCallback? onStepCancel}) {
-                        return Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            // text("Saving = ${masjidC.isSaving}"),
-
-                            currStep != 0
-                                ? TextButton(
-                                    onPressed: onStepCancel,
-                                    child: Text(mk_sebelum,
-                                        style: secondaryTextStyle()),
-                                  )
-                                : 10.width,
-                            currStep < steps.length - 1
-                                ? TextButton(
-                                    onPressed: onStepContinue,
-                                    child: Text(mk_berikut,
-                                        style: secondaryTextStyle()),
-                                  )
-                                : 10.width,
-                          ],
-                        );
-                      },
-                      onStepContinue: () {
-                        setState(() {
-                          if (currStep < steps.length - 1) {
-                            currStep = currStep + 1;
-                          }
-                        });
-                      },
-                      onStepCancel: () {
-                        // finish(context);
-                        setState(() {
-                          if (currStep > 0) {
-                            currStep = currStep - 1;
-                          } else {
-                            currStep = 0;
-                          }
-                        });
-                      },
-                      onStepTapped: (step) {
-                        setState(() {
-                          currStep = step;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                Obx(
-                  () => Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    margin: EdgeInsets.all(10),
-                    decoration: boxDecoration(
-                        bgColor: masjidC.isSaving.value
-                            ? mkColorPrimaryLight
-                            : mkColorPrimary,
-                        radius: 10),
-                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    child: InkWell(
-                      onTap: () async {
-                        if (masjidC.isSaving.value == false) {
-                          if (formKey.currentState!.validate()) {
-                            model.alamat = alamat.text;
-                            model.deskripsi = deskripsi.text;
-                            model.kecamatan = kecamatan.text;
-                            model.kodePos = kodePos.text;
-                            model.kota = kota.text;
-                            model.legalitas = legalitas;
-                            model.luasBangunan = luasBangunan.text;
-                            model.luasTanah = luasTanah.text;
-                            model.nama = nama.text;
-                            model.photoUrl = masjidC.downloadUrl.value;
-                            model.provinsi = provinsi.text;
-                            model.statusTanah = statusTanah;
-                            model.tahun = tahun.text;
-                            if (photo.value.path.isNotEmpty) {
-                              foto = File(photo.value.path);
-                            }
-                            await masjidC.saveMasjid(model, foto);
-                            Get.back();
-                          } else {
-                            formKey.currentState!.validate();
-                          }
-                        }
-                      },
-                      child: Center(
-                        child: masjidC.isSaving.value
-                            ? CircularProgressIndicator()
-                            : Text(mk_submit,
-                                style: boldTextStyle(color: white, size: 18)),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: appStore.appBarColor,
+              leading: BackButton(),
+              title: appBarTitleWidget(
+                context,
+                model.nama ?? mk_add_masjid,
+              ),
+              // actions: actions,
             ),
-          )),
-    ))));
+            body: WillPopScope(
+              onWillPop: () async {
+                // return Future.value(true);
+                return profilC.checkControllers(model)
+                    ? await showDialog(
+                        context: context,
+                        builder: (BuildContext context) => ConfirmDialog())
+                    : Future.value(true);
+              },
+              child: Container(
+                  child: GestureDetector(
+                onTap: () {
+                  FocusScopeNode currentFocus = FocusScope.of(context);
+
+                  if (!currentFocus.hasPrimaryFocus) {
+                    currentFocus.unfocus();
+                  }
+                },
+                child: Theme(
+                    data: ThemeData(colorScheme: mkColorScheme),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Obx(
+                              () => Stepper(
+                                steps: steps,
+                                type: StepperType.vertical,
+                                currentStep: currStep,
+                                physics: ScrollPhysics(),
+                                controlsBuilder: (BuildContext context,
+                                    {VoidCallback? onStepContinue,
+                                    VoidCallback? onStepCancel}) {
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      // text("Saving = ${profilC.isSaving}"),
+
+                                      currStep != 0
+                                          ? TextButton(
+                                              onPressed: onStepCancel,
+                                              child: Text(mk_sebelum,
+                                                  style: secondaryTextStyle()),
+                                            )
+                                          : 10.width,
+                                      currStep < steps.length - 1
+                                          ? TextButton(
+                                              onPressed: onStepContinue,
+                                              child: Text(mk_berikut,
+                                                  style: secondaryTextStyle()),
+                                            )
+                                          : 10.width,
+                                    ],
+                                  );
+                                },
+                                onStepContinue: () {
+                                  setState(() {
+                                    if (currStep < steps.length - 1) {
+                                      currStep = currStep + 1;
+                                    }
+                                  });
+                                },
+                                onStepCancel: () {
+                                  // finish(context);
+                                  setState(() {
+                                    if (currStep > 0) {
+                                      currStep = currStep - 1;
+                                    } else {
+                                      currStep = 0;
+                                    }
+                                  });
+                                },
+                                onStepTapped: (step) {
+                                  setState(() {
+                                    currStep = step;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          Obx(
+                            () => Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 50,
+                              margin: EdgeInsets.all(10),
+                              decoration: boxDecoration(
+                                  bgColor: profilC.isSaving.value
+                                      ? mkColorPrimaryLight
+                                      : mkColorPrimary,
+                                  radius: 10),
+                              padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                              child: InkWell(
+                                onTap: () async {
+                                  if (profilC.isSaving.value == false) {
+                                    if (formKey.currentState!.validate()) {
+                                      await profilC.saveMasjid(model);
+                                      Get.back();
+                                    } else {
+                                      formKey.currentState!.validate();
+                                    }
+                                  }
+                                },
+                                child: Center(
+                                  child: profilC.isSaving.value
+                                      ? CircularProgressIndicator()
+                                      : Text(mk_submit,
+                                          style: boldTextStyle(
+                                              color: white, size: 18)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+              )),
+            )));
   }
 }

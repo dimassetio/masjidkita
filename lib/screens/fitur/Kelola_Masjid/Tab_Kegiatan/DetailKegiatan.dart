@@ -7,8 +7,8 @@ import 'package:mosq/main/utils/AppWidget.dart';
 
 import 'package:mosq/integrations/controllers.dart';
 
-class DetailsPage extends StatelessWidget {
-  const DetailsPage();
+class DetailKegiatan extends StatelessWidget {
+  const DetailKegiatan();
 
   @override
   Widget build(BuildContext context) {
