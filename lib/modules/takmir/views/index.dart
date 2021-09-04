@@ -86,7 +86,7 @@ class TakmirCard extends StatelessWidget {
           },
           onDismissed: (direction) async {
             try {
-              takmirC.delete(dataTakmir);
+              takmirC.deleteTakmir(dataTakmir);
             } catch (e) {
               toast('Error Delete Data');
               rethrow;

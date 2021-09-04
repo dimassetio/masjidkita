@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -31,8 +32,8 @@ class InventarisDetail extends StatelessWidget {
     // }
 
     changeStatusColor(appStore.appBarColor!);
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+    var width = Get.width;
+    var height = Get.height;
 
     Widget mTag(var value) {
       return Container(
@@ -119,26 +120,21 @@ class InventarisDetail extends StatelessWidget {
                       margin: EdgeInsets.all(16),
                       child: Column(
                         children: <Widget>[
-                          model.url != ""
-                              ? CachedNetworkImage(
-                                  placeholder: placeholderWidgetFn() as Widget
-                                      Function(BuildContext, String)?,
-                                  imageUrl: "$imageURL",
-                                  width: width,
-                                  height: width * 0.7,
-                                  fit: BoxFit.cover,
-                                )
-                              // : Container(
-                              //     child: text("Tidak ada gambar"),
-                              //   ),
-                              : CachedNetworkImage(
-                                  placeholder: placeholderWidgetFn() as Widget
-                                      Function(BuildContext, String)?,
-                                  imageUrl: "$imageURL",
-                                  width: width,
-                                  height: width * 0.7,
-                                  fit: BoxFit.cover,
-                                ),
+                          Container(
+                            decoration: boxDecoration(radius: 20),
+                            width: Get.width,
+                            height: Get.width / 1.777,
+                            child: model.url != ""
+                                ? CachedNetworkImage(
+                                    placeholder: placeholderWidgetFn() as Widget
+                                        Function(BuildContext, String)?,
+                                    imageUrl: "$imageURL",
+                                    width: width,
+                                    height: width * 0.7,
+                                    fit: BoxFit.cover,
+                                  )
+                                : SvgPicture.asset(mk_no_image),
+                          ),
                           SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -17,20 +17,12 @@ class MasjidDatabase {
   static final CollectionReference userDB =
       firebaseFirestore.collection(usersCollection);
 
-  CollectionReference inventarises(MasjidModel model) {
-    return db.doc(model.id).collection(inventarisCollection);
+  CollectionReference childReference(MasjidModel model, String collectionName) {
+    return db.doc(model.id).collection(collectionName);
   }
 
-  Reference inventarisStorage(MasjidModel model) {
-    return storage.child(model.id ?? "").child(inventarisCollection);
-  }
-
-  CollectionReference takmirs(MasjidModel model) {
-    return db.doc(model.id).collection(takmirCollection);
-  }
-
-  Reference takmirStorage(MasjidModel model) {
-    return storage.child(model.id ?? "").child(takmirCollection);
+  Reference childStorage(MasjidModel model, String collectionName) {
+    return storage.child(model.id ?? "").child(collectionName);
   }
 
   CollectionReference kases(MasjidModel model) {

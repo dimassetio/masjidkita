@@ -1,23 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
-import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/modules/kas/views/form_kas.dart';
 import 'package:mosq/modules/profile/views/Form_Profile.dart';
+import 'package:mosq/modules/takmir/views/form_takmir.dart';
 import 'package:mosq/screens/MosqDashboard.dart';
 import 'package:mosq/screens/MosqProfile.dart';
 import 'package:mosq/modules/masjid/views/index.dart';
 import 'package:mosq/screens/authentication/MKSignIn.dart';
 import 'package:mosq/screens/authentication/MKSignUp.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/Form_Kegiatan.dart';
-import 'package:mosq/modules/inventaris/views/Form_Inventaris.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/DetailKegiatan.dart';
+import 'package:mosq/modules/inventaris/views/form.dart';
 // import 'package:mosq/screens/PageSiMasjid.dart';
 import 'package:mosq/modules/masjid/views/show.dart';
-import 'package:mosq/modules/inventaris/views/detailI.dart';
-import 'package:mosq/modules/takmir/views/detail.dart';
-import 'package:mosq/modules/takmir/views/form_takmir.dart';
+import 'package:mosq/modules/inventaris/views/show.dart';
+import 'package:mosq/modules/takmir/views/show.dart';
+import 'package:mosq/modules/kegiatan/views/form_kegiatan.dart';
 import './route_name.dart';
 
 class AppPage {
@@ -48,7 +45,7 @@ class AppPage {
     // GetPage(
     //     name: RouteName.inventaris,
     //     page: () => TMTabInventaris()),
-    GetPage(name: RouteName.detail_kegiatan, page: () => TMTabKegiatan()),
+    GetPage(name: RouteName.detail_kegiatan, page: () => DetailKegiatan()),
     GetPage(name: RouteName.new_takmir, page: () => FormTakmir()),
     GetPage(name: RouteName.detail_takmir, page: () => DetailTakmir()),
     GetPage(

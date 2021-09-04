@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
@@ -9,8 +8,6 @@ import 'package:mosq/modules/takmir/models/takmir_model.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
-import 'package:mosq/screens/utils/MKWidget.dart';
-import 'package:nb_utils/nb_utils.dart';
 
 class DetailTakmir extends StatelessWidget {
   TakmirModel dataTakmir = Get.arguments;

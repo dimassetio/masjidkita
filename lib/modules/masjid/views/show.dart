@@ -6,8 +6,9 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
+import 'package:mosq/modules/kas/views/TabKas.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
+import 'package:mosq/modules/kegiatan/views/index.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -15,11 +16,9 @@ import 'package:get/get.dart';
 // import 'package:mosq/screens/widgets/T5Slider.dart';
 
 import 'package:mosq/main.dart';
-
-import '../../kas/views/TabKas.dart';
-import '../../profile/views/TabProfile.dart';
-import '../../takmir/views/index.dart';
-import '../../inventaris/views/TabInventaris.dart';
+import 'package:mosq/modules/profile/views/TabProfile.dart';
+import 'package:mosq/modules/takmir/views/index.dart';
+import 'package:mosq/modules/inventaris/views/index.dart';
 
 class DetailMasjid extends StatelessWidget {
   MasjidModel model = Get.arguments as MasjidModel;
@@ -100,7 +99,7 @@ class DetailMasjid extends StatelessWidget {
                       TMTabTakmir(model),
                       TMTabKas(model),
                       TMTabInventaris(model, InventarisModel()),
-                      TMTabKegiatan(),
+                      TabKegiatan(model),
                     ],
                   )),
             );

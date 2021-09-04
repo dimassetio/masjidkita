@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:mosq/modules/inventaris/databases/inventaris_database.dart';
 import 'package:mosq/modules/kas/databases/kas_database.dart';
 import 'package:mosq/modules/kas/databases/kategori_database.dart';
+import 'package:mosq/integrations/firestore.dart';
+import 'package:mosq/modules/kegiatan/databases/kegiatan_database.dart';
 import 'package:mosq/modules/masjid/databases/masjid_database.dart';
 import 'package:mosq/modules/takmir/databases/takmir_database.dart';
 import 'package:mosq/modules/takmir/models/takmir_model.dart';
@@ -29,6 +30,7 @@ class MasjidModel {
   TakmirDatabase? takmirDao;
   KasDatabase? kasDao;
   KategoriDatabase? kategoriDao;
+  KegiatanDatabase? kegiatanDao;
 
   MasjidModel({
     this.id,
@@ -47,11 +49,19 @@ class MasjidModel {
     this.legalitas,
   }) {
     inventarisDao = InventarisDatabase(
-        db: dao.inventarises(this), storage: dao.inventarisStorage(this));
-    takmirDao =
-        TakmirDatabase(db: dao.takmirs(this), storage: dao.takmirStorage(this));
-    kasDao = KasDatabase(db: dao.kases(this), storage: dao.kasStorage(this));
-    kategoriDao = KategoriDatabase(db: dao.transaksiKategories(this));
+        db: dao.childReference(this, inventarisCollection),
+        storage: dao.childStorage(this, inventarisCollection));
+    kasDao = KasDatabase(
+        db: dao.childReference(this, kasCollection),
+        storage: dao.childStorage(this, kasCollection));
+    kategoriDao =
+        KategoriDatabase(db: dao.childReference(this, kategoriCollection));
+    takmirDao = TakmirDatabase(
+        db: dao.childReference(this, takmirCollection),
+        storage: dao.childStorage(this, takmirCollection));
+    kegiatanDao = KegiatanDatabase(
+        db: dao.childReference(this, kegiatanCollection),
+        storage: dao.childStorage(this, kegiatanCollection));
   }
 
   MasjidModel fromSnapshot(DocumentSnapshot snapshot) {

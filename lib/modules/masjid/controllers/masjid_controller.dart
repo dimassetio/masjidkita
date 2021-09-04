@@ -35,7 +35,6 @@ class MasjidController extends GetxController {
 
   var emptyValue = false.obs;
   var myMasjid = false.obs;
-  var isSaving = false.obs;
 
   List<String> get idFav => idFavorit;
 
@@ -147,6 +146,7 @@ class MasjidController extends GetxController {
       takmirC.getTakmirStream(dataMasjid);
       inventarisC.getInventarisStream(dataMasjid);
       kasC.getKasStream(dataMasjid);
+      kegiatanC.getKegiatanStream(dataMasjid);
     } catch (e) {
       toast(e.toString());
     } finally {
@@ -155,64 +155,11 @@ class MasjidController extends GetxController {
     }
   }
 
-  saveMasjid(MasjidModel model, File? foto) async {
-    isSaving.value = true;
-    try {
-      var result =
-          foto == null ? await model.save() : await model.saveWithDetails(foto);
-      if (result is UploadTask) {
-        UploadTask task = result;
-        task.snapshotEvents.listen((event) async {
-          print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
-        });
-      }
-    } on SocketException catch (_) {
-      showDialog(
-          context: Get.context!,
-          builder: (context) => AlertDialog(
-                title: Text("Connection Error !"),
-                content: Text("Please connect to the internet."),
-              ));
-    } catch (e) {
-      print(e);
-      toast("Error Saving Data");
-    } finally {
-      toast("Data Berhasil Diperbarui");
-      isSaving.value = false;
-    }
-  }
-
-  isMyMasjid(
-    MasjidModel masjid,
-  ) {
-    print("user ${authController.user.masjid}");
-    print("masjid ${masjid.id}");
+  isMyMasjid(MasjidModel masjid) {
     authController.user.masjid != null
         ? masjid.id == authController.user.masjid
             ? myMasjid.value = true
             : myMasjid.value = false
         : myMasjid.value = false;
-  }
-
-  PickedFile? pickImage;
-  String fileName = '', filePath = '';
-  String message = "Belum ada gambar";
-  var downloadUrl = "".obs;
-  var isLoadingImage = false.obs;
-  PickedFile? pickedFile;
-  var uploadPrecentage = 0.0.obs;
-  XFile? pickedImage;
-  var photoPath = "".obs;
-
-  final ImagePicker _picker = ImagePicker();
-
-  // uploadImage(bool isCam) async {
-  //   pickedImage = await getImage(isCam);
-  //   // await uploadToStorage(pickedImage);
-  // }
-
-  getImage(bool isCam) async {
-    return pickedImage = await _picker.pickImage(
-        source: isCam ? ImageSource.camera : ImageSource.gallery);
   }
 }

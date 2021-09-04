@@ -1,63 +1,46 @@
-import 'dart:collection';
 import 'dart:io';
+
+import 'package:mosq/modules/kegiatan/models/kegiatan_model.dart';
+import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
+import 'package:mosq/models/user.dart';
 import 'package:get/get.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
-import 'package:mosq/modules/takmir/models/takmir_model.dart';
-import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:mosq/routes/route_name.dart';
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class TakmirController extends GetxController {
+class KegiatanController extends GetxController {
+  final TextEditingController namaC = TextEditingController();
+  final TextEditingController deskripsiC = TextEditingController();
+
+  static KegiatanController instance = Get.find();
+
+  RxList<KegiatanModel> rxKegiatans = RxList<KegiatanModel>();
+  List<KegiatanModel> get kegiatans => rxKegiatans.value;
+
+  Rx<KegiatanModel> _kegiatanModel = KegiatanModel().obs;
+  KegiatanModel get kegiatan => _kegiatanModel.value;
+
   final ImagePicker _picker = ImagePicker();
-
-  static TakmirController instance = Get.find();
-
-  RxList<TakmirModel> rxTakmirs = RxList<TakmirModel>();
-  List<TakmirModel> get takmirs => rxTakmirs.value;
-
-  Rx<TakmirModel> _takmirModel = TakmirModel().obs;
-  TakmirModel get takmir => _takmirModel.value;
-
-  List<String> jabatanList = [
-    'Ketua',
-    'Sekretaris',
-    'Bendahara',
-    mk_lbl_lainnya
-  ];
-  var isOtherJabatan = false.obs;
-  String? jabatan;
-  late TextEditingController namaC;
-  late TextEditingController jabatanC;
   XFile? pickedImage;
   var xfoto = XFile("").obs;
   var isSaving = false.obs;
 
-  checkControllers(TakmirModel model) {
-    if (model.id.isEmptyOrNull) {
-      if (namaC.text.isNotEmpty ||
-          !jabatan.isEmptyOrNull ||
-          jabatanC.text.isNotEmpty ||
-          !xfoto.value.path.isEmptyOrNull) return true;
-    } else {
-      if (namaC.text != model.nama ||
-          !xfoto.value.path.isEmptyOrNull ||
-          jabatan != model.jabatan && jabatanC.text != model.jabatan) {
-        return true;
-      }
-    }
-    return false;
+  var _date = DateTime.now().obs;
+  DateTime get selectedDate => _date.value;
+  set selectedDate(DateTime value) => this._date.value = value;
+
+  getKegiatanStream(MasjidModel model) {
+    rxKegiatans.bindStream(model.kegiatanDao!.kegiatanStream(model));
   }
 
-  getTakmirStream(MasjidModel model) {
-    rxTakmirs.bindStream(model.takmirDao!.takmirStream(model));
-  }
-
-  Future deleteTakmir(TakmirModel model) async {
+  Future deleteKegiatan(KegiatanModel model) async {
     if (model.photoUrl.isEmptyOrNull) {
       return await model.delete();
     } else
@@ -72,10 +55,11 @@ class TakmirController extends GetxController {
     }
   }
 
-  saveTakmir(TakmirModel model) async {
+  saveKegiatan(KegiatanModel model) async {
     isSaving.value = true;
     model.nama = namaC.text;
-    model.jabatan = jabatan == "Lainnya" ? jabatanC.text : jabatan;
+    model.deskripsi = deskripsiC.text;
+    model.tanggal = selectedDate;
     File? foto;
     if (xfoto.value.path.isNotEmpty) {
       foto = File(xfoto.value.path);
@@ -106,11 +90,20 @@ class TakmirController extends GetxController {
     Get.back();
   }
 
-  void clear() {
+  clear() {
     namaC.clear();
-    jabatanC.clear();
-    jabatan = null;
+    deskripsiC.clear();
     xfoto.value = XFile("");
+    selectedDate = DateTime.now();
+  }
+
+  checkControllers() {
+    // if (namaController.text != kegiatan.nama ||
+    //     namaController.text != kegiatan.nama ||
+    //     deskripsiController.text != kegiatan.deskripsi) {
+    //   return true;
+    // } else
+    //   return false;
   }
 
   @override
@@ -121,6 +114,5 @@ class TakmirController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    clear();
   }
 }

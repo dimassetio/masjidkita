@@ -13,6 +13,7 @@ const mkTextColorSecondary = Color(0XFF888888);
 const mkTextColorThird = Color(0XFFBABFB6);
 const mkTextColorGrey = Color(0XFFB4BBC2);
 const mkWhite = Color(0XFFFFFFFF);
+const mkBlack = Color(0XFF000000);
 const mkWhite2 = Color(0XFFFCFCFC);
 const mkLayoutBackgroundWhite = Color(0XFFF6F7FA);
 const mkViewColor = Color(0XFFB4BBC2);
@@ -32,15 +33,15 @@ const mk_view_color = Color(0xFFB4BBC2);
 
 const mkColorScheme = ColorScheme(
     primary: mkColorPrimary,
-    primaryVariant: mkColorPrimary,
+    primaryVariant: mkColorPrimaryDark,
     secondary: mkColorSecondary,
-    secondaryVariant: mkColorSecondary,
-    surface: mkColorPrimaryDark,
+    secondaryVariant: mkColorThird,
+    surface: mkWhite,
     background: mkWhite,
     error: mkDarkRed,
-    onPrimary: mkColorPrimary,
-    onSecondary: mkColorSecondary,
-    onSurface: mkColorPrimaryDark,
+    onPrimary: mkWhite,
+    onSecondary: mkBlack,
+    onSurface: mkTextColorPrimary,
     onBackground: mkLayoutBackgroundWhite,
     onError: mkDarkRed,
     brightness: Brightness.light);

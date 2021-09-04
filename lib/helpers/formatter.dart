@@ -2,10 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class Formatter {
-  final currencyFormatter =
-      NumberFormat.simpleCurrency(locale: "id ", decimalDigits: 0);
+// class Formatter {
+currencyFormatter(number) {
+  return NumberFormat.simpleCurrency(locale: "id ", decimalDigits: 0)
+      .format(number);
 }
+
+dateFormatter(DateTime? date) {
+  if (date is DateTime)
+    return DateFormat.yMMMEd('id').format(date);
+  else
+    return '';
+}
+
+timeFormatter(DateTime? date) {
+  if (date is DateTime) {
+    return DateFormat.Hm('id').format(date);
+  }
+  return '';
+}
+// }
 
 class DecimalInputFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(

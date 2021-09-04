@@ -188,42 +188,11 @@ class _MosqDashboardState extends State<MosqDashboard> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          // Experimen
-                          ElevatedButton(
-                              onPressed: () {
-                                Get.toNamed(
-                                  RouteName.new_masjid,
-                                  // arguments: MasjidModel()
-                                );
-                              },
-                              child: text("New Masjid")),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //   children: [
-                          //     // Obx(
-                          //     //   () => text(
-                          //     //       "is FL : ${authController.isFirstLaunch.value}"),
-                          //     // ),
-                          //     TextButton.icon(
-                          //         label: text("First Launch Status",
-                          //             fontSize: textSizeSMedium),
-                          //         onPressed: () async {
-                          //           await authController.box
-                          //               .remove('first_launch');
-                          //         },
-                          //         icon: Icon(Icons.delete)),
-                          //     TextButton.icon(
-                          //         label: text("ToolTip"),
-                          //         onPressed: () {
-                          //           // authController.box.remove('first_launch');
-                          //           ShowCaseWidget.of(context)!
-                          //               .startShowCase([scOne, scTwo]);
-                          //           print("P!");
-                          //         },
-                          //         icon: Icon(Icons.play_circle)),
-                          //   ],
-                          // ),
-
+                          // ElevatedButton(
+                          //     onPressed: () {
+                          //       Get.toNamed(RouteName.new_masjid);
+                          //     },
+                          //     child: text('tes')),
                           Container(
                             alignment: Alignment.topLeft,
                             padding: EdgeInsets.only(left: 15, bottom: 5),

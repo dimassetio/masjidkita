@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
-import 'package:mosq/main/utils/AppColors.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
-import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class ConfirmDialog extends StatelessWidget {
@@ -38,16 +34,6 @@ class ConfirmDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            // ClipRRect(
-            //   borderRadius: BorderRadius.only(
-            //       topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-            //   child: Image(
-            //       width: MediaQuery.of(context).size.width,
-            //       image: AssetImage(
-            //           'images/widgets/materialWidgets/mwDialogAlertPanelWidgets/widget_delete.jpg'),
-            //       height: 120,
-            //       fit: BoxFit.cover),
-            // ),
             24.height,
             Text("Perubahan belum tersimpan",
                 style:
@@ -94,11 +80,7 @@ class ConfirmDialog extends StatelessWidget {
                         ),
                       ),
                     ).onTap(() {
-                      // FocusScope.of(context).unfocus();
-                      // if (!currentFocus.hasPrimaryFocus) {
-                      //   currentFocus.unfocus();
-                      // }
-                      finish(context);
+                      Get.back(result: false);
                     }),
                   ),
                   16.width,
@@ -127,17 +109,11 @@ class ConfirmDialog extends StatelessWidget {
                         ),
                       ),
                     ).onTap(() {
-                      FocusScope.of(context).unfocus();
-
-                      finish(context);
-
-                      // if (!currentFocus.hasPrimaryFocus) {
-                      //   currentFocus.unfocus();
-                      // }
-
-                      // masjidC.clearControllers();
-                      Get.back(closeOverlays: true);
-                      // Get.toNamed(RouteName.sign_in);
+                      // FocusScope.of(context).unfocus();
+                      // finish(context);
+                      Get.back(result: true);
+                      // return true;
+                      // Navigator.of(context).pop();
                     }),
                   )
                 ],
