@@ -19,7 +19,7 @@ class InventarisController extends GetxController {
   static InventarisController instance = Get.find();
 
   RxList<InventarisModel> inventarisList = RxList<InventarisModel>();
-  List<InventarisModel> get inventariss => inventarisList.value;
+  List<InventarisModel> get inventarises => inventarisList.value;
 
   Rx<InventarisModel> _inventarisModel = InventarisModel().obs;
   InventarisModel get inventaris => _inventarisModel.value;
@@ -56,90 +56,6 @@ class InventarisController extends GetxController {
   getInventarisStream(MasjidModel model) {
     inventarisList.bindStream(model.inventarisDao!.inventarisStream(model));
   }
-
-  Future store(InventarisModel model, String masjidID) async {
-    var result = await collections(masjidID).add(getData(model));
-    return result.id;
-  }
-
-  Future updateInventaris(InventarisModel model, String masjidID) async {
-    await collections(masjidID).doc(model.inventarisID).set(getData(model));
-    return model.inventarisID;
-  }
-
-  Future delete(InventarisModel model) async {
-    if (model.url.isEmptyOrNull) {
-      return await model.delete();
-    } else
-      return await model.deleteWithDetails();
-  }
-
-  addInventaris(InventarisModel model, String userId) async {
-    // Map<String, dynamic> data = new HashMap();
-    // DateTime now = DateTime.now();
-    // String harga = hargaController.text;
-    // String result = harga.replaceAll('Rp', '');
-    // String finalHarga = result.replaceAll('.', '');
-    // int price = finalHarga.toInt();
-    // int jumlah = jumlahController.text.toInt();
-    // int totalPrice = price * jumlah;
-    // if (namaController.text != "") data['nama'] = namaController.text;
-    // if (jumlahController.text != "") data["jumlah"] = jumlah;
-    // if (kondisiController.text != "") data["kondisi"] = kondisiController.text;
-    // if (urlController.text != "") data["url"] = urlController.text;
-    // if (hargaController.text != "") data["harga"] = price;
-    // if (fotoController.text != "") data["foto"] = fotoController.text;
-    // data["hargaTotal"] = totalPrice;
-    // data["updatedAt"] = now;
-    String? docID = Get.parameters['id'];
-
-    try {
-      docID == null
-          ? await firebaseFirestore
-              .collection(masjidCollection)
-              .doc(userId)
-              .collection(inventarisCollection)
-              .add(getData(model))
-          : await firebaseFirestore
-              .collection(masjidCollection)
-              .doc(userId)
-              .collection(inventarisCollection)
-              .doc(docID)
-              .update(getData(model));
-    } on SocketException catch (_) {
-      showDialog(
-          context: Get.context!,
-          builder: (context) => AlertDialog(
-                title: Text("Connection Error !"),
-                content: Text("Please connect to the internet."),
-              ));
-      toast("value");
-    } catch (e) {
-      print(e);
-      toast("Error Saving Data");
-    } finally {
-      toast("Data Berhasil Diperbarui");
-      isSaving.value = false;
-    }
-    // catch (e) {
-    //   print(e);
-    //   rethrow;
-    // }
-    Get.back(); // Get.toNamed(RouteName.kelolamasjid);
-  }
-
-  // clearController() {
-  //   namaController.clear();
-  //   fotoController.clear();
-  //   urlController.clear();
-  //   jumlahController.clear();
-  //   kondisiController.clear();
-  //   hargaController.clear();
-  // }
-
-  // tesBind() {
-  //   inventarisList.bindStream(inventarisStream());
-  // }
 
   set inventaris(InventarisModel value) => this._inventarisModel.value = value;
 
@@ -331,7 +247,7 @@ class InventarisController extends GetxController {
           photoUrlC = await pathStorage.getDownloadURL();
           inventaris.url = photoUrlC;
           // fotoController.text = fileName;
-          updateInventaris(inventaris, authController.user.masjid!);
+          InventarisModel().save();
           // await firebaseFirestore
           //     .collection(masjidCollection)
           //     .doc(manMasjidC.deMasjid.id)

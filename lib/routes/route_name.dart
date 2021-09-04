@@ -15,7 +15,12 @@ abstract class RouteName {
   static const edit_inventaris = '/edit_inventaris';
   static const detail_kegiatan = '/detail_kegiatan';
   static const new_kegiatan = '/new_kegiatan';
+  static const edit_kegiatan = '/edit_kegiatan';
   static const new_takmir = '/new_takmir';
   static const detail_takmir = '/detail_takmir';
   static const edit_takmir = '/edit_takmir';
+  static const new_kas = '/new_kas';
+  static const new_kategori_transaksi = '/new_kaategori_transaksi';
+  static const detail_kas = '/detail_kas';
+  static const edit_kas = '/edit_kas';
 }

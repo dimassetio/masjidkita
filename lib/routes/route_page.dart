@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
+import 'package:mosq/modules/kas/views/form_kas.dart';
 import 'package:mosq/modules/profile/views/Form_Profile.dart';
 import 'package:mosq/screens/MosqDashboard.dart';
 import 'package:mosq/screens/MosqProfile.dart';
@@ -14,7 +15,7 @@ import 'package:mosq/modules/inventaris/views/Form_Inventaris.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/TMTabKegiatan.dart';
 // import 'package:mosq/screens/PageSiMasjid.dart';
 import 'package:mosq/modules/masjid/views/show.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/detailInventaris.dart';
+import 'package:mosq/modules/inventaris/views/detailI.dart';
 import 'package:mosq/modules/takmir/views/detail.dart';
 import 'package:mosq/modules/takmir/views/form_takmir.dart';
 import './route_name.dart';
@@ -30,10 +31,12 @@ class AppPage {
     GetPage(name: RouteName.new_masjid, page: () => FormMasjid()),
     GetPage(name: RouteName.new_inventaris, page: () => FormInventaris()),
     GetPage(name: RouteName.new_kegiatan, page: () => FormKegiatan()),
+    GetPage(name: RouteName.edit_kegiatan, page: () => FormKegiatan()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),
-    // GetPage(
-    //     name: RouteName.edit_inventaris + '/:id', page: () => FormInventaris()),
     GetPage(name: RouteName.edit_inventaris, page: () => FormInventaris()),
+    GetPage(name: RouteName.new_kas, page: () => FormKas()),
+    GetPage(name: RouteName.new_kategori_transaksi, page: () => FormKas()),
+    GetPage(name: RouteName.edit_kas, page: () => FormKas()),
     GetPage(
         name: RouteName.list_masjid,
         page: () => PageListMasjid(),
@@ -52,5 +55,6 @@ class AppPage {
       name: RouteName.edit_takmir,
       page: () => FormTakmir(),
     ),
+    // GetPage(name: RouteName.new_kas, page: () => FormKas()),
   ];
 }

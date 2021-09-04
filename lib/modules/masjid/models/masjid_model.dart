@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:mosq/modules/inventaris/databases/inventaris_database.dart';
+import 'package:mosq/modules/kas/databases/kas_database.dart';
+import 'package:mosq/modules/kas/databases/kategori_database.dart';
 import 'package:mosq/modules/masjid/databases/masjid_database.dart';
 import 'package:mosq/modules/takmir/databases/takmir_database.dart';
 import 'package:mosq/modules/takmir/models/takmir_model.dart';
@@ -24,6 +27,8 @@ class MasjidModel {
   MasjidDatabase dao = new MasjidDatabase();
   InventarisDatabase? inventarisDao;
   TakmirDatabase? takmirDao;
+  KasDatabase? kasDao;
+  KategoriDatabase? kategoriDao;
 
   MasjidModel({
     this.id,
@@ -45,6 +50,8 @@ class MasjidModel {
         db: dao.inventarises(this), storage: dao.inventarisStorage(this));
     takmirDao =
         TakmirDatabase(db: dao.takmirs(this), storage: dao.takmirStorage(this));
+    kasDao = KasDatabase(db: dao.kases(this), storage: dao.kasStorage(this));
+    kategoriDao = KategoriDatabase(db: dao.transaksiKategories(this));
   }
 
   MasjidModel fromSnapshot(DocumentSnapshot snapshot) {

@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 
 import 'package:mosq/main.dart';
 
-import '../../../screens/fitur/Kelola_Masjid/Tab_Kas/TMTabKas.dart';
+import '../../kas/views/TabKas.dart';
 import '../../profile/views/TabProfile.dart';
 import '../../takmir/views/index.dart';
 import '../../inventaris/views/TabInventaris.dart';
@@ -98,7 +98,7 @@ class DetailMasjid extends StatelessWidget {
                     children: [
                       TMTabProfile(model),
                       TMTabTakmir(model),
-                      TMTabKas(),
+                      TMTabKas(model),
                       TMTabInventaris(model, InventarisModel()),
                       TMTabKegiatan(),
                     ],

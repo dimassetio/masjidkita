@@ -51,14 +51,6 @@ class _FormInventarisState extends State<FormInventaris> {
   @override
   void initState() {
     super.initState();
-    // if (model.inventarisID != null) {
-    //   nama.text = model.nama ?? "";
-    //   kondisi.text = model.kondisi ?? "";
-    //   foto.text = model.foto ?? "";
-    //   url.text = model.url ?? "";
-    //   harga.text = model.harga.toString();
-    //   jumlah.text = model.jumlah.toString();
-    // }
     if (model.inventarisID != null) {
       nama.text = model.nama ?? "";
       kondisi.text = model.kondisi ?? "";
@@ -197,38 +189,6 @@ class _FormInventarisState extends State<FormInventaris> {
           title: Text("Foto"),
           content: Column(
             children: <Widget>[
-              // Obx(() => inventarisC.downloadUrl.value != ""
-              //     ? Container(
-              //         alignment: Alignment.center,
-              //         child: CachedNetworkImage(
-              //           width: Get.width - 40,
-              //           placeholder: placeholderWidgetFn() as Widget Function(
-              //               BuildContext, String)?,
-              //           imageUrl: inventarisC.downloadUrl.value.isEmpty
-              //               ? inventarisC.inventaris.url.toString()
-              //               : inventarisC.downloadUrl.value,
-              //           fit: BoxFit.cover,
-              //         ),
-              //       )
-              //     : text('Belum Ada Gambar', fontSize: textSizeSMedium)),
-              // CircleAvatar(
-              //   backgroundImage: AssetImage(mk_profile_pic),
-              //   child: isEdit && !model.url.isEmptyOrNull
-              //       ? Container(
-              //           decoration: BoxDecoration(
-              //               color: mkColorAccent,
-              //               borderRadius: BorderRadius.circular(100),
-              //               image: DecorationImage(
-              //                   image: CachedNetworkImageProvider(
-              //                       model.url ?? ""),
-              //                   fit: BoxFit.cover)),
-              //         )
-              //       : null,
-              //   foregroundImage: FileImage(File(takmirC.photoPath)),
-              //   backgroundColor: mkColorPrimary,
-              //   radius: 100,
-              // ),
-
               Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(bottom: 16),
@@ -251,29 +211,6 @@ class _FormInventarisState extends State<FormInventaris> {
                               fontSize: textSizeSMedium)),
                 ),
               ),
-
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-              //   child: EditText(
-              //     // focusNode: FocusNode(),
-              //     // enableInteractiveSelection: false,
-              //     // style: GoogleFonts.poppins(),
-              //     isReadOnly: true,
-              //     // enabled: !isSaving.value,
-              //     mController: foto,
-              //     // decoration: InputDecoration(hintText: inventarisC.message),
-              //     // validator: (s) {
-              //     //   if (s!.trim().isEmpty)
-              //     //     return '$mk_lbl_foto_inventaris $mk_is_required';
-              //     //   return null;
-              //     // },
-              //     hint: inventarisC.message,
-              //     // validator: (value) => (Validator(
-              //     //         attributeName: mk_lbl_foto_inventaris, value: value)
-              //     //       ..required())
-              //     //     .getError(),
-              //   ),
-              // ),
               ElevatedButton(
                 child: text("Upload Foto",
                     textColor: mkWhite, fontSize: textSizeSMedium),
@@ -322,27 +259,6 @@ class _FormInventarisState extends State<FormInventaris> {
                   controller: url,
                 ),
               ),
-              // Opacity(
-              //   opacity: 0.0,
-              //   child: TextField(
-              //     focusNode: FocusNode(),
-              //     enableInteractiveSelection: false,
-              //     // style: GoogleFonts.poppins(),
-              //     enabled: false,
-              //     controller: inventarisC.foto,
-              //   ),
-              // ),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     inventarisC
-              //         .addInventaris(authController.firebaseUser.value.uid);
-              //   },
-              //   child: text("Tambahkan",
-              //       textColor: mkWhite, fontSize: textSizeMedium),
-              //   style: ElevatedButton.styleFrom(
-              //     primary: mkColorPrimary,
-              //   ),
-              // ).center()
             ],
           ),
           isActive: currStep == 1,
@@ -373,62 +289,6 @@ class _FormInventarisState extends State<FormInventaris> {
                 : mk_edit_inventaris,
           ),
           actions: <Widget>[
-            // Padding(
-            //   padding: EdgeInsets.only(right: 20.0),
-            //   child: InkWell(
-            //     onTap: () async {
-            //       if (isSaving.value == false) {
-            //         if (formKey.currentState!.validate()) {
-            //           int jumlah = jumlah.text.toInt();
-            //           int harga = harga.text
-            //               .replaceAll('Rp', '')
-            //               .replaceAll('.', '')
-            //               .toInt();
-            //           InventarisModel model = InventarisModel(
-            //               inventarisID: isEdit
-            //                   ? inventarisC.inventaris.inventarisID
-            //                   : null,
-            //               nama: nama.text,
-            //               kondisi: kondisi.text,
-            //               foto: foto.text,
-            //               url: url.text,
-            //               harga: harga,
-            //               jumlah: jumlah,
-            //               hargaTotal: harga * jumlah);
-
-            //           if (currStep < steps.length - 1) {
-            //             currStep = currStep + 1;
-            //           } else {
-            //             isSaving.value = true;
-            //             setState(() {});
-            //             await inventarisC.addInventaris(
-            //                 model, authController.firebaseUser.value.uid);
-
-            //             if (inventarisC.photoLocal != null) {
-            //               await inventarisC.uploadToStorage(
-            //                   inventarisC.photoLocal, model);
-            //             }
-
-            //             isSaving.value = false;
-            //           }
-            //         } else {
-            //           formKey.currentState!.validate();
-            //         }
-            //       }
-            //     },
-            //     child: isSaving.value
-            //         ? Container(
-            //             padding: EdgeInsets.all(13),
-            //             width: 55.0,
-            //             child: CircularProgressIndicator())
-            //         : Icon(
-            //             Icons.check,
-            //             size: 26.0,
-            //             color: mkColorPrimary,
-            //           ),
-            //   ),
-            // )
-
             Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: InkWell(
@@ -440,21 +300,6 @@ class _FormInventarisState extends State<FormInventaris> {
                           .replaceAll('Rp', '')
                           .replaceAll('.', '')
                           .toInt();
-                      // InventarisModel model = InventarisModel(
-                      //     inventarisID: isEdit
-                      //         ? inventarisC.inventaris.inventarisID
-                      //         : null,
-                      //     nama: nama.text,
-                      //     kondisi: kondisi.text,
-                      //     foto: foto.text,
-                      //     url: url.text,
-                      //     harga: hargaBarang,
-                      //     jumlah: jumlahBarang,
-                      //     hargaTotal: hargaBarang * jumlahBarang);
-
-                      // inventarisID: isEdit
-                      //     ? inventarisC.inventaris.inventarisID
-                      //     : null,
                       model.nama = nama.text;
                       model.kondisi = kondisi.text;
                       model.foto = foto.text;
@@ -467,25 +312,15 @@ class _FormInventarisState extends State<FormInventaris> {
                         fotos = File(xfoto.value.path);
                       }
 
-                      // await inventarisC.saveInventaris(model, fotos);
-                      // isSaving.value = false;
-                      // Get.back();
-
                       if (currStep < steps.length - 1) {
                         currStep = currStep + 1;
                       } else {
                         isSaving.value = true;
                         setState(() {});
-                        // await inventarisC.addInventaris(
-                        //     model, authController.firebaseUser.value.uid);
 
                         await inventarisC.saveInventaris(model, fotos);
 
                         Get.back();
-                        // if (inventarisC.photoLocal != null) {
-                        //   await inventarisC.uploadToStorage(
-                        //       inventarisC.photoLocal, model);
-                        // }
 
                         isSaving.value = false;
                       }
@@ -562,15 +397,6 @@ class _FormInventarisState extends State<FormInventaris> {
                           }
                         });
                       }
-                      // setState(() {
-                      //   if (currStep < steps.length - 1) {
-                      //     currStep = currStep + 1;
-                      //   } else {
-                      //     //currStep = 0;
-                      //     finish(context);
-                      //   }
-                      // }
-                      // );
                     },
                     onStepCancel: () {
                       // finish(context);
@@ -589,46 +415,6 @@ class _FormInventarisState extends State<FormInventaris> {
                     },
                   ),
                 ),
-                // Obx(
-                //   () => GestureDetector(
-                //     onTap: () async {
-                //       if (isSaving.value == false) {
-                //         if (formKey.currentState!.validate()) {
-                //           // formKey.currentState!.deactivate();
-                //           // formKey.currentState!.save();
-                //           setState(() {});
-                //           await inventarisC.addInventaris(
-                //               authController.firebaseUser.value.uid);
-                //           // setState(() {});
-                //           // toast("Data Berhasil di Update");
-
-                //           Get.back();
-                //           // maninvenmk_lbl_nama_inventarisC.clearControllers();
-                //         } else {
-                //           formKey.currentState!.validate();
-                //         }
-                //       }
-                //       // finish(context);
-                //     },
-                //     child: Container(
-                //       width: MediaQuery.of(context).size.width,
-                //       height: 50,
-                //       margin: EdgeInsets.all(10),
-                //       decoration: boxDecoration(
-                //           bgColor: isSaving.value
-                //               ? mkColorPrimaryLight
-                //               : mkColorPrimary,
-                //           radius: 10),
-                //       padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                //       child: Center(
-                //         child: isSaving.value
-                //             ? CircularProgressIndicator()
-                //             : Text(mk_submit,
-                //                 style: boldTextStyle(color: white, size: 18)),
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

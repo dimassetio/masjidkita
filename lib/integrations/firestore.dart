@@ -17,3 +17,5 @@ const masjidCollection = "masjid";
 const inventarisCollection = "inventaris";
 const kegiatanCollection = "kegiatan";
 const takmirCollection = "takmir";
+const kasCollection = "kas";
+const kategoriCollection = "kategori transaksi";
