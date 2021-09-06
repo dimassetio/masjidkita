@@ -1,13 +1,8 @@
-import 'dart:collection';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mosq/helpers/formatter.dart';
-import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:get/get.dart';
-import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';

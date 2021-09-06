@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
+import 'package:mosq/modules/kegiatan/views/show.dart';
 import 'package:mosq/modules/profile/views/Form_Profile.dart';
 import 'package:mosq/modules/takmir/views/form_takmir.dart';
 import 'package:mosq/screens/MosqDashboard.dart';
@@ -7,7 +8,6 @@ import 'package:mosq/screens/MosqProfile.dart';
 import 'package:mosq/modules/masjid/views/index.dart';
 import 'package:mosq/screens/authentication/MKSignIn.dart';
 import 'package:mosq/screens/authentication/MKSignUp.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Tab_Kegiatan/DetailKegiatan.dart';
 import 'package:mosq/modules/inventaris/views/form.dart';
 // import 'package:mosq/screens/PageSiMasjid.dart';
 import 'package:mosq/modules/masjid/views/show.dart';
@@ -27,9 +27,8 @@ class AppPage {
     GetPage(name: RouteName.new_masjid, page: () => FormMasjid()),
     GetPage(name: RouteName.new_inventaris, page: () => FormInventaris()),
     GetPage(name: RouteName.new_kegiatan, page: () => FormKegiatan()),
+    GetPage(name: RouteName.edit_kegiatan, page: () => FormKegiatan()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),
-    // GetPage(
-    //     name: RouteName.edit_inventaris + '/:id', page: () => FormInventaris()),
     GetPage(name: RouteName.edit_inventaris, page: () => FormInventaris()),
     GetPage(
         name: RouteName.list_masjid,
@@ -39,9 +38,6 @@ class AppPage {
       name: RouteName.detail,
       page: () => DetailMasjid(),
     ),
-    // GetPage(
-    //     name: RouteName.inventaris,
-    //     page: () => TMTabInventaris()),
     GetPage(name: RouteName.detail_kegiatan, page: () => DetailKegiatan()),
     GetPage(name: RouteName.new_takmir, page: () => FormTakmir()),
     GetPage(name: RouteName.detail_takmir, page: () => DetailTakmir()),

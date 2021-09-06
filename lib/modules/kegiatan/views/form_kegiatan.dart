@@ -69,6 +69,12 @@ class _StepperBodyState extends State<StepperBody> {
   @override
   void initState() {
     super.initState();
+    if (!model.id.isEmptyOrNull) {
+      kegiatanC.namaC.text = model.nama ?? "";
+      kegiatanC.deskripsiC.text = model.deskripsi ?? "";
+      kegiatanC.tempatC.text = model.tempat ?? "";
+      kegiatanC.selectedDate = model.tanggal ?? DateTime.now();
+    }
   }
 
   @override
@@ -81,14 +87,6 @@ class _StepperBodyState extends State<StepperBody> {
 
   Future<void> _selectDate(BuildContext context) async {
     var result = await showDatePicker(
-        // helpText: 'Pilih tanggal kegiatan',
-        // cancelText: 'Batal',
-        // confirmText: "Konfirmasi",
-        // fieldLabelText: 'Tanggal Kegiatan',
-        // fieldHintText: 'Bulan/Tanggal/Tahun',
-        // errorFormatText: 'Masukkan tanggal yang valid',
-        // errorInvalidText: 'Masukkan tanggal dalam rentang yang tersedia',
-
         context: context,
         builder: (BuildContext context, Widget? child) {
           return Theme(
@@ -108,11 +106,6 @@ class _StepperBodyState extends State<StepperBody> {
         kegiatanC.selectedDate.minute,
       );
     }
-    // if (picked != null && picked != selectedDate)
-    //   setState(() {
-    //     print(picked);
-    //     selectedDate = picked;
-    //   });
   }
 
   _selectTime(BuildContext context) async {
@@ -128,14 +121,6 @@ class _StepperBodyState extends State<StepperBody> {
               child: child!,
             ),
           );
-
-          // return CustomTheme(
-          //   child: MediaQuery(
-          //     data:
-          //         MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-          //     child: child!,
-          //   ),
-          // );
         });
 
     if (picked is TimeOfDay)
@@ -192,52 +177,53 @@ class _StepperBodyState extends State<StepperBody> {
         ),
       ),
       Step(
-        title: Text("Waktu Kegiatan", style: primaryTextStyle()),
+        title: Text(mk_lbl_waktu_tempat, style: primaryTextStyle()),
         content: Obx(
           () => Column(children: <Widget>[
             Card(
-                elevation: 4,
-                child: ListTile(
-                  onTap: () {
+              elevation: 2,
+              child: ListTile(
+                onTap: () {
+                  _selectDate(context);
+                },
+                title: Text(
+                  'Tanggal Kegiatan',
+                  style: primaryTextStyle(),
+                ),
+                subtitle: Text(
+                  "${kegiatanC.selectedDate.toLocal()}".split(' ')[0],
+                  style: secondaryTextStyle(),
+                ),
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.date_range,
+                    color: mkColorPrimaryDark,
+                  ),
+                  onPressed: () {
                     _selectDate(context);
                   },
-                  title: Text(
-                    'Pilih tanggal acara',
-                    style: primaryTextStyle(),
-                  ),
-                  subtitle: Text(
-                    "${kegiatanC.selectedDate.toLocal()}".split(' ')[0],
-                    style: secondaryTextStyle(),
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.date_range,
-                      color: mkColorPrimary,
-                    ),
-                    onPressed: () {
-                      _selectDate(context);
-                    },
-                  ),
-                )),
+                ),
+              ),
+            ),
             SizedBox(height: 20),
             Card(
-                elevation: 4,
+                elevation: 2,
                 child: ListTile(
                   onTap: () {
                     _selectTime(context);
                   },
                   title: Text(
-                    'Pilih waktu acara',
+                    'Waktu Kegiatan',
                     style: primaryTextStyle(),
                   ),
                   subtitle: Text(
                     timeFormatter(kegiatanC.selectedDate),
                     style: secondaryTextStyle(),
                   ),
-                  trailing: IconButton(
+                  leading: IconButton(
                     icon: Icon(
                       Icons.schedule,
-                      color: mkColorPrimary,
+                      color: mkColorPrimaryDark,
                     ),
                     onPressed: () {
                       _selectTime(context);
@@ -245,6 +231,16 @@ class _StepperBodyState extends State<StepperBody> {
                   ),
                 )),
             SizedBox(height: 20),
+            EditText(
+              isEnabled: !kegiatanC.isSaving.value,
+              mController: kegiatanC.tempatC,
+              label: mk_lbl_tempat_kegiatan,
+              hint: mk_lbl_tempat_kegiatan,
+              icon: Icon(Icons.volunteer_activism,
+                  color: kegiatanC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
+            ),
           ]),
         ),
         isActive: currStep == 1,
@@ -266,7 +262,7 @@ class _StepperBodyState extends State<StepperBody> {
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 child: Obx(() => kegiatanC.xfoto.value.path.isNotEmpty
                     ? Image.file(File(kegiatanC.xfoto.value.path))
-                    : isEdit && !model.photoUrl.isEmptyOrNull
+                    : !model.photoUrl.isEmptyOrNull
                         ? CachedNetworkImage(
                             placeholder: placeholderWidgetFn() as Widget
                                 Function(BuildContext, String)?,
@@ -317,13 +313,13 @@ class _StepperBodyState extends State<StepperBody> {
     ];
     return WillPopScope(
         onWillPop: () async {
-          // return kegiatanC.checkControllers()
-          //     ? await showDialog(
-          //         context: context,
-          //         builder: (BuildContext context) => ConfirmDialog())
-          //     : Future.value(true);
+          return kegiatanC.checkControllers(model)
+              ? await showDialog(
+                  context: context,
+                  builder: (BuildContext context) => ConfirmDialog())
+              : Future.value(true);
           // toast("value");
-          return Future.value(true);
+          // return Future.value(true);
         },
         child: Container(
             child: GestureDetector(
@@ -401,17 +397,12 @@ class _StepperBodyState extends State<StepperBody> {
                     ),
                     Obx(
                       () => Container(
-                        width: MediaQuery.of(context).size.width,
+                        width: Get.width,
                         height: 50,
                         margin: EdgeInsets.all(10),
-                        decoration: boxDecoration(
-                            bgColor: kegiatanC.isSaving.value
-                                ? mkColorPrimaryLight
-                                : mkColorPrimary,
-                            radius: 10),
-                        padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                        child: InkWell(
-                          onTap: () async {
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(),
+                          onPressed: () async {
                             if (kegiatanC.isSaving.value == false) {
                               if (_formKey.currentState!.validate()) {
                                 await kegiatanC.saveKegiatan(model);
@@ -419,7 +410,6 @@ class _StepperBodyState extends State<StepperBody> {
                                 _formKey.currentState!.validate();
                               }
                             }
-                            // finish(context);
                           },
                           child: Center(
                             child: kegiatanC.isSaving.value

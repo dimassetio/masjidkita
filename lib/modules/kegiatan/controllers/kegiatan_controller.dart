@@ -18,6 +18,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 class KegiatanController extends GetxController {
   final TextEditingController namaC = TextEditingController();
   final TextEditingController deskripsiC = TextEditingController();
+  final TextEditingController tempatC = TextEditingController();
 
   static KegiatanController instance = Get.find();
 
@@ -41,10 +42,17 @@ class KegiatanController extends GetxController {
   }
 
   Future deleteKegiatan(KegiatanModel model) async {
-    if (model.photoUrl.isEmptyOrNull) {
-      return await model.delete();
-    } else
-      return await model.deleteWithDetails();
+    // Get.back();
+    try {
+      if (model.photoUrl.isEmptyOrNull) {
+        await model.delete();
+      } else
+        await model.deleteWithDetails();
+    } catch (e) {
+      toast('Error Delete Data');
+    } finally {
+      Get.back();
+    }
   }
 
   getImage(bool isCam) async {
@@ -59,6 +67,7 @@ class KegiatanController extends GetxController {
     isSaving.value = true;
     model.nama = namaC.text;
     model.deskripsi = deskripsiC.text;
+    model.tempat = tempatC.text;
     model.tanggal = selectedDate;
     File? foto;
     if (xfoto.value.path.isNotEmpty) {
@@ -93,17 +102,26 @@ class KegiatanController extends GetxController {
   clear() {
     namaC.clear();
     deskripsiC.clear();
+    tempatC.clear();
     xfoto.value = XFile("");
     selectedDate = DateTime.now();
   }
 
-  checkControllers() {
-    // if (namaController.text != kegiatan.nama ||
-    //     namaController.text != kegiatan.nama ||
-    //     deskripsiController.text != kegiatan.deskripsi) {
-    //   return true;
-    // } else
-    //   return false;
+  checkControllers(KegiatanModel model) {
+    if (model.id.isEmptyOrNull) {
+      if (namaC.text.isNotEmpty ||
+          tempatC.text.isNotEmpty ||
+          deskripsiC.text.isNotEmpty ||
+          // selectedDate != DateTime.now() ||
+          !xfoto.value.path.isEmptyOrNull) return true;
+    } else {
+      if (namaC.text != model.nama ||
+          tempatC.text != model.tempat ||
+          deskripsiC.text != model.deskripsi ||
+          selectedDate != model.tanggal ||
+          !xfoto.value.path.isEmptyOrNull) return true;
+    }
+    return false;
   }
 
   @override
