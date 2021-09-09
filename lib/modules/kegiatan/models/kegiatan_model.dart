@@ -8,6 +8,7 @@ class KegiatanModel {
   String? nama;
   String? photoUrl;
   String? deskripsi;
+  String? tempat;
   DateTime? tanggal;
   KegiatanDatabase? dao;
 
@@ -17,6 +18,7 @@ class KegiatanModel {
     this.photoUrl,
     this.deskripsi,
     this.tanggal,
+    this.tempat,
     this.dao,
   });
 
@@ -51,6 +53,7 @@ class KegiatanModel {
       id: snapshot.id,
       nama: snapshot.data()?["nama"],
       deskripsi: snapshot.data()?["deskripsi"],
+      tempat: snapshot.data()?["tempat"],
       photoUrl: snapshot.data()?["photoUrl"],
       tanggal: snapshot.data()?["tanggal"].toDate(),
       dao: dao,
@@ -64,6 +67,7 @@ class KegiatanModel {
       'deskripsi': this.deskripsi,
       'photoUrl': this.photoUrl,
       'tanggal': this.tanggal,
+      'tempat': this.tempat,
     };
   }
 }

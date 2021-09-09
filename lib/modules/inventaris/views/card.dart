@@ -33,6 +33,11 @@ class InventarisCard extends StatelessWidget {
         textColor: appStore.textSecondaryColor,
         fontSize: textSizeMedium,
       ),
+      // leading: CircleAvatar(
+      //     backgroundColor: mkCat1,
+      //     child: Icon(
+      //       Icons.call_received,
+      //     )),
       trailing: CircleAvatar(
         backgroundColor: mkColorPrimary,
         child: text(inventaris.jumlah.toString(),

@@ -103,6 +103,8 @@ const mk_lbl_nama_kegiatan = "Nama Kegiatan";
 const mk_hint_nama_kegiatan = "Ex: Istighosah";
 const mk_lbl_deskripsi_kegiatan = "Deskripsi";
 const mk_lbl_tanggal_kegiatan = "Tanggal";
+const mk_lbl_tempat_kegiatan = "Tempat";
+const mk_lbl_waktu_tempat = "Waktu & Tempat";
 const mk_lbl_foto_kegiatan = "Foto";
 
 const mk_lbl_kas = "Buku Kas";

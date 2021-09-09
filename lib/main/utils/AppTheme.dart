@@ -83,6 +83,8 @@ class AppThemeData {
     }),
   );
 
+  static final ThemeData themeMosQ = ThemeData.from(colorScheme: mkColorScheme);
+
   static final ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: appBackgroundColorDark,
     highlightColor: appBackgroundColorDark,

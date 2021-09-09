@@ -26,7 +26,10 @@ class KegiatanDatabase {
   }
 
   Stream<List<KegiatanModel>> kegiatanStream(MasjidModel model) async* {
-    yield* db.snapshots().map((QuerySnapshot query) {
+    yield* db
+        .orderBy('tanggal', descending: true)
+        .snapshots()
+        .map((QuerySnapshot query) {
       List<KegiatanModel> list = [];
       print("dao = ${model.kegiatanDao}");
       query.docs.forEach((element) {
@@ -62,7 +65,8 @@ class KegiatanDatabase {
     task.snapshotEvents.listen((event) async {
       if (event.state == TaskState.success) {
         model.photoUrl = await path.getDownloadURL();
-        update(model);
+        var result = update(model);
+        return result;
       }
     });
     return task;

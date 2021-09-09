@@ -7,7 +7,10 @@ import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/modules/takmir/models/takmir_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
-import 'package:mosq/screens/widgets/KegiatanCard.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
+import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/widgets/DismissibleBackground.dart';
+import 'package:mosq/modules/kegiatan/views/card.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../main.dart';
@@ -28,7 +31,6 @@ class TabKegiatan extends StatelessWidget {
               physics: ScrollPhysics(),
               itemBuilder: (context, index) {
                 return KegiatanCard(
-                  width: Get.width,
                   dataKegiatan: kegiatanC.kegiatans[index],
                 );
               })),
@@ -43,6 +45,18 @@ class TabKegiatan extends StatelessWidget {
                     Icons.edit,
                     color: mkWhite,
                   ),
+                  // child: PopupMenuButton(
+
+                  //     itemBuilder: (context) => [
+                  //           PopupMenuItem(
+                  //             child: Text("First"),
+                  //             value: 1,
+                  //           ),
+                  //           PopupMenuItem(
+                  //             child: Text("Second"),
+                  //             value: 2,
+                  //           )
+                  //         ]),
                   backgroundColor: mkColorPrimary,
                   onPressed: () {
                     Get.toNamed(RouteName.new_kegiatan,

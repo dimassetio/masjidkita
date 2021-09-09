@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 const mkColorPrimary = Color(0XFF4EBFB4);
-const mkColorSecondary = Color(0XFF8BD9D1);
-const mkColorThird = Color(0XFF8BD9D1);
+const mkColorSecondary = Color(0XFF52E3E1);
+const mkColorThird = Color(0XFF00C9C6);
 const mkColorPrimaryLight = Color(0XFFB4D9D5);
 const mkColorPrimaryDark = Color(0XFF025951);
 
@@ -14,6 +14,7 @@ const mkTextColorThird = Color(0XFFBABFB6);
 const mkTextColorGrey = Color(0XFFB4BBC2);
 const mkWhite = Color(0XFFFFFFFF);
 const mkBlack = Color(0XFF000000);
+const mkGreen = Colors.green;
 const mkWhite2 = Color(0XFFFCFCFC);
 const mkLayoutBackgroundWhite = Color(0XFFF6F7FA);
 const mkViewColor = Color(0XFFB4BBC2);
@@ -26,9 +27,9 @@ const mkCat4 = Color(0XFF92E8BA);
 const mkCat5 = Color(0XFFE8BADB);
 const mkCat6 = Color(0XFF7E92FF);
 const mkShadowColor = Color(0X95E9EBF0);
-const mkDarkRed = Color(0XFFF06263);
+const mkRed = Colors.red;
+const mkYellow = Color(0XFFF2D335);
 const mkColorPrimary50 = Color(0X8096B753);
-
 const mk_view_color = Color(0xFFB4BBC2);
 
 const mkColorScheme = ColorScheme(
@@ -38,10 +39,12 @@ const mkColorScheme = ColorScheme(
     secondaryVariant: mkColorThird,
     surface: mkWhite,
     background: mkWhite,
-    error: mkDarkRed,
+    error: mkRed,
     onPrimary: mkWhite,
     onSecondary: mkBlack,
     onSurface: mkTextColorPrimary,
-    onBackground: mkLayoutBackgroundWhite,
-    onError: mkDarkRed,
+    onBackground: mkWhite,
+    onError: mkRed,
     brightness: Brightness.light);
+
+ThemeData mosq = ThemeData.from(colorScheme: mkColorScheme);

@@ -15,8 +15,8 @@ import 'package:nb_utils/nb_utils.dart';
 class MasjidController extends GetxController {
   static MasjidController instance = Get.find();
 
-  RxList<MasjidModel> listMasjid = RxList<MasjidModel>();
-  List<MasjidModel> get masjids => listMasjid.value;
+  RxList<MasjidModel> _masjids = RxList<MasjidModel>();
+  List<MasjidModel> get masjids => _masjids.value;
 
   RxList<MasjidModel> favoritMasjid = RxList<MasjidModel>();
   List<MasjidModel> get favMasjids => favoritMasjid.value;
@@ -42,7 +42,7 @@ class MasjidController extends GetxController {
   void onInit() async {
     super.onInit();
     // getInitialMasjid();
-    listMasjid.bindStream(MasjidModel().dao.masjidStream());
+    _masjids.bindStream(MasjidModel().dao.masjidStream());
     searchController.addListener(_onSearchChanged);
     readStr();
   }

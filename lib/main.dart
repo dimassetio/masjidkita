@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
         // home: GoogleSignInScreen(),
         getPages: AppPage.pages,
         theme: !appStore.isDarkModeOn
-            ? AppThemeData.mosqTheme
+            ? AppThemeData.themeMosQ
             : AppThemeData.darkTheme,
         builder: scrollBehaviour(),
         initialBinding: InitBinding(),
