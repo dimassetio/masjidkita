@@ -10,6 +10,7 @@ import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../main.dart';
 
@@ -25,7 +26,14 @@ class TMTabKas extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              TMKasSlider(model),
+              Obx(
+                () => kasC.kases.isEmpty
+                    ? Container(
+                        height: 250,
+                        child: text("Masjid belu memiliki buku Kas").center(),
+                      )
+                    : TMKasSlider(model),
+              ),
               Container(
                 padding: EdgeInsets.all(10),
                 child: Row(
@@ -82,8 +90,8 @@ class TMTabKas extends StatelessWidget {
                         Get.toNamed(RouteName.new_kas,
                             arguments: KasModel(dao: model.kasDao));
                       } else {
-                        Get.toNamed(RouteName.new_kategori_transaksi,
-                            arguments: KategoriModel(dao: model.kategoriDao));
+                        // Get.toNamed(RouteName.new_kategori_transaksi,
+                        //     arguments: KategoriModel(dao: model.kategoriDao));
                       }
                     },
                     offset: Offset(-50, -130),

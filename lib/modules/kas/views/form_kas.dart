@@ -77,32 +77,45 @@ class _StepperBodyState extends State<StepperBody> {
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
-  bool isEdit = Get.currentRoute == RouteName.edit_kas;
-  bool isKasRoute = Get.currentRoute == RouteName.new_kas;
-  var isSaving = false.obs;
-
-  final TextEditingController nama = TextEditingController();
-  var saldoAwal = TextEditingController();
-
-  final TextEditingController namaKategori = TextEditingController();
-  final TextEditingController jenis = TextEditingController();
-  XFile? pickedImage;
-  var xfoto = XFile("").obs;
-  File? foto;
-  // String? photoUrl;
-  KasModel model = Get.arguments ?? KasModel();
-  final KategoriModel modelKategori = KategoriModel();
+  var model = Get.arguments;
+  KategoriModel? modelKategori;
+  KasModel? modelKas;
   // KategoriModel modelKategori = Get.arguments ?? KategoriModel();
 
-  List<String> jenisList = [
-    'Pengeluaran',
-    'Pemasukan',
-  ];
-  String? jenisTransaksi;
+  // List<String> jenisList = [
+  //   'Pengeluaran',
+  //   'Pemasukan',
+  //   'Mutasi',
+  // ];
+  // String? jenisTransaksi;
 
   @override
   void initState() {
     super.initState();
+    if (model is KasModel) {
+      modelKas = model;
+      kasC.nama = TextEditingController();
+      kasC.saldoAwal = TextEditingController();
+      kasC.saldo = TextEditingController();
+      kasC.deskripsi = TextEditingController();
+      if (modelKas!.id != null) {
+        kasC.nama.text = model.nama ?? "";
+        kasC.deskripsi.text = model.deskripsi ?? "";
+        kasC.saldoAwal.text = currencyFormatter(model.saldoAwal);
+        if (kasC.saldo.text.isEmptyOrNull) {
+          kasC.saldo.text = kasC.saldoAwal.text;
+        }
+      }
+    }
+    if (model is KategoriModel) {
+      modelKategori = model;
+      kasC.namaKategori = TextEditingController();
+      if (modelKategori!.id != null) {
+        kasC.namaKategori.text = model.nama ?? "";
+        kasC.jenis = model.jenis;
+      }
+    }
+
     // if (isKasRoute) {
     //   if (model.id != null) {
     //     nama.text = model.nama ?? "";
@@ -116,18 +129,12 @@ class _StepperBodyState extends State<StepperBody> {
     //     jenis.text = modelKategori.jenis ?? "";
     //   }
     // }
-    if (model.id != null) {
-      nama.text = model.nama ?? "";
-      saldoAwal.text = Formatter().currencyFormatter.format(model.saldoAwal);
-      // url.text = model.url ?? "";
-      // jumlah.text = model.jumlah.toString();
-    }
   }
 
   @override
   void dispose() {
     super.dispose();
-    kasC.clearControllers();
+    kasC.clear();
     // KasC.downloadUrl.value = "";
     // showDialog(
     //     context: context, builder: (BuildContext context) => ConfirmDialog());
@@ -143,22 +150,48 @@ class _StepperBodyState extends State<StepperBody> {
         content: Column(
           children: [
             EditText(
-              isEnabled: !isSaving.value,
-              mController: nama,
+              isEnabled: !kasC.isSaving.value,
+              mController: kasC.nama,
               validator: (value) =>
                   (Validator(attributeName: mk_lbl_nama_kas, value: value)
                         ..required())
                       .getError(),
               // inputFormatters: [CurrrencyInputFormatter()],
               label: mk_lbl_nama,
-              icon: Icon(Icons.person,
-                  color: isSaving.value
+              icon: Icon(Icons.nature,
+                  color: kasC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
             EditText(
+              isEnabled: !kasC.isSaving.value,
+              mController: kasC.deskripsi,
+              textInputAction: TextInputAction.newline,
+              validator: (value) =>
+                  (Validator(attributeName: mk_lbl_deskripsi, value: value)
+                        ..required())
+                      .getError(),
+              label: mk_lbl_deskripsi_kegiatan,
+              hint: mk_lbl_deskripsi_kegiatan,
+              icon: Icon(Icons.departure_board,
+                  color: kasC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
+              maxLine: 3,
+              keyboardType: TextInputType.multiline,
+            ),
+          ],
+        ),
+      ),
+      Step(
+        title: Text(mk_lbl_saldo_kas, style: primaryTextStyle()),
+        isActive: currStep == 1,
+        state: StepState.indexed,
+        content: Column(
+          children: [
+            EditText(
               textAlign: TextAlign.end,
-              mController: saldoAwal,
+              mController: kasC.saldoAwal,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 CurrrencyInputFormatter()
@@ -170,76 +203,15 @@ class _StepperBodyState extends State<StepperBody> {
                   (Validator(attributeName: mk_lbl_saldo_awal_kas, value: value)
                         ..required())
                       .getError(),
-              isEnabled: !isSaving.value,
+              isEnabled: !kasC.isSaving.value,
               icon: Icon(Icons.play_for_work,
-                  color: isSaving.value
+                  color: kasC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
           ],
         ),
       ),
-      // Step(
-      //     title: Text(mk_lbl_foto_profil, style: primaryTextStyle()),
-      //     isActive: currStep == 3,
-      //     state: StepState.indexed,
-      //     content: Column(children: [
-      // Obx(
-      //   () => CircleAvatar(
-      //     backgroundImage: AssetImage(mk_profile_pic),
-      //     child: isEdit && !model.photoUrl.isEmptyOrNull
-      //         ? Container(
-      //             decoration: BoxDecoration(
-      //                 borderRadius: BorderRadius.circular(100),
-      //                 image: DecorationImage(
-      //                     image: CachedNetworkImageProvider(
-      //                         model.photoUrl ?? ""),
-      //                     fit: BoxFit.cover)),
-      //           )
-      //         : null,
-      //     foregroundImage: FileImage(File(xfoto.value.path)),
-      //     backgroundColor: mkColorPrimary,
-      //     radius: 100,
-      //   ),
-      // ),
-      // 16.height,
-
-      // ElevatedButton(
-      //   child: text("Upload Foto", textColor: mkWhite),
-      //   onPressed: () {
-      //     showModalBottomSheet(
-      //         context: context,
-      //         backgroundColor: appStore.scaffoldBackground,
-      //         shape: RoundedRectangleBorder(
-      //           borderRadius:
-      //               BorderRadius.vertical(top: Radius.circular(25.0)),
-      //         ),
-      //         builder: (builder) {
-      //           return ImageSourceBottomSheet(
-      //             isLoading: kasC.isLoadingImage,
-      //             uploadPrecentage: kasC.uploadPrecentage,
-      //             isSaving: isSaving.value,
-      //             fromCamera: () async {
-      //               xfoto.value = await KasC.getImage(true);
-      //               Get.back();
-      //               FocusScopeNode currentFocus = FocusScope.of(context);
-      //               if (!currentFocus.hasPrimaryFocus) {
-      //                 currentFocus.unfocus();
-      //               }
-      //             },
-      //             fromGaleri: () async {
-      //               xfoto.value = await kasC.getImage(false);
-      //               Get.back();
-      //               FocusScopeNode currentFocus = FocusScope.of(context);
-      //               if (!currentFocus.hasPrimaryFocus) {
-      //                 currentFocus.unfocus();
-      //               }
-      //             },
-      //           );
-      //         });
-      //   },
-      // ),
-      // ]))
     ];
 
     List<Step> stepsKategori = [
@@ -250,8 +222,8 @@ class _StepperBodyState extends State<StepperBody> {
         content: Column(
           children: [
             EditText(
-              isEnabled: !isSaving.value,
-              mController: namaKategori,
+              isEnabled: !kasC.isSaving.value,
+              mController: kasC.namaKategori,
               validator: (value) => (Validator(
                       attributeName: mk_lbl_nama_Kategori_transaksi,
                       value: value)
@@ -259,8 +231,8 @@ class _StepperBodyState extends State<StepperBody> {
                   .getError(),
               // inputFormatters: [CurrrencyInputFormatter()],
               label: mk_lbl_nama_Kategori_transaksi,
-              icon: Icon(Icons.person,
-                  color: isSaving.value
+              icon: Icon(Icons.category,
+                  color: kasC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
@@ -272,26 +244,27 @@ class _StepperBodyState extends State<StepperBody> {
                   .getError(),
               style: primaryTextStyle(color: appStore.textPrimaryColor),
               alignment: Alignment.centerLeft,
-              value: jenisTransaksi,
+              value: kasC.jenis,
               decoration: InputDecoration(
                 labelText: mk_lbl_jenis_Kategori_transaksi,
                 hintStyle: secondaryTextStyle(),
                 labelStyle: secondaryTextStyle(),
                 hintText: mk_lbl_enter + mk_lbl_jenis_Kategori_transaksi,
                 icon: Icon(Icons.plagiarism,
-                    color: isSaving.value
+                    color: kasC.isSaving.value
                         ? mkColorPrimaryLight
                         : mkColorPrimaryDark),
               ),
               dropdownColor: appStore.appBarColor,
-              onChanged: isSaving.value
+              onChanged: kasC.isSaving.value
                   ? null
                   : (String? newValue) {
                       setState(() {
-                        jenisTransaksi = newValue ?? "";
+                        kasC.jenis = newValue ?? "";
                       });
                     },
-              items: jenisList.map<DropdownMenuItem<String>>((String value) {
+              items:
+                  kasC.jenisList.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Tooltip(
@@ -305,67 +278,6 @@ class _StepperBodyState extends State<StepperBody> {
           ],
         ),
       ),
-      // Step(
-      //     title: Text(mk_lbl_foto_profil, style: primaryTextStyle()),
-      //     isActive: currStep == 3,
-      //     state: StepState.indexed,
-      //     content: Column(children: [
-      // Obx(
-      //   () => CircleAvatar(
-      //     backgroundImage: AssetImage(mk_profile_pic),
-      //     child: isEdit && !model.photoUrl.isEmptyOrNull
-      //         ? Container(
-      //             decoration: BoxDecoration(
-      //                 borderRadius: BorderRadius.circular(100),
-      //                 image: DecorationImage(
-      //                     image: CachedNetworkImageProvider(
-      //                         model.photoUrl ?? ""),
-      //                     fit: BoxFit.cover)),
-      //           )
-      //         : null,
-      //     foregroundImage: FileImage(File(xfoto.value.path)),
-      //     backgroundColor: mkColorPrimary,
-      //     radius: 100,
-      //   ),
-      // ),
-      // 16.height,
-
-      // ElevatedButton(
-      //   child: text("Upload Foto", textColor: mkWhite),
-      //   onPressed: () {
-      //     showModalBottomSheet(
-      //         context: context,
-      //         backgroundColor: appStore.scaffoldBackground,
-      //         shape: RoundedRectangleBorder(
-      //           borderRadius:
-      //               BorderRadius.vertical(top: Radius.circular(25.0)),
-      //         ),
-      //         builder: (builder) {
-      //           return ImageSourceBottomSheet(
-      //             isLoading: kasC.isLoadingImage,
-      //             uploadPrecentage: kasC.uploadPrecentage,
-      //             isSaving: isSaving.value,
-      //             fromCamera: () async {
-      //               xfoto.value = await KasC.getImage(true);
-      //               Get.back();
-      //               FocusScopeNode currentFocus = FocusScope.of(context);
-      //               if (!currentFocus.hasPrimaryFocus) {
-      //                 currentFocus.unfocus();
-      //               }
-      //             },
-      //             fromGaleri: () async {
-      //               xfoto.value = await kasC.getImage(false);
-      //               Get.back();
-      //               FocusScopeNode currentFocus = FocusScope.of(context);
-      //               if (!currentFocus.hasPrimaryFocus) {
-      //                 currentFocus.unfocus();
-      //               }
-      //             },
-      //           );
-      //         });
-      //   },
-      // ),
-      // ]))
     ];
 
     return Container(
@@ -387,7 +299,7 @@ class _StepperBodyState extends State<StepperBody> {
                 Expanded(
                   child: Obx(
                     () => Stepper(
-                      steps: isKasRoute ? stepsKas : stepsKategori,
+                      steps: modelKas != null ? stepsKas : stepsKategori,
                       type: StepperType.vertical,
                       currentStep: currStep,
                       physics: ScrollPhysics(),
@@ -418,29 +330,13 @@ class _StepperBodyState extends State<StepperBody> {
                         );
                       },
                       onStepContinue: () {
-                        isKasRoute
-                            ? setState(() {
-                                if (currStep < stepsKas.length - 1) {
-                                  currStep = currStep + 1;
-                                } else {
-                                  // KasC.updateDataMasjid();
-                                  kasC.clearControllers();
-                                  // currStep = 0;
-
-                                  finish(context);
-                                }
-                              })
-                            : setState(() {
-                                if (currStep < stepsKategori.length - 1) {
-                                  currStep = currStep + 1;
-                                } else {
-                                  // KasC.updateDataMasjid();
-                                  kasC.clearControllers();
-                                  // currStep = 0;
-
-                                  finish(context);
-                                }
-                              });
+                        setState(() {
+                          if (currStep < stepsKas.length - 1) {
+                            currStep = currStep + 1;
+                          } else {
+                            finish(context);
+                          }
+                        });
                       },
                       onStepCancel: () {
                         // finish(context);
@@ -462,57 +358,23 @@ class _StepperBodyState extends State<StepperBody> {
                 ),
                 Obx(
                   () => Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: Get.width,
                     height: 50,
                     margin: EdgeInsets.all(10),
-                    decoration: boxDecoration(
-                        bgColor: isSaving.value
-                            ? mkColorPrimaryLight
-                            : mkColorPrimary,
-                        radius: 10),
-                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    child: InkWell(
-                      onTap: () async {
-                        int saldoFinal = saldoAwal.text
-                            .replaceAll('Rp', '')
-                            .replaceAll('.', '')
-                            .toInt();
-                        if (isSaving.value == false) {
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (kasC.isSaving.value == false) {
                           if (_formKey.currentState!.validate()) {
-                            if (isKasRoute) {
-                              isSaving.value = true;
-                              model.nama = nama.text;
-                              model.saldoAwal = saldoFinal;
-                              model.saldo = saldoFinal;
-                              // model.jabatan =
-                              //     jabatan == "Lainnya" ? jabatanC.text : jabatan;
-                              // if (xfoto.value.path.isNotEmpty) {
-                              //   foto = File(xfoto.value.path);
-                              // }
-                              await kasC.saveKas(model);
-                              isSaving.value = false;
-                              Get.back();
-                            } else {
-                              isSaving.value = true;
-                              model.nama = namaKategori.text;
-                              // model. = jenis.text;
-                              // model.jabatan =
-                              //     jabatan == "Lainnya" ? jabatanC.text : jabatan;
-                              // if (xfoto.value.path.isNotEmpty) {
-                              //   foto = File(xfoto.value.path);
-                              // }
-                              await kasC.saveKategori(modelKategori);
-                              isSaving.value = false;
-                              Get.back();
-                            }
+                            modelKas != null
+                                ? await kasC.saveKas(modelKas!)
+                                : await kasC.saveKategori(modelKategori!);
                           } else {
                             _formKey.currentState!.validate();
                           }
                         }
-                        // finish(context);
                       },
                       child: Center(
-                        child: isSaving.value
+                        child: kasC.isSaving.value
                             ? CircularProgressIndicator()
                             : Text(mk_submit,
                                 style: boldTextStyle(color: white, size: 18)),

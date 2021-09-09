@@ -12,20 +12,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class KasController extends GetxController {
-  String? photoUrlC;
-
-  XFile? photoLocal;
-  var rxPhotoPath = "".obs;
-  String get photoPath => rxPhotoPath.value;
-  set photoPath(String value) => this.rxPhotoPath.value = value;
-
-  var rxjabatan = "".obs;
-  String get jabatan => rxjabatan.value;
-  set jabatan(String value) => this.rxjabatan.value = value;
-  XFile? pickedImage;
-  final ImagePicker _picker = ImagePicker();
-
   static KasController instance = Get.find();
+
+  var isSaving = false.obs;
 
   RxList<KasModel> kasList = RxList<KasModel>();
   List<KasModel> get kases => kasList.value;
@@ -38,19 +27,19 @@ class KasController extends GetxController {
   Rx<KasModel> _kasModel = KasModel().obs;
 
   KasModel get kas => _kasModel.value;
-  CollectionReference collections(String masjidID) {
-    return firebaseFirestore
-        .collection(masjidCollection)
-        .doc(masjidID)
-        .collection(kasCollection);
-  }
 
-  CollectionReference collectionsKategori(String masjidID) {
-    return firebaseFirestore
-        .collection(masjidCollection)
-        .doc(masjidID)
-        .collection(kategoriCollection);
-  }
+  late TextEditingController nama;
+  late TextEditingController saldoAwal;
+  late TextEditingController saldo;
+  late TextEditingController deskripsi;
+
+  late TextEditingController namaKategori;
+  List<String> jenisList = [
+    'Pemasukan',
+    'Pengeluaran',
+    'Mutasi',
+  ];
+  String? jenis;
 
   @override
   void onInit() {
@@ -73,29 +62,6 @@ class KasController extends GetxController {
     kasList.bindStream(model.kasDao!.kasStream(model));
   }
 
-  //Single
-  Map<String, dynamic> getData(KasModel model) {
-    return {
-      'id': model.id,
-      'nama': model.nama,
-      'saldoAwal': model.saldoAwal,
-      // 'photoUrl': model.photoUrl,
-    };
-  }
-
-  var uploadPrecentage = 0.0.obs;
-  var isLoadingImage = false.obs;
-
-  Future store(KasModel model, String masjidID) async {
-    var result = await collections(masjidID).add(getData(model));
-    return result.id;
-  }
-
-  Future updatekas(KasModel model, String masjidID) async {
-    await collections(masjidID).doc(model.id).set(getData(model));
-    return model.id;
-  }
-
   Future delete(KasModel model) async {
     // if (model.photoUrl.isEmptyOrNull) {
     //   return await model.delete();
@@ -104,21 +70,18 @@ class KasController extends GetxController {
     return await model.delete();
   }
 
-  getImage(bool isCam) async {
-    return pickedImage = await _picker.pickImage(
-        source: isCam ? ImageSource.camera : ImageSource.gallery);
-  }
-
   saveKas(KasModel model) async {
+    isSaving.value = true;
+
+    int saldoAwalInt =
+        saldoAwal.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
+    int saldoInt = saldo.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
+
+    model.nama = nama.text;
+    model.saldoAwal = saldoAwalInt;
+    model.saldo = saldoInt;
+    model.deskripsi = deskripsi.text;
     try {
-      // var result =
-      //     foto == null ? await model.save() : await model.saveWithDetails(foto);
-      // if (result is UploadTask) {
-      //   UploadTask task = result;
-      //   task.snapshotEvents.listen((event) async {
-      //     print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
-      //   });
-      // }
       await model.save();
     } on SocketException catch (_) {
       showDialog(
@@ -133,18 +96,15 @@ class KasController extends GetxController {
     } finally {
       toast("Data Berhasil Diperbarui");
     }
+    isSaving.value = false;
+    Get.back();
   }
 
   saveKategori(KategoriModel model) async {
+    isSaving.value = true;
+    model.nama = namaKategori.text;
+    model.jenis = jenis;
     try {
-      // var result =
-      //     foto == null ? await model.save() : await model.saveWithDetails(foto);
-      // if (result is UploadTask) {
-      //   UploadTask task = result;
-      //   task.snapshotEvents.listen((event) async {
-      //     print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
-      //   });
-      // }
       await model.save();
     } on SocketException catch (_) {
       showDialog(
@@ -159,86 +119,37 @@ class KasController extends GetxController {
     } finally {
       toast("Data Berhasil Diperbarui");
     }
+    isSaving.value = false;
+    Get.back();
   }
 
-  // saveKas(KasModel model, File? foto) async {
-  //   try {
-  //     var result =
-  //         foto == null ? await model.save() : await model.saveWithDetails(foto);
-  //     if (result is UploadTask) {
-  //       UploadTask task = result;
-  //       task.snapshotEvents.listen((event) async {
-  //         print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
-  //       });
-  //     }
-  //   } on SocketException catch (_) {
-  //     showDialog(
-  //         context: Get.context!,
-  //         builder: (context) => AlertDialog(
-  //               title: Text("Connection Error !"),
-  //               content: Text("Please connect to the internet."),
-  //             ));
-  //   } catch (e) {
-  //     print(e);
-  //     toast("Error Saving Data");
-  //   } finally {
-  //     toast("Data Berhasil Diperbarui");
-  //   }
-  // }
+  checkControllers(var model) {
+    if (model is KasModel) {
+      if (model.id.isEmptyOrNull) {
+        if (nama.text.isNotEmpty ||
+            deskripsi.text.isNotEmpty ||
+            saldoAwal.text.isNotEmpty ||
+            saldo.text.isNotEmpty) return true;
+      } else {
+        if (nama.text != model.nama || deskripsi.text != model.deskripsi)
+          return true;
+      }
+    } else if (model is KategoriModel) {
+      if (model.id.isEmptyOrNull) {
+        if (namaKategori.text.isNotEmpty || !jenis.isEmptyOrNull) return true;
+      } else {
+        if (nama.text != model.nama || jenis != model.jenis) return true;
+      }
+    }
+    return false;
+  }
 
-  // uploadImage(XFile? pickImage, kasModel kas) async {
-  //   if (pickImage != null) {
-  //     Reference pathStorage = firebaseStorage
-  //         .ref()
-  //         .child(masjidCollection)
-  //         .child(authController.user.masjid!)
-  //         .child(kasCollection)
-  //         .child(kas.id ?? "");
-  //     var file = File(pickImage.path);
-  //     final metadata = SettableMetadata(
-  //         contentType: 'image/jpeg',
-  //         customMetadata: {
-  //           'picked-file-path': pickImage.path,
-  //           'picked-file-name': pickImage.name
-  //         });
-
-  //     // TaskSnapshot uploadedFile = await pathStorage.putFile(file);
-
-  //     UploadTask uploadTask = pathStorage.putFile(file, metadata);
-  //     uploadTask.snapshotEvents.listen((event) async {
-  //       print("uploading : ${event.bytesTransferred} / ${event.totalBytes}");
-  //       uploadPrecentage.value = event.bytesTransferred / event.totalBytes;
-
-  //       if (event.state == TaskState.success) {
-  //         photoUrlC = await pathStorage.getDownloadURL();
-  //         kas.photoUrl = photoUrlC;
-  //         updatekas(kas, authController.user.masjid!);
-  //         // await collections(authController.user.masjid!)
-  //         //     .doc(deMasjid.id)
-  //         //     .update({'photoUrl': photoUrlC});
-  //         isLoadingImage.value = false;
-  //       } else {}
-  //     });
-  //   } else {
-  //     toast('No Image Picked');
-  //   }
-  // }
-
-  // checkControllers(kasModel data) {
-  //   if (namaC.text != data.nama ||
-  //       jabatanC.text != data.jabatan ||
-  //       photoLocal != null) {
-  //     return true;
-  //   } else
-  //     return false;
-  // }
-
-  clearControllers() {
-    // namaC.clear();
-    // jabatanC.clear();
-    // photoUrlC = null;
-    // jabatan = "";
-    // photoLocal = null;
-    // photoPath = "";
+  clear() {
+    nama.clear();
+    saldoAwal.clear();
+    saldo.clear();
+    deskripsi.clear();
+    namaKategori.clear();
+    jenis = null;
   }
 }

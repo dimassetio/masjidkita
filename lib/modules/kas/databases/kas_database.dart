@@ -10,10 +10,15 @@ import 'package:mosq/modules/masjid/models/masjid_model.dart';
 class KasDatabase {
   final CollectionReference db;
   final Reference storage;
+  bool? exist;
   KasDatabase({
     required this.db,
     required this.storage,
   });
+
+  CollectionReference childReference(KasModel model, String collectionName) {
+    return db.doc(model.id).collection(collectionName);
+  }
 
   Stream<KasModel> streamDetailTakmir(KasModel model) {
     return db
@@ -29,14 +34,22 @@ class KasDatabase {
       query.docs.forEach((element) {
         list.add(KasModel().fromSnapshot(element, model.kasDao!));
       });
+      list.add(KasModel().getKasTotal(list));
+      print(list.toString());
       return list;
     });
   }
 
+  // Future<bool> checkKas(KasModel model) async {
+  //   try {
+  //     await db.doc(model.id)
+  //   } catch (e) {
+  //   }
+  // }
+
   Future store(KasModel model) async {
-    DocumentReference result = await db.add(model.toSnapshot());
-    model.id = result.id;
-    return result;
+    return await db.add(model.toSnapshot());
+    // await db.add(model.toSnapshotKasTotal());
   }
 
   Future update(KasModel model) async {

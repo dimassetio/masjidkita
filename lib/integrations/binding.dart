@@ -13,7 +13,9 @@ class InitBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(AuthController(), permanent: true);
+    Get.lazyPut(() => MasjidController());
     Get.lazyPut(() => KasController());
+    Get.lazyPut(() => InventarisController());
     Get.lazyPut(() => KegiatanController());
     Get.lazyPut(() => TakmirController());
     Get.lazyPut(() => ProfilController());

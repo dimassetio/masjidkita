@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mosq/modules/inventaris/controllers/inventarisController.dart';
 import 'package:mosq/integrations/controllers.dart';
 
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';

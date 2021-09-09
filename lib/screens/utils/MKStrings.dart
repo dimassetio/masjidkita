@@ -106,6 +106,7 @@ const mk_lbl_tanggal_kegiatan = "Tanggal";
 const mk_lbl_foto_kegiatan = "Foto";
 
 const mk_lbl_kas = "Buku Kas";
+const mk_lbl_saldo_kas = "Saldo";
 const mk_lbl_nama_kas = "Nama Kas";
 const mk_hint_nama_kas = "Ex: Kas Besar";
 const mk_lbl_saldo_awal_kas = "Saldo Awal";
