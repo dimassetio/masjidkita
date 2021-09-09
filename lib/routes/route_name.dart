@@ -19,4 +19,8 @@ abstract class RouteName {
   static const new_takmir = '/new_takmir';
   static const detail_takmir = '/detail_takmir';
   static const edit_takmir = '/edit_takmir';
+  static const new_kas = '/new_kas';
+  static const new_kategori_transaksi = '/new_kaategori_transaksi';
+  static const detail_kas = '/detail_kas';
+  static const edit_kas = '/edit_kas';
 }

@@ -43,7 +43,7 @@ class MasjidCarouselSlider extends StatefulWidget {
       this.viewportFraction: 0.8,
       this.initialPage: 0,
       int realPage: 10000,
-      this.enableInfiniteScroll: true,
+      this.enableInfiniteScroll: false,
       this.reverse: false,
       this.autoPlay: false,
       this.autoPlayInterval: const Duration(seconds: 4),

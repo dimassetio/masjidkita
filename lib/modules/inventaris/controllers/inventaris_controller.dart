@@ -14,7 +14,7 @@ class InventarisController extends GetxController {
   static InventarisController instance = Get.find();
 
   RxList<InventarisModel> inventarisList = RxList<InventarisModel>();
-  List<InventarisModel> get inventariss => inventarisList.value;
+  List<InventarisModel> get inventarises => inventarisList.value;
 
   Rx<InventarisModel> _inventarisModel = InventarisModel().obs;
   InventarisModel get inventaris => _inventarisModel.value;

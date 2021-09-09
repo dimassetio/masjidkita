@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/modules/kegiatan/views/show.dart';
+import 'package:mosq/modules/kas/views/form_kas.dart';
 import 'package:mosq/modules/profile/views/Form_Profile.dart';
 import 'package:mosq/modules/takmir/views/form_takmir.dart';
 import 'package:mosq/screens/MosqDashboard.dart';
@@ -30,6 +31,9 @@ class AppPage {
     GetPage(name: RouteName.edit_kegiatan, page: () => FormKegiatan()),
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),
     GetPage(name: RouteName.edit_inventaris, page: () => FormInventaris()),
+    GetPage(name: RouteName.new_kas, page: () => FormKas()),
+    GetPage(name: RouteName.new_kategori_transaksi, page: () => FormKas()),
+    GetPage(name: RouteName.edit_kas, page: () => FormKas()),
     GetPage(
         name: RouteName.list_masjid,
         page: () => PageListMasjid(),
@@ -45,5 +49,6 @@ class AppPage {
       name: RouteName.edit_takmir,
       page: () => FormTakmir(),
     ),
+    // GetPage(name: RouteName.new_kas, page: () => FormKas()),
   ];
 }

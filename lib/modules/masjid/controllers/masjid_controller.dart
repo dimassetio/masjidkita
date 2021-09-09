@@ -145,6 +145,7 @@ class MasjidController extends GetxController {
     try {
       takmirC.getTakmirStream(dataMasjid);
       inventarisC.getInventarisStream(dataMasjid);
+      kasC.getKasStream(dataMasjid);
       kegiatanC.getKegiatanStream(dataMasjid);
     } catch (e) {
       toast(e.toString());

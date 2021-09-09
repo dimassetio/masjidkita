@@ -69,6 +69,9 @@ const mk_join = "Bergabung";
 const mk_add_takmir = "Tambah Takmir";
 const mk_edit_takmir = "Edit Takmir";
 
+const mk_add_kas = "Tambah Kas";
+const mk_edit_kas = "Edit Kas";
+
 const mk_masjid_fav = "Masjid Favorit";
 const mk_masjid_fav_null =
     "Anda belum memiliki masjid favorit untuk ditampilkan";
@@ -104,6 +107,13 @@ const mk_lbl_tempat_kegiatan = "Tempat";
 const mk_lbl_waktu_tempat = "Waktu & Tempat";
 const mk_lbl_foto_kegiatan = "Foto";
 
+const mk_lbl_kas = "Buku Kas";
+const mk_lbl_saldo_kas = "Saldo";
+const mk_lbl_nama_kas = "Nama Kas";
+const mk_hint_nama_kas = "Ex: Kas Besar";
+const mk_lbl_saldo_awal_kas = "Saldo Awal";
+const mk_hint_saldo_awal_kas = "Ex: Rp. 3.000.000,-";
+
 const mk_lbl_delete = "Hapus";
 const mk_lbl_edit = "Edit";
 
@@ -111,3 +121,9 @@ const mk_lbl_foto_profil = "Foto Profil";
 const mk_lbl_profil = "Profil";
 const mk_lbl_jabatan = "Jabatan";
 const mk_lbl_lainnya = "Lainnya";
+
+const mk_lbl_Kategori_transaksi = "Kategori";
+const mk_lbl_nama_Kategori_transaksi = "Nama Kategori";
+const mk_hint_nama_Kategori_transaksi = "Ex: Listrik";
+
+const mk_lbl_jenis_Kategori_transaksi = "Jenis";

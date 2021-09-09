@@ -88,7 +88,11 @@ class InventarisDatabase {
 
   Future deleteFromStorage(InventarisModel model) async {
     print(storage.child(model.inventarisID!));
-    return storage.child(model.inventarisID!).delete();
+    if (storage.child(model.inventarisID!) == null) {
+      print("No such image on storage");
+    } else {
+      storage.child(model.inventarisID!).delete();
+    }
   }
 
   Future upload(InventarisModel model, File foto) async {

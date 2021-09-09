@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mosq/modules/inventaris/controllers/inventarisController.dart';
+import 'package:mosq/modules/inventaris/controllers/inventaris_controller.dart';
 import 'package:mosq/integrations/controllers.dart';
 // import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/models/user.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/alertdeleteInventaris.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/widgets/DismissibleBackground.dart';
 // import 'package:mosq/screens/utils/MKImages.dart';
@@ -24,12 +24,8 @@ class TMTabInventaris extends StatefulWidget {
   _TMTabInventarisState createState() => _TMTabInventarisState();
   final InventarisModel item;
   final MasjidModel model;
-  // final Useritem user;
-  // final ManMasjiditem masjid;
-  const TMTabInventaris(this.model, this.item
-      // this.user,
-      // this.masjid,
-      );
+
+  const TMTabInventaris(this.model, this.item);
 }
 
 class _TMTabInventarisState extends State<TMTabInventaris> {
@@ -49,7 +45,6 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
   }
 
   Widget generateItemList() {
-    final InventarisModel item;
     // final InventarisModel item;
     // final InventarisController inventarisC = Get.find();
     return Container(
@@ -57,7 +52,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
           child: Column(
         children: [
           Obx(
-            () => inventarisC.inventariss.isEmpty
+            () => inventarisC.inventarises.isEmpty
                 ? Container(
                     height: 200,
                     child: text("Masjid belum memiliki Inventaris").center(),
@@ -69,13 +64,13 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                 : ListView.builder(
                     padding: EdgeInsets.symmetric(),
                     scrollDirection: Axis.vertical,
-                    itemCount: inventarisC.inventariss.length,
+                    itemCount: inventarisC.inventarises.length,
                     shrinkWrap: true,
                     physics: ScrollPhysics(),
                     itemBuilder: (context, index) {
                       InventarisModel dataInventaris =
-                          inventarisC.inventariss[index];
-                      // final item = inventarisC.inventariss[index];
+                          inventarisC.inventarises[index];
+                      // final item = inventarisC.inventarises[index];
 
                       return Obx(() => Column(children: [
                             Dismissible(
@@ -86,7 +81,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                               child:
                                   // InventarisCard(inventarisC.inventariss[index]),
                                   InventarisCard(
-                                inventaris: inventarisC.inventariss[index],
+                                inventaris: inventarisC.inventarises[index],
                               ),
                               background: slideRightBackground(),
                               secondaryBackground: slideLeftBackground(),
@@ -138,12 +133,6 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
 
   @override
   Widget build(BuildContext context) {
-    // var visible;
-    // if (masjidC.deMasjid.id == authControl) {
-    //   visible = true;
-    // } else {
-    //   visible = false;
-    // }
     Get.put(InventarisController());
     return Stack(
       children: [
@@ -153,12 +142,6 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
             padding: EdgeInsets.only(right: 15, bottom: 15),
             child: Obx(() => masjidC.myMasjid.value
                 ? FloatingActionButton(
-                    // heroTag: '1',
-                    // heroTag: '5',
-                    // label: Text(
-                    //   "Add",
-                    //   style: primaryTextStyle(color: Colors.white),
-                    // ),
                     child: Icon(
                       Icons.edit,
                       color: mkWhite,

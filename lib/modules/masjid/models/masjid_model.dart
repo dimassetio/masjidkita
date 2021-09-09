@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/modules/inventaris/databases/inventaris_database.dart';
+import 'package:mosq/modules/kas/databases/kas_database.dart';
+import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/modules/kegiatan/databases/kegiatan_database.dart';
 import 'package:mosq/modules/masjid/databases/masjid_database.dart';
 import 'package:mosq/modules/takmir/databases/takmir_database.dart';
@@ -26,6 +27,7 @@ class MasjidModel {
   MasjidDatabase dao = new MasjidDatabase();
   InventarisDatabase? inventarisDao;
   TakmirDatabase? takmirDao;
+  KasDatabase? kasDao;
   KegiatanDatabase? kegiatanDao;
 
   MasjidModel({
@@ -45,9 +47,11 @@ class MasjidModel {
     this.legalitas,
   }) {
     inventarisDao = InventarisDatabase(
-      db: dao.childReference(this, inventarisCollection),
-      storage: dao.childStorage(this, inventarisCollection),
-    );
+        db: dao.childReference(this, inventarisCollection),
+        storage: dao.childStorage(this, inventarisCollection));
+    kasDao = KasDatabase(
+        db: dao.childReference(this, kasCollection),
+        storage: dao.childStorage(this, kasCollection));
     takmirDao = TakmirDatabase(
         db: dao.childReference(this, takmirCollection),
         storage: dao.childStorage(this, takmirCollection));

@@ -16,16 +16,21 @@ import 'package:get/get.dart';
 
 import 'package:mosq/main.dart';
 
+// ignore: must_be_immutable
 class InventarisDetail extends StatelessWidget {
   InventarisModel model = Get.arguments;
   @override
   Widget build(BuildContext context) {
-    String? imageURL = model.url ?? mk_net_img;
+    String? imageURL = model.url;
     // String noImage = "https://i.postimg.cc/9M4hLrrJ/no-image.png";
-    if (imageURL == "") {
-      String? imageURL = "https://i.postimg.cc/9M4hLrrJ/no-image.png";
-      print(imageURL);
+    if (imageURL.isEmptyOrNull) {
+      imageURL = "https://i.postimg.cc/9M4hLrrJ/no-image.png";
+      // print(imageURL);
     }
+    // else {
+    //   imageURL;
+    // }
+
     changeStatusColor(appStore.appBarColor!);
     var width = Get.width;
     var height = Get.height;
