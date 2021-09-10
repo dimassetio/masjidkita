@@ -21,8 +21,10 @@ class KasModel {
       this.saldo,
       this.deskripsi,
       this.dao}) {
-    kategoriDao =
-        KategoriDatabase(db: dao!.childReference(this, kategoriCollection));
+    if (dao != null) {
+      kategoriDao =
+          KategoriDatabase(db: dao!.childReference(this, kategoriCollection));
+    }
   }
 
   save() async {
@@ -131,7 +133,7 @@ class KategoriModel {
   //   return await this.dao!.delete(this);
   // }
 
-  KategoriModel fromSnapshot(DocumentSnapshot snapshot, KategoriDatabase dao) {
+  KategoriModel fromSnapshot(DocumentSnapshot snapshot, KategoriDatabase? dao) {
     return KategoriModel(
       id: snapshot.id,
       nama: snapshot.data()?["nama"],

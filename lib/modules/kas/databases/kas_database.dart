@@ -30,7 +30,6 @@ class KasDatabase {
   Stream<List<KasModel>> kasStream(MasjidModel model) async* {
     yield* db.snapshots().map((QuerySnapshot query) {
       List<KasModel> list = [];
-      print("dao = ${model.kasDao}");
       query.docs.forEach((element) {
         list.add(KasModel().fromSnapshot(element, model.kasDao!));
       });
