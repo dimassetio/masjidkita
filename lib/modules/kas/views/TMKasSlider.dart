@@ -55,24 +55,23 @@ class KasSlider extends StatelessWidget {
     var saldoAwal = currencyFormatter(dataKas.saldoAwal ?? 0);
     var saldo = currencyFormatter(dataKas.saldo);
     return Container(
-      // height: 400,
       width: width,
       decoration: boxDecoration(bgColor: mkColorPrimary, radius: 20),
-      child: Stack(
-        children: [
-          InkWell(
-            splashColor: mkColorPrimary,
-            onTap: () {
-              dataKas.nama != "Kas Total"
-                  ? Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DashboardKas(),
-                      ),
-                    )
-                  : null;
-            },
-            child: Column(
+      child: InkWell(
+        splashColor: mkColorPrimaryDark,
+        onTap: () {
+          dataKas.nama != "Kas Total"
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DashboardKas(),
+                  ),
+                )
+              : null;
+        },
+        child: Stack(
+          children: [
+            Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Column(
@@ -146,96 +145,97 @@ class KasSlider extends StatelessWidget {
                 )
               ],
             ),
-          ),
-          Container(
-            alignment: Alignment.topLeft,
-            margin: EdgeInsets.only(left: 15, top: 15),
-            child: ClipOval(
-              child: Material(
-                color: mkWhite, // Button color
-                child: InkWell(
-                  splashColor: mkColorAccent, // Splash color
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          DialogDeskripsiKas(dataKas),
-                    );
-                  },
-                  child: SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: Icon(Icons.info, size: 30, color: mkColorPrimary)),
+            Container(
+              alignment: Alignment.topLeft,
+              margin: EdgeInsets.only(left: 15, top: 15),
+              child: ClipOval(
+                child: Material(
+                  color: mkWhite, // Button color
+                  child: InkWell(
+                    splashColor: mkColorPrimaryDark, // Splash color
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            DialogDeskripsiKas(dataKas),
+                      );
+                    },
+                    child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child:
+                            Icon(Icons.info, size: 30, color: mkColorPrimary)),
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(
-              alignment: Alignment.topRight,
-              margin: EdgeInsets.only(right: 10, top: 5),
-              child: dataKas.nama != "Kas Total"
-                  ? Obx(() => masjidC.myMasjid.value
-                      ? InkWell(
-                          onTap: () {},
-                          child: PopupMenuButton(
-                            color: mkWhite,
-                            icon: Icon(
-                              Icons.more_vert,
+            Container(
+                alignment: Alignment.topRight,
+                margin: EdgeInsets.only(right: 10, top: 5),
+                child: dataKas.nama != "Kas Total"
+                    ? Obx(() => masjidC.myMasjid.value
+                        ? InkWell(
+                            onTap: () {},
+                            child: PopupMenuButton(
                               color: mkWhite,
-                            ),
-                            onSelected: (dynamic value) async {
-                              if (value == 'edit') {
-                                Get.toNamed(RouteName.edit_kas,
-                                    arguments: dataKas);
-                              } else {
-                                var res = await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        CustomDelete(
-                                          titleName: 'Kas',
-                                          subtitleName: dataKas.nama ?? "",
-                                        ));
-                                if (res == true) {
-                                  kasC.delete(dataKas);
+                              icon: Icon(
+                                Icons.more_vert,
+                                color: mkWhite,
+                              ),
+                              onSelected: (dynamic value) async {
+                                if (value == 'edit') {
+                                  Get.toNamed(RouteName.edit_kas,
+                                      arguments: dataKas);
+                                } else {
+                                  var res = await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          CustomDelete(
+                                            titleName: 'Kas',
+                                            subtitleName: dataKas.nama ?? "",
+                                          ));
+                                  if (res == true) {
+                                    kasC.delete(dataKas);
+                                  }
+                                  // Get.toNamed(RouteName.new_kategori_transaksi,
+                                  //     arguments: KategoriModel(dao: model.kategoriDao));
                                 }
-                                // Get.toNamed(RouteName.new_kategori_transaksi,
-                                //     arguments: KategoriModel(dao: model.kategoriDao));
-                              }
-                            },
-                            offset: Offset(0, 50),
-                            itemBuilder: (context) {
-                              List<PopupMenuEntry<Object>> list = [];
-                              list.add(
-                                PopupMenuItem(
-                                  child: ListTile(
-                                    leading: Icon(
-                                      Icons.edit,
-                                      color: Colors.black,
+                              },
+                              offset: Offset(0, 50),
+                              itemBuilder: (context) {
+                                List<PopupMenuEntry<Object>> list = [];
+                                list.add(
+                                  PopupMenuItem(
+                                    child: ListTile(
+                                      leading: Icon(
+                                        Icons.edit,
+                                        color: Colors.black,
+                                      ),
+                                      title: Text('Edit'),
                                     ),
-                                    title: Text('Edit'),
+                                    value: 'edit',
                                   ),
-                                  value: 'edit',
-                                ),
-                              );
-                              list.add(
-                                PopupMenuItem(
-                                  child: ListTile(
-                                    leading: Icon(
-                                      Icons.delete,
-                                      color: Colors.black,
+                                );
+                                list.add(
+                                  PopupMenuItem(
+                                    child: ListTile(
+                                      leading: Icon(
+                                        Icons.delete,
+                                        color: Colors.black,
+                                      ),
+                                      title: Text('Hapus'),
                                     ),
-                                    title: Text('Hapus'),
+                                    value: 'delete',
                                   ),
-                                  value: 'delete',
-                                ),
-                              );
-                              return list;
-                            },
-                          ),
-                        )
-                      : SizedBox())
-                  : SizedBox()),
-        ],
+                                );
+                                return list;
+                              },
+                            ),
+                          )
+                        : SizedBox())
+                    : SizedBox()),
+          ],
+        ),
       ),
     );
   }

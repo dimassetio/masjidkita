@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/modules/kas/views/form_kas.dart';
 import 'package:mosq/modules/kegiatan/views/show.dart';
+import 'package:mosq/modules/kegiatan/views/show.dart';
+import 'package:mosq/modules/kas/views/form_kas.dart';
 import 'package:mosq/modules/profile/views/Form_Profile.dart';
 import 'package:mosq/modules/takmir/views/form_takmir.dart';
 import 'package:mosq/screens/MosqDashboard.dart';
