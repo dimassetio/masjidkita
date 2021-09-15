@@ -1,26 +1,19 @@
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/helpers/validator.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
-import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
-import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
+import 'package:mosq/screens/widgets/MqFormFoto.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:get/get.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mosq/main.dart';
 
 class FormInventaris extends StatefulWidget {
@@ -40,7 +33,7 @@ class _FormInventarisState extends State<FormInventaris> {
   // var isSaving = false.obs;
   // GlobalKey<FormState> formKey = GlobalKey();
   InventarisModel model = Get.arguments as InventarisModel;
-
+  MqFormFoto formFoto = MqFormFoto();
   @override
   void initState() {
     super.initState();
@@ -50,11 +43,12 @@ class _FormInventarisState extends State<FormInventaris> {
     inventarisC.harga = TextEditingController();
     inventarisC.jumlah = TextEditingController();
 
-    if (model.inventarisID != null) {
+    if (model.id != null) {
       inventarisC.nama.text = model.nama ?? "";
       inventarisC.kondisi.text = model.kondisi ?? "";
       inventarisC.harga.text = currencyFormatter(model.harga);
       inventarisC.jumlah.text = model.jumlah.toString();
+      formFoto.oldPath = model.photoUrl ?? "";
     }
 
     // if (isEdit == true) {}
@@ -162,69 +156,12 @@ class _FormInventarisState extends State<FormInventaris> {
           title: Text("Foto"),
           content: Column(
             children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(bottom: 16),
-                // decoration: boxDecoration(
-                //     radius: 10.0, showShadow: true, color: mkColorPrimary),
-                width: Get.width,
-                height: Get.width / 1.7,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Obx(() => inventarisC.xfoto.value.path.isNotEmpty
-                      ? Image.file(File(inventarisC.xfoto.value.path))
-                      : isEdit && !model.url.isEmptyOrNull
-                          ? CachedNetworkImage(
-                              placeholder: placeholderWidgetFn() as Widget
-                                  Function(BuildContext, String)?,
-                              imageUrl: model.url!,
-                              fit: BoxFit.cover,
-                            )
-                          : SvgPicture.asset(
-                              mk_no_image,
-                            )),
-                ),
-              ),
-              ElevatedButton(
-                child: text("Upload Foto",
-                    textColor: mkWhite, fontSize: textSizeSMedium),
-                onPressed: () {
-                  showModalBottomSheet(
-                      context: context,
-                      backgroundColor: appStore.scaffoldBackground,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(25.0)),
-                      ),
-                      builder: (builder) {
-                        return ImageSourceBottomSheet(
-                            isSaving: inventarisC.isSaving,
-                            fromCamera: () async {
-                              await takmirC.getImage(true);
-                              Get.back();
-                              FocusScopeNode currentFocus =
-                                  FocusScope.of(context);
-                              if (!currentFocus.hasPrimaryFocus) {
-                                currentFocus.unfocus();
-                              }
-                            },
-                            fromGaleri: () async {
-                              await inventarisC.getImage(false);
-                              Get.back();
-                              FocusScopeNode currentFocus =
-                                  FocusScope.of(context);
-                              if (!currentFocus.hasPrimaryFocus) {
-                                currentFocus.unfocus();
-                              }
-                            });
-                      });
-                  // inventarisC.inventarisage(image!);
-                },
-              ),
+              16.height,
+              formFoto,
             ],
           ),
           isActive: currStep == 1,
-          state: StepState.disabled),
+          state: StepState.indexed),
     ];
     return SafeArea(
       child: Scaffold(
@@ -239,46 +176,46 @@ class _FormInventarisState extends State<FormInventaris> {
                 ? mk_add_inventaris
                 : mk_edit_inventaris,
           ),
-          actions: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: InkWell(
-                onTap: () async {
-                  if (inventarisC.isSaving.value == false) {
-                    if (formKey.currentState!.validate()) {
-                      if (currStep < steps.length - 1) {
-                        currStep = currStep + 1;
-                      } else {
-                        inventarisC.isSaving.value = true;
-                        setState(() {});
-                        await inventarisC.saveInventaris(model);
+          // actions: <Widget>[
+          //   Padding(
+          //     padding: EdgeInsets.only(right: 20.0),
+          //     child: InkWell(
+          //       onTap: () async {
+          //         if (inventarisC.isSaving.value == false) {
+          //           if (formKey.currentState!.validate()) {
+          //             if (currStep < steps.length - 1) {
+          //               currStep = currStep + 1;
+          //             } else {
+          //               inventarisC.isSaving.value = true;
+          //               setState(() {});
+          //               await inventarisC.saveInventaris(model);
 
-                        Get.back();
-                        inventarisC.isSaving.value = false;
-                      }
-                    } else {
-                      formKey.currentState!.validate();
-                    }
-                  }
-                },
-                child: inventarisC.isSaving.value
-                    ? Container(
-                        padding: EdgeInsets.all(13),
-                        width: 55.0,
-                        child: CircularProgressIndicator())
-                    : Icon(
-                        Icons.check,
-                        size: 26.0,
-                        color: mkColorPrimary,
-                      ),
-              ),
-            )
-          ],
+          //               Get.back();
+          //               inventarisC.isSaving.value = false;
+          //             }
+          //           } else {
+          //             formKey.currentState!.validate();
+          //           }
+          //         }
+          //       },
+          //       child: inventarisC.isSaving.value
+          //           ? Container(
+          //               padding: EdgeInsets.all(13),
+          //               width: 55.0,
+          //               child: CircularProgressIndicator())
+          //           : Icon(
+          //               Icons.check,
+          //               size: 26.0,
+          //               color: mkColorPrimary,
+          //             ),
+          //     ),
+          //   )
+          // ],
         ),
         body: WillPopScope(
           onWillPop: () async {
             // return Future.value(true);
-            return inventarisC.checkControllers(model)
+            return inventarisC.checkControllers(model, formFoto.newPath)
                 ? await showDialog(
                     context: context,
                     builder: (BuildContext context) => ConfirmDialog())
@@ -293,7 +230,7 @@ class _FormInventarisState extends State<FormInventaris> {
                   Expanded(
                     child: Stepper(
                       steps: steps,
-                      type: StepperType.horizontal,
+                      type: StepperType.vertical,
                       currentStep: this.currStep,
                       controlsBuilder: (BuildContext context,
                           {VoidCallback? onStepContinue,
@@ -352,6 +289,37 @@ class _FormInventarisState extends State<FormInventaris> {
                           currStep = step;
                         });
                       },
+                    ),
+                  ),
+                  Obx(
+                    () => Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      margin: EdgeInsets.all(10),
+                      decoration: boxDecoration(
+                          bgColor: inventarisC.isSaving.value
+                              ? mkColorPrimaryLight
+                              : mkColorPrimary,
+                          radius: 10),
+                      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: InkWell(
+                        onTap: () async {
+                          if (inventarisC.isSaving.value == false) {
+                            if (formKey.currentState!.validate()) {
+                              await inventarisC.saveInventaris(model,
+                                  path: formFoto.newPath);
+                            } else {
+                              formKey.currentState!.validate();
+                            }
+                          }
+                        },
+                        child: Center(
+                          child: inventarisC.isSaving.value
+                              ? CircularProgressIndicator()
+                              : Text(mk_submit,
+                                  style: boldTextStyle(color: white, size: 18)),
+                        ),
+                      ),
                     ),
                   ),
                 ],

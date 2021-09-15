@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
@@ -21,14 +20,14 @@ class InventarisDetail extends StatelessWidget {
   InventarisModel model = Get.arguments;
   @override
   Widget build(BuildContext context) {
-    String? imageURL = model.url;
+    String? imagephotoUrl = model.photoUrl;
     // String noImage = "https://i.postimg.cc/9M4hLrrJ/no-image.png";
-    if (imageURL.isEmptyOrNull) {
-      imageURL = "https://i.postimg.cc/9M4hLrrJ/no-image.png";
-      // print(imageURL);
+    if (imagephotoUrl.isEmptyOrNull) {
+      imagephotoUrl = "https://i.postimg.cc/9M4hLrrJ/no-image.png";
+      // print(imagephotoUrl);
     }
     // else {
-    //   imageURL;
+    //   imagephotoUrl;
     // }
 
     changeStatusColor(appStore.appBarColor!);
@@ -65,42 +64,6 @@ class InventarisDetail extends StatelessWidget {
             SizedBox(height: 16),
             Divider(height: 1, color: mk_view_color),
             SizedBox(height: 16),
-            Row(
-              children: <Widget>[
-                // FloatingActionButton.extended(
-                //     heroTag: '5',
-                //     label: Text(
-                //       "Edit",
-                //       style: primaryTextStyle(color: Colors.white),
-                //     ),
-                //     backgroundColor: Colors.orange,
-                //     icon: Icon(
-                //       Icons.edit,
-                //       color: Colors.white,
-                //     ),
-                //     onPressed: () {
-                //       Get.toNamed(RouteName.edit_inventaris);
-                //       // Get.to(CustomDelete());
-                //     }),
-                // 10.width,
-                // FloatingActionButton.extended(
-                //     heroTag: '1',
-                //     // heroTag: '5',
-                //     label: Text(
-                //       "Hapus",
-                //       style: primaryTextStyle(color: Colors.white),
-                //     ),
-                //     backgroundColor: Colors.redAccent,
-                //     icon: Icon(
-                //       Icons.delete,
-                //       color: Colors.white,
-                //     ),
-                //     onPressed: () {
-                //       Get.to(() => CustomDelete());
-                //       // Database().deleteInventaris(model.inventarisID);
-                //     }),
-              ],
-            )
           ],
         ),
       );
@@ -124,11 +87,11 @@ class InventarisDetail extends StatelessWidget {
                             decoration: boxDecoration(radius: 20),
                             width: Get.width,
                             height: Get.width / 1.777,
-                            child: model.url != ""
+                            child: model.photoUrl != ""
                                 ? CachedNetworkImage(
                                     placeholder: placeholderWidgetFn() as Widget
                                         Function(BuildContext, String)?,
-                                    imageUrl: "$imageURL",
+                                    imageUrl: "$imagephotoUrl",
                                     width: width,
                                     height: width * 0.7,
                                     fit: BoxFit.cover,

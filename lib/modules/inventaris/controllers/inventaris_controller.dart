@@ -5,7 +5,6 @@ import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:get/get.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class InventarisController extends GetxController {
@@ -26,7 +25,6 @@ class InventarisController extends GetxController {
   late TextEditingController kondisi;
   late TextEditingController harga;
   // var harga = TextEditingController();
-  var xfoto = XFile("").obs;
 
   @override
   void onInit() {
@@ -39,27 +37,17 @@ class InventarisController extends GetxController {
   }
 
   Future delete(InventarisModel model) async {
-    if (model.url.isEmptyOrNull) {
+    if (model.photoUrl.isEmptyOrNull) {
       return await model.delete();
     } else
       return await model.deleteWithDetails();
   }
 
-  final ImagePicker _picker = ImagePicker();
-
-  getImage(bool isCam) async {
-    var result = await _picker.pickImage(
-        source: isCam ? ImageSource.camera : ImageSource.gallery);
-    if (result is XFile) {
-      xfoto.value = result;
-    }
-  }
-
-  saveInventaris(InventarisModel model) async {
+  saveInventaris(InventarisModel model, {String? path}) async {
+    isSaving.value = true;
     int jumlahBarang = jumlah.text.toInt();
     int hargaBarang =
         harga.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
-
     model.nama = nama.text;
     model.kondisi = kondisi.text;
     model.harga = hargaBarang;
@@ -67,8 +55,8 @@ class InventarisController extends GetxController {
     model.hargaTotal = hargaBarang * jumlahBarang;
 
     File? foto;
-    if (xfoto.value.path.isNotEmpty) {
-      foto = File(xfoto.value.path);
+    if (!path.isEmptyOrNull) {
+      foto = File(path!);
     }
 
     try {
@@ -92,22 +80,24 @@ class InventarisController extends GetxController {
       toast("Error saving data");
     } finally {
       toast("Data berhasil diperbarui");
+      isSaving.value = false;
+      Get.back();
     }
   }
 
-  checkControllers(InventarisModel model) {
-    if (model.inventarisID.isEmptyOrNull) {
+  checkControllers(InventarisModel model, String? foto) {
+    if (model.id.isEmptyOrNull) {
       if (nama.text.isNotEmpty ||
           jumlah.text.isNotEmpty ||
           harga.text.isNotEmpty ||
           kondisi.text.isNotEmpty ||
-          !xfoto.value.path.isEmptyOrNull) return true;
+          !foto.isEmptyOrNull) return true;
     } else {
       if (nama.text != model.nama ||
           harga.text != currencyFormatter(model.harga) ||
           jumlah.text != model.jumlah.toString() ||
           kondisi.text != model.kondisi ||
-          !xfoto.value.path.isEmptyOrNull) return true;
+          !foto.isEmptyOrNull) return true;
     }
     return false;
   }
@@ -117,6 +107,5 @@ class InventarisController extends GetxController {
     jumlah.clear();
     harga.clear();
     kondisi.clear();
-    xfoto.value = XFile("");
   }
 }

@@ -7,7 +7,6 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/kegiatan/models/kegiatan_model.dart';
-import 'package:mosq/modules/takmir/models/takmir_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -15,7 +14,6 @@ import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:nb_utils/src/extensions/int_extensions.dart';
 
 class DetailKegiatan extends StatelessWidget {
   KegiatanModel model = Get.arguments;

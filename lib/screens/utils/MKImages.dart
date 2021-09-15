@@ -17,6 +17,7 @@ const mk_ic_wa = "images/MK/whatsapp.png";
 const mk_ic_twitter = "images/MK/twitter.png";
 const mk_login = "images/MK/ic_login.png";
 const mk_profile_pic = "images/MK/profile_pic.png";
+const mk_profile_svg = "images/MK/profile_pic.svg";
 const t5_invoice = "images/theme5/t5_invoice.svg";
 const t5_paperplane = "images/theme5/t5_paperplane.svg";
 const t5_dollar_exchange = "images/theme5/t5_dollar_exchange.svg";

@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
-import 'package:mosq/models/user.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class MasjidDatabase {

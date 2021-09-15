@@ -1,28 +1,21 @@
 // import 'dart:math';
 
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/kegiatan/models/kegiatan_model.dart';
 import 'package:mosq/routes/route_name.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
-import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
+import 'package:mosq/screens/widgets/MqFormFoto.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-
-import 'package:image_picker/image_picker.dart';
 
 class FormKegiatan extends StatelessWidget {
   final KegiatanModel model = Get.arguments ?? KegiatanModel();
@@ -66,6 +59,8 @@ class _StepperBodyState extends State<StepperBody> {
   bool isEdit = Get.currentRoute == RouteName.edit_takmir;
   KegiatanModel model = Get.arguments ?? KegiatanModel();
 
+  MqFormFoto formFoto = MqFormFoto();
+
   @override
   void initState() {
     super.initState();
@@ -74,6 +69,7 @@ class _StepperBodyState extends State<StepperBody> {
       kegiatanC.deskripsiC.text = model.deskripsi ?? "";
       kegiatanC.tempatC.text = model.tempat ?? "";
       kegiatanC.selectedDate = model.tanggal ?? DateTime.now();
+      formFoto.oldPath = model.photoUrl ?? '';
     }
   }
 
@@ -251,69 +247,13 @@ class _StepperBodyState extends State<StepperBody> {
           isActive: currStep == 2,
           state: StepState.indexed,
           content: Column(children: [
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(bottom: 16),
-              // decoration: boxDecoration(
-              //     radius: 10.0, showShadow: true, color: mkColorPrimary),
-              width: Get.width,
-              height: Get.width / 1.7,
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                child: Obx(() => kegiatanC.xfoto.value.path.isNotEmpty
-                    ? Image.file(File(kegiatanC.xfoto.value.path))
-                    : !model.photoUrl.isEmptyOrNull
-                        ? CachedNetworkImage(
-                            placeholder: placeholderWidgetFn() as Widget
-                                Function(BuildContext, String)?,
-                            imageUrl: model.photoUrl!,
-                            fit: BoxFit.cover,
-                          )
-                        : SvgPicture.asset(
-                            mk_no_image,
-                          )),
-              ),
-            ),
-
-            ElevatedButton(
-              child: text("Upload Foto", textColor: mkWhite),
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    backgroundColor: appStore.scaffoldBackground,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(25.0)),
-                    ),
-                    builder: (builder) {
-                      return ImageSourceBottomSheet(
-                        isSaving: kegiatanC.isSaving,
-                        fromCamera: () async {
-                          await kegiatanC.getImage(true);
-                          Get.back();
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                        },
-                        fromGaleri: () async {
-                          await kegiatanC.getImage(false);
-                          Get.back();
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                        },
-                      );
-                    });
-              },
-            ),
-            // ),
+            16.height,
+            formFoto,
           ]))
     ];
     return WillPopScope(
         onWillPop: () async {
-          return kegiatanC.checkControllers(model)
+          return kegiatanC.checkControllers(model, formFoto.newPath)
               ? await showDialog(
                   context: context,
                   builder: (BuildContext context) => ConfirmDialog())
@@ -405,7 +345,8 @@ class _StepperBodyState extends State<StepperBody> {
                           onPressed: () async {
                             if (kegiatanC.isSaving.value == false) {
                               if (_formKey.currentState!.validate()) {
-                                await kegiatanC.saveKegiatan(model);
+                                await kegiatanC.saveKegiatan(model,
+                                    path: formFoto.newPath);
                               } else {
                                 _formKey.currentState!.validate();
                               }

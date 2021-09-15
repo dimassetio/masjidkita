@@ -34,18 +34,17 @@ class TakmirController extends GetxController {
   late TextEditingController namaC;
   late TextEditingController jabatanC;
   XFile? pickedImage;
-  var xfoto = XFile("").obs;
   var isSaving = false.obs;
 
-  checkControllers(TakmirModel model) {
+  checkControllers(TakmirModel model, String? foto) {
     if (model.id.isEmptyOrNull) {
       if (namaC.text.isNotEmpty ||
           !jabatan.isEmptyOrNull ||
           jabatanC.text.isNotEmpty ||
-          !xfoto.value.path.isEmptyOrNull) return true;
+          !foto.isEmptyOrNull) return true;
     } else {
       if (namaC.text != model.nama ||
-          !xfoto.value.path.isEmptyOrNull ||
+          !foto.isEmptyOrNull ||
           jabatan != model.jabatan && jabatanC.text != model.jabatan) {
         return true;
       }
@@ -64,21 +63,24 @@ class TakmirController extends GetxController {
       return await model.deleteWithDetails();
   }
 
-  getImage(bool isCam) async {
-    var result = await _picker.pickImage(
-        source: isCam ? ImageSource.camera : ImageSource.gallery);
-    if (result is XFile) {
-      xfoto.value = result;
-    }
-  }
+  // getImage(bool isCam) async {
+  //   var result = await _picker.pickImage(
+  //       source: isCam ? ImageSource.camera : ImageSource.gallery);
+  //   if (result is XFile) {
+  //     xfoto.value = result;
+  //   }
+  // }
 
-  saveTakmir(TakmirModel model) async {
+  saveTakmir(TakmirModel model, {String? path}) async {
     isSaving.value = true;
     model.nama = namaC.text;
     model.jabatan = jabatan == "Lainnya" ? jabatanC.text : jabatan;
     File? foto;
-    if (xfoto.value.path.isNotEmpty) {
-      foto = File(xfoto.value.path);
+    // if (xfoto.value.path.isNotEmpty) {
+    //   foto = File(xfoto.value.path);
+    // }
+    if (!path.isEmptyOrNull) {
+      foto = File(path!);
     }
     try {
       var result =
@@ -110,7 +112,6 @@ class TakmirController extends GetxController {
     namaC.clear();
     jabatanC.clear();
     jabatan = null;
-    xfoto.value = XFile("");
   }
 
   @override

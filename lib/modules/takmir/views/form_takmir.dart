@@ -5,17 +5,19 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/takmir/models/takmir_model.dart';
 import 'package:mosq/routes/route_name.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
+import 'package:mosq/screens/widgets/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
+import 'package:mosq/screens/widgets/MqFormFoto.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
@@ -64,7 +66,9 @@ class _StepperBodyState extends State<StepperBody> {
 
   bool isEdit = Get.currentRoute == RouteName.edit_takmir;
   TakmirModel model = Get.arguments ?? TakmirModel();
-
+  MqFormFoto formFoto = MqFormFoto(
+    defaultPath: mk_profile_svg,
+  );
   @override
   void initState() {
     super.initState();
@@ -82,6 +86,7 @@ class _StepperBodyState extends State<StepperBody> {
       }
     }
     takmirC.jabatan == 'Lainnya' ? takmirC.isOtherJabatan.value = true : null;
+    formFoto.oldPath = model.photoUrl ?? '';
   }
 
   @override
@@ -175,83 +180,17 @@ class _StepperBodyState extends State<StepperBody> {
       ),
       Step(
           title: Text(mk_lbl_foto_profil, style: primaryTextStyle()),
-          isActive: currStep == 3,
+          isActive: currStep == 1,
           state: StepState.indexed,
           content: Column(children: [
-            // Obx(() => Container(
-            //       decoration: BoxDecoration(
-            //           borderRadius: BorderRadius.circular(100),
-            //           image: DecorationImage(
-            //               image:
-            //                   CachedNetworkImageProvider(model.photoUrl ?? ""),
-            //               fit: BoxFit.cover)),
-            //     )),
-            Obx(
-              () => CircleAvatar(
-                backgroundImage: AssetImage(mk_profile_pic),
-                child: isEdit && !model.photoUrl.isEmptyOrNull
-                    ? Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            image: DecorationImage(
-                                image: CachedNetworkImageProvider(
-                                    model.photoUrl ?? ""),
-                                fit: BoxFit.cover)),
-                      )
-                    : null,
-                foregroundImage: FileImage(File(takmirC.xfoto.value.path)),
-                backgroundColor: mkColorPrimary,
-                radius: 100,
-              ),
-            ),
             16.height,
-            // FormField(
-            //   autovalidateMode: AutovalidateMode.onUserInteraction,
-            //   validator: (String? value) =>
-            //       (Validator(attributeName: mk_lbl_foto_profil, value: value)
-            //             ..required())
-            //           .getError(),
-            //   builder: (FormFieldState imageForm) =>
-            ElevatedButton(
-              child: text("Upload Foto", textColor: mkWhite),
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    backgroundColor: appStore.scaffoldBackground,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(25.0)),
-                    ),
-                    builder: (builder) {
-                      return ImageSourceBottomSheet(
-                        isSaving: takmirC.isSaving,
-                        fromCamera: () async {
-                          await takmirC.getImage(true);
-                          Get.back();
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                        },
-                        fromGaleri: () async {
-                          await takmirC.getImage(false);
-                          Get.back();
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                        },
-                      );
-                    });
-              },
-            ),
-            // ),
+            formFoto,
           ]))
     ];
 
     return WillPopScope(
         onWillPop: () async {
-          return takmirC.checkControllers(model)
+          return takmirC.checkControllers(model, formFoto.newPath)
               ? await showDialog(
                   context: context,
                   builder: (BuildContext context) => ConfirmDialog())
@@ -350,12 +289,12 @@ class _StepperBodyState extends State<StepperBody> {
                           onTap: () async {
                             if (takmirC.isSaving.value == false) {
                               if (_formKey.currentState!.validate()) {
-                                await takmirC.saveTakmir(model);
+                                await takmirC.saveTakmir(model,
+                                    path: formFoto.newPath);
                               } else {
                                 _formKey.currentState!.validate();
                               }
                             }
-                            // finish(context);
                           },
                           child: Center(
                             child: takmirC.isSaving.value

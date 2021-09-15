@@ -33,7 +33,7 @@ class KasController extends GetxController {
   late TextEditingController saldo;
   late TextEditingController deskripsi;
 
-  late TextEditingController namaKategori;
+  TextEditingController namaKategori = TextEditingController();
   List<String> jenisList = [
     'Pemasukan',
     'Pengeluaran',

@@ -34,17 +34,17 @@ class ProfilController extends GetxController {
   String? statusTanah;
   String? legalitas;
 
-  var xfoto = XFile("").obs;
+  // var xfoto = XFile("").obs;
 
-  getImage(bool isCam) async {
-    var result = await _picker.pickImage(
-        source: isCam ? ImageSource.camera : ImageSource.gallery);
-    if (result is XFile) {
-      xfoto.value = result;
-    }
-  }
+  // getImage(bool isCam) async {
+  //   var result = await _picker.pickImage(
+  //       source: isCam ? ImageSource.camera : ImageSource.gallery);
+  //   if (result is XFile) {
+  //     xfoto.value = result;
+  //   }
+  // }
 
-  saveMasjid(MasjidModel model) async {
+  saveMasjid(MasjidModel model, {String? path}) async {
     isSaving.value = true;
 
     model.alamat = alamat.text;
@@ -60,8 +60,8 @@ class ProfilController extends GetxController {
     model.statusTanah = statusTanah;
     model.tahun = tahun.text;
     File? foto;
-    if (xfoto.value.path.isNotEmpty) {
-      foto = File(xfoto.value.path);
+    if (!path.isEmptyOrNull) {
+      foto = File(path!);
     }
 
     try {
@@ -89,9 +89,9 @@ class ProfilController extends GetxController {
     }
   }
 
-  checkControllers(MasjidModel model) {
+  checkControllers(MasjidModel model, String? path) {
     if (model.id.isEmptyOrNull) {
-      return !xfoto.value.path.isEmptyOrNull ||
+      return !path.isEmptyOrNull ||
           nama.text.isEmpty ||
           alamat.text.isEmpty ||
           deskripsi.text.isEmpty ||
@@ -105,7 +105,7 @@ class ProfilController extends GetxController {
           legalitas.isEmptyOrNull ||
           statusTanah.isEmptyOrNull;
     } else {
-      return !xfoto.value.path.isEmptyOrNull ||
+      return !path.isEmptyOrNull ||
           nama.text != model.nama ||
           alamat.text != model.alamat ||
           deskripsi.text != model.deskripsi ||
@@ -134,7 +134,6 @@ class ProfilController extends GetxController {
     luasBangunan.clear();
     statusTanah = null;
     legalitas = null;
-    xfoto.value = XFile("");
   }
 
   @override

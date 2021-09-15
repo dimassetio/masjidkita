@@ -4,7 +4,6 @@ import 'package:mosq/integrations/controllers.dart';
 // import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
-import 'package:mosq/models/user.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -17,7 +16,7 @@ import 'package:get/get.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'card.dart';
 
-import '../../../../main.dart';
+import 'package:mosq/main.dart';
 
 class TMTabInventaris extends StatefulWidget {
   @override
@@ -74,7 +73,7 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
 
                       return Obx(() => Column(children: [
                             Dismissible(
-                              key: Key(dataInventaris.inventarisID!),
+                              key: Key(dataInventaris.id!),
                               direction: masjidC.myMasjid.value
                                   ? DismissDirection.horizontal
                                   : DismissDirection.none,

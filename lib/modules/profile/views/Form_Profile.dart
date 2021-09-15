@@ -1,8 +1,3 @@
-// import 'dart:math';
-
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,19 +6,14 @@ import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
-
-import 'package:mosq/routes/route_name.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
-import 'package:mosq/screens/utils/MKConstant.dart';
-import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
+import 'package:mosq/screens/widgets/MqFormFoto.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:image_picker/image_picker.dart';
 
 class FormMasjid extends StatefulWidget {
   @override
@@ -37,6 +27,8 @@ class _FormMasjidState extends State<FormMasjid> {
   GlobalKey<FormState> formKey = GlobalKey();
 
   MasjidModel model = Get.arguments ?? MasjidModel();
+  MqFormFoto formFoto = MqFormFoto();
+
   @override
   void initState() {
     super.initState();
@@ -57,6 +49,7 @@ class _FormMasjidState extends State<FormMasjid> {
       if (profilC.legalitasList.contains(model.legalitas)) {
         profilC.legalitas = model.legalitas;
       }
+      formFoto.oldPath = model.photoUrl ?? '';
     }
   }
 
@@ -338,57 +331,7 @@ class _FormMasjidState extends State<FormMasjid> {
           title: Text("Foto Masjid", style: primaryTextStyle()),
           isActive: currStep == 3,
           state: StepState.indexed,
-          content: Column(children: [
-            Container(
-              width: Get.width,
-              height: Get.width / 1.7,
-              child: Obx(() => profilC.xfoto.value.path != ""
-                  ? Image.file(File(profilC.xfoto.value.path))
-                  : !model.photoUrl.isEmptyOrNull
-                      ? CachedNetworkImage(
-                          placeholder: placeholderWidgetFn() as Widget Function(
-                              BuildContext, String)?,
-                          imageUrl: model.photoUrl ?? "",
-                          fit: BoxFit.fill,
-                        )
-                      : Image.asset(mk_contoh_image)),
-            ),
-            ElevatedButton(
-              child: text("Upload Foto", textColor: mkWhite),
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    backgroundColor: appStore.scaffoldBackground,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(25.0)),
-                    ),
-                    builder: (builder) {
-                      return ImageSourceBottomSheet(
-                        isSaving: profilC.isSaving,
-                        fromCamera: () async {
-                          await profilC.getImage(true);
-                          Get.back();
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                        },
-                        fromGaleri: () async {
-                          await profilC.getImage(false);
-                          Get.back();
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                        },
-                      );
-                    });
-
-                // profilC.uploadImage(image!);
-              },
-            ),
-          ]))
+          content: Column(children: [16.height, formFoto]))
     ];
 
     return SafeArea(
@@ -406,7 +349,7 @@ class _FormMasjidState extends State<FormMasjid> {
             body: WillPopScope(
               onWillPop: () async {
                 // return Future.value(true);
-                return profilC.checkControllers(model)
+                return profilC.checkControllers(model, formFoto.newPath)
                     ? await showDialog(
                         context: context,
                         builder: (BuildContext context) => ConfirmDialog())
@@ -501,7 +444,8 @@ class _FormMasjidState extends State<FormMasjid> {
                                 onTap: () async {
                                   if (profilC.isSaving.value == false) {
                                     if (formKey.currentState!.validate()) {
-                                      await profilC.saveMasjid(model);
+                                      await profilC.saveMasjid(model,
+                                          path: formFoto.newPath);
                                       Get.back();
                                     } else {
                                       formKey.currentState!.validate();

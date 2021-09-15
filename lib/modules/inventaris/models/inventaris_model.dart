@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mosq/modules/inventaris/databases/inventaris_database.dart';
-import 'package:mosq/modules/masjid/databases/masjid_database.dart';
 
 class InventarisModel {
-  String? inventarisID;
+  String? id;
   String? nama;
-  String? foto;
-  String? url;
+  String? photoUrl;
   int? jumlah;
   String? kondisi;
   int? harga;
@@ -18,10 +16,9 @@ class InventarisModel {
   InventarisDatabase? dao;
 
   InventarisModel({
-    this.inventarisID,
+    this.id,
     this.nama,
-    this.foto,
-    this.url,
+    this.photoUrl,
     this.jumlah,
     this.kondisi,
     this.harga,
@@ -36,14 +33,14 @@ class InventarisModel {
       'harga': 'Harga',
       'jumlah': 'Jumlah',
       'foto': 'Foto',
-      'url': 'Url',
+      'photoUrl': 'photoUrl',
       'hargaTotal': 'HargaTotal',
     };
     return lang[attribute];
   }
 
   save() async {
-    if (this.inventarisID == null) {
+    if (this.id == null) {
       return await this.dao!.store(this);
     } else {
       return await this.dao!.update(this);
@@ -51,7 +48,7 @@ class InventarisModel {
   }
 
   saveWithDetails(File fotos) async {
-    if (this.inventarisID == null) {
+    if (this.id == null) {
       await this.dao!.store(this);
     } else {
       await this.dao!.update(this);
@@ -75,10 +72,9 @@ class InventarisModel {
   InventarisModel.fromDocumentSnapshot(
     DocumentSnapshot documentSnapshot,
   ) {
-    inventarisID = documentSnapshot.id;
+    id = documentSnapshot.id;
     nama = documentSnapshot.data()?["nama"];
-    foto = documentSnapshot.data()?["foto"];
-    url = documentSnapshot.data()?["url"];
+    photoUrl = documentSnapshot.data()?["photoUrl"];
     jumlah = documentSnapshot.data()?["jumlah"];
     kondisi = documentSnapshot.data()?["kondisi"];
     harga = documentSnapshot.data()?["harga"];
@@ -88,10 +84,9 @@ class InventarisModel {
   InventarisModel fromSnapshot(
       DocumentSnapshot snapshot, InventarisDatabase dao) {
     return InventarisModel(
-      inventarisID: snapshot.id,
+      id: snapshot.id,
       nama: snapshot.data()?["nama"],
-      foto: snapshot.data()?["foto"],
-      url: snapshot.data()?["url"],
+      photoUrl: snapshot.data()?["photoUrl"],
       jumlah: snapshot.data()?["jumlah"],
       kondisi: snapshot.data()?["kondisi"],
       harga: snapshot.data()?["harga"],
@@ -102,10 +97,9 @@ class InventarisModel {
 
   Map<String, dynamic> toSnapshot() {
     return {
-      'inventarisID': this.inventarisID,
+      'id': this.id,
       'nama': this.nama,
-      'foto': this.foto,
-      'url': this.url,
+      'photoUrl': this.photoUrl,
       'jumlah': this.jumlah,
       'kondisi': this.kondisi,
       'harga': this.harga,
@@ -115,20 +109,20 @@ class InventarisModel {
 }
 
 // class ListInventarisModel {
-//   String? inventarisID;
+//   String? id;
 //   String? nama;
-//   String? foto;
-//   String? url;
+//   
+//   String? photoUrl;
 //   int? jumlah;
 //   String? kondisi;
 //   int? harga;
 //   int? hargaTotal;
 
 //   ListInventarisModel({
-//     // @required this.inventarisID,
+//     // @required this.id,
 //     this.nama,
 //     this.foto,
-//     this.url,
+//     this.photoUrl,
 //     this.jumlah,
 //     this.kondisi,
 //     this.harga,
@@ -138,10 +132,10 @@ class InventarisModel {
 //   ListInventarisModel.fromDocumentSnapshot(
 //     DocumentSnapshot documentSnapshot,
 //   ) {
-//     inventarisID = documentSnapshot.id;
+//     id = documentSnapshot.id;
 //     nama = documentSnapshot["nama"];
 //     foto = documentSnapshot["foto"];
-//     url = documentSnapshot["url"];
+//     photoUrl = documentSnapshot["photoUrl"];
 //     jumlah = documentSnapshot["jumlah"];
 //     kondisi = documentSnapshot["kondisi"];
 //     harga = documentSnapshot["harga"];

@@ -8,8 +8,6 @@ import 'package:get/get.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/routes/route_name.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class MasjidController extends GetxController {

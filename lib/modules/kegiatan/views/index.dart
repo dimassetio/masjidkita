@@ -6,9 +6,8 @@ import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/modules/kegiatan/views/card.dart';
-import 'package:nb_utils/nb_utils.dart';
 
-import '../../../../main.dart';
+import 'package:mosq/main.dart';
 
 class TabKegiatan extends StatelessWidget {
   const TabKegiatan(this.model);
