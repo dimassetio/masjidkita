@@ -36,7 +36,6 @@ class AppPage {
     GetPage(name: RouteName.detail_inventaris, page: () => InventarisDetail()),
     GetPage(name: RouteName.edit_inventaris, page: () => FormInventaris()),
     GetPage(name: RouteName.new_kas, page: () => FormKas()),
-    GetPage(name: RouteName.new_kategori_transaksi, page: () => FormKas()),
     GetPage(name: RouteName.edit_kas, page: () => FormKas()),
     GetPage(name: RouteName.new_transaksi, page: () => FormTransaksi()),
     GetPage(name: RouteName.edit_transaksi, page: () => FormTransaksi()),

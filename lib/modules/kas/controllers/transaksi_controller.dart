@@ -29,8 +29,31 @@ class TransaksiController extends GetxController {
   late TextEditingController url;
   late TextEditingController jumlah;
   late TextEditingController keterangan;
-  late TextEditingController kategori;
+  // late TextEditingController kategori;
   late TextEditingController tipeTransaksi;
+
+  List<String> listkategori = [
+    'Operasional Masjid',
+    'Iuran Keamanan',
+    'Renovasi',
+    'Mutasi',
+  ];
+
+  String? kategori;
+
+  List<String> listBukuAsal = [
+    'Kas Besar',
+    'Kas Kecil',
+  ];
+
+  String? bukuAsal;
+
+  List<String> listBukuTujuan = [
+    'Kas Besar',
+    'Kas Kecil',
+  ];
+
+  String? bukuTujuan;
 
   var _date = DateTime.now().obs;
   DateTime get selectedDate => _date.value;
@@ -84,7 +107,7 @@ class TransaksiController extends GetxController {
     model.jumlah = jumlahInt;
     model.tanggal = selectedDate;
     model.keterangan = keterangan.text;
-    model.kategori = kategori.text;
+    model.kategori = kategori;
     model.tipeTransaksi = tipeTransaksi.text;
 
     File? foto;
@@ -117,7 +140,7 @@ class TransaksiController extends GetxController {
           url.text.isNotEmpty ||
           jumlah.text.isNotEmpty ||
           keterangan.text.isNotEmpty ||
-          kategori.text.isNotEmpty ||
+          kategori.isEmptyOrNull ||
           tipeTransaksi.text.isNotEmpty ||
           // selectedDate != DateTime.now() ||
           !foto.isEmptyOrNull) return true;
@@ -126,7 +149,7 @@ class TransaksiController extends GetxController {
           url.text != model.url ||
           selectedDate != model.tanggal ||
           keterangan.text != model.keterangan ||
-          kategori.text != model.kategori ||
+          kategori != model.kategori ||
           tipeTransaksi.text != model.tipeTransaksi ||
           !foto.isEmptyOrNull) return true;
     }
@@ -139,7 +162,7 @@ class TransaksiController extends GetxController {
     jumlah.clear();
     selectedDate = DateTime.now();
     keterangan.clear();
-    kategori.clear();
+    kategori = null;
     tipeTransaksi.clear();
   }
 }

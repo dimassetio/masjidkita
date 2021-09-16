@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/helpers/formatter.dart';
@@ -11,7 +10,6 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/kas/models/transaksi_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
-import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:mosq/screens/widgets/MqFormFoto.dart';
@@ -83,13 +81,13 @@ class _StepperBodyState extends State<StepperBody> {
     transaksiC.url = TextEditingController();
     transaksiC.jumlah = TextEditingController();
     transaksiC.keterangan = TextEditingController();
-    transaksiC.kategori = TextEditingController();
+    // transaksiC.kategori = TextEditingController();
     transaksiC.tipeTransaksi = TextEditingController();
 
     if (!model.id.isEmptyOrNull) {
       transaksiC.nama.text = model.nama ?? "";
       transaksiC.keterangan.text = model.keterangan ?? "";
-      transaksiC.kategori.text = model.kategori ?? "";
+      transaksiC.kategori = model.kategori ?? "";
       transaksiC.jumlah.text = currencyFormatter(model.jumlah);
       transaksiC.selectedDate = model.tanggal ?? DateTime.now();
       if (transaksiC.jumlah.text.isEmptyOrNull) {
@@ -127,6 +125,45 @@ class _StepperBodyState extends State<StepperBody> {
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
+            DropdownButtonFormField<String>(
+              validator: (value) => (Validator(
+                      attributeName: mk_lbl_jenis_Kategori_transaksi,
+                      value: value)
+                    ..required())
+                  .getError(),
+              style: primaryTextStyle(color: appStore.textPrimaryColor),
+              alignment: Alignment.centerLeft,
+              value: transaksiC.kategori,
+              decoration: InputDecoration(
+                labelText: mk_lbl_jenis_Kategori_transaksi,
+                hintStyle: secondaryTextStyle(),
+                labelStyle: secondaryTextStyle(),
+                hintText: mk_lbl_enter + mk_lbl_jenis_Kategori_transaksi,
+                icon: Icon(Icons.plagiarism,
+                    color: transaksiC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
+              ),
+              dropdownColor: appStore.appBarColor,
+              onChanged: transaksiC.isSaving.value
+                  ? null
+                  : (String? newValue) {
+                      setState(() {
+                        transaksiC.kategori = newValue ?? "";
+                      });
+                    },
+              items: transaksiC.listkategori
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Tooltip(
+                      message: value,
+                      child: Container(
+                          margin: EdgeInsets.only(left: 4, right: 4),
+                          child: Text(value, style: primaryTextStyle()))),
+                );
+              }).toList(),
+            ),
             EditText(
               isEnabled: !transaksiC.isSaving.value,
               mController: transaksiC.keterangan,
@@ -148,8 +185,141 @@ class _StepperBodyState extends State<StepperBody> {
         ),
       ),
       Step(
+          title: Text(mk_lbl_buku_kas, style: primaryTextStyle()),
+          isActive: currStep == 1,
+          state: StepState.indexed,
+          content: isMutasi
+              ? Column(
+                  children: [
+                    DropdownButtonFormField<String>(
+                      validator: (value) => (Validator(
+                              attributeName: mk_lbl_buku_kas + mk_lbl_from,
+                              value: value)
+                            ..required())
+                          .getError(),
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                      alignment: Alignment.centerLeft,
+                      value: transaksiC.bukuAsal,
+                      decoration: InputDecoration(
+                        labelText: mk_lbl_buku_kas + mk_lbl_from,
+                        hintStyle: secondaryTextStyle(),
+                        labelStyle: secondaryTextStyle(),
+                        hintText: mk_lbl_enter + mk_lbl_buku_kas + mk_lbl_from,
+                        icon: Icon(Icons.pageview,
+                            color: transaksiC.isSaving.value
+                                ? mkColorPrimaryLight
+                                : mkColorPrimaryDark),
+                      ),
+                      dropdownColor: appStore.appBarColor,
+                      onChanged: transaksiC.isSaving.value
+                          ? null
+                          : (String? newValue) {
+                              setState(() {
+                                transaksiC.bukuAsal = newValue ?? "";
+                              });
+                            },
+                      items: transaksiC.listBukuAsal
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Tooltip(
+                              message: value,
+                              child: Container(
+                                  margin: EdgeInsets.only(left: 4, right: 4),
+                                  child:
+                                      Text(value, style: primaryTextStyle()))),
+                        );
+                      }).toList(),
+                    ),
+                    DropdownButtonFormField<String>(
+                      validator: (value) => (Validator(
+                              attributeName: mk_lbl_buku_kas + mk_lbl_to,
+                              value: value)
+                            ..required())
+                          .getError(),
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                      alignment: Alignment.centerLeft,
+                      value: transaksiC.bukuTujuan,
+                      decoration: InputDecoration(
+                        labelText: mk_lbl_buku_kas + mk_lbl_to,
+                        hintStyle: secondaryTextStyle(),
+                        labelStyle: secondaryTextStyle(),
+                        hintText: mk_lbl_enter + mk_lbl_buku_kas + mk_lbl_to,
+                        icon: Icon(Icons.pageview,
+                            color: transaksiC.isSaving.value
+                                ? mkColorPrimaryLight
+                                : mkColorPrimaryDark),
+                      ),
+                      dropdownColor: appStore.appBarColor,
+                      onChanged: transaksiC.isSaving.value
+                          ? null
+                          : (String? newValue) {
+                              setState(() {
+                                transaksiC.bukuTujuan = newValue ?? "";
+                              });
+                            },
+                      items: transaksiC.listBukuTujuan
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Tooltip(
+                              message: value,
+                              child: Container(
+                                  margin: EdgeInsets.only(left: 4, right: 4),
+                                  child:
+                                      Text(value, style: primaryTextStyle()))),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    DropdownButtonFormField<String>(
+                      validator: (value) => (Validator(
+                              attributeName: mk_lbl_buku_kas + mk_lbl_from,
+                              value: value)
+                            ..required())
+                          .getError(),
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                      alignment: Alignment.centerLeft,
+                      value: transaksiC.bukuAsal,
+                      decoration: InputDecoration(
+                        labelText: mk_lbl_buku_kas + mk_lbl_from,
+                        hintStyle: secondaryTextStyle(),
+                        labelStyle: secondaryTextStyle(),
+                        hintText: mk_lbl_enter + mk_lbl_buku_kas + mk_lbl_from,
+                        icon: Icon(Icons.pageview,
+                            color: transaksiC.isSaving.value
+                                ? mkColorPrimaryLight
+                                : mkColorPrimaryDark),
+                      ),
+                      dropdownColor: appStore.appBarColor,
+                      onChanged: transaksiC.isSaving.value
+                          ? null
+                          : (String? newValue) {
+                              setState(() {
+                                transaksiC.bukuAsal = newValue ?? "";
+                              });
+                            },
+                      items: transaksiC.listBukuAsal
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Tooltip(
+                              message: value,
+                              child: Container(
+                                  margin: EdgeInsets.only(left: 4, right: 4),
+                                  child:
+                                      Text(value, style: primaryTextStyle()))),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                )),
+      Step(
         title: Text(mk_lbl_jumlah, style: primaryTextStyle()),
-        isActive: currStep == 1,
+        isActive: currStep == 2,
         state: StepState.indexed,
         content: Column(
           children: [
@@ -184,7 +354,7 @@ class _StepperBodyState extends State<StepperBody> {
               formFoto,
             ],
           ),
-          isActive: currStep == 2,
+          isActive: currStep == 3,
           state: StepState.indexed),
     ];
 
