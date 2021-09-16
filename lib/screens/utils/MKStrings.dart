@@ -30,6 +30,8 @@ const mk_lbl_nama = "Nama";
 const mk_lbl_nama_masjid = "Nama Masjid";
 const mk_hint_nama_masjid = "Ex: Masjid Istiqlal";
 const mk_lbl_enter = "Masukkan ";
+const mk_lbl_from = " Asal";
+const mk_lbl_to = " Tujuan";
 const mk_lbl_alamat = "Alamat";
 const mk_hint_alamat = "Ex: Jl. Panglima Sudirman No. 56";
 const mk_lbl_deskripsi = "Deskripsi";
@@ -118,6 +120,7 @@ const mk_hint_saldo_awal_kas = "Ex: Rp. 3.000.000,-";
 
 const mk_lbl_transaksi = "Transaksi";
 const mk_lbl_nama_transaksi = "Nama Transaksi";
+const mk_lbl_buku_kas = "Buku Kas";
 const mk_lbl_keterangan = "Keterangan";
 const mk_lbl_jumlah = "Jumlah";
 const mk_hint_jumlah = "Ex: Rp. 700.000,-";

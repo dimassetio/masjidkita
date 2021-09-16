@@ -186,7 +186,7 @@ class KasSlider extends StatelessWidget {
                                 if (value == 'edit') {
                                   Get.toNamed(RouteName.edit_kas,
                                       arguments: dataKas);
-                                } else {
+                                } else if (value == 'delete') {
                                   var res = await showDialog(
                                       context: context,
                                       builder: (BuildContext context) =>
@@ -199,11 +199,25 @@ class KasSlider extends StatelessWidget {
                                   }
                                   // Get.toNamed(RouteName.new_kategori_transaksi,
                                   //     arguments: KategoriModel(dao: model.kategoriDao));
+                                } else if (value == 'kategori') {
+                                  Get.toNamed(RouteName.new_kategori);
                                 }
                               },
                               offset: Offset(0, 50),
                               itemBuilder: (context) {
                                 List<PopupMenuEntry<Object>> list = [];
+                                list.add(
+                                  PopupMenuItem(
+                                    child: ListTile(
+                                      leading: Icon(
+                                        Icons.tag,
+                                        color: Colors.black,
+                                      ),
+                                      title: Text('Tambah Kategori'),
+                                    ),
+                                    value: 'kategori',
+                                  ),
+                                );
                                 list.add(
                                   PopupMenuItem(
                                     child: ListTile(
