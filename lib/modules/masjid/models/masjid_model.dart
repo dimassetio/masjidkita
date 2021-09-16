@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mosq/modules/inventaris/databases/inventaris_database.dart';
 import 'package:mosq/modules/kas/databases/kas_database.dart';
 import 'package:mosq/integrations/firestore.dart';
+import 'package:mosq/modules/kas/databases/kategori_database.dart';
 import 'package:mosq/modules/kas/databases/transaksi_database.dart';
 import 'package:mosq/modules/kegiatan/databases/kegiatan_database.dart';
 import 'package:mosq/modules/masjid/databases/masjid_database.dart';
@@ -26,11 +27,12 @@ class MasjidModel {
   String? statusTanah;
   String? legalitas;
   MasjidDatabase dao = new MasjidDatabase();
-  InventarisDatabase? inventarisDao;
   TakmirDatabase? takmirDao;
+  InventarisDatabase? inventarisDao;
   KasDatabase? kasDao;
-  KegiatanDatabase? kegiatanDao;
   TransaksiDatabase? transaksiDao;
+  KategoriDatabase? kategoriDao;
+  KegiatanDatabase? kegiatanDao;
 
   MasjidModel({
     this.id,
@@ -63,6 +65,9 @@ class MasjidModel {
     transaksiDao = TransaksiDatabase(
         db: dao.childReference(this, transaksiCollection),
         storage: dao.childStorage(this, transaksiCollection));
+    kategoriDao = KategoriDatabase(
+        db: dao.childReference(this, kategoriCollection),
+        storage: dao.childStorage(this, kategoriCollection));
   }
 
   MasjidModel fromSnapshot(DocumentSnapshot snapshot) {

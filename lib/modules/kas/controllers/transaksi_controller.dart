@@ -16,7 +16,6 @@ class TransaksiController extends GetxController {
 
   final ImagePicker _picker = ImagePicker();
   XFile? pickedImage;
-  var xfoto = XFile("").obs;
   var isSaving = false.obs;
 
   RxList<TransaksiModel> transaksiList = RxList<TransaksiModel>();
@@ -74,15 +73,7 @@ class TransaksiController extends GetxController {
     return await model.delete();
   }
 
-  getImage(bool isCam) async {
-    var result = await _picker.pickImage(
-        source: isCam ? ImageSource.camera : ImageSource.gallery);
-    if (result is XFile) {
-      xfoto.value = result;
-    }
-  }
-
-  saveTransaksi(TransaksiModel model) async {
+  saveTransaksi(TransaksiModel model, {String? path}) async {
     isSaving.value = true;
 
     int jumlahInt =
@@ -95,6 +86,12 @@ class TransaksiController extends GetxController {
     model.keterangan = keterangan.text;
     model.kategori = kategori.text;
     model.tipeTransaksi = tipeTransaksi.text;
+
+    File? foto;
+    if (!path.isEmptyOrNull) {
+      foto = File(path!);
+    }
+
     try {
       await model.save();
     } on SocketException catch (_) {
@@ -114,7 +111,7 @@ class TransaksiController extends GetxController {
     Get.back();
   }
 
-  checkControllers(TransaksiModel model) {
+  checkControllers(TransaksiModel model, String? foto) {
     if (model.id.isEmptyOrNull) {
       if (nama.text.isNotEmpty ||
           url.text.isNotEmpty ||
@@ -123,7 +120,7 @@ class TransaksiController extends GetxController {
           kategori.text.isNotEmpty ||
           tipeTransaksi.text.isNotEmpty ||
           // selectedDate != DateTime.now() ||
-          !xfoto.value.path.isEmptyOrNull) return true;
+          !foto.isEmptyOrNull) return true;
     } else {
       if (nama.text != model.nama ||
           url.text != model.url ||
@@ -131,7 +128,7 @@ class TransaksiController extends GetxController {
           keterangan.text != model.keterangan ||
           kategori.text != model.kategori ||
           tipeTransaksi.text != model.tipeTransaksi ||
-          !xfoto.value.path.isEmptyOrNull) return true;
+          !foto.isEmptyOrNull) return true;
     }
     return false;
   }

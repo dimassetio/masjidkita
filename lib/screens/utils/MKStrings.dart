@@ -123,6 +123,11 @@ const mk_lbl_jumlah = "Jumlah";
 const mk_hint_jumlah = "Ex: Rp. 700.000,-";
 const mk_lbl_bukti_transaks = "Foto Bukti Transaksi";
 
+const mk_add_kategori = "Tambah Kategori transaksi";
+const mk_edit_kategori = "Edit Kategori";
+const mk_lbl_kategori = "Kategori";
+const mk_lbl_nama_kategori = "Nama Kategori";
+
 const mk_lbl_delete = "Hapus";
 const mk_lbl_edit = "Edit";
 

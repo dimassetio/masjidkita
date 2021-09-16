@@ -19,11 +19,6 @@ class KasController extends GetxController {
   RxList<KasModel> kasList = RxList<KasModel>();
   List<KasModel> get kases => kasList.value;
 
-  RxList<KategoriModel> kategoriList = RxList<KategoriModel>();
-  List<KategoriModel> get kategories => kategoriList.value;
-  Rx<KategoriModel> _kategoriModel = KategoriModel().obs;
-  KategoriModel get kategori => _kategoriModel.value;
-
   Rx<KasModel> _kasModel = KasModel().obs;
 
   KasModel get kas => _kasModel.value;
@@ -32,14 +27,6 @@ class KasController extends GetxController {
   late TextEditingController saldoAwal;
   late TextEditingController saldo;
   late TextEditingController deskripsi;
-
-  TextEditingController namaKategori = TextEditingController();
-  List<String> jenisList = [
-    'Pemasukan',
-    'Pengeluaran',
-    'Mutasi',
-  ];
-  String? jenis;
 
   @override
   void onInit() {
@@ -100,48 +87,16 @@ class KasController extends GetxController {
     Get.back();
   }
 
-  saveKategori(KategoriModel model) async {
-    isSaving.value = true;
-    model.nama = namaKategori.text;
-    model.jenis = jenis;
-    try {
-      await model.save();
-    } on SocketException catch (_) {
-      showDialog(
-          context: Get.context!,
-          builder: (context) => AlertDialog(
-                title: Text("Connection Error !"),
-                content: Text("Please connect to the internet."),
-              ));
-    } catch (e) {
-      print(e);
-      toast("Error Saving Data");
-    } finally {
-      toast("Data Berhasil Diperbarui");
-    }
-    isSaving.value = false;
-    Get.back();
-  }
-
   checkControllers(var model) {
-    if (model is KasModel) {
-      if (model.id.isEmptyOrNull) {
-        if (nama.text.isNotEmpty ||
-            deskripsi.text.isNotEmpty ||
-            saldoAwal.text.isNotEmpty ||
-            saldo.text.isNotEmpty) return true;
-      } else {
-        if (nama.text != model.nama || deskripsi.text != model.deskripsi)
-          return true;
-      }
-    } else if (model is KategoriModel) {
-      if (model.id.isEmptyOrNull) {
-        if (namaKategori.text.isNotEmpty || !jenis.isEmptyOrNull) return true;
-      } else {
-        if (nama.text != model.nama || jenis != model.jenis) return true;
-      }
+    if (model.id.isEmptyOrNull) {
+      if (nama.text.isNotEmpty ||
+          deskripsi.text.isNotEmpty ||
+          saldoAwal.text.isNotEmpty ||
+          saldo.text.isNotEmpty) return true;
+    } else {
+      if (nama.text != model.nama || deskripsi.text != model.deskripsi)
+        return true;
     }
-    return false;
   }
 
   clear() {
@@ -149,7 +104,5 @@ class KasController extends GetxController {
     saldoAwal.clear();
     saldo.clear();
     deskripsi.clear();
-    namaKategori.clear();
-    jenis = null;
   }
 }

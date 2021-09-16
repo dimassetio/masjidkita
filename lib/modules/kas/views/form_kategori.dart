@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/modules/kas/models/transaksi_model.dart';
+import 'package:mosq/modules/kas/models/kategori_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
@@ -19,9 +19,9 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 
-class FormTransaksi extends StatelessWidget {
-  final TransaksiModel model = Get.arguments ?? TransaksiModel();
-  static const tag = '/FormTransaksi';
+class FormKategori extends StatelessWidget {
+  final KategoriModel model = Get.arguments ?? KategoriModel();
+  static const tag = '/FormKategori';
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +39,9 @@ class FormTransaksi extends StatelessWidget {
             ),
             title: appBarTitleWidget(
                 context,
-                Get.currentRoute == RouteName.edit_transaksi
-                    ? mk_edit_transaksi
-                    : mk_add_transaksi),
+                Get.currentRoute == RouteName.edit_kategori
+                    ? mk_edit_kategori
+                    : mk_add_kategori),
             // actions: actions,
           ),
           body: StepperBody()),
@@ -61,12 +61,14 @@ class _StepperBodyState extends State<StepperBody> {
   int get currStep => currentStep.value;
   set currStep(int value) => this.currentStep.value = value;
 
-  bool isEdit = Get.currentRoute == RouteName.edit_transaksi;
+  bool isEdit = Get.currentRoute == RouteName.edit_kategori;
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
-  TransaksiModel model = Get.arguments ?? TransaksiModel();
-  MqFormFoto formFoto = MqFormFoto();
+  KategoriModel model = Get.arguments ?? KategoriModel();
+  MqFormFoto formFoto = MqFormFoto(
+    defaultPath: mk_no_image,
+  );
   // KategoriModel modelKategori = Get.arguments ?? KategoriModel();
 
   // List<String> jenisList = [
@@ -74,118 +76,91 @@ class _StepperBodyState extends State<StepperBody> {
   //   'Pemasukan',
   //   'Mutasi',
   // ];
-  // String? jenisTransaksi;
+  // String? jenisKategori;
 
   @override
   void initState() {
     super.initState();
-    transaksiC.nama = TextEditingController();
-    transaksiC.url = TextEditingController();
-    transaksiC.jumlah = TextEditingController();
-    transaksiC.keterangan = TextEditingController();
-    transaksiC.kategori = TextEditingController();
-    transaksiC.tipeTransaksi = TextEditingController();
+    kategoriC.nama = TextEditingController();
+    // kategoriC.url = TextEditingController();
 
     if (!model.id.isEmptyOrNull) {
-      transaksiC.nama.text = model.nama ?? "";
-      transaksiC.keterangan.text = model.keterangan ?? "";
-      transaksiC.kategori.text = model.kategori ?? "";
-      transaksiC.jumlah.text = currencyFormatter(model.jumlah);
-      transaksiC.selectedDate = model.tanggal ?? DateTime.now();
-      if (transaksiC.jumlah.text.isEmptyOrNull) {
-        transaksiC.jumlah.text = transaksiC.jumlah.text;
-      }
+      kategoriC.nama.text = model.nama ?? "";
+      kategoriC.jenis = model.jenis ?? "";
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    transaksiC.clear();
+    kategoriC.clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Step> stepsTransaksi = [
+    List<Step> steps = [
       Step(
-        title: Text(mk_lbl_transaksi, style: primaryTextStyle()),
+        title: Text(mk_lbl_kategori, style: primaryTextStyle()),
         isActive: currStep == 0,
         state: StepState.indexed,
         content: Column(
           children: [
             EditText(
-              isEnabled: !transaksiC.isSaving.value,
-              mController: transaksiC.nama,
+              isEnabled: !kategoriC.isSaving.value,
+              mController: kategoriC.nama,
               validator: (value) =>
-                  (Validator(attributeName: mk_lbl_transaksi, value: value)
+                  (Validator(attributeName: mk_lbl_kategori, value: value)
                         ..required())
                       .getError(),
               // inputFormatters: [CurrrencyInputFormatter()],
-              label: mk_lbl_nama,
+              label: mk_lbl_nama_kategori,
               icon: Icon(Icons.nature,
-                  color: transaksiC.isSaving.value
+                  color: kategoriC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
-            EditText(
-              isEnabled: !transaksiC.isSaving.value,
-              mController: transaksiC.keterangan,
-              textInputAction: TextInputAction.newline,
-              validator: (value) =>
-                  (Validator(attributeName: mk_lbl_keterangan, value: value)
-                        ..required())
-                      .getError(),
-              label: mk_lbl_keterangan,
-              hint: mk_lbl_keterangan,
-              icon: Icon(Icons.departure_board,
-                  color: transaksiC.isSaving.value
-                      ? mkColorPrimaryLight
-                      : mkColorPrimaryDark),
-              maxLine: 3,
-              keyboardType: TextInputType.multiline,
-            ),
-          ],
-        ),
-      ),
-      Step(
-        title: Text(mk_lbl_jumlah, style: primaryTextStyle()),
-        isActive: currStep == 1,
-        state: StepState.indexed,
-        content: Column(
-          children: [
-            EditText(
-              textAlign: TextAlign.end,
-              mController: transaksiC.jumlah,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                CurrrencyInputFormatter()
-              ],
-              keyboardType: TextInputType.number,
-              hint: mk_hint_jumlah,
-              label: mk_hint_jumlah,
-              validator: (value) =>
-                  (Validator(attributeName: mk_lbl_jumlah, value: value)
-                        ..required())
-                      .getError(),
-              isEnabled: !transaksiC.isSaving.value,
-              icon: Icon(Icons.play_for_work,
-                  color: transaksiC.isSaving.value
-                      ? mkColorPrimaryLight
-                      : mkColorPrimaryDark),
+            DropdownButtonFormField<String>(
+              validator: (value) => (Validator(
+                      attributeName: mk_lbl_jenis_Kategori_transaksi,
+                      value: value)
+                    ..required())
+                  .getError(),
+              style: primaryTextStyle(color: appStore.textPrimaryColor),
+              alignment: Alignment.centerLeft,
+              value: kategoriC.jenis,
+              decoration: InputDecoration(
+                labelText: mk_lbl_jenis_Kategori_transaksi,
+                hintStyle: secondaryTextStyle(),
+                labelStyle: secondaryTextStyle(),
+                hintText: mk_lbl_enter + mk_lbl_jenis_Kategori_transaksi,
+                icon: Icon(Icons.plagiarism,
+                    color: kategoriC.isSaving.value
+                        ? mkColorPrimaryLight
+                        : mkColorPrimaryDark),
+              ),
+              dropdownColor: appStore.appBarColor,
+              onChanged: kategoriC.isSaving.value
+                  ? null
+                  : (String? newValue) {
+                      setState(() {
+                        kategoriC.jenis = newValue ?? "";
+                      });
+                    },
+              items: kategoriC.jenisList
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Tooltip(
+                      message: value,
+                      child: Container(
+                          margin: EdgeInsets.only(left: 4, right: 4),
+                          child: Text(value, style: primaryTextStyle()))),
+                );
+              }).toList(),
             ),
           ],
         ),
       ),
-      Step(
-          title: Text("Foto"),
-          content: Column(
-            children: <Widget>[
-              16.height,
-              formFoto,
-            ],
-          ),
-          isActive: currStep == 2,
-          state: StepState.indexed),
     ];
 
     return Container(
@@ -207,7 +182,7 @@ class _StepperBodyState extends State<StepperBody> {
                 Expanded(
                   child: Obx(
                     () => Stepper(
-                      steps: stepsTransaksi,
+                      steps: steps,
                       type: StepperType.vertical,
                       currentStep: currStep,
                       physics: ScrollPhysics(),
@@ -227,7 +202,7 @@ class _StepperBodyState extends State<StepperBody> {
                                         style: secondaryTextStyle()),
                                   )
                                 : 10.width,
-                            currStep < stepsTransaksi.length - 1
+                            currStep < steps.length - 1
                                 ? TextButton(
                                     onPressed: onStepContinue,
                                     child: Text(mk_berikut,
@@ -239,7 +214,7 @@ class _StepperBodyState extends State<StepperBody> {
                       },
                       onStepContinue: () {
                         setState(() {
-                          if (currStep < stepsTransaksi.length - 1) {
+                          if (currStep < steps.length - 1) {
                             currStep = currStep + 1;
                           } else {
                             finish(context);
@@ -271,9 +246,9 @@ class _StepperBodyState extends State<StepperBody> {
                     margin: EdgeInsets.all(10),
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (transaksiC.isSaving.value == false) {
+                        if (kategoriC.isSaving.value == false) {
                           if (_formKey.currentState!.validate()) {
-                            await transaksiC.saveTransaksi(model,
+                            await kategoriC.saveKategori(model,
                                 path: formFoto.newPath);
                           } else {
                             _formKey.currentState!.validate();
@@ -281,7 +256,7 @@ class _StepperBodyState extends State<StepperBody> {
                         }
                       },
                       child: Center(
-                        child: transaksiC.isSaving.value
+                        child: kategoriC.isSaving.value
                             ? CircularProgressIndicator()
                             : Text(mk_submit,
                                 style: boldTextStyle(color: white, size: 18)),

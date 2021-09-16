@@ -1,16 +1,16 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/integrations/firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:mosq/modules/kas/models/kas_model.dart';
+import 'package:mosq/modules/kas/models/kategori_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 
 class KategoriDatabase {
-  CollectionReference? db;
+  final CollectionReference? db;
+  final Reference storage;
   KategoriDatabase({
     this.db,
+    required this.storage,
   });
 
   Stream<KategoriModel> streamDetailKategori(KategoriModel model) {
@@ -20,13 +20,13 @@ class KategoriDatabase {
         .map((event) => KategoriModel().fromSnapshot(event, model.dao!));
   }
 
-  Stream<List<KategoriModel>> kategoriStream(KasModel model) async* {
+  Stream<List<KategoriModel>> kategoriStream(MasjidModel model) async* {
     yield* db!.snapshots().map((QuerySnapshot query) {
-      List<KategoriModel> list = [];
+      List<KategoriModel> retVal = [];
       query.docs.forEach((element) {
-        list.add(KategoriModel().fromSnapshot(element, model.kategoriDao));
+        retVal.add(KategoriModel().fromSnapshot(element, model.kategoriDao!));
       });
-      return list;
+      return retVal;
     });
   }
 
@@ -43,16 +43,4 @@ class KategoriDatabase {
   Future delete(KategoriModel model) async {
     return await db!.doc(model.id).delete();
   }
-
-  // upload(KategoriModel model, File foto) async {
-  //   var path = storage.child(model.id!);
-  //   UploadTask task = path.putFile(foto);
-  //   task.snapshotEvents.listen((event) async {
-  //     if (event.state == TaskState.success) {
-  //       model.photoUrl = await path.getDownloadURL();
-  //       update(model);
-  //     }
-  //   });
-  //   return task;
-  // }
 }
