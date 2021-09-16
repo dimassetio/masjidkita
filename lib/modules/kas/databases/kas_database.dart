@@ -20,7 +20,7 @@ class KasDatabase {
     return db.doc(model.id).collection(collectionName);
   }
 
-  Stream<KasModel> streamDetailTakmir(KasModel model) {
+  Stream<KasModel> streamDetailKas(KasModel model) {
     return db
         .doc(model.id)
         .snapshots()

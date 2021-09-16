@@ -70,6 +70,8 @@ const mk_add_takmir = "Tambah Takmir";
 const mk_edit_takmir = "Edit Takmir";
 
 const mk_add_kas = "Tambah Kas";
+const mk_add_transaksi = "Tambah Transaksi";
+const mk_edit_transaksi = "Edit Transaksi";
 const mk_edit_kas = "Edit Kas";
 
 const mk_masjid_fav = "Masjid Favorit";
@@ -113,6 +115,13 @@ const mk_lbl_nama_kas = "Nama Kas";
 const mk_hint_nama_kas = "Ex: Kas Besar";
 const mk_lbl_saldo_awal_kas = "Saldo Awal";
 const mk_hint_saldo_awal_kas = "Ex: Rp. 3.000.000,-";
+
+const mk_lbl_transaksi = "Transaksi";
+const mk_lbl_nama_transaksi = "Nama Transaksi";
+const mk_lbl_keterangan = "Keterangan";
+const mk_lbl_jumlah = "Jumlah";
+const mk_hint_jumlah = "Ex: Rp. 700.000,-";
+const mk_lbl_bukti_transaks = "Foto Bukti Transaksi";
 
 const mk_lbl_delete = "Hapus";
 const mk_lbl_edit = "Edit";

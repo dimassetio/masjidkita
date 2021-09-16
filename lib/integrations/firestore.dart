@@ -19,3 +19,4 @@ const kegiatanCollection = "kegiatan";
 const takmirCollection = "takmir";
 const kasCollection = "kas";
 const kategoriCollection = "kategori transaksi";
+const transaksiCollection = "transaksi transaksi";

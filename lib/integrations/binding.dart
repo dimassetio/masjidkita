@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mosq/controllers/authController.dart';
 import 'package:mosq/modules/inventaris/controllers/inventaris_controller.dart';
 import 'package:mosq/modules/kas/controllers/kas_controller.dart';
+import 'package:mosq/modules/kas/controllers/transaksi_controller.dart';
 import 'package:mosq/modules/kegiatan/controllers/kegiatan_controller.dart';
 import 'package:mosq/modules/masjid/controllers/masjid_controller.dart';
 import 'package:mosq/modules/profile/controllers/profile_controller.dart';
@@ -15,6 +16,7 @@ class InitBinding extends Bindings {
     Get.put(AuthController(), permanent: true);
     Get.lazyPut(() => MasjidController());
     Get.lazyPut(() => KasController());
+    Get.lazyPut(() => TransaksiController());
     Get.lazyPut(() => InventarisController());
     Get.lazyPut(() => KegiatanController());
     Get.lazyPut(() => TakmirController());
@@ -35,5 +37,6 @@ class DetailMasjidBinding extends Bindings {
     Get.find<InventarisController>();
     Get.find<TakmirController>();
     Get.find<KasController>();
+    Get.find<TransaksiController>();
   }
 }

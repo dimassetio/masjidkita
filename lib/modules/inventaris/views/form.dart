@@ -200,7 +200,7 @@ class _FormInventarisState extends State<FormInventaris> {
                         return ImageSourceBottomSheet(
                             isSaving: inventarisC.isSaving,
                             fromCamera: () async {
-                              await takmirC.getImage(true);
+                              await inventarisC.getImage(true);
                               Get.back();
                               FocusScopeNode currentFocus =
                                   FocusScope.of(context);
