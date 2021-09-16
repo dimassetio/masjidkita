@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/modules/kas/models/kas_model.dart';
+import 'package:mosq/modules/kas/models/transaksi_model.dart';
 import 'package:mosq/modules/kas/views/TMKasSlider.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
@@ -78,55 +78,72 @@ class TMTabKas extends StatelessWidget {
           padding: EdgeInsets.only(right: 15, bottom: 15),
           child: Obx(() => masjidC.myMasjid.value
               ? FloatingActionButton(
-                  onPressed: () {},
-                  child: PopupMenuButton(
+                  child: Icon(
+                    Icons.edit,
                     color: mkWhite,
-                    icon: Icon(
-                      Icons.edit,
-                      color: mkWhite,
-                    ),
-                    onSelected: (dynamic value) {
-                      if (value == 'kas') {
-                        Get.toNamed(RouteName.new_kas,
-                            arguments: KasModel(dao: model.kasDao));
-                      } else {
-                        // Get.toNamed(RouteName.new_kategori_transaksi,
-                        //     arguments: KategoriModel(dao: model.kategoriDao));
-                      }
-                    },
-                    offset: Offset(-50, -130),
-                    itemBuilder: (context) {
-                      List<PopupMenuEntry<Object>> list = [];
-                      list.add(
-                        PopupMenuItem(
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.book_online,
-                              color: Colors.black,
-                            ),
-                            title: Text('Buku Kas'),
-                          ),
-                          value: 'kas',
-                        ),
-                      );
-                      list.add(
-                        PopupMenuItem(
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.sell,
-                              color: Colors.black,
-                            ),
-                            title: Text('Kategori Transaksi'),
-                          ),
-                          value: 'kategori',
-                        ),
-                      );
-                      return list;
-                    },
                   ),
-                )
+                  backgroundColor: mkColorPrimary,
+                  onPressed: () {
+                    Get.toNamed(RouteName.new_transaksi,
+                        arguments: TransaksiModel(dao: model.transaksiDao));
+                  })
               : SizedBox())),
     ]);
+
+    //   Container(
+    //       alignment: Alignment.bottomRight,
+    //       padding: EdgeInsets.only(right: 15, bottom: 15),
+    //       child: Obx(() => masjidC.myMasjid.value
+    //           ? FloatingActionButton(
+    //               onPressed: () {},
+    //               child: PopupMenuButton(
+    //                 color: mkWhite,
+    //                 icon: Icon(
+    //                   Icons.edit,
+    //                   color: mkWhite,
+    //                 ),
+    //                 onSelected: (dynamic value) {
+    //                   if (value == 'kas') {
+    //                     Get.toNamed(RouteName.new_kas,
+    //                         arguments: KasModel(dao: model.kasDao));
+    //                   } else {
+    //                     // Get.toNamed(RouteName.new_kategori_transaksi,
+    //                     //     arguments: KategoriModel(dao: model.kategoriDao));
+    //                   }
+    //                 },
+    //                 offset: Offset(-50, -130),
+    //                 itemBuilder: (context) {
+    //                   List<PopupMenuEntry<Object>> list = [];
+    //                   list.add(
+    //                     PopupMenuItem(
+    //                       child: ListTile(
+    //                         leading: Icon(
+    //                           Icons.book_online,
+    //                           color: Colors.black,
+    //                         ),
+    //                         title: Text('Buku Kas'),
+    //                       ),
+    //                       value: 'kas',
+    //                     ),
+    //                   );
+    //                   list.add(
+    //                     PopupMenuItem(
+    //                       child: ListTile(
+    //                         leading: Icon(
+    //                           Icons.sell,
+    //                           color: Colors.black,
+    //                         ),
+    //                         title: Text('Kategori Transaksi'),
+    //                       ),
+    //                       value: 'kategori',
+    //                     ),
+    //                   );
+    //                   return list;
+    //                 },
+    //               ),
+    //             )
+    //           : SizedBox())),
+    // ]);
     // Container(
     //     alignment: Alignment.bottomRight,
     //     padding: EdgeInsets.only(right: 15, bottom: 15),

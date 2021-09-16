@@ -5,6 +5,9 @@ import 'package:mosq/modules/kegiatan/models/kegiatan_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
+import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/widgets/DismissibleBackground.dart';
 import 'package:mosq/modules/kegiatan/views/card.dart';
 
 import 'package:mosq/main.dart';

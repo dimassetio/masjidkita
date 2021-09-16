@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
+import 'package:mosq/modules/kas/views/form_kas.dart';
+import 'package:mosq/modules/kas/views/form_transaksi.dart';
+import 'package:mosq/modules/kegiatan/views/show.dart';
 import 'package:mosq/modules/kegiatan/views/show.dart';
 import 'package:mosq/modules/kas/views/form_kas.dart';
 import 'package:mosq/modules/profile/views/Form_Profile.dart';
@@ -34,6 +37,7 @@ class AppPage {
     GetPage(name: RouteName.new_kas, page: () => FormKas()),
     GetPage(name: RouteName.new_kategori_transaksi, page: () => FormKas()),
     GetPage(name: RouteName.edit_kas, page: () => FormKas()),
+    GetPage(name: RouteName.new_transaksi, page: () => FormTransaksi()),
     GetPage(
         name: RouteName.list_masjid,
         page: () => PageListMasjid(),
