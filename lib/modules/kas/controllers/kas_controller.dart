@@ -24,10 +24,10 @@ class KasController extends GetxController {
 
   KasModel get kas => _kasModel.value;
 
-  late TextEditingController nama;
-  late TextEditingController saldoAwal;
-  late TextEditingController saldo;
-  late TextEditingController deskripsi;
+  TextEditingController nama = TextEditingController();
+  TextEditingController saldoAwal = TextEditingController();
+  TextEditingController saldo = TextEditingController();
+  TextEditingController deskripsi = TextEditingController();
 
   @override
   void onInit() {

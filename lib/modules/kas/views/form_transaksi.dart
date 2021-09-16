@@ -185,139 +185,140 @@ class _StepperBodyState extends State<StepperBody> {
           ],
         ),
       ),
-      Step(
-          title: Text(mk_lbl_buku_kas, style: primaryTextStyle()),
-          isActive: currStep == 1,
-          state: StepState.indexed,
-          content: isMutasi
-              ? Column(
-                  children: [
-                    DropdownButtonFormField<String>(
-                      validator: (value) => (Validator(
-                              attributeName: mk_lbl_buku_kas + mk_lbl_from,
-                              value: value)
-                            ..required())
-                          .getError(),
-                      style: primaryTextStyle(color: appStore.textPrimaryColor),
-                      alignment: Alignment.centerLeft,
-                      value: transaksiC.bukuAsal,
-                      decoration: InputDecoration(
-                        labelText: mk_lbl_buku_kas + mk_lbl_from,
-                        hintStyle: secondaryTextStyle(),
-                        labelStyle: secondaryTextStyle(),
-                        hintText: mk_lbl_enter + mk_lbl_buku_kas + mk_lbl_from,
-                        icon: Icon(Icons.pageview,
-                            color: transaksiC.isSaving.value
-                                ? mkColorPrimaryLight
-                                : mkColorPrimaryDark),
-                      ),
-                      dropdownColor: appStore.appBarColor,
-                      onChanged: transaksiC.isSaving.value
-                          ? null
-                          : (String? newValue) {
-                              setState(() {
-                                transaksiC.bukuAsal = newValue ?? "";
-                              });
-                            },
-                      items: transaksiC.listBukuAsal
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Tooltip(
-                              message: value,
-                              child: Container(
-                                  margin: EdgeInsets.only(left: 4, right: 4),
-                                  child:
-                                      Text(value, style: primaryTextStyle()))),
-                        );
-                      }).toList(),
-                    ),
-                    DropdownButtonFormField<String>(
-                      validator: (value) => (Validator(
-                              attributeName: mk_lbl_buku_kas + mk_lbl_to,
-                              value: value)
-                            ..required())
-                          .getError(),
-                      style: primaryTextStyle(color: appStore.textPrimaryColor),
-                      alignment: Alignment.centerLeft,
-                      value: transaksiC.bukuTujuan,
-                      decoration: InputDecoration(
-                        labelText: mk_lbl_buku_kas + mk_lbl_to,
-                        hintStyle: secondaryTextStyle(),
-                        labelStyle: secondaryTextStyle(),
-                        hintText: mk_lbl_enter + mk_lbl_buku_kas + mk_lbl_to,
-                        icon: Icon(Icons.pageview,
-                            color: transaksiC.isSaving.value
-                                ? mkColorPrimaryLight
-                                : mkColorPrimaryDark),
-                      ),
-                      dropdownColor: appStore.appBarColor,
-                      onChanged: transaksiC.isSaving.value
-                          ? null
-                          : (String? newValue) {
-                              setState(() {
-                                transaksiC.bukuTujuan = newValue ?? "";
-                              });
-                            },
-                      items: transaksiC.listBukuTujuan
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Tooltip(
-                              message: value,
-                              child: Container(
-                                  margin: EdgeInsets.only(left: 4, right: 4),
-                                  child:
-                                      Text(value, style: primaryTextStyle()))),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                )
-              : Column(
-                  children: [
-                    DropdownButtonFormField<String>(
-                      validator: (value) => (Validator(
-                              attributeName: mk_lbl_buku_kas + mk_lbl_from,
-                              value: value)
-                            ..required())
-                          .getError(),
-                      style: primaryTextStyle(color: appStore.textPrimaryColor),
-                      alignment: Alignment.centerLeft,
-                      value: transaksiC.bukuAsal,
-                      decoration: InputDecoration(
-                        labelText: mk_lbl_buku_kas + mk_lbl_from,
-                        hintStyle: secondaryTextStyle(),
-                        labelStyle: secondaryTextStyle(),
-                        hintText: mk_lbl_enter + mk_lbl_buku_kas + mk_lbl_from,
-                        icon: Icon(Icons.pageview,
-                            color: transaksiC.isSaving.value
-                                ? mkColorPrimaryLight
-                                : mkColorPrimaryDark),
-                      ),
-                      dropdownColor: appStore.appBarColor,
-                      onChanged: transaksiC.isSaving.value
-                          ? null
-                          : (String? newValue) {
-                              setState(() {
-                                transaksiC.bukuAsal = newValue ?? "";
-                              });
-                            },
-                      items: transaksiC.listBukuAsal
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Tooltip(
-                              message: value,
-                              child: Container(
-                                  margin: EdgeInsets.only(left: 4, right: 4),
-                                  child:
-                                      Text(value, style: primaryTextStyle()))),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                )),
+      // Step(
+      //     title: Text(mk_lbl_buku_kas, style: primaryTextStyle()),
+      //     isActive: currStep == 1,
+      //     state: StepState.indexed,
+      //     content: isMutasi
+      //         ? Column(
+      //             children: [
+      //               DropdownButtonFormField<String>(
+      //                 validator: (value) => (Validator(
+      //                         attributeName: mk_lbl_buku_kas + mk_lbl_from,
+      //                         value: value)
+      //                       ..required())
+      //                     .getError(),
+      //                 style: primaryTextStyle(color: appStore.textPrimaryColor),
+      //                 alignment: Alignment.centerLeft,
+      //                 value: transaksiC.bukuAsal,
+      //                 decoration: InputDecoration(
+      //                   labelText: mk_lbl_buku_kas + mk_lbl_from,
+      //                   hintStyle: secondaryTextStyle(),
+      //                   labelStyle: secondaryTextStyle(),
+      //                   hintText: mk_lbl_enter + mk_lbl_buku_kas + mk_lbl_from,
+      //                   icon: Icon(Icons.pageview,
+      //                       color: transaksiC.isSaving.value
+      //                           ? mkColorPrimaryLight
+      //                           : mkColorPrimaryDark),
+      //                 ),
+      //                 dropdownColor: appStore.appBarColor,
+      //                 onChanged: transaksiC.isSaving.value
+      //                     ? null
+      //                     : (String? newValue) {
+      //                         setState(() {
+      //                           transaksiC.bukuAsal = newValue ?? "";
+      //                         });
+      //                       },
+      //                 items: transaksiC.listBukuAsal
+      //                     .map<DropdownMenuItem<String>>((String value) {
+      //                   return DropdownMenuItem<String>(
+      //                     value: value,
+      //                     child: Tooltip(
+      //                         message: value,
+      //                         child: Container(
+      //                             margin: EdgeInsets.only(left: 4, right: 4),
+      //                             child:
+      //                                 Text(value, style: primaryTextStyle()))),
+      //                   );
+      //                 }).toList(),
+      //               ),
+      //               DropdownButtonFormField<String>(
+      //                 validator: (value) => (Validator(
+      //                         attributeName: mk_lbl_buku_kas + mk_lbl_to,
+      //                         value: value)
+      //                       ..required())
+      //                     .getError(),
+      //                 style: primaryTextStyle(color: appStore.textPrimaryColor),
+      //                 alignment: Alignment.centerLeft,
+      //                 value: transaksiC.bukuTujuan,
+      //                 decoration: InputDecoration(
+      //                   labelText: mk_lbl_buku_kas + mk_lbl_to,
+      //                   hintStyle: secondaryTextStyle(),
+      //                   labelStyle: secondaryTextStyle(),
+      //                   hintText: mk_lbl_enter + mk_lbl_buku_kas + mk_lbl_to,
+      //                   icon: Icon(Icons.pageview,
+      //                       color: transaksiC.isSaving.value
+      //                           ? mkColorPrimaryLight
+      //                           : mkColorPrimaryDark),
+      //                 ),
+      //                 dropdownColor: appStore.appBarColor,
+      //                 onChanged: transaksiC.isSaving.value
+      //                     ? null
+      //                     : (String? newValue) {
+      //                         setState(() {
+      //                           transaksiC.bukuTujuan = newValue ?? "";
+      //                         });
+      //                       },
+      //                 items: transaksiC.listBukuTujuan
+      //                     .map<DropdownMenuItem<String>>((String value) {
+      //                   return DropdownMenuItem<String>(
+      //                     value: value,
+      //                     child: Tooltip(
+      //                         message: value,
+      //                         child: Container(
+      //                             margin: EdgeInsets.only(left: 4, right: 4),
+      //                             child:
+      //                                 Text(value, style: primaryTextStyle()))),
+      //                   );
+      //                 }).toList(),
+      //               ),
+      //             ],
+      //           )
+      //         : Column(
+      //             children: [
+      //               DropdownButtonFormField<String>(
+      //                 validator: (value) => (Validator(
+      //                         attributeName: mk_lbl_buku_kas + mk_lbl_from,
+      //                         value: value)
+      //                       ..required())
+      //                     .getError(),
+      //                 style: primaryTextStyle(color: appStore.textPrimaryColor),
+      //                 alignment: Alignment.centerLeft,
+      //                 value: transaksiC.bukuAsal,
+      //                 decoration: InputDecoration(
+      //                   labelText: mk_lbl_buku_kas + mk_lbl_from,
+      //                   hintStyle: secondaryTextStyle(),
+      //                   labelStyle: secondaryTextStyle(),
+      //                   hintText: mk_lbl_enter + mk_lbl_buku_kas + mk_lbl_from,
+      //                   icon: Icon(Icons.pageview,
+      //                       color: transaksiC.isSaving.value
+      //                           ? mkColorPrimaryLight
+      //                           : mkColorPrimaryDark),
+      //                 ),
+      //                 dropdownColor: appStore.appBarColor,
+      //                 onChanged: transaksiC.isSaving.value
+      //                     ? null
+      //                     : (String? newValue) {
+      //                         setState(() {
+      //                           transaksiC.bukuAsal = newValue ?? "";
+      //                         });
+      //                       },
+      //                 items: transaksiC.listBukuAsal
+      //                     .map<DropdownMenuItem<String>>((String value) {
+      //                   return DropdownMenuItem<String>(
+      //                     value: value,
+      //                     child: Tooltip(
+      //                         message: value,
+      //                         child: Container(
+      //                             margin: EdgeInsets.only(left: 4, right: 4),
+      //                             child:
+      //                                 Text(value, style: primaryTextStyle()))),
+      //                   );
+      //                 }).toList(),
+      //               ),
+      //             ],
+      //           )),
+
       Step(
         title: Text(mk_lbl_jumlah, style: primaryTextStyle()),
         isActive: currStep == 2,

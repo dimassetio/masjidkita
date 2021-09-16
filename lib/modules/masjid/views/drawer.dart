@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/modules/kas/models/kas_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -94,7 +95,10 @@ class MosQDrawer extends StatelessWidget {
                             ontap: () {
                           Get.toNamed(RouteName.kategori, arguments: model);
                         }),
-                        getDrawerItem(mk_report, mk_lbl_report, 3),
+                        getDrawerItem(mk_report, 'Buku Kas Baru', 3, ontap: () {
+                          Get.toNamed(RouteName.new_kas,
+                              arguments: KasModel(dao: model.kasDao));
+                        }),
                       ],
                     ),
                     16.height,
