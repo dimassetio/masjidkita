@@ -28,7 +28,7 @@ class DetailMasjid extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get.put(InventarisController().onInit());
     return Scaffold(
-      endDrawer: MosQDrawer(),
+      endDrawer: MosQDrawer(model),
       body: StreamBuilder<MasjidModel>(
           stream: model.dao.streamDetailMasjid(model),
           initialData: model,

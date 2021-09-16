@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/modules/kas/models/kategori_model.dart';
+import 'package:mosq/modules/kas/kategori/kategori_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
@@ -66,26 +66,13 @@ class _StepperBodyState extends State<StepperBody> {
   GlobalKey<FormState> _formKey = GlobalKey();
 
   KategoriModel model = Get.arguments ?? KategoriModel();
-  MqFormFoto formFoto = MqFormFoto(
-    defaultPath: mk_no_image,
-  );
-  // KategoriModel modelKategori = Get.arguments ?? KategoriModel();
-
-  // List<String> jenisList = [
-  //   'Pengeluaran',
-  //   'Pemasukan',
-  //   'Mutasi',
-  // ];
-  // String? jenisKategori;
 
   @override
   void initState() {
     super.initState();
-    kategoriC.nama = TextEditingController();
-    // kategoriC.url = TextEditingController();
 
     if (!model.id.isEmptyOrNull) {
-      kategoriC.nama.text = model.nama ?? "";
+      kategoriC.namaC.text = model.nama ?? "";
       kategoriC.jenis = model.jenis ?? "";
     }
   }
@@ -107,7 +94,7 @@ class _StepperBodyState extends State<StepperBody> {
           children: [
             EditText(
               isEnabled: !kategoriC.isSaving.value,
-              mController: kategoriC.nama,
+              mController: kategoriC.namaC,
               validator: (value) =>
                   (Validator(attributeName: mk_lbl_kategori, value: value)
                         ..required())
@@ -248,8 +235,7 @@ class _StepperBodyState extends State<StepperBody> {
                       onPressed: () async {
                         if (kategoriC.isSaving.value == false) {
                           if (_formKey.currentState!.validate()) {
-                            await kategoriC.saveKategori(model,
-                                path: formFoto.newPath);
+                            await kategoriC.saveKategori(model);
                           } else {
                             _formKey.currentState!.validate();
                           }

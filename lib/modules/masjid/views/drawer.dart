@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
@@ -13,6 +14,9 @@ import 'package:mosq/screens/widgets/ConfirmLogout.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class MosQDrawer extends StatelessWidget {
+  MosQDrawer(this.model);
+  MasjidModel model;
+
   var _selectedItem = 0.obs;
   int get selectedItem => _selectedItem.value;
   set selectedItem(int value) => this._selectedItem.value = value;
@@ -88,7 +92,7 @@ class MosQDrawer extends StatelessWidget {
                       children: [
                         getDrawerItem(mk_report, mk_lbl_Kategori_transaksi, 2,
                             ontap: () {
-                          Get.toNamed(RouteName.new_kategori_transaksi);
+                          Get.toNamed(RouteName.kategori, arguments: model);
                         }),
                         getDrawerItem(mk_report, mk_lbl_report, 3),
                       ],
