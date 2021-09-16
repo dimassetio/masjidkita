@@ -69,7 +69,7 @@ class TransaksiDatabase {
     UploadTask task = path.putFile(foto);
     task.snapshotEvents.listen((event) async {
       if (event.state == TaskState.success) {
-        model.url = await path.getDownloadURL();
+        model.photoUrl = await path.getDownloadURL();
         update(model);
       }
     });

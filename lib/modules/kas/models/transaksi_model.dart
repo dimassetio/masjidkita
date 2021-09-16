@@ -8,7 +8,7 @@ class TransaksiModel {
   String? kasID;
   String? kategoriID;
   String? nama;
-  String? url;
+  String? photoUrl;
   DateTime? tanggal;
   int? jumlah;
   String? keterangan;
@@ -21,7 +21,7 @@ class TransaksiModel {
       this.kasID,
       this.kategoriID,
       this.nama,
-      this.url,
+      this.photoUrl,
       this.tanggal,
       this.jumlah,
       this.keterangan,
@@ -66,7 +66,7 @@ class TransaksiModel {
       kasID: snapshot.data()?["kasID"],
       kategoriID: snapshot.data()?["kategoriID"],
       nama: snapshot.data()?["nama"],
-      url: snapshot.data()?["url"],
+      photoUrl: snapshot.data()?["photoUrl"],
       tanggal: snapshot.data()?["tanggal"],
       jumlah: snapshot.data()?["jumlah"],
       keterangan: snapshot.data()?["keterangan"],
@@ -80,7 +80,7 @@ class TransaksiModel {
     return {
       'id': this.id,
       'nama': this.nama,
-      'url': this.url,
+      'photoUrl': this.photoUrl,
       'jumlah': this.jumlah,
       'tanggal': this.tanggal,
       'keterangan': this.keterangan,

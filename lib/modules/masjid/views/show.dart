@@ -9,8 +9,10 @@ import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/modules/kas/views/TabKas.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/modules/kegiatan/views/index.dart';
+import 'package:mosq/modules/masjid/views/drawer.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
+import 'package:mosq/screens/widgets/ImageSourceBottomSheet.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:get/get.dart';
 // import 'package:mosq/screens/widgets/T5Slider.dart';
@@ -26,6 +28,7 @@ class DetailMasjid extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get.put(InventarisController().onInit());
     return Scaffold(
+      endDrawer: MosQDrawer(),
       body: StreamBuilder<MasjidModel>(
           stream: model.dao.streamDetailMasjid(model),
           initialData: model,

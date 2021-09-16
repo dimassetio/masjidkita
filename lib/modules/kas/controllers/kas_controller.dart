@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:get/get.dart';
+import 'package:mosq/modules/kas/kategori/kategori_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/modules/kas/models/kas_model.dart';
 import 'package:nb_utils/nb_utils.dart';

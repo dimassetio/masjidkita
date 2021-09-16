@@ -10,11 +10,11 @@ import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/kas/models/transaksi_model.dart';
 import 'package:mosq/routes/route_name.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
+import 'package:mosq/screens/widgets/MqFormFoto.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
@@ -66,14 +66,7 @@ class _StepperBodyState extends State<StepperBody> {
   GlobalKey<FormState> _formKey = GlobalKey();
 
   TransaksiModel model = Get.arguments ?? TransaksiModel();
-  // KategoriModel modelKategori = Get.arguments ?? KategoriModel();
-
-  // List<String> jenisList = [
-  //   'Pengeluaran',
-  //   'Pemasukan',
-  //   'Mutasi',
-  // ];
-  // String? jenisTransaksi;
+  MqFormFoto formFoto = MqFormFoto();
 
   @override
   void initState() {
@@ -91,24 +84,11 @@ class _StepperBodyState extends State<StepperBody> {
       transaksiC.kategori.text = model.kategori ?? "";
       transaksiC.jumlah.text = currencyFormatter(model.jumlah);
       transaksiC.selectedDate = model.tanggal ?? DateTime.now();
+      formFoto.oldPath = model.photoUrl ?? '';
       if (transaksiC.jumlah.text.isEmptyOrNull) {
         transaksiC.jumlah.text = transaksiC.jumlah.text;
       }
     }
-
-    // if (isKasRoute) {
-    //   if (model.id != null) {
-    //     nama.text = model.nama ?? "";
-    //     saldoAwal.text = Formatter().currencyFormatter.format(model.saldoAwal);
-    //     // url.text = model.url ?? "";
-    //     // jumlah.text = model.jumlah.toString();
-    //   }
-    // } else {
-    //   if (modelKategori.id != null) {
-    //     namaKategori.text = modelKategori.nama ?? "";
-    //     jenis.text = modelKategori.jenis ?? "";
-    //   }
-    // }
   }
 
   @override
@@ -197,64 +177,8 @@ class _StepperBodyState extends State<StepperBody> {
           isActive: currStep == 2,
           state: StepState.indexed,
           content: Column(children: [
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(bottom: 16),
-              // decoration: boxDecoration(
-              //     radius: 10.0, showShadow: true, color: mkColorPrimary),
-              width: Get.width,
-              height: Get.width / 1.7,
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                child: Obx(() => transaksiC.xfoto.value.path.isNotEmpty
-                    ? Image.file(File(transaksiC.xfoto.value.path))
-                    : !model.url.isEmptyOrNull
-                        ? CachedNetworkImage(
-                            placeholder: placeholderWidgetFn() as Widget
-                                Function(BuildContext, String)?,
-                            imageUrl: model.url!,
-                            fit: BoxFit.cover,
-                          )
-                        : SvgPicture.asset(
-                            mk_no_image,
-                          )),
-              ),
-            ),
-
-            ElevatedButton(
-              child: text("Upload Foto", textColor: mkWhite),
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    backgroundColor: appStore.scaffoldBackground,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(25.0)),
-                    ),
-                    builder: (builder) {
-                      return ImageSourceBottomSheet(
-                        isSaving: transaksiC.isSaving,
-                        fromCamera: () async {
-                          await transaksiC.getImage(true);
-                          Get.back();
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                        },
-                        fromGaleri: () async {
-                          await transaksiC.getImage(false);
-                          Get.back();
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                        },
-                      );
-                    });
-              },
-            ),
-            // ),
+            16.height,
+            formFoto,
           ]))
     ];
 
