@@ -79,16 +79,7 @@ class _StepperBodyState extends State<StepperBody> {
   GlobalKey<FormState> _formKey = GlobalKey();
 
   var model = Get.arguments;
-  KategoriModel? modelKategori;
   KasModel? modelKas;
-  // KategoriModel modelKategori = Get.arguments ?? KategoriModel();
-
-  // List<String> jenisList = [
-  //   'Pengeluaran',
-  //   'Pemasukan',
-  //   'Mutasi',
-  // ];
-  // String? jenisTransaksi;
 
   @override
   void initState() {
@@ -108,28 +99,6 @@ class _StepperBodyState extends State<StepperBody> {
         }
       }
     }
-    if (model is KategoriModel) {
-      modelKategori = model;
-      kasC.namaKategori = TextEditingController();
-      if (modelKategori!.id != null) {
-        kasC.namaKategori.text = model.nama ?? "";
-        kasC.jenis = model.jenis;
-      }
-    }
-
-    // if (isKasRoute) {
-    //   if (model.id != null) {
-    //     nama.text = model.nama ?? "";
-    //     saldoAwal.text = Formatter().currencyFormatter.format(model.saldoAwal);
-    //     // url.text = model.url ?? "";
-    //     // jumlah.text = model.jumlah.toString();
-    //   }
-    // } else {
-    //   if (modelKategori.id != null) {
-    //     namaKategori.text = modelKategori.nama ?? "";
-    //     jenis.text = modelKategori.jenis ?? "";
-    //   }
-    // }
   }
 
   @override
@@ -215,71 +184,71 @@ class _StepperBodyState extends State<StepperBody> {
       ),
     ];
 
-    List<Step> stepsKategori = [
-      Step(
-        title: Text(mk_lbl_Kategori_transaksi, style: primaryTextStyle()),
-        isActive: currStep == 0,
-        state: StepState.indexed,
-        content: Column(
-          children: [
-            EditText(
-              isEnabled: !kasC.isSaving.value,
-              mController: kasC.namaKategori,
-              validator: (value) => (Validator(
-                      attributeName: mk_lbl_nama_Kategori_transaksi,
-                      value: value)
-                    ..required())
-                  .getError(),
-              // inputFormatters: [CurrrencyInputFormatter()],
-              label: mk_lbl_nama_Kategori_transaksi,
-              icon: Icon(Icons.category,
-                  color: kasC.isSaving.value
-                      ? mkColorPrimaryLight
-                      : mkColorPrimaryDark),
-            ),
-            DropdownButtonFormField<String>(
-              validator: (value) => (Validator(
-                      attributeName: mk_lbl_jenis_Kategori_transaksi,
-                      value: value)
-                    ..required())
-                  .getError(),
-              style: primaryTextStyle(color: appStore.textPrimaryColor),
-              alignment: Alignment.centerLeft,
-              value: kasC.jenis,
-              decoration: InputDecoration(
-                labelText: mk_lbl_jenis_Kategori_transaksi,
-                hintStyle: secondaryTextStyle(),
-                labelStyle: secondaryTextStyle(),
-                hintText: mk_lbl_enter + mk_lbl_jenis_Kategori_transaksi,
-                icon: Icon(Icons.plagiarism,
-                    color: kasC.isSaving.value
-                        ? mkColorPrimaryLight
-                        : mkColorPrimaryDark),
-              ),
-              dropdownColor: appStore.appBarColor,
-              onChanged: kasC.isSaving.value
-                  ? null
-                  : (String? newValue) {
-                      setState(() {
-                        kasC.jenis = newValue ?? "";
-                      });
-                    },
-              items:
-                  kasC.jenisList.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Tooltip(
-                      message: value,
-                      child: Container(
-                          margin: EdgeInsets.only(left: 4, right: 4),
-                          child: Text(value, style: primaryTextStyle()))),
-                );
-              }).toList(),
-            ),
-          ],
-        ),
-      ),
-    ];
+    // List<Step> stepsKategori = [
+    //   Step(
+    //     title: Text(mk_lbl_Kategori_transaksi, style: primaryTextStyle()),
+    //     isActive: currStep == 0,
+    //     state: StepState.indexed,
+    //     content: Column(
+    //       children: [
+    //         EditText(
+    //           isEnabled: !kasC.isSaving.value,
+    //           mController: kasC.namaKategori,
+    //           validator: (value) => (Validator(
+    //                   attributeName: mk_lbl_nama_Kategori_transaksi,
+    //                   value: value)
+    //                 ..required())
+    //               .getError(),
+    //           // inputFormatters: [CurrrencyInputFormatter()],
+    //           label: mk_lbl_nama_Kategori_transaksi,
+    //           icon: Icon(Icons.category,
+    //               color: kasC.isSaving.value
+    //                   ? mkColorPrimaryLight
+    //                   : mkColorPrimaryDark),
+    //         ),
+    //         DropdownButtonFormField<String>(
+    //           validator: (value) => (Validator(
+    //                   attributeName: mk_lbl_jenis_Kategori_transaksi,
+    //                   value: value)
+    //                 ..required())
+    //               .getError(),
+    //           style: primaryTextStyle(color: appStore.textPrimaryColor),
+    //           alignment: Alignment.centerLeft,
+    //           value: kasC.jenis,
+    //           decoration: InputDecoration(
+    //             labelText: mk_lbl_jenis_Kategori_transaksi,
+    //             hintStyle: secondaryTextStyle(),
+    //             labelStyle: secondaryTextStyle(),
+    //             hintText: mk_lbl_enter + mk_lbl_jenis_Kategori_transaksi,
+    //             icon: Icon(Icons.plagiarism,
+    //                 color: kasC.isSaving.value
+    //                     ? mkColorPrimaryLight
+    //                     : mkColorPrimaryDark),
+    //           ),
+    //           dropdownColor: appStore.appBarColor,
+    //           onChanged: kasC.isSaving.value
+    //               ? null
+    //               : (String? newValue) {
+    //                   setState(() {
+    //                     kasC.jenis = newValue ?? "";
+    //                   });
+    //                 },
+    //           items:
+    //               kasC.jenisList.map<DropdownMenuItem<String>>((String value) {
+    //             return DropdownMenuItem<String>(
+    //               value: value,
+    //               child: Tooltip(
+    //                   message: value,
+    //                   child: Container(
+    //                       margin: EdgeInsets.only(left: 4, right: 4),
+    //                       child: Text(value, style: primaryTextStyle()))),
+    //             );
+    //           }).toList(),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // ];
 
     return Container(
         child: GestureDetector(
@@ -300,7 +269,7 @@ class _StepperBodyState extends State<StepperBody> {
                 Expanded(
                   child: Obx(
                     () => Stepper(
-                      steps: modelKas != null ? stepsKas : stepsKategori,
+                      steps: stepsKas,
                       type: StepperType.vertical,
                       currentStep: currStep,
                       physics: ScrollPhysics(),
@@ -366,9 +335,7 @@ class _StepperBodyState extends State<StepperBody> {
                       onPressed: () async {
                         if (kasC.isSaving.value == false) {
                           if (_formKey.currentState!.validate()) {
-                            modelKas != null
-                                ? await kasC.saveKas(modelKas!)
-                                : await kasC.saveKategori(modelKategori!);
+                            await kasC.saveKas(modelKas!);
                           } else {
                             _formKey.currentState!.validate();
                           }

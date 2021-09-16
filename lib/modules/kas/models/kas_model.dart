@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mosq/integrations/firestore.dart';
 import 'package:mosq/modules/kas/databases/kas_database.dart';
-import 'package:mosq/modules/kas/kategori/kategori_database.dart';
 
 class KasModel {
   String? id;
@@ -12,7 +10,6 @@ class KasModel {
   int? saldo;
   String? deskripsi;
   KasDatabase? dao;
-  KategoriDatabase? kategoriDao;
 
   KasModel(
       {this.id,
@@ -20,12 +17,7 @@ class KasModel {
       this.saldoAwal,
       this.saldo,
       this.deskripsi,
-      this.dao}) {
-    if (dao != null) {
-      kategoriDao =
-          KategoriDatabase(db: dao!.childReference(this, kategoriCollection));
-    }
-  }
+      this.dao});
 
   save() async {
     if (this.id == null) {

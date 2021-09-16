@@ -31,9 +31,9 @@ class MasjidDatabase {
     return storage.child(model.id ?? "").child(kasCollection);
   }
 
-  CollectionReference transaksiKategories(MasjidModel model) {
-    return db.doc(model.id).collection(kategoriCollection);
-  }
+  // CollectionReference transaksiKategories(MasjidModel model) {
+  //   return db.doc(model.id).collection(kategoriCollection);
+  // }
 
   Stream<MasjidModel> streamDetailMasjid(MasjidModel model) {
     return db

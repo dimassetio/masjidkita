@@ -27,12 +27,12 @@ class MasjidModel {
   String? statusTanah;
   String? legalitas;
   MasjidDatabase dao = new MasjidDatabase();
-  InventarisDatabase? inventarisDao;
   TakmirDatabase? takmirDao;
+  InventarisDatabase? inventarisDao;
   KasDatabase? kasDao;
+  TransaksiDatabase? transaksiDao;
   KategoriDatabase? kategoriDao;
   KegiatanDatabase? kegiatanDao;
-  TransaksiDatabase? transaksiDao;
 
   MasjidModel({
     this.id,
