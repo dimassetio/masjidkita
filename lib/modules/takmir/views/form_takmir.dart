@@ -11,6 +11,7 @@ import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/takmir/models/takmir_model.dart';
 import 'package:mosq/routes/route_name.dart';
+import 'package:mosq/screens/widgets/ButtonForm.dart';
 import 'package:mosq/screens/widgets/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -274,37 +275,19 @@ class _StepperBodyState extends State<StepperBody> {
                         ),
                       ),
                     ),
-                    Obx(
-                      () => Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        margin: EdgeInsets.all(10),
-                        decoration: boxDecoration(
-                            bgColor: takmirC.isSaving.value
-                                ? mkColorPrimaryLight
-                                : mkColorPrimary,
-                            radius: 10),
-                        padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                        child: InkWell(
-                          onTap: () async {
-                            if (takmirC.isSaving.value == false) {
-                              if (_formKey.currentState!.validate()) {
-                                await takmirC.saveTakmir(model,
-                                    path: formFoto.newPath);
-                              } else {
-                                _formKey.currentState!.validate();
-                              }
-                            }
-                          },
-                          child: Center(
-                            child: takmirC.isSaving.value
-                                ? CircularProgressIndicator()
-                                : Text(mk_submit,
-                                    style:
-                                        boldTextStyle(color: white, size: 18)),
-                          ),
-                        ),
-                      ),
+                    ButtonForm(
+                      tapFunction: () async {
+                        // takmirC.isSaving.value = true;
+                        if (takmirC.isSaving.value == false) {
+                          if (_formKey.currentState!.validate()) {
+                            await takmirC.saveTakmir(model,
+                                path: formFoto.newPath);
+                          } else {
+                            _formKey.currentState!.validate();
+                          }
+                        }
+                      },
+                      isSaving: takmirC.isSaving,
                     ),
                   ],
                 ),

@@ -14,6 +14,7 @@ import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
+import 'package:mosq/screens/widgets/ButtonForm.dart';
 import 'package:mosq/screens/widgets/MqFormFoto.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
@@ -73,7 +74,7 @@ class _StepperBodyState extends State<StepperBody> {
 
     if (!model.id.isEmptyOrNull) {
       kategoriC.namaC.text = model.nama ?? "";
-      kategoriC.jenis = model.jenis ?? "";
+      kategoriC.jenis = model.jenis;
     }
   }
 
@@ -92,24 +93,10 @@ class _StepperBodyState extends State<StepperBody> {
         state: StepState.indexed,
         content: Column(
           children: [
-            EditText(
-              isEnabled: !kategoriC.isSaving.value,
-              mController: kategoriC.namaC,
-              validator: (value) =>
-                  (Validator(attributeName: mk_lbl_kategori, value: value)
-                        ..required())
-                      .getError(),
-              // inputFormatters: [CurrrencyInputFormatter()],
-              label: mk_lbl_nama_kategori,
-              icon: Icon(Icons.nature,
-                  color: kategoriC.isSaving.value
-                      ? mkColorPrimaryLight
-                      : mkColorPrimaryDark),
-            ),
-            DropdownButtonFormField<String>(
+            DropdownButtonFormField<int>(
               validator: (value) => (Validator(
                       attributeName: mk_lbl_jenis_Kategori_transaksi,
-                      value: value)
+                      value: jenisTransaksiToStr(value))
                     ..required())
                   .getError(),
               style: primaryTextStyle(color: appStore.textPrimaryColor),
@@ -128,22 +115,37 @@ class _StepperBodyState extends State<StepperBody> {
               dropdownColor: appStore.appBarColor,
               onChanged: kategoriC.isSaving.value
                   ? null
-                  : (String? newValue) {
+                  : (int? newValue) {
                       setState(() {
-                        kategoriC.jenis = newValue ?? "";
+                        kategoriC.jenis = newValue;
                       });
                     },
-              items: kategoriC.jenisList
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
+              items:
+                  kategoriC.jenisList.map<DropdownMenuItem<int>>((int value) {
+                return DropdownMenuItem<int>(
                   value: value,
                   child: Tooltip(
-                      message: value,
+                      message: jenisTransaksiToStr(value),
                       child: Container(
                           margin: EdgeInsets.only(left: 4, right: 4),
-                          child: Text(value, style: primaryTextStyle()))),
+                          child: Text(jenisTransaksiToStr(value),
+                              style: primaryTextStyle()))),
                 );
               }).toList(),
+            ),
+            EditText(
+              isEnabled: !kategoriC.isSaving.value,
+              mController: kategoriC.namaC,
+              validator: (value) =>
+                  (Validator(attributeName: mk_lbl_kategori, value: value)
+                        ..required())
+                      .getError(),
+              // inputFormatters: [CurrrencyInputFormatter()],
+              label: mk_lbl_nama_kategori,
+              icon: Icon(Icons.nature,
+                  color: kategoriC.isSaving.value
+                      ? mkColorPrimaryLight
+                      : mkColorPrimaryDark),
             ),
           ],
         ),
@@ -226,30 +228,17 @@ class _StepperBodyState extends State<StepperBody> {
                     ),
                   ),
                 ),
-                Obx(
-                  () => Container(
-                    width: Get.width,
-                    height: 50,
-                    margin: EdgeInsets.all(10),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (kategoriC.isSaving.value == false) {
-                          if (_formKey.currentState!.validate()) {
-                            await kategoriC.saveKategori(model);
-                          } else {
-                            _formKey.currentState!.validate();
-                          }
+                ButtonForm(
+                    tapFunction: () async {
+                      if (kategoriC.isSaving.value == false) {
+                        if (_formKey.currentState!.validate()) {
+                          await kategoriC.saveKategori(model);
+                        } else {
+                          _formKey.currentState!.validate();
                         }
-                      },
-                      child: Center(
-                        child: kategoriC.isSaving.value
-                            ? CircularProgressIndicator()
-                            : Text(mk_submit,
-                                style: boldTextStyle(color: white, size: 18)),
-                      ),
-                    ),
-                  ),
-                ),
+                      }
+                    },
+                    isSaving: kategoriC.isSaving)
               ],
             ),
           )),

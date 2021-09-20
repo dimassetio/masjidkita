@@ -9,6 +9,7 @@ import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
+import 'package:mosq/screens/widgets/ButtonForm.dart';
 import 'package:mosq/screens/widgets/MqFormFoto.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/integrations/controllers.dart';
@@ -176,41 +177,6 @@ class _FormInventarisState extends State<FormInventaris> {
                 ? mk_add_inventaris
                 : mk_edit_inventaris,
           ),
-          // actions: <Widget>[
-          //   Padding(
-          //     padding: EdgeInsets.only(right: 20.0),
-          //     child: InkWell(
-          //       onTap: () async {
-          //         if (inventarisC.isSaving.value == false) {
-          //           if (formKey.currentState!.validate()) {
-          //             if (currStep < steps.length - 1) {
-          //               currStep = currStep + 1;
-          //             } else {
-          //               inventarisC.isSaving.value = true;
-          //               setState(() {});
-          //               await inventarisC.saveInventaris(model);
-
-          //               Get.back();
-          //               inventarisC.isSaving.value = false;
-          //             }
-          //           } else {
-          //             formKey.currentState!.validate();
-          //           }
-          //         }
-          //       },
-          //       child: inventarisC.isSaving.value
-          //           ? Container(
-          //               padding: EdgeInsets.all(13),
-          //               width: 55.0,
-          //               child: CircularProgressIndicator())
-          //           : Icon(
-          //               Icons.check,
-          //               size: 26.0,
-          //               color: mkColorPrimary,
-          //             ),
-          //     ),
-          //   )
-          // ],
         ),
         body: WillPopScope(
           onWillPop: () async {
@@ -291,37 +257,18 @@ class _FormInventarisState extends State<FormInventaris> {
                       },
                     ),
                   ),
-                  Obx(
-                    () => Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      margin: EdgeInsets.all(10),
-                      decoration: boxDecoration(
-                          bgColor: inventarisC.isSaving.value
-                              ? mkColorPrimaryLight
-                              : mkColorPrimary,
-                          radius: 10),
-                      padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                      child: InkWell(
-                        onTap: () async {
-                          if (inventarisC.isSaving.value == false) {
-                            if (formKey.currentState!.validate()) {
-                              await inventarisC.saveInventaris(model,
-                                  path: formFoto.newPath);
-                            } else {
-                              formKey.currentState!.validate();
-                            }
+                  ButtonForm(
+                      tapFunction: () async {
+                        if (inventarisC.isSaving.value == false) {
+                          if (formKey.currentState!.validate()) {
+                            await inventarisC.saveInventaris(model,
+                                path: formFoto.newPath);
+                          } else {
+                            formKey.currentState!.validate();
                           }
-                        },
-                        child: Center(
-                          child: inventarisC.isSaving.value
-                              ? CircularProgressIndicator()
-                              : Text(mk_submit,
-                                  style: boldTextStyle(color: white, size: 18)),
-                        ),
-                      ),
-                    ),
-                  ),
+                        }
+                      },
+                      isSaving: inventarisC.isSaving)
                 ],
               ),
             ),
