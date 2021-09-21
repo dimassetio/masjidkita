@@ -122,6 +122,7 @@ const mk_lbl_transaksi = "Transaksi";
 const mk_lbl_nama_transaksi = "Nama Transaksi";
 const mk_lbl_buku_kas = "Buku Kas";
 const mk_lbl_keterangan = "Keterangan";
+const mk_lbl_keterangan_optional = "Keterangan (opsional)";
 const mk_lbl_jumlah = "Jumlah";
 const mk_hint_jumlah = "Ex: Rp. 700.000,-";
 const mk_lbl_bukti_transaks = "Foto Bukti Transaksi";

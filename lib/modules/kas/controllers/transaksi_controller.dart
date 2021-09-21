@@ -32,12 +32,12 @@ class TransaksiController extends GetxController {
   // late TextEditingController kategori;
   late TextEditingController tipeTransaksi;
 
-  List<String> listkategori = [
-    'Operasional Masjid',
-    'Iuran Keamanan',
-    'Renovasi',
-    'Mutasi',
-  ];
+  // List<String> listkategori = [
+  //   'Operasional Masjid',
+  //   'Iuran Keamanan',
+  //   'Renovasi',
+  //   'Mutasi',
+  // ];
 
   String? kategori;
 
@@ -101,8 +101,6 @@ class TransaksiController extends GetxController {
 
     int jumlahInt =
         jumlah.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
-
-    model.nama = nama.text;
     model.photoUrl = url.text;
     model.jumlah = jumlahInt;
     model.tanggal = selectedDate;
@@ -145,8 +143,7 @@ class TransaksiController extends GetxController {
           // selectedDate != DateTime.now() ||
           !foto.isEmptyOrNull) return true;
     } else {
-      if (nama.text != model.nama ||
-          url.text != model.photoUrl ||
+      if (url.text != model.photoUrl ||
           selectedDate != model.tanggal ||
           keterangan.text != model.keterangan ||
           kategori != model.kategori ||
@@ -157,7 +154,6 @@ class TransaksiController extends GetxController {
   }
 
   clear() {
-    nama.clear();
     url.clear();
     jumlah.clear();
     selectedDate = DateTime.now();
