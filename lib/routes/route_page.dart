@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/modules/kas/kategori/index.dart';
 import 'package:mosq/modules/kas/views/form_kas.dart';
-import 'package:mosq/modules/kas/views/form_kategori.dart';
+import 'package:mosq/modules/kas/kategori/form_kategori.dart';
 import 'package:mosq/modules/kas/views/form_transaksi.dart';
 import 'package:mosq/modules/kegiatan/views/show.dart';
 import 'package:mosq/modules/kegiatan/views/show.dart';

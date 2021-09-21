@@ -10,6 +10,7 @@ import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dar
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
+import 'package:mosq/screens/widgets/ButtonForm.dart';
 import 'package:mosq/screens/widgets/MqFormFoto.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
@@ -69,6 +70,7 @@ class _FormMasjidState extends State<FormMasjid> {
         content: Column(
           children: [
             EditText(
+              textInputAction: TextInputAction.next,
               isEnabled: !profilC.isSaving.value,
               mController: profilC.nama,
               validator: (value) =>
@@ -109,6 +111,7 @@ class _FormMasjidState extends State<FormMasjid> {
         content: Column(
           children: [
             EditText(
+              textInputAction: TextInputAction.next,
               isEnabled: !profilC.isSaving.value,
               mController: profilC.alamat,
               validator: (value) =>
@@ -117,13 +120,14 @@ class _FormMasjidState extends State<FormMasjid> {
                       .getError(),
               label: mk_lbl_alamat,
               hint: mk_hint_alamat,
-              keyboardType: TextInputType.streetAddress,
+              // keyboardType: TextInputType.streetAddress,
               icon: Icon(Icons.edit_location,
                   color: profilC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
             ),
             EditText(
+              textInputAction: TextInputAction.next,
               isEnabled: !profilC.isSaving.value,
               mController: profilC.kecamatan,
               validator: (value) =>
@@ -138,6 +142,7 @@ class _FormMasjidState extends State<FormMasjid> {
                       : mkColorPrimaryDark),
             ),
             EditText(
+              textInputAction: TextInputAction.next,
               isEnabled: !profilC.isSaving.value,
               mController: profilC.kodePos,
               inputFormatters: [
@@ -158,6 +163,7 @@ class _FormMasjidState extends State<FormMasjid> {
                       : mkColorPrimaryDark),
             ),
             EditText(
+              textInputAction: TextInputAction.next,
               isEnabled: !profilC.isSaving.value,
               mController: profilC.kota,
               validator: (value) =>
@@ -171,6 +177,7 @@ class _FormMasjidState extends State<FormMasjid> {
                       : mkColorPrimaryDark),
             ),
             EditText(
+              textInputAction: TextInputAction.next,
               isEnabled: !profilC.isSaving.value,
               mController: profilC.provinsi,
               validator: (value) =>
@@ -194,6 +201,7 @@ class _FormMasjidState extends State<FormMasjid> {
         content: Column(
           children: [
             EditText(
+              textInputAction: TextInputAction.next,
               isEnabled: !profilC.isSaving.value,
               mController: profilC.tahun,
               validator: (value) =>
@@ -214,6 +222,7 @@ class _FormMasjidState extends State<FormMasjid> {
               ],
             ),
             EditText(
+              textInputAction: TextInputAction.next,
               isEnabled: !profilC.isSaving.value,
               mController: profilC.luasTanah,
               validator: (value) =>
@@ -233,6 +242,7 @@ class _FormMasjidState extends State<FormMasjid> {
               ],
             ),
             EditText(
+              textInputAction: TextInputAction.next,
               isEnabled: !profilC.isSaving.value,
               mController: profilC.luasBangunan,
               validator: (value) =>
@@ -429,38 +439,20 @@ class _FormMasjidState extends State<FormMasjid> {
                               ),
                             ),
                           ),
-                          Obx(
-                            () => Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 50,
-                              margin: EdgeInsets.all(10),
-                              decoration: boxDecoration(
-                                  bgColor: profilC.isSaving.value
-                                      ? mkColorPrimaryLight
-                                      : mkColorPrimary,
-                                  radius: 10),
-                              padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                              child: InkWell(
-                                onTap: () async {
-                                  if (profilC.isSaving.value == false) {
-                                    if (formKey.currentState!.validate()) {
-                                      await profilC.saveMasjid(model,
-                                          path: formFoto.newPath);
-                                      Get.back();
-                                    } else {
-                                      formKey.currentState!.validate();
-                                    }
-                                  }
-                                },
-                                child: Center(
-                                  child: profilC.isSaving.value
-                                      ? CircularProgressIndicator()
-                                      : Text(mk_submit,
-                                          style: boldTextStyle(
-                                              color: white, size: 18)),
-                                ),
-                              ),
-                            ),
+                          ButtonForm(
+                            isSaving: profilC.isSaving,
+                            tapFunction: () async {
+                              // profilC.isSaving.value = true;
+                              if (profilC.isSaving.value == false) {
+                                if (formKey.currentState!.validate()) {
+                                  await profilC.saveMasjid(model,
+                                      path: formFoto.newPath);
+                                  Get.back();
+                                } else {
+                                  formKey.currentState!.validate();
+                                }
+                              }
+                            },
                           ),
                         ],
                       ),

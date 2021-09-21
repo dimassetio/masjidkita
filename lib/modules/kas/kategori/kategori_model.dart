@@ -4,7 +4,7 @@ import 'package:mosq/modules/kas/kategori/kategori_database.dart';
 class KategoriModel {
   String? id;
   String? nama;
-  String? jenis;
+  int? jenis;
   KategoriDatabase? dao;
 
   KategoriModel({this.id, this.nama, this.jenis, this.dao});

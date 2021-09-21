@@ -12,6 +12,7 @@ import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dar
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
+import 'package:mosq/screens/widgets/ButtonForm.dart';
 import 'package:mosq/screens/widgets/MqFormFoto.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
@@ -335,33 +336,18 @@ class _StepperBodyState extends State<StepperBody> {
                         ),
                       ),
                     ),
-                    Obx(
-                      () => Container(
-                        width: Get.width,
-                        height: 50,
-                        margin: EdgeInsets.all(10),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(),
-                          onPressed: () async {
-                            if (kegiatanC.isSaving.value == false) {
-                              if (_formKey.currentState!.validate()) {
-                                await kegiatanC.saveKegiatan(model,
-                                    path: formFoto.newPath);
-                              } else {
-                                _formKey.currentState!.validate();
-                              }
+                    ButtonForm(
+                        tapFunction: () async {
+                          if (kegiatanC.isSaving.value == false) {
+                            if (_formKey.currentState!.validate()) {
+                              await kegiatanC.saveKegiatan(model,
+                                  path: formFoto.newPath);
+                            } else {
+                              _formKey.currentState!.validate();
                             }
-                          },
-                          child: Center(
-                            child: kegiatanC.isSaving.value
-                                ? CircularProgressIndicator()
-                                : Text(mk_submit,
-                                    style:
-                                        boldTextStyle(color: white, size: 18)),
-                          ),
-                        ),
-                      ),
-                    ),
+                          }
+                        },
+                        isSaving: kegiatanC.isSaving)
                   ],
                 ),
               )),

@@ -22,8 +22,8 @@ class KategoriController extends GetxController {
   var isSaving = false.obs;
 
   TextEditingController namaC = TextEditingController();
-  List<String> jenisList = ['pemasukan', 'pengeluaran'];
-  String? jenis;
+  List<int> jenisList = [10, 20];
+  int? jenis;
 
   getKategoriStream(MasjidModel model) {
     rxKategories.bindStream(model.kategoriDao!.kategoriStream(model));
@@ -58,7 +58,7 @@ class KategoriController extends GetxController {
 
   checkControllers(KategoriModel model) {
     if (model.id.isEmptyOrNull) {
-      if (namaC.text.isNotEmpty || !jenis.isEmptyOrNull) return true;
+      if (namaC.text.isNotEmpty || jenis != null) return true;
     } else {
       if (namaC.text != model.nama || jenis != model.jenis) return true;
     }
