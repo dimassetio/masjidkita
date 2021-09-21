@@ -12,8 +12,6 @@ import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
-import 'package:mosq/screens/utils/MKImages.dart';
-import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/widgets/MasjidCarouselSlider.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -197,27 +195,11 @@ class KasSlider extends StatelessWidget {
                                   if (res == true) {
                                     kasC.delete(dataKas);
                                   }
-                                  // Get.toNamed(RouteName.new_kategori_transaksi,
-                                  //     arguments: KategoriModel(dao: model.kategoriDao));
-                                } else if (value == 'kategori') {
-                                  Get.toNamed(RouteName.new_kategori);
                                 }
                               },
                               offset: Offset(0, 50),
                               itemBuilder: (context) {
                                 List<PopupMenuEntry<Object>> list = [];
-                                list.add(
-                                  PopupMenuItem(
-                                    child: ListTile(
-                                      leading: Icon(
-                                        Icons.tag,
-                                        color: Colors.black,
-                                      ),
-                                      title: Text('Tambah Kategori'),
-                                    ),
-                                    value: 'kategori',
-                                  ),
-                                );
                                 list.add(
                                   PopupMenuItem(
                                     child: ListTile(
