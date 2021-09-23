@@ -296,7 +296,7 @@ Widget CardDetails({
                 children: <Widget>[
                   FittedBox(
                     child: Text(
-                      'CARDHOLDER',
+                      'MASJID',
                       style: secondaryTextStyle(color: Colors.white60),
                       textAlign: TextAlign.center,
                     ),
@@ -318,7 +318,7 @@ Widget CardDetails({
                 children: <Widget>[
                   FittedBox(
                     child: Text(
-                      'EXPIRES',
+                      'SALDO',
                       style: secondaryTextStyle(color: Colors.white60),
                       textAlign: TextAlign.center,
                     ),

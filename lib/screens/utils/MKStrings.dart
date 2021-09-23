@@ -72,6 +72,7 @@ const mk_add_takmir = "Tambah Takmir";
 const mk_edit_takmir = "Edit Takmir";
 
 const mk_add_kas = "Tambah Kas";
+const mk_dashboard_kas = "Dashboard Kas";
 const mk_add_transaksi = "Tambah Transaksi";
 const mk_edit_transaksi = "Edit Transaksi";
 const mk_edit_kas = "Edit Kas";

@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/modules/kas/models/kas_model.dart';
+import 'package:mosq/modules/kas/models/transaksi_model.dart';
+import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/Style.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class DashboardKas extends StatefulWidget {
+  KasModel model = Get.arguments;
+  // TransaksiModel modelT = Get.arguments;
   @override
   _DashboardKasState createState() => _DashboardKasState();
 }
@@ -18,11 +25,11 @@ class _DashboardKasState extends State<DashboardKas> {
   @override
   Widget build(BuildContext context) {
     final tab = [
-      OPDasboardScreen(context),
-      OPDasboardScreen(context),
-      OPDasboardScreen(context),
-      OPDasboardScreen(context),
-      OPDasboardScreen(context),
+      OPDasboardScreen(context, widget.model),
+      OPDasboardScreen(context, widget.model),
+      OPDasboardScreen(context, widget.model),
+      OPDasboardScreen(context, widget.model),
+      OPDasboardScreen(context, widget.model),
       // OPMyCards(),
       // OPDasboardScreen(context),
       // OPAtmLocationScreen(),
@@ -50,26 +57,12 @@ class _DashboardKasState extends State<DashboardKas> {
             backgroundColor: appStore.appBarColor,
             leading: IconButton(
               onPressed: () {
-                // KasC.checkControllers(
-                //         Get.currentRoute == RouteName.edit_Kas
-                //             ? dataKas!
-                //             : KasModel(
-                //                 nama: "", jabatan: "", photoUrl: "", id: ""))
-                //     ? showDialog(
-                //         context: Get.context!,
-                //         builder: (BuildContext context) => ConfirmDialog(),
-                //       )
-                //     :
                 Get.back();
               },
               icon: Icon(Icons.arrow_back,
                   color: appStore.isDarkModeOn ? white : black),
             ),
-            // title: appBarTitleWidget(
-            //   context,
-            //   Get.currentRoute == RouteName.edit_kas ? mk_edit_kas : mk_add_kas,
-            // ),
-            // actions: actions,
+            title: appBarTitleWidget(context, widget.model.nama ?? 'Detail'),
           ),
           // : SizedBox(),
           body: tab[_currentIndex],
@@ -147,7 +140,8 @@ class _DashboardKasState extends State<DashboardKas> {
   }
 }
 
-Widget OPDasboardScreen(BuildContext context) {
+// ignore: non_constant_identifier_names
+Widget OPDasboardScreen(BuildContext context, KasModel model) {
   return Container(
     child: SingleChildScrollView(
       child: Column(
@@ -162,10 +156,10 @@ Widget OPDasboardScreen(BuildContext context) {
                   children: <Widget>[
                     Container(
                       child: CardDetails(
-                        visaTitle: 'Visa',
-                        creditNumber: '3456',
-                        expire: '12/20',
-                        name: 'John Doe',
+                        visaTitle: model.nama ?? 'Buku kas',
+                        creditNumber: model.id ?? 'Ini kode',
+                        expire: model.saldo.toString(),
+                        name: 'Masjid',
                         color: mkColorPrimary,
                       ),
                     ),
@@ -207,28 +201,17 @@ Widget OPDasboardScreen(BuildContext context) {
               ],
             ),
           ),
-          Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 5.0),
-                width: double.infinity,
-                child: DashboardList(
-                  name: 'John Doe',
-                  status: 'Payment Received',
-                  color: mkColorPrimary,
-                  amount: '+ ₹250',
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => OPTransactionDetailsScreen(),
-                    //   ),
-                    // );
-                  },
-                ),
-              ),
-            ],
-          ),
+          Obx(() => ListView.builder(
+              padding: EdgeInsets.symmetric(),
+              scrollDirection: Axis.vertical,
+              itemCount: transaksiC.transaksies.length,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Transaksies(
+                    dataTransaksi: transaksiC.transaksies[index]);
+              })),
+          text(transaksiC.transaksies.toString())
         ],
       ),
     ),
@@ -297,6 +280,37 @@ class TransaksiKas extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Transaksies extends StatelessWidget {
+  const Transaksies({required this.dataTransaksi});
+  final TransaksiModel dataTransaksi;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 5.0),
+          width: double.infinity,
+          child: DashboardList(
+            name: '${dataTransaksi.jumlah}',
+            status: '${dataTransaksi.jumlah}',
+            color: mkColorPrimary,
+            amount: '${dataTransaksi.jumlah}',
+            onPressed: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => OPTransactionDetailsScreen(),
+              //   ),
+              // );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

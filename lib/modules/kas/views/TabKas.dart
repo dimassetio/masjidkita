@@ -17,6 +17,7 @@ import '../../../../main.dart';
 class TMTabKas extends StatelessWidget {
   const TMTabKas(this.model);
   final MasjidModel model;
+  // final TransaksiModel modelT;
   @override
   Widget build(BuildContext context) {
     var width = Get.width - 10;
@@ -68,7 +69,7 @@ class TMTabKas extends StatelessWidget {
                   ],
                 ),
               ),
-              TransaksiKas(),
+              // TransaksiKas(),
             ],
           ),
         ),
@@ -88,85 +89,96 @@ class TMTabKas extends StatelessWidget {
                         arguments: TransaksiModel(dao: model.transaksiDao));
                   })
               : SizedBox())),
+      text(transaksiC.transaksies.toString())
     ]);
   }
 }
 
 class TransaksiKas extends StatelessWidget {
+  final TransaksiModel model = Get.arguments;
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width - 10;
     return Container(
       width: width,
       // padding: EdgeInsets.only(left: 20.0, right: 20),
-      child: ListView.builder(
+      child: Obx(() => ListView.builder(
+          padding: EdgeInsets.symmetric(),
           scrollDirection: Axis.vertical,
-          itemCount: 10,
+          itemCount: transaksiC.transaksies.length,
           shrinkWrap: true,
           physics: ScrollPhysics(),
           itemBuilder: (context, index) {
-            return Column(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 18),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Container(
-                        width: width * 0.1,
-                        child: Column(
-                          children: <Widget>[
-                            text("Des", fontSize: textSizeSMedium),
-                            text("$index",
-                                fontSize: textSizeLargeMedium,
-                                textColor: appStore.textSecondaryColor),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        decoration: boxDecoration(
-                            radius: width * 0.06, bgColor: mkColorPrimary50),
-                        // margin: EdgeInsets.only(left: 16, right: 16),
-                        width: width * 0.06,
-                        height: width * 0.06,
-                        child: Icon(
-                          Icons.call_received,
-                          size: width * 0.04,
-                          color: mkColorPrimary,
-                        ),
-                        // padding: EdgeInsets.all(width / 30),
-                      ),
-                      Container(
-                        width: width * 0.5,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            text(
-                                "Nama Pengeluaran fs dhn jfkns  ksdfkjsdn sd fjksdhf sdnfk ",
-                                textColor: appStore.textPrimaryColor,
-                                fontSize: textSizeMedium,
-                                fontFamily: fontSemibold),
-                            text("Nama Buku Kas", fontSize: textSizeSMedium)
-                          ],
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        width: width * 0.25,
-                        child: text("+ RP $index" + ".000.000",
-                            textColor: appStore.textSecondaryColor,
-                            fontSize: textSizeMedium,
-                            isLongText: true,
-                            fontFamily: fontSemibold),
-                      )
-                    ],
-                  ),
+            return TransaksiList(dataTransaksi: transaksiC.transaksies[index]);
+          })),
+    );
+  }
+}
+
+class TransaksiList extends StatelessWidget {
+  const TransaksiList({required this.dataTransaksi});
+  final TransaksiModel dataTransaksi;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 18),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Container(
+                width: Get.width * 0.1,
+                child: Column(
+                  children: <Widget>[
+                    text("${dataTransaksi.jumlah}", fontSize: textSizeSMedium),
+                    text("${dataTransaksi.jumlah}",
+                        fontSize: textSizeLargeMedium,
+                        textColor: appStore.textSecondaryColor),
+                  ],
                 ),
-                Divider(height: 0.5)
-              ],
-            );
-          }),
+              ),
+              Container(
+                decoration: boxDecoration(
+                    radius: Get.width * 0.06, bgColor: mkColorPrimary50),
+                // margin: EdgeInsets.only(left: 16, right: 16),
+                width: Get.width * 0.06,
+                height: Get.width * 0.06,
+                child: Icon(
+                  Icons.call_received,
+                  size: Get.width * 0.04,
+                  color: mkColorPrimary,
+                ),
+                // padding: EdgeInsets.all(width / 30),
+              ),
+              Container(
+                width: Get.width * 0.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    text("${dataTransaksi.jumlah}",
+                        textColor: appStore.textPrimaryColor,
+                        fontSize: textSizeMedium,
+                        fontFamily: fontSemibold),
+                    text("${dataTransaksi.jumlah}", fontSize: textSizeSMedium)
+                  ],
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                width: Get.width * 0.25,
+                child: text("+ RP ${dataTransaksi.jumlah}" + ".000.000",
+                    textColor: appStore.textSecondaryColor,
+                    fontSize: textSizeMedium,
+                    isLongText: true,
+                    fontFamily: fontSemibold),
+              )
+            ],
+          ),
+        ),
+        Divider(height: 0.5)
+      ],
     );
   }
 }
