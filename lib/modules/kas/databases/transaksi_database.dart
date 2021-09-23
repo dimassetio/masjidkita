@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobx/mobx.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:mosq/modules/kas/databases/kas_database.dart';
 import 'package:mosq/modules/kas/models/kas_model.dart';
 import 'package:mosq/modules/kas/models/transaksi_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
@@ -47,12 +49,22 @@ class TransaksiDatabase {
   // }
 
   Future store(TransaksiModel model) async {
+    firebaseFirestore.runTransaction((transaction) async {
+      DocumentReference fromKas =
+          firebaseFirestore.collection('kas').doc(model.kasID);
+      DocumentSnapshot dataKas = await transaction.get(fromKas);
+      int jumlah = dataKas.data()?['saldo'];
+      transaction.update(fromKas, {'saldo': jumlah - model.jumlah!});
+    });
     return await db.add(model.toSnapshot());
     // await db.add(model.toSnapshotTransaksiTotal());
   }
 
   Future update(TransaksiModel model) async {
-    return await db.doc(model.id).update(model.toSnapshot());
+    return await db.doc(model.kasID).update(model.toSnapshot());
+    // return await firebaseFirestore.runTransaction((transaction) async {
+    //   db.doc(kas.)
+    // });
   }
 
   Future delete(TransaksiModel model) async {
@@ -69,7 +81,7 @@ class TransaksiDatabase {
     UploadTask task = path.putFile(foto);
     task.snapshotEvents.listen((event) async {
       if (event.state == TaskState.success) {
-        model.photoUrl = await path.getDownloadURL();
+        model.url = await path.getDownloadURL();
         update(model);
       }
     });
