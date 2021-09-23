@@ -15,17 +15,23 @@ class TransaksiModel {
   String? tipeTransaksi;
   TransaksiDatabase? dao;
 
-  TransaksiModel(
-      {this.id,
-      this.kasID,
-      this.kategoriID,
-      this.photoUrl,
-      this.tanggal,
-      this.jumlah,
-      this.keterangan,
-      this.kategori,
-      this.tipeTransaksi,
-      this.dao});
+  int? jenis; //Testing Only
+  String? fromKas; //Testing Only
+
+  TransaksiModel({
+    this.id,
+    this.kasID,
+    this.kategoriID,
+    this.photoUrl,
+    this.tanggal,
+    this.jumlah,
+    this.keterangan,
+    this.kategori,
+    this.tipeTransaksi,
+    this.dao,
+    this.fromKas, //Testing Only
+    this.jenis, //Testing Only
+  });
 
   save() async {
     if (this.id == null) {
@@ -69,6 +75,8 @@ class TransaksiModel {
       keterangan: snapshot.data()?["keterangan"],
       kategori: snapshot.data()?["kategori"],
       tipeTransaksi: snapshot.data()?["tipeTransaksi"],
+      jenis: snapshot.data()?["jenis"], //testing only
+      fromKas: snapshot.data()?["fromKas"], //testing only
       dao: dao,
     );
   }
@@ -81,7 +89,9 @@ class TransaksiModel {
       'tanggal': this.tanggal,
       'keterangan': this.keterangan,
       'kategori': this.kategori,
-      'tipeTransaksi': this.tipeTransaksi
+      'tipeTransaksi': this.tipeTransaksi,
+      'jenis': this.jenis,
+      'from_kas': this.fromKas,
     };
   }
 }

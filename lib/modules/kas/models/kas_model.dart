@@ -51,6 +51,7 @@ class KasModel {
       result = result + kas.saldo!;
     }
     return KasModel(
+        id: 'KasTotal',
         nama: "Kas Total",
         saldo: result,
         deskripsi: "Akumulasi dari keseluruhan Buku Kas");

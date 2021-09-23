@@ -19,7 +19,7 @@ class TransaksiController extends GetxController {
   var isSaving = false.obs;
 
   RxList<TransaksiModel> transaksiList = RxList<TransaksiModel>();
-  List<TransaksiModel> get kases => transaksiList.value;
+  List<TransaksiModel> get transaksies => transaksiList.value;
 
   Rx<TransaksiModel> _transaksiModel = TransaksiModel().obs;
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mosq/modules/kas/kategori/kategori_database.dart';
 import 'package:mosq/modules/kas/kategori/kategori_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
@@ -16,6 +17,9 @@ class KategoriController extends GetxController {
   RxList<KategoriModel> rxKategories = RxList<KategoriModel>();
   List<KategoriModel> get kategories => rxKategories.value;
 
+  RxList<KategoriModel> _filteredKategories = RxList<KategoriModel>();
+  List<KategoriModel> get filteredKategories => _filteredKategories.value;
+
   Rx<KategoriModel> _kategoriModel = KategoriModel().obs;
   KategoriModel get kategori => _kategoriModel.value;
 
@@ -27,6 +31,11 @@ class KategoriController extends GetxController {
 
   getKategoriStream(MasjidModel model) {
     rxKategories.bindStream(model.kategoriDao!.kategoriStream(model));
+  }
+
+  filterKategoriStream(MasjidModel model, FilterKategori? filter) {
+    _filteredKategories
+        .bindStream(model.kategoriDao!.filterKategoriStream(model, filter));
   }
 
   Future deleteKategori(KategoriModel model) async {

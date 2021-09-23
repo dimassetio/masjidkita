@@ -35,9 +35,9 @@ class MasjidDatabase {
   //   return db.doc(model.id).collection(kategoriCollection);
   // }
 
-  Stream<MasjidModel> streamDetailMasjid(MasjidModel model) {
+  Stream<MasjidModel> streamDetailMasjid(String id) {
     return db
-        .doc(model.id)
+        .doc(id)
         .snapshots()
         .map((event) => MasjidModel().fromSnapshot(event));
   }

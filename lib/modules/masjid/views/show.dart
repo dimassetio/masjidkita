@@ -31,7 +31,7 @@ class DetailMasjid extends StatelessWidget {
     return Scaffold(
       drawer: masjidC.myMasjid.value ? MosQDrawer(model) : null,
       body: StreamBuilder<MasjidModel>(
-          stream: model.dao.streamDetailMasjid(model),
+          stream: model.dao.streamDetailMasjid(model.id!),
           initialData: model,
           builder: (context, masjidStream) {
             model = masjidStream.data!;
@@ -103,7 +103,7 @@ class DetailMasjid extends StatelessWidget {
                       TMTabProfile(model),
                       TMTabTakmir(model),
                       TMTabKas(model),
-                      TMTabInventaris(model, InventarisModel()),
+                      TMTabInventaris(model),
                       TabKegiatan(model),
                     ],
                   )),

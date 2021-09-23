@@ -144,7 +144,8 @@ const mk_lbl_Kategori_transaksi = "Kategori";
 const mk_lbl_nama_Kategori_transaksi = "Nama Kategori";
 const mk_hint_nama_Kategori_transaksi = "Ex: Listrik";
 
-const mk_lbl_jenis_Kategori_transaksi = "Jenis";
+const mk_lbl_jenis_Kategori_transaksi = "Kategori";
+const mk_lbl_jenis_transaksi = "Jenis Transaksi";
 
 const mk_lbl_settings = 'Settings';
 const mk_lbl_message = 'Messages';

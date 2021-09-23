@@ -22,6 +22,10 @@ class MasjidController extends GetxController {
   RxList<MasjidModel> resultsList = RxList<MasjidModel>();
   List<MasjidModel> get filteredMasjid => resultsList.value;
 
+  var _currMasjid = MasjidModel().obs;
+  MasjidModel get currMasjid => _currMasjid.value;
+  set currMasjid(MasjidModel value) => this._currMasjid.value = value;
+
   TextEditingController searchController = TextEditingController();
 
   var isSearching = false.obs;
@@ -146,10 +150,12 @@ class MasjidController extends GetxController {
       kasC.getKasStream(dataMasjid);
       kategoriC.getKategoriStream(dataMasjid);
       kegiatanC.getKegiatanStream(dataMasjid);
+      transaksiC.getTransaksiStream(dataMasjid);
     } catch (e) {
       toast(e.toString());
     } finally {
       await isMyMasjid(dataMasjid);
+      _currMasjid.bindStream(dataMasjid.dao.streamDetailMasjid(dataMasjid.id!));
       await Get.toNamed(RouteName.detail, arguments: dataMasjid);
     }
   }

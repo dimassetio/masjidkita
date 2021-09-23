@@ -39,6 +39,26 @@ class TransaksiDatabase {
     });
   }
 
+  Stream<int> getSumTransaksi(MasjidModel model, KasModel kas) async* {
+    yield* db
+        .where('from_kas', isEqualTo: kas.id)
+        .snapshots()
+        .map((QuerySnapshot query) {
+      int total = 0;
+      query.docs.forEach((element) {
+        if (element.data()["jenis"] == 10) {
+          total = total + element.data()["jumlah"] as int;
+        } else if (element.data()["jenis"] == 20) {
+          total = total - element.data()["jumlah"] as int;
+        } else {
+          print('Jenis e error bro');
+        }
+      });
+      print("Total = $total");
+      return total;
+    });
+  }
+
   // Future<bool> checkTransaksi(TransaksiModel model) async {
   //   try {
   //     await db.doc(model.id)
@@ -47,7 +67,12 @@ class TransaksiDatabase {
   // }
 
   Future store(TransaksiModel model) async {
-    return await db.add(model.toSnapshot());
+    // firebaseFirestore.runTransaction((transaction) {
+    // transaction.set(db, model.toSnapshot());
+    // }
+
+    await db.add(model.toSnapshot());
+    // );
     // await db.add(model.toSnapshotTransaksiTotal());
   }
 
