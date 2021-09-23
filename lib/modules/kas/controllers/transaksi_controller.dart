@@ -118,7 +118,7 @@ class TransaksiController extends GetxController {
         jumlah.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
     model.kategori = kategori;
     model.kasID = idKas;
-    model.url = url.text;
+    model.photoUrl = path;
     model.jumlah = jumlahInt;
     model.tanggal = date;
     model.keterangan = keterangan.text;
@@ -163,7 +163,7 @@ class TransaksiController extends GetxController {
           // selectedDate != DateTime.now() ||
           !foto.isEmptyOrNull) return true;
     } else {
-      if (url.text != model.url ||
+      if (url.text != model.photoUrl ||
           // selectedDate != model.tanggal ||
           keterangan.text != model.keterangan ||
           kategori != model.kategori ||
