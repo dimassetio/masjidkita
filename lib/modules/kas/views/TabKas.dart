@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/kas/models/transaksi_model.dart';
@@ -69,7 +70,7 @@ class TMTabKas extends StatelessWidget {
                   ],
                 ),
               ),
-              // TransaksiKas(),
+              TransaksiKas(),
             ],
           ),
         ),
@@ -89,13 +90,12 @@ class TMTabKas extends StatelessWidget {
                         arguments: TransaksiModel(dao: model.transaksiDao));
                   })
               : SizedBox())),
-      text(transaksiC.transaksies.toString())
     ]);
   }
 }
 
 class TransaksiKas extends StatelessWidget {
-  final TransaksiModel model = Get.arguments;
+  // final TransaksiModel model = Get.arguments;
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width - 10;
@@ -128,26 +128,20 @@ class TransaksiList extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Container(
-                width: Get.width * 0.1,
-                child: Column(
-                  children: <Widget>[
-                    text("${dataTransaksi.jumlah}", fontSize: textSizeSMedium),
-                    text("${dataTransaksi.jumlah}",
-                        fontSize: textSizeLargeMedium,
-                        textColor: appStore.textSecondaryColor),
-                  ],
-                ),
-              ),
-              Container(
                 decoration: boxDecoration(
-                    radius: Get.width * 0.06, bgColor: mkColorPrimary50),
+                    radius: Get.width * 0.06,
+                    bgColor: dataTransaksi.tipeTransaksi == 10
+                        ? mkGreen.withOpacity(0.3)
+                        : mkRed.withOpacity(0.3)),
                 // margin: EdgeInsets.only(left: 16, right: 16),
                 width: Get.width * 0.06,
                 height: Get.width * 0.06,
                 child: Icon(
-                  Icons.call_received,
+                  dataTransaksi.tipeTransaksi == 10
+                      ? Icons.call_received
+                      : Icons.call_made,
                   size: Get.width * 0.04,
-                  color: mkColorPrimary,
+                  color: dataTransaksi.tipeTransaksi == 10 ? mkGreen : mkRed,
                 ),
                 // padding: EdgeInsets.all(width / 30),
               ),
@@ -157,18 +151,19 @@ class TransaksiList extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    text("${dataTransaksi.jumlah}",
+                    text("${dataTransaksi.kategori}",
                         textColor: appStore.textPrimaryColor,
                         fontSize: textSizeMedium,
                         fontFamily: fontSemibold),
-                    text("${dataTransaksi.jumlah}", fontSize: textSizeSMedium)
+                    text("${dataTransaksi.keterangan}",
+                        fontSize: textSizeSMedium)
                   ],
                 ),
               ),
               Container(
                 alignment: Alignment.center,
                 width: Get.width * 0.25,
-                child: text("+ RP ${dataTransaksi.jumlah}" + ".000.000",
+                child: text("${currencyFormatter(dataTransaksi.jumlah)}",
                     textColor: appStore.textSecondaryColor,
                     fontSize: textSizeMedium,
                     isLongText: true,

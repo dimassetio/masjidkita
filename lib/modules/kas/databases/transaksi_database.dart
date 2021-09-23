@@ -36,6 +36,7 @@ class TransaksiDatabase {
       query.docs.forEach((element) {
         list.add(TransaksiModel().fromSnapshot(element, model.transaksiDao!));
       });
+      print("List Transaksi $list");
       return list;
     });
   }

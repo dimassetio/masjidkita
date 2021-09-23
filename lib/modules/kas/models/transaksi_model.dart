@@ -16,8 +16,6 @@ class TransaksiModel {
   DateTime? tanggal;
   TransaksiDatabase? dao;
 
-  int? jenis; //Testing Only
-
   TransaksiModel({
     this.id,
     this.toKas,
@@ -29,8 +27,7 @@ class TransaksiModel {
     this.kategori,
     this.tipeTransaksi,
     this.dao,
-    this.fromKas, //Testing Only
-    this.jenis, //Testing Only
+    this.fromKas,
   });
 
   save() async {
@@ -70,14 +67,13 @@ class TransaksiModel {
       toKas: snapshot.data()?["toKas"],
       kategoriID: snapshot.data()?["kategoriID"],
       photoUrl: snapshot.data()?["url"],
-      tanggal: snapshot.data()?["tanggal"],
+      tanggal: snapshot.data()?["tanggal"].toDate(),
       jumlah: snapshot.data()?["jumlah"],
       keterangan: snapshot.data()?["keterangan"],
       kategori: snapshot.data()?["kategori"],
       tipeTransaksi: snapshot.data()?["tipeTransaksi"],
       fromKas: snapshot.data()?["fromKas"],
       dao: dao,
-      jenis: snapshot.data()?["jenis"], //testing only
     );
   }
 
@@ -92,7 +88,6 @@ class TransaksiModel {
       'keterangan': this.keterangan,
       'kategori': this.kategori,
       'tipeTransaksi': this.tipeTransaksi,
-      'jenis': this.jenis,
       'from_kas': this.fromKas,
     };
   }
