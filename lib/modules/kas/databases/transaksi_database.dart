@@ -76,23 +76,7 @@ class TransaksiDatabase {
       int jumlah = dataKas.data()?['saldo'];
       transaction.update(fromKas, {'saldo': jumlah - model.jumlah!});
     });
-    return await db.add(model.toSnapshot());
-    // firebaseFirestore.runTransaction((transaction) {
-    // transaction.set(db, model.toSnapshot());
-    // }
-
     await db.add(model.toSnapshot());
-    // );
-
-    // firebaseFirestore.runTransaction((transaction) async {
-    //   DocumentReference fromKas =
-    //       firebaseFirestore.collection('kas').doc(model.kasID);
-    //   DocumentSnapshot dataKas = await transaction.get(fromKas);
-    //   int jumlah = dataKas.data()?['saldo'];
-    //   transaction.update(fromKas, {'saldo': jumlah - model.jumlah!});
-    // });
-    return await db.add(model.toSnapshot());
-    // await db.add(model.toSnapshotTransaksiTotal());
   }
 
   Future update(TransaksiModel model) async {

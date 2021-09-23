@@ -22,11 +22,7 @@ class TransaksiModel {
     this.id,
     this.kasID,
     this.kategoriID,
-<<<<<<< HEAD
-    this.url,
-=======
     this.photoUrl,
->>>>>>> 38eb778220aead80d7a95c6c3259c732539190c2
     this.tanggal,
     this.jumlah,
     this.keterangan,

@@ -59,13 +59,8 @@ class KasSlider extends StatelessWidget {
         splashColor: mkColorPrimaryDark,
         onTap: () {
           dataKas.nama != "Kas Total"
-              ? Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DashboardKas(),
-                  ),
-                )
-              : null;
+              ? Get.toNamed(RouteName.dashboard_kas, arguments: dataKas)
+              : text("EWEWEW");
         },
         child: Stack(
           children: [
