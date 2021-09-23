@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mosq/modules/kas/kategori/kategori_database.dart';
 import 'package:mosq/modules/kas/kategori/kategori_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
@@ -16,17 +17,25 @@ class KategoriController extends GetxController {
   RxList<KategoriModel> rxKategories = RxList<KategoriModel>();
   List<KategoriModel> get kategories => rxKategories.value;
 
+  RxList<KategoriModel> _filteredKategories = RxList<KategoriModel>();
+  List<KategoriModel> get filteredKategories => _filteredKategories.value;
+
   Rx<KategoriModel> _kategoriModel = KategoriModel().obs;
   KategoriModel get kategori => _kategoriModel.value;
 
   var isSaving = false.obs;
 
   TextEditingController namaC = TextEditingController();
-  List<String> jenisList = ['pemasukan', 'pengeluaran'];
-  String? jenis;
+  List<int> jenisList = [10, 20];
+  int? jenis;
 
   getKategoriStream(MasjidModel model) {
     rxKategories.bindStream(model.kategoriDao!.kategoriStream(model));
+  }
+
+  filterKategoriStream(MasjidModel model, FilterKategori? filter) {
+    _filteredKategories
+        .bindStream(model.kategoriDao!.filterKategoriStream(model, filter));
   }
 
   Future deleteKategori(KategoriModel model) async {
@@ -58,7 +67,7 @@ class KategoriController extends GetxController {
 
   checkControllers(KategoriModel model) {
     if (model.id.isEmptyOrNull) {
-      if (namaC.text.isNotEmpty || !jenis.isEmptyOrNull) return true;
+      if (namaC.text.isNotEmpty || jenis != null) return true;
     } else {
       if (namaC.text != model.nama || jenis != model.jenis) return true;
     }

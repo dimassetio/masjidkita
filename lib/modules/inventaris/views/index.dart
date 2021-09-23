@@ -21,10 +21,10 @@ import 'package:mosq/main.dart';
 class TMTabInventaris extends StatefulWidget {
   @override
   _TMTabInventarisState createState() => _TMTabInventarisState();
-  final InventarisModel item;
+
   final MasjidModel model;
 
-  const TMTabInventaris(this.model, this.item);
+  const TMTabInventaris(this.model);
 }
 
 class _TMTabInventarisState extends State<TMTabInventaris> {
@@ -104,8 +104,9 @@ class _TMTabInventarisState extends State<TMTabInventaris> {
                                       builder: (BuildContext context) =>
                                           CustomDelete(
                                             titleName: 'Inventaris',
-                                            subtitleName:
-                                                widget.item.nama ?? "",
+                                            subtitleName: inventarisC
+                                                    .inventarises[index].nama ??
+                                                "",
                                           ));
                                 } else
                                   res = false;

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mosq/modules/kas/databases/kas_database.dart';
+import 'package:mosq/modules/kas/models/transaksi_model.dart';
 
 class KasModel {
   String? id;
@@ -24,6 +25,12 @@ class KasModel {
       return await this.dao!.store(this);
     } else {
       return await this.dao!.update(this);
+    }
+  }
+
+  saveToKas() async {
+    if (this.id != null) {
+      return await this.dao!.updateFTransaksi(TransaksiModel(), this);
     }
   }
 
@@ -51,6 +58,7 @@ class KasModel {
       result = result + kas.saldo!;
     }
     return KasModel(
+        id: 'KasTotal',
         nama: "Kas Total",
         saldo: result,
         deskripsi: "Akumulasi dari keseluruhan Buku Kas");

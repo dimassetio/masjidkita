@@ -13,6 +13,7 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/kas/kategori/kategori_model.dart';
 import 'package:mosq/modules/kas/models/kas_model.dart';
 import 'package:mosq/routes/route_name.dart';
+import 'package:mosq/screens/widgets/ButtonForm.dart';
 import 'package:mosq/screens/widgets/ImageSourceBottomSheet.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
@@ -260,30 +261,17 @@ class _StepperBodyState extends State<StepperBody> {
                     ),
                   ),
                 ),
-                Obx(
-                  () => Container(
-                    width: Get.width,
-                    height: 50,
-                    margin: EdgeInsets.all(10),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (kasC.isSaving.value == false) {
-                          if (_formKey.currentState!.validate()) {
-                            await kasC.saveKas(modelKas!);
-                          } else {
-                            _formKey.currentState!.validate();
-                          }
+                ButtonForm(
+                    tapFunction: () async {
+                      if (kasC.isSaving.value == false) {
+                        if (_formKey.currentState!.validate()) {
+                          await kasC.saveKas(modelKas!);
+                        } else {
+                          _formKey.currentState!.validate();
                         }
-                      },
-                      child: Center(
-                        child: kasC.isSaving.value
-                            ? CircularProgressIndicator()
-                            : Text(mk_submit,
-                                style: boldTextStyle(color: white, size: 18)),
-                      ),
-                    ),
-                  ),
-                ),
+                      }
+                    },
+                    isSaving: kasC.isSaving)
               ],
             ),
           )),

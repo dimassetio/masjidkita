@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/modules/kas/views/TabKas.dart';
@@ -28,9 +29,9 @@ class DetailMasjid extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get.put(InventarisController().onInit());
     return Scaffold(
-      endDrawer: MosQDrawer(model),
+      drawer: masjidC.myMasjid.value ? MosQDrawer(model) : null,
       body: StreamBuilder<MasjidModel>(
-          stream: model.dao.streamDetailMasjid(model),
+          stream: model.dao.streamDetailMasjid(model.id!),
           initialData: model,
           builder: (context, masjidStream) {
             model = masjidStream.data!;
@@ -41,17 +42,18 @@ class DetailMasjid extends StatelessWidget {
                       (BuildContext context, bool innerBoxIsScrolled) {
                     return <Widget>[
                       SliverAppBar(
-                        leading: IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          color: appStore.isDarkModeOn
-                              ? appStore.iconColor
-                              : innerBoxIsScrolled
-                                  ? blackColor
-                                  : lightGrey,
-                          onPressed: () {
-                            Get.back();
-                          },
-                        ),
+                        // leading: IconButton(
+                        //   icon: Icon(Icons.arrow_back),
+                        //   color: appStore.isDarkModeOn
+                        //       ? appStore.iconColor
+                        //       : innerBoxIsScrolled
+                        //           ? blackColor
+                        //           : lightGrey,
+                        //   onPressed: () {
+                        //     Get.back();
+                        //   },
+                        // ),
+                        leading: masjidC.myMasjid.value ? null : BackButton(),
                         expandedHeight: 220.0,
                         floating: true,
                         centerTitle: true,
@@ -101,7 +103,7 @@ class DetailMasjid extends StatelessWidget {
                       TMTabProfile(model),
                       TMTabTakmir(model),
                       TMTabKas(model),
-                      TMTabInventaris(model, InventarisModel()),
+                      TMTabInventaris(model),
                       TabKegiatan(model),
                     ],
                   )),

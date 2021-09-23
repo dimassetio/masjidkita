@@ -21,6 +21,19 @@ timeFormatter(DateTime? date) {
   }
   return '';
 }
+
+jenisTransaksiToStr(int? jenis) {
+  switch (jenis) {
+    case 10:
+      return 'Pemasukan';
+    case 20:
+      return 'Pengeluaran';
+    case 30:
+      return 'Pengeluaran';
+    default:
+      return 'Jenis Transaksi';
+  }
+}
 // }
 
 class DecimalInputFormatter extends TextInputFormatter {

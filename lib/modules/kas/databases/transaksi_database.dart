@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobx/mobx.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:mosq/modules/kas/databases/kas_database.dart';
 import 'package:mosq/modules/kas/models/kas_model.dart';
 import 'package:mosq/modules/kas/models/transaksi_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
@@ -39,6 +41,26 @@ class TransaksiDatabase {
     });
   }
 
+  Stream<int> getSumTransaksi(MasjidModel model, KasModel kas) async* {
+    yield* db
+        .where('from_kas', isEqualTo: kas.id)
+        .snapshots()
+        .map((QuerySnapshot query) {
+      int total = 0;
+      query.docs.forEach((element) {
+        if (element.data()["jenis"] == 10) {
+          total = total + element.data()["jumlah"] as int;
+        } else if (element.data()["jenis"] == 20) {
+          total = total - element.data()["jumlah"] as int;
+        } else {
+          print('Jenis e error bro');
+        }
+      });
+      print("Total = $total");
+      return total;
+    });
+  }
+
   // Future<bool> checkTransaksi(TransaksiModel model) async {
   //   try {
   //     await db.doc(model.id)
@@ -47,12 +69,37 @@ class TransaksiDatabase {
   // }
 
   Future store(TransaksiModel model) async {
+    firebaseFirestore.runTransaction((transaction) async {
+      DocumentReference fromKas =
+          firebaseFirestore.collection('kas').doc(model.kasID);
+      DocumentSnapshot dataKas = await transaction.get(fromKas);
+      int jumlah = dataKas.data()?['saldo'];
+      transaction.update(fromKas, {'saldo': jumlah - model.jumlah!});
+    });
+    return await db.add(model.toSnapshot());
+    // firebaseFirestore.runTransaction((transaction) {
+    // transaction.set(db, model.toSnapshot());
+    // }
+
+    await db.add(model.toSnapshot());
+    // );
+
+    // firebaseFirestore.runTransaction((transaction) async {
+    //   DocumentReference fromKas =
+    //       firebaseFirestore.collection('kas').doc(model.kasID);
+    //   DocumentSnapshot dataKas = await transaction.get(fromKas);
+    //   int jumlah = dataKas.data()?['saldo'];
+    //   transaction.update(fromKas, {'saldo': jumlah - model.jumlah!});
+    // });
     return await db.add(model.toSnapshot());
     // await db.add(model.toSnapshotTransaksiTotal());
   }
 
   Future update(TransaksiModel model) async {
-    return await db.doc(model.id).update(model.toSnapshot());
+    return await db.doc(model.kasID).update(model.toSnapshot());
+    // return await firebaseFirestore.runTransaction((transaction) async {
+    //   db.doc(kas.)
+    // });
   }
 
   Future delete(TransaksiModel model) async {

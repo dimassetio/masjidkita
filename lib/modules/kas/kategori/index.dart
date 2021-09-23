@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/kas/kategori/kategori_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
+import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:mosq/screens/widgets/DismissibleBackground.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class KategoriIndex extends StatelessWidget {
@@ -56,36 +59,8 @@ class KategoriIndex extends StatelessWidget {
                               shrinkWrap: true,
                               physics: ScrollPhysics(),
                               itemBuilder: (context, index) {
-                                return ListTile(
-                                  onTap: () {
-                                    toast('value');
-                                  },
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 12),
-                                  leading: CircleAvatar(
-                                    backgroundColor:
-                                        kategoriC.kategories[index].jenis ==
-                                                'pemasukan'
-                                            ? Colors.green.withOpacity(0.5)
-                                            : Colors.red.withOpacity(0.5),
-                                    child: Icon(
-                                      kategoriC.kategories[index].jenis ==
-                                              'pemasukan'
-                                          ? Icons.arrow_downward
-                                          : Icons.arrow_upward,
-                                      color:
-                                          kategoriC.kategories[index].jenis ==
-                                                  'pemasukan'
-                                              ? Colors.green
-                                              : Colors.red,
-                                    ),
-                                  ),
-                                  title: text(
-                                      kategoriC.kategories[index].nama ??
-                                          "Nama Kategori"),
-                                  subtitle: text(
-                                      kategoriC.kategories[index].jenis ??
-                                          "Nama Kategori"),
+                                return KategoriCard(
+                                  model: kategoriC.kategories[index],
                                 );
                               },
                             ),
@@ -111,6 +86,72 @@ class KategoriIndex extends StatelessWidget {
                       backgroundColor: mkColorPrimary,
                     )
                   : SizedBox())),
+        ],
+      ),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class KategoriCard extends StatelessWidget {
+  KategoriCard({required this.model});
+  KategoriModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dismissible(
+      key: Key(model.id!),
+      direction: masjidC.myMasjid.value
+          ? DismissDirection.horizontal
+          : DismissDirection.none,
+      background: slideRightBackground(),
+      secondaryBackground: slideLeftBackground(),
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.startToEnd) {
+          Get.toNamed(RouteName.edit_kategori, arguments: model);
+          return false;
+        } else if (direction == DismissDirection.endToStart) {
+          // toast("Delete data");
+          return await showDialog(
+              context: context,
+              builder: (BuildContext context) => CustomDelete(
+                    titleName: 'Kategori',
+                    subtitleName: model.nama ?? "",
+                  ));
+        }
+      },
+      onDismissed: (direction) async {
+        try {
+          kategoriC.deleteKategori(model);
+        } catch (e) {
+          toast('Error Delete Data');
+          rethrow;
+        }
+      },
+      child: Column(
+        children: [
+          ListTile(
+            onTap: () {
+              toast('value');
+            },
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            leading: CircleAvatar(
+              backgroundColor: model.jenis == 10
+                  ? Colors.green.withOpacity(0.5)
+                  : Colors.red.withOpacity(0.5),
+              child: Icon(
+                model.jenis == 10 ? Icons.arrow_downward : Icons.arrow_upward,
+                color: model.jenis == 10 ? Colors.green : Colors.red,
+              ),
+            ),
+            title: text(model.nama ?? "Nama Kategori"),
+            subtitle: text(jenisTransaksiToStr(model.jenis),
+                fontSize: textSizeSMedium),
+          ),
+          Divider(
+            color: mk_view_color,
+            height: 1,
+          )
         ],
       ),
     );

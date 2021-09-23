@@ -27,4 +27,5 @@ abstract class RouteName {
   static const edit_kategori = '/edit_kategori';
   static const new_transaksi = '/new_transaksi';
   static const edit_transaksi = '/edit_transaksi';
+  static const tes_transaksi = '/tes_transaksi';
 }

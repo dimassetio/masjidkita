@@ -15,17 +15,27 @@ class TransaksiModel {
   String? tipeTransaksi;
   TransaksiDatabase? dao;
 
-  TransaksiModel(
-      {this.id,
-      this.kasID,
-      this.kategoriID,
-      this.photoUrl,
-      this.tanggal,
-      this.jumlah,
-      this.keterangan,
-      this.kategori,
-      this.tipeTransaksi,
-      this.dao});
+  int? jenis; //Testing Only
+  String? fromKas; //Testing Only
+
+  TransaksiModel({
+    this.id,
+    this.kasID,
+    this.kategoriID,
+<<<<<<< HEAD
+    this.url,
+=======
+    this.photoUrl,
+>>>>>>> 38eb778220aead80d7a95c6c3259c732539190c2
+    this.tanggal,
+    this.jumlah,
+    this.keterangan,
+    this.kategori,
+    this.tipeTransaksi,
+    this.dao,
+    this.fromKas, //Testing Only
+    this.jenis, //Testing Only
+  });
 
   save() async {
     if (this.id == null) {
@@ -63,12 +73,14 @@ class TransaksiModel {
       id: snapshot.id,
       kasID: snapshot.data()?["kasID"],
       kategoriID: snapshot.data()?["kategoriID"],
-      photoUrl: snapshot.data()?["photoUrl"],
+      photoUrl: snapshot.data()?["url"],
       tanggal: snapshot.data()?["tanggal"],
       jumlah: snapshot.data()?["jumlah"],
       keterangan: snapshot.data()?["keterangan"],
       kategori: snapshot.data()?["kategori"],
       tipeTransaksi: snapshot.data()?["tipeTransaksi"],
+      jenis: snapshot.data()?["jenis"], //testing only
+      fromKas: snapshot.data()?["fromKas"], //testing only
       dao: dao,
     );
   }
@@ -76,12 +88,16 @@ class TransaksiModel {
   Map<String, dynamic> toSnapshot() {
     return {
       'id': this.id,
-      'photoUrl': this.photoUrl,
+      'url': this.photoUrl,
+      'kasID': this.kasID,
+      'kategoriID': this.kategoriID,
       'jumlah': this.jumlah,
       'tanggal': this.tanggal,
       'keterangan': this.keterangan,
       'kategori': this.kategori,
-      'tipeTransaksi': this.tipeTransaksi
+      'tipeTransaksi': this.tipeTransaksi,
+      'jenis': this.jenis,
+      'from_kas': this.fromKas,
     };
   }
 }
