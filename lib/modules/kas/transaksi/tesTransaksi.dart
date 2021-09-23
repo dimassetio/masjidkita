@@ -33,14 +33,23 @@ class TesTransaksi extends StatelessWidget {
     int sisaSaldo = kasModel.saldo!;
     sumTransaksi
         .bindStream(model.transaksiDao!.getSumTransaksi(model, kasModel));
+<<<<<<< HEAD
 
     var transaksimodel = TransaksiModel(
       dao: model.transaksiDao!,
       jenis: jenisTransaksi,
+=======
+    // sumTransaksi.value = model.transaksiDao!.getSumTransaksi(model, kasModel);
+
+    var transaksimodel = TransaksiModel(
+      dao: model.transaksiDao!,
+      tipeTransaksi: jenisTransaksi,
+>>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
       fromKas: dummyKas.id,
       jumlah: jumlahC.text.toInt(),
     );
     int? totalNow;
+<<<<<<< HEAD
     if (transaksimodel.jenis == 10) {
       totalNow =
           dummyKas.saldoAwal! + sumTransaksi.value + jumlahC.text.toInt();
@@ -48,6 +57,13 @@ class TesTransaksi extends StatelessWidget {
       totalNow =
           dummyKas.saldoAwal! + sumTransaksi.value - jumlahC.text.toInt();
     }
+=======
+    int jumlah = transaksimodel.jumlah ?? 0;
+    if (transaksimodel.tipeTransaksi == 20) {
+      transaksimodel.jumlah = 0 - transaksimodel.jumlah!;
+    }
+    totalNow = dummyKas.saldoAwal! + sumTransaksi.value + jumlah;
+>>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
     try {
       firebaseFirestore.runTransaction((transaction) async {
         CollectionReference colRef = kasModel.dao!.db;

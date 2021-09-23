@@ -5,22 +5,30 @@ import 'package:mosq/modules/kas/databases/transaksi_database.dart';
 
 class TransaksiModel {
   String? id;
-  String? kasID;
+  int? tipeTransaksi;
   String? kategoriID;
+  String? kategori;
+  String? keterangan;
+  int? jumlah;
+  String? fromKas;
+  String? toKas;
   String? photoUrl;
   DateTime? tanggal;
-  int? jumlah;
-  String? keterangan;
-  String? kategori;
-  String? tipeTransaksi;
   TransaksiDatabase? dao;
 
   int? jenis; //Testing Only
+<<<<<<< HEAD
   String? fromKas; //Testing Only
 
   TransaksiModel({
     this.id,
     this.kasID,
+=======
+
+  TransaksiModel({
+    this.id,
+    this.toKas,
+>>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
     this.kategoriID,
     this.photoUrl,
     this.tanggal,
@@ -67,7 +75,7 @@ class TransaksiModel {
       DocumentSnapshot snapshot, TransaksiDatabase dao) {
     return TransaksiModel(
       id: snapshot.id,
-      kasID: snapshot.data()?["kasID"],
+      toKas: snapshot.data()?["toKas"],
       kategoriID: snapshot.data()?["kategoriID"],
       photoUrl: snapshot.data()?["url"],
       tanggal: snapshot.data()?["tanggal"],
@@ -75,9 +83,14 @@ class TransaksiModel {
       keterangan: snapshot.data()?["keterangan"],
       kategori: snapshot.data()?["kategori"],
       tipeTransaksi: snapshot.data()?["tipeTransaksi"],
+<<<<<<< HEAD
       jenis: snapshot.data()?["jenis"], //testing only
       fromKas: snapshot.data()?["fromKas"], //testing only
+=======
+      fromKas: snapshot.data()?["fromKas"],
+>>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
       dao: dao,
+      jenis: snapshot.data()?["jenis"], //testing only
     );
   }
 
@@ -85,7 +98,11 @@ class TransaksiModel {
     return {
       'id': this.id,
       'url': this.photoUrl,
+<<<<<<< HEAD
       'kasID': this.kasID,
+=======
+      'toKas': this.toKas,
+>>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
       'kategoriID': this.kategoriID,
       'jumlah': this.jumlah,
       'tanggal': this.tanggal,

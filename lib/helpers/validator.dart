@@ -5,7 +5,7 @@ class Validator {
   String? error;
   bool isDone = false;
   final String attributeName;
-  final String? value;
+  var value;
 
   Validator({
     required this.attributeName,
