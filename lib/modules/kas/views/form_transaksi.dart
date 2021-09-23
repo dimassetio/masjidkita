@@ -1,10 +1,9 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/helpers/formatter.dart';
+import 'package:mosq/helpers/validator.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/kas/kategori/kategori_database.dart';
 import 'package:mosq/modules/kas/kategori/kategori_model.dart';
@@ -14,7 +13,7 @@ import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
-import 'package:mosq/screens/utils/m_k_icon_icons.dart';
+import 'package:mosq/screens/widgets/ButtonForm.dart';
 import 'package:mosq/screens/widgets/MqFormFoto.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main.dart';
@@ -71,31 +70,21 @@ class _StepperBodyState extends State<StepperBody> {
   MqFormFoto formFoto = MqFormFoto();
 
   var isMutasi = false.obs;
-
-  // KategoriModel modelKategori = Get.arguments ?? KategoriModel();
-
-  // List<String> jenisList = [
-  //   'Pengeluaran',
-  //   'Pemasukan',
-  //   'Mutasi',
-  // ];
-  // String? jenisTransaksi;
+  var isSelected = false.obs;
+  List<KasModel> fromKases = kasC.kases;
 
   @override
   void initState() {
     super.initState();
-    transaksiC.fromKas.removeWhere((item) => item.nama == "Kas Total");
-    transaksiC.nama = TextEditingController();
-    transaksiC.url = TextEditingController();
-    transaksiC.jumlah = TextEditingController();
-    transaksiC.keterangan = TextEditingController();
-    // transaksiC.kategori = TextEditingController();
-    transaksiC.tipeTransaksi = TextEditingController();
+    fromKases = kasC.kases;
+    fromKases.removeWhere((item) => item.nama == "Kas Total");
+
     kategoriC.filterKategoriStream(masjidC.currMasjid, null);
 
     if (!model.id.isEmptyOrNull) {
       transaksiC.keterangan.text = model.keterangan ?? "";
-      transaksiC.kategori = model.kategori ?? "";
+      transaksiC.kategori = model.kategori;
+      transaksiC.tipeTransaksi = model.tipeTransaksi;
       transaksiC.jumlah.text = currencyFormatter(model.jumlah);
       // transaksiC.selectedDate = model.tanggal ?? DateTime.now();
       formFoto.oldPath = model.photoUrl ?? '';
@@ -103,6 +92,8 @@ class _StepperBodyState extends State<StepperBody> {
         transaksiC.jumlah.text = transaksiC.jumlah.text;
       }
     }
+
+    if (transaksiC.tipeTransaksi != null) isSelected.value = true;
   }
 
   @override
@@ -115,46 +106,68 @@ class _StepperBodyState extends State<StepperBody> {
   Widget build(BuildContext context) {
     List<Step> stepsTransaksi = [
       Step(
-        title: Text(mk_lbl_kategori, style: primaryTextStyle()),
+        title: Text(mk_lbl_tipe_transaksi),
         isActive: currStep == 0,
         state: StepState.indexed,
         content: Column(
           children: [
-            DropdownButtonFormField(
-                // value: transaksiC.kategori,
+            // text(isSelected.value.toString()),
+            // text(isMutasi.value.toString()),
+            // text(transaksiC.tipeTransaksi.toString()),
+            DropdownButtonFormField<int>(
+                value: transaksiC.tipeTransaksi,
                 decoration: InputDecoration(
-                  labelText: mk_lbl_jenis_transaksi,
+                  labelText: mk_lbl_tipe_transaksi,
                   hintStyle: secondaryTextStyle(),
                   labelStyle: secondaryTextStyle(),
-                  hintText: mk_lbl_enter + mk_lbl_jenis_transaksi,
+                  hintText: mk_lbl_enter + mk_lbl_tipe_transaksi,
                   icon: Icon(Icons.change_circle_outlined,
                       color: transaksiC.isSaving.value
                           ? mkColorPrimaryLight
                           : mkColorPrimaryDark),
                 ),
+                validator: (value) => (Validator(
+                        attributeName: mk_lbl_tipe_transaksi,
+                        value: value.toString())
+                      ..required())
+                    .getError(),
                 onChanged: (newValue) {
-                  if (newValue is FilterKategori) {
-                    transaksiC.kategori = null;
-                    isMutasi.value = false;
-                  } else {
-                    isMutasi.value = true;
-                  }
-                  kategoriC.filterKategoriStream(
-                      masjidC.currMasjid, newValue as FilterKategori);
+                  setState(() {
+                    FilterKategori? filter;
+                    switch (newValue) {
+                      case 10:
+                        filter = FilterKategori.Pemasukan;
+                        isMutasi.value = false;
+                        break;
+                      case 20:
+                        filter = FilterKategori.Pengeluaran;
+                        isMutasi.value = false;
+                        break;
+                      case 30:
+                        filter = FilterKategori.All;
+                        isMutasi.value = true;
+                        break;
+                    }
+                    isSelected.value = true;
+                    transaksiC.tipeTransaksi = newValue;
+                    kategoriC.filterKategoriStream(masjidC.currMasjid, filter);
+                  });
                 },
                 items: [
-                  DropdownMenuItem(
-                    value: FilterKategori.All,
+                  DropdownMenuItem<int>(
+                    enabled: false,
+                    value: 30,
                     child: Tooltip(
                       message: 'Mutasi',
                       child: Container(
                         margin: EdgeInsets.only(left: 4, right: 4),
-                        child: Text('Mutasi', style: primaryTextStyle()),
+                        child: Text('Mutasi (Disabled)',
+                            style: primaryTextStyle()),
                       ),
                     ),
                   ),
-                  DropdownMenuItem<FilterKategori>(
-                    value: FilterKategori.Pemasukan,
+                  DropdownMenuItem<int>(
+                    value: 10,
                     child: Tooltip(
                       message: 'Pemasukan',
                       child: Container(
@@ -163,8 +176,8 @@ class _StepperBodyState extends State<StepperBody> {
                       ),
                     ),
                   ),
-                  DropdownMenuItem<FilterKategori>(
-                    value: FilterKategori.Pengeluaran,
+                  DropdownMenuItem<int>(
+                    value: 20,
                     child: Tooltip(
                       message: 'Pengeluaran',
                       child: Container(
@@ -174,22 +187,32 @@ class _StepperBodyState extends State<StepperBody> {
                     ),
                   ),
                 ]),
+          ],
+        ),
+      ),
+      Step(
+        title: Text(mk_lbl_kategori),
+        isActive: currStep == 1,
+        state: isSelected.value ? StepState.indexed : StepState.disabled,
+        content: Column(
+          children: [
             Obx(
-              () => DropdownButtonFormField<String>(
+              () => DropdownButtonFormField<KasModel>(
                 validator: (value) => (Validator(
-                        attributeName: mk_lbl_jenis_Kategori_transaksi,
-                        value: value)
+                        attributeName: mk_lbl_buku_kas, value: value.toString())
                       ..required())
                     .getError(),
+                // value: transaksiC.kasModel,
                 style: primaryTextStyle(color: appStore.textPrimaryColor),
                 alignment: Alignment.centerLeft,
-                value: transaksiC.kategori,
+                // value: KasModel(
+                //     id: transaksiC.kategoriID, nama: transaksiC.kategori),
                 decoration: InputDecoration(
-                  labelText: mk_lbl_jenis_Kategori_transaksi,
+                  labelText: mk_lbl_buku_kas,
                   hintStyle: secondaryTextStyle(),
                   labelStyle: secondaryTextStyle(),
-                  hintText: mk_lbl_enter + mk_lbl_jenis_Kategori_transaksi,
-                  icon: Icon(Icons.plagiarism,
+                  hintText: mk_lbl_enter + mk_lbl_buku_kas,
+                  icon: Icon(Icons.book_outlined,
                       color: transaksiC.isSaving.value
                           ? mkColorPrimaryLight
                           : mkColorPrimaryDark),
@@ -198,14 +221,60 @@ class _StepperBodyState extends State<StepperBody> {
                 onChanged: transaksiC.isSaving.value
                     ? null
                     : (newValue) {
+                        isSelected.value = true;
                         setState(() {
-                          transaksiC.kategori = newValue;
+                          transaksiC.kasModel = newValue!;
+                        });
+                      },
+                items: fromKases.map<DropdownMenuItem<KasModel>>((value) {
+                  return DropdownMenuItem<KasModel>(
+                    value: value,
+                    child: Tooltip(
+                        message: value.nama!,
+                        child: Container(
+                            margin: EdgeInsets.only(left: 4, right: 4),
+                            child:
+                                Text(value.nama!, style: primaryTextStyle()))),
+                  );
+                }).toList(),
+              ),
+            ),
+            Obx(
+              () => DropdownButtonFormField<KategoriModel>(
+                validator: (value) => (Validator(
+                        attributeName: mk_lbl_jenis_Kategori_transaksi,
+                        value: value.toString())
+                      ..required())
+                    .getError(),
+                // value: transaksiC.kategoriModel,
+
+                style: primaryTextStyle(color: appStore.textPrimaryColor),
+                alignment: Alignment.centerLeft,
+                // value: KategoriModel(
+                //     id: transaksiC.kategoriID, nama: transaksiC.kategori),
+                decoration: InputDecoration(
+                  labelText: mk_lbl_jenis_Kategori_transaksi,
+                  hintStyle: secondaryTextStyle(),
+                  labelStyle: secondaryTextStyle(),
+                  hintText: mk_lbl_enter + mk_lbl_jenis_Kategori_transaksi,
+                  icon: Icon(Icons.plagiarism_outlined,
+                      color: transaksiC.isSaving.value
+                          ? mkColorPrimaryLight
+                          : mkColorPrimaryDark),
+                ),
+                dropdownColor: appStore.appBarColor,
+                onChanged: transaksiC.isSaving.value
+                    ? null
+                    : (newValue) {
+                        isSelected.value = true;
+                        setState(() {
+                          transaksiC.kategoriModel = newValue!;
                         });
                       },
                 items: kategoriC.filteredKategories
-                    .map<DropdownMenuItem<String>>((value) {
-                  return DropdownMenuItem<String>(
-                    value: value.id,
+                    .map<DropdownMenuItem<KategoriModel>>((value) {
+                  return DropdownMenuItem<KategoriModel>(
+                    value: value,
                     child: Tooltip(
                         message: value.nama!,
                         child: Container(
@@ -220,13 +289,9 @@ class _StepperBodyState extends State<StepperBody> {
               isEnabled: !transaksiC.isSaving.value,
               mController: transaksiC.keterangan,
               textInputAction: TextInputAction.newline,
-              validator: (value) =>
-                  (Validator(attributeName: mk_lbl_keterangan, value: value)
-                        ..required())
-                      .getError(),
               label: mk_lbl_keterangan,
               hint: mk_lbl_keterangan_optional,
-              icon: Icon(Icons.departure_board,
+              icon: Icon(Icons.departure_board_outlined,
                   color: transaksiC.isSaving.value
                       ? mkColorPrimaryLight
                       : mkColorPrimaryDark),
@@ -237,9 +302,9 @@ class _StepperBodyState extends State<StepperBody> {
         ),
       ),
       Step(
-        title: Text(mk_lbl_jumlah, style: primaryTextStyle()),
+        title: Text(mk_lbl_jumlah),
         isActive: currStep == 2,
-        state: StepState.indexed,
+        state: isSelected.value ? StepState.indexed : StepState.disabled,
         content: Column(
           children: [
             EditText(
@@ -266,15 +331,16 @@ class _StepperBodyState extends State<StepperBody> {
         ),
       ),
       Step(
-          title: Text("Foto Bukti Transaksi"),
-          content: Column(
-            children: <Widget>[
-              16.height,
-              formFoto,
-            ],
-          ),
-          isActive: currStep == 3,
-          state: StepState.indexed),
+        title: Text("Foto Bukti Transaksi"),
+        content: Column(
+          children: <Widget>[
+            16.height,
+            formFoto,
+          ],
+        ),
+        isActive: currStep == 3,
+        state: isSelected.value ? StepState.indexed : StepState.disabled,
+      ),
     ];
 
     return Container(
@@ -316,7 +382,8 @@ class _StepperBodyState extends State<StepperBody> {
                                         style: secondaryTextStyle()),
                                   )
                                 : 10.width,
-                            currStep < stepsTransaksi.length - 1
+                            currStep < stepsTransaksi.length - 1 &&
+                                    isSelected.value
                                 ? TextButton(
                                     onPressed: onStepContinue,
                                     child: Text(mk_berikut,
@@ -353,31 +420,18 @@ class _StepperBodyState extends State<StepperBody> {
                     ),
                   ),
                 ),
-                Obx(
-                  () => Container(
-                    width: Get.width,
-                    height: 50,
-                    margin: EdgeInsets.all(10),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (transaksiC.isSaving.value == false) {
-                          if (_formKey.currentState!.validate()) {
-                            await transaksiC.saveTransaksi(model,
-                                path: formFoto.newPath);
-                          } else {
-                            _formKey.currentState!.validate();
-                          }
+                ButtonForm(
+                    tapFunction: () {
+                      if (transaksiC.isSaving.value == false) {
+                        if (_formKey.currentState!.validate()) {
+                          transaksiC.saveTransaksi(model,
+                              path: formFoto.newPath);
+                        } else {
+                          _formKey.currentState!.validate();
                         }
-                      },
-                      child: Center(
-                        child: transaksiC.isSaving.value
-                            ? CircularProgressIndicator()
-                            : Text(mk_submit,
-                                style: boldTextStyle(color: white, size: 18)),
-                      ),
-                    ),
-                  ),
-                ),
+                      }
+                    },
+                    isSaving: transaksiC.isSaving)
               ],
             ),
           )),

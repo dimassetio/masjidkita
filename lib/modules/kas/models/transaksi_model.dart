@@ -5,22 +5,22 @@ import 'package:mosq/modules/kas/databases/transaksi_database.dart';
 
 class TransaksiModel {
   String? id;
-  String? kasID;
+  int? tipeTransaksi;
   String? kategoriID;
+  String? kategori;
+  String? keterangan;
+  int? jumlah;
+  String? fromKas;
+  String? toKas;
   String? photoUrl;
   DateTime? tanggal;
-  int? jumlah;
-  String? keterangan;
-  String? kategori;
-  String? tipeTransaksi;
   TransaksiDatabase? dao;
 
   int? jenis; //Testing Only
-  String? fromKas; //Testing Only
 
   TransaksiModel({
     this.id,
-    this.kasID,
+    this.toKas,
     this.kategoriID,
     this.photoUrl,
     this.tanggal,
@@ -67,7 +67,7 @@ class TransaksiModel {
       DocumentSnapshot snapshot, TransaksiDatabase dao) {
     return TransaksiModel(
       id: snapshot.id,
-      kasID: snapshot.data()?["kasID"],
+      toKas: snapshot.data()?["toKas"],
       kategoriID: snapshot.data()?["kategoriID"],
       photoUrl: snapshot.data()?["url"],
       tanggal: snapshot.data()?["tanggal"],
@@ -75,9 +75,9 @@ class TransaksiModel {
       keterangan: snapshot.data()?["keterangan"],
       kategori: snapshot.data()?["kategori"],
       tipeTransaksi: snapshot.data()?["tipeTransaksi"],
-      jenis: snapshot.data()?["jenis"], //testing only
-      fromKas: snapshot.data()?["fromKas"], //testing only
+      fromKas: snapshot.data()?["fromKas"],
       dao: dao,
+      jenis: snapshot.data()?["jenis"], //testing only
     );
   }
 
@@ -85,7 +85,7 @@ class TransaksiModel {
     return {
       'id': this.id,
       'url': this.photoUrl,
-      'kasID': this.kasID,
+      'toKas': this.toKas,
       'kategoriID': this.kategoriID,
       'jumlah': this.jumlah,
       'tanggal': this.tanggal,

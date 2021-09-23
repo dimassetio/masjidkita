@@ -33,21 +33,20 @@ class TesTransaksi extends StatelessWidget {
     int sisaSaldo = kasModel.saldo!;
     sumTransaksi
         .bindStream(model.transaksiDao!.getSumTransaksi(model, kasModel));
+    // sumTransaksi.value = model.transaksiDao!.getSumTransaksi(model, kasModel);
 
     var transaksimodel = TransaksiModel(
       dao: model.transaksiDao!,
-      jenis: jenisTransaksi,
+      tipeTransaksi: jenisTransaksi,
       fromKas: dummyKas.id,
       jumlah: jumlahC.text.toInt(),
     );
     int? totalNow;
-    if (transaksimodel.jenis == 10) {
-      totalNow =
-          dummyKas.saldoAwal! + sumTransaksi.value + jumlahC.text.toInt();
-    } else if (transaksimodel.jenis == 20) {
-      totalNow =
-          dummyKas.saldoAwal! + sumTransaksi.value - jumlahC.text.toInt();
+    int jumlah = transaksimodel.jumlah ?? 0;
+    if (transaksimodel.tipeTransaksi == 20) {
+      transaksimodel.jumlah = 0 - transaksimodel.jumlah!;
     }
+    totalNow = dummyKas.saldoAwal! + sumTransaksi.value + jumlah;
     try {
       firebaseFirestore.runTransaction((transaction) async {
         CollectionReference colRef = kasModel.dao!.db;

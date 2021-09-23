@@ -132,6 +132,8 @@ const mk_edit_kategori = "Edit Kategori";
 const mk_lbl_kategori = "Kategori";
 const mk_lbl_nama_kategori = "Nama Kategori";
 
+const mk_lbl_tipe_transaksi = "Tipe Transaksi";
+
 const mk_lbl_delete = "Hapus";
 const mk_lbl_edit = "Edit";
 
