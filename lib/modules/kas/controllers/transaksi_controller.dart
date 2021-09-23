@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:get/get.dart';
+import 'package:mosq/modules/kas/databases/kas_database.dart';
+import 'package:mosq/modules/kas/models/kas_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/modules/kas/models/transaksi_model.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -25,6 +27,8 @@ class TransaksiController extends GetxController {
 
   TransaksiModel get transaksi => _transaksiModel.value;
 
+  List<KasModel> fromKas = kasC.kases;
+
   late TextEditingController nama;
   late TextEditingController url;
   late TextEditingController jumlah;
@@ -41,12 +45,19 @@ class TransaksiController extends GetxController {
 
   String? kategori;
 
+  List<String> kategories = [
+    'Pemasukan',
+    'Pengeluaran',
+    'Mutasi',
+  ];
+
   List<String> listBukuAsal = [
     'Kas Besar',
     'Kas Kecil',
   ];
 
   String? bukuAsal;
+  String? idKas;
 
   List<String> listBukuTujuan = [
     'Kas Besar',
@@ -55,9 +66,9 @@ class TransaksiController extends GetxController {
 
   String? bukuTujuan;
 
-  var _date = DateTime.now().obs;
-  DateTime get selectedDate => _date.value;
-  set selectedDate(DateTime value) => this._date.value = value;
+  var date = DateTime.now();
+  // DateTime get selectedDate => _date.value;
+  // set selectedDate(DateTime value) => this._date.value = value;
 
   // late TextEditingController namaKategori;
   // List<String> jenisList = [
@@ -89,23 +100,28 @@ class TransaksiController extends GetxController {
   }
 
   Future delete(TransaksiModel model) async {
-    // if (model.photoUrl.isEmptyOrNull) {
+    // if (model.url.isEmptyOrNull) {
     //   return await model.delete();
     // } else
     //   return await model.deleteWithDetails();
     return await model.delete();
   }
 
+  // updateKas(KasModel model) async {
+  //   await model.sav
+  // }
+
   saveTransaksi(TransaksiModel model, {String? path}) async {
     isSaving.value = true;
 
     int jumlahInt =
         jumlah.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
-    model.photoUrl = url.text;
-    model.jumlah = jumlahInt;
-    model.tanggal = selectedDate;
-    model.keterangan = keterangan.text;
     model.kategori = kategori;
+    model.kasID = idKas;
+    model.url = url.text;
+    model.jumlah = jumlahInt;
+    model.tanggal = date;
+    model.keterangan = keterangan.text;
     model.tipeTransaksi = tipeTransaksi.text;
 
     File? foto;
@@ -115,6 +131,10 @@ class TransaksiController extends GetxController {
 
     try {
       await model.save();
+      // await kasM.saveToKas();
+      // if (model.kategori == "Pemasukan") {
+
+      // }
     } on SocketException catch (_) {
       showDialog(
           context: Get.context!,
@@ -143,8 +163,8 @@ class TransaksiController extends GetxController {
           // selectedDate != DateTime.now() ||
           !foto.isEmptyOrNull) return true;
     } else {
-      if (url.text != model.photoUrl ||
-          selectedDate != model.tanggal ||
+      if (url.text != model.url ||
+          // selectedDate != model.tanggal ||
           keterangan.text != model.keterangan ||
           kategori != model.kategori ||
           tipeTransaksi.text != model.tipeTransaksi ||
@@ -156,7 +176,7 @@ class TransaksiController extends GetxController {
   clear() {
     url.clear();
     jumlah.clear();
-    selectedDate = DateTime.now();
+    // selectedDate = DateTime.now();
     keterangan.clear();
     kategori = null;
     tipeTransaksi.clear();

@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobx/mobx.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mosq/modules/kas/models/kas_model.dart';
+import 'package:mosq/modules/kas/models/transaksi_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 
 class KasDatabase {
@@ -53,6 +55,17 @@ class KasDatabase {
 
   Future update(KasModel model) async {
     return await db.doc(model.id).update(model.toSnapshot());
+  }
+
+  Future updateFTransaksi(TransaksiModel model, KasModel kas) async {
+    // DocumentReference kas = db.doc(model.kasID);
+    // DocumentSnapshot kass = await transaction.call(kas);
+    // return await db.doc(model.id).update(model.toSnapshot());
+    return await firebaseFirestore.runTransaction((transaction) async {
+      // await db.doc(model.kasID).
+      return transaction
+          .update(db.doc(model.kasID), {'saldo': kas.saldo! + model.jumlah!});
+    });
   }
 
   Future delete(KasModel model) async {

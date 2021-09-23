@@ -92,6 +92,7 @@ class KategoriIndex extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class KategoriCard extends StatelessWidget {
   KategoriCard({required this.model});
   KategoriModel model;

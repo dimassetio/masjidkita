@@ -69,7 +69,7 @@ class TransaksiModel {
       id: snapshot.id,
       kasID: snapshot.data()?["kasID"],
       kategoriID: snapshot.data()?["kategoriID"],
-      photoUrl: snapshot.data()?["photoUrl"],
+      photoUrl: snapshot.data()?["url"],
       tanggal: snapshot.data()?["tanggal"],
       jumlah: snapshot.data()?["jumlah"],
       keterangan: snapshot.data()?["keterangan"],
@@ -84,7 +84,9 @@ class TransaksiModel {
   Map<String, dynamic> toSnapshot() {
     return {
       'id': this.id,
-      'photoUrl': this.photoUrl,
+      'url': this.photoUrl,
+      'kasID': this.kasID,
+      'kategoriID': this.kategoriID,
       'jumlah': this.jumlah,
       'tanggal': this.tanggal,
       'keterangan': this.keterangan,
