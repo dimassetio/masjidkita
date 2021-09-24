@@ -47,15 +47,9 @@ class TransaksiDatabase {
         .map((QuerySnapshot query) {
       int total = 0;
       query.docs.forEach((element) {
-<<<<<<< HEAD
-        if (element.data()["jenis"] == 10) {
-          total = total + element.data()["jumlah"] as int;
-        } else if (element.data()["jenis"] == 20) {
-=======
         if (element.data()["tipeTransaksi"] == 10) {
           total = total + element.data()["jumlah"] as int;
         } else if (element.data()["tipeTransaksi"] == 20) {
->>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
           total = total - element.data()["jumlah"] as int;
         } else {
           print('Jenis e error bro');
@@ -74,20 +68,6 @@ class TransaksiDatabase {
   // }
 
   Future store(TransaksiModel model) async {
-<<<<<<< HEAD
-    firebaseFirestore.runTransaction((transaction) async {
-      DocumentReference fromKas =
-          firebaseFirestore.collection('kas').doc(model.kasID);
-      DocumentSnapshot dataKas = await transaction.get(fromKas);
-      int jumlah = dataKas.data()?['saldo'];
-      transaction.update(fromKas, {'saldo': jumlah - model.jumlah!});
-    });
-    await db.add(model.toSnapshot());
-  }
-
-  Future update(TransaksiModel model) async {
-    return await db.doc(model.kasID).update(model.toSnapshot());
-=======
     // firebaseFirestore.runTransaction((transaction) async {
     //   DocumentReference fromKas =
     //       firebaseFirestore.collection('kas').doc(model.fromKas);
@@ -101,7 +81,6 @@ class TransaksiDatabase {
 
   Future update(TransaksiModel model) async {
     return await db.doc(model.fromKas).update(model.toSnapshot());
->>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
     // return await firebaseFirestore.runTransaction((transaction) async {
     //   db.doc(kas.)
     // });

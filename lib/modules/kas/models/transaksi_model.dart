@@ -17,18 +17,10 @@ class TransaksiModel {
   TransaksiDatabase? dao;
 
   int? jenis; //Testing Only
-<<<<<<< HEAD
-  String? fromKas; //Testing Only
-
-  TransaksiModel({
-    this.id,
-    this.kasID,
-=======
 
   TransaksiModel({
     this.id,
     this.toKas,
->>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
     this.kategoriID,
     this.photoUrl,
     this.tanggal,
@@ -78,17 +70,12 @@ class TransaksiModel {
       toKas: snapshot.data()?["toKas"],
       kategoriID: snapshot.data()?["kategoriID"],
       photoUrl: snapshot.data()?["url"],
-      tanggal: snapshot.data()?["tanggal"],
+      tanggal: snapshot.data()?["tanggal"].toDate(),
       jumlah: snapshot.data()?["jumlah"],
       keterangan: snapshot.data()?["keterangan"],
       kategori: snapshot.data()?["kategori"],
       tipeTransaksi: snapshot.data()?["tipeTransaksi"],
-<<<<<<< HEAD
-      jenis: snapshot.data()?["jenis"], //testing only
-      fromKas: snapshot.data()?["fromKas"], //testing only
-=======
       fromKas: snapshot.data()?["fromKas"],
->>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
       dao: dao,
       jenis: snapshot.data()?["jenis"], //testing only
     );
@@ -98,11 +85,7 @@ class TransaksiModel {
     return {
       'id': this.id,
       'url': this.photoUrl,
-<<<<<<< HEAD
-      'kasID': this.kasID,
-=======
       'toKas': this.toKas,
->>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
       'kategoriID': this.kategoriID,
       'jumlah': this.jumlah,
       'tanggal': this.tanggal,

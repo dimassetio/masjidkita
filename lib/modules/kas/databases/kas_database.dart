@@ -61,19 +61,11 @@ class KasDatabase {
     // DocumentReference kas = db.doc(model.kasID);
     // DocumentSnapshot kass = await transaction.call(kas);
     // return await db.doc(model.id).update(model.toSnapshot());
-<<<<<<< HEAD
-    return await firebaseFirestore.runTransaction((transaction) async {
-      // await db.doc(model.kasID).
-      return transaction
-          .update(db.doc(model.kasID), {'saldo': kas.saldo! + model.jumlah!});
-    });
-=======
     // return await firebaseFirestore.runTransaction((transaction) async {
     //   // await db.doc(model.kasID).
     //   return transaction
     //       .update(db.doc(model.kasID), {'saldo': kas.saldo! + model.jumlah!});
     // });
->>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
   }
 
   Future delete(KasModel model) async {

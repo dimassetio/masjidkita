@@ -2,10 +2,7 @@ import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/modules/kas/kategori/index.dart';
 import 'package:mosq/modules/kas/transaksi/tesTransaksi.dart';
-<<<<<<< HEAD
 import 'package:mosq/modules/kas/views/dashboard.dart';
-=======
->>>>>>> 7abc64ae864a26fedee5a063ddc69227b92d807e
 import 'package:mosq/modules/kas/views/form_kas.dart';
 import 'package:mosq/modules/kas/kategori/form_kategori.dart';
 import 'package:mosq/modules/kas/views/form_transaksi.dart';
