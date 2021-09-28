@@ -4,8 +4,9 @@ import 'package:get/get.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/modules/kas/models/transaksi_model.dart';
-import 'package:mosq/modules/kas/views/TMKasSlider.dart';
+import 'package:mosq/modules/kas/transaksi/list_transaksi.dart';
+import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
+import 'package:mosq/modules/kas/buku/slider_kas.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -70,7 +71,11 @@ class TMTabKas extends StatelessWidget {
                   ],
                 ),
               ),
-              TransaksiKas(),
+              Obx(
+                () => TransaksiKas(
+                  transaksies: transaksiC.transaksies,
+                ),
+              )
             ],
           ),
         ),
@@ -91,89 +96,5 @@ class TMTabKas extends StatelessWidget {
                   })
               : SizedBox())),
     ]);
-  }
-}
-
-class TransaksiKas extends StatelessWidget {
-  // final TransaksiModel model = Get.arguments;
-  @override
-  Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width - 10;
-    return Container(
-      width: width,
-      // padding: EdgeInsets.only(left: 20.0, right: 20),
-      child: Obx(() => ListView.builder(
-          padding: EdgeInsets.symmetric(),
-          scrollDirection: Axis.vertical,
-          itemCount: transaksiC.transaksies.length,
-          shrinkWrap: true,
-          physics: ScrollPhysics(),
-          itemBuilder: (context, index) {
-            return TransaksiList(dataTransaksi: transaksiC.transaksies[index]);
-          })),
-    );
-  }
-}
-
-class TransaksiList extends StatelessWidget {
-  const TransaksiList({required this.dataTransaksi});
-  final TransaksiModel dataTransaksi;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 18),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Container(
-                decoration: boxDecoration(
-                    radius: Get.width * 0.06,
-                    bgColor: dataTransaksi.tipeTransaksi == 10
-                        ? mkGreen.withOpacity(0.3)
-                        : mkRed.withOpacity(0.3)),
-                // margin: EdgeInsets.only(left: 16, right: 16),
-                width: Get.width * 0.06,
-                height: Get.width * 0.06,
-                child: Icon(
-                  dataTransaksi.tipeTransaksi == 10
-                      ? Icons.call_received
-                      : Icons.call_made,
-                  size: Get.width * 0.04,
-                  color: dataTransaksi.tipeTransaksi == 10 ? mkGreen : mkRed,
-                ),
-                // padding: EdgeInsets.all(width / 30),
-              ),
-              Container(
-                width: Get.width * 0.5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    text("${dataTransaksi.kategori}",
-                        textColor: appStore.textPrimaryColor,
-                        fontSize: textSizeMedium,
-                        fontFamily: fontSemibold),
-                    text("${dataTransaksi.keterangan}",
-                        fontSize: textSizeSMedium)
-                  ],
-                ),
-              ),
-              Container(
-                alignment: Alignment.center,
-                width: Get.width * 0.25,
-                child: text("${currencyFormatter(dataTransaksi.jumlah)}",
-                    textColor: appStore.textSecondaryColor,
-                    fontSize: textSizeMedium,
-                    isLongText: true,
-                    fontFamily: fontSemibold),
-              )
-            ],
-          ),
-        ),
-        Divider(height: 0.5)
-      ],
-    );
   }
 }

@@ -115,11 +115,13 @@ class _StepperBodyState extends State<StepperBody> {
               dropdownColor: appStore.appBarColor,
               onChanged: kategoriC.isSaving.value
                   ? null
-                  : (int? newValue) {
-                      setState(() {
-                        kategoriC.jenis = newValue;
-                      });
-                    },
+                  : kategoriC.jenis != null
+                      ? null
+                      : (int? newValue) {
+                          setState(() {
+                            kategoriC.jenis = newValue;
+                          });
+                        },
               items:
                   kategoriC.jenisList.map<DropdownMenuItem<int>>((int value) {
                 return DropdownMenuItem<int>(

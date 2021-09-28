@@ -5,9 +5,10 @@ import 'package:mobx/mobx.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:mosq/modules/kas/databases/kas_database.dart';
-import 'package:mosq/modules/kas/models/kas_model.dart';
-import 'package:mosq/modules/kas/models/transaksi_model.dart';
+import 'package:mosq/modules/kas/buku/kas_database.dart';
+import 'package:mosq/modules/kas/buku/kas_model.dart';
+import 'package:mosq/modules/kas/transaksi/filter_model.dart';
+import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 
 class TransaksiDatabase {
@@ -30,18 +31,28 @@ class TransaksiDatabase {
         .map((event) => TransaksiModel().fromSnapshot(event, model.dao!));
   }
 
-  Stream<List<TransaksiModel>> transaksiStream(MasjidModel model) async* {
-    yield* db.snapshots().map((QuerySnapshot query) {
+  Stream<List<TransaksiModel>> transaksiStream(MasjidModel model,
+      {FilterModel? filter}) async* {
+    Query ref = db;
+    if (filter != null) {
+      ref = db.where(
+        filter.field,
+        isEqualTo: filter.value,
+      );
+    }
+    yield* ref
+        .orderBy('tanggal', descending: true)
+        .snapshots()
+        .map((QuerySnapshot query) {
       List<TransaksiModel> list = [];
       query.docs.forEach((element) {
         list.add(TransaksiModel().fromSnapshot(element, model.transaksiDao!));
       });
-      print("List Transaksi $list");
       return list;
     });
   }
 
-  Stream<int> getSumTransaksi(MasjidModel model, KasModel kas) async* {
+  Stream<int> getSumTransaksi(KasModel kas) async* {
     yield* db
         .where('from_kas', isEqualTo: kas.id)
         .snapshots()
@@ -56,9 +67,25 @@ class TransaksiDatabase {
           print('Jenis e error bro');
         }
       });
-      print("Total = $total");
       return total;
     });
+  }
+
+  Future calculateTransaksi(KasModel kas) {
+    var tes = db.where('from_kas', isEqualTo: kas.id).get().then((value) {
+      int total = 0;
+      value.docs.forEach((element) {
+        if (element.data()["tipeTransaksi"] == 10) {
+          total = total + element.data()["jumlah"] as int;
+        } else if (element.data()["tipeTransaksi"] == 20) {
+          total = total - element.data()["jumlah"] as int;
+        } else {
+          print('Jenis e error bro');
+        }
+      });
+      return total;
+    });
+    return tes;
   }
 
   // Future<bool> checkTransaksi(TransaksiModel model) async {
@@ -69,19 +96,13 @@ class TransaksiDatabase {
   // }
 
   Future store(TransaksiModel model) async {
-    // firebaseFirestore.runTransaction((transaction) async {
-    //   DocumentReference fromKas =
-    //       firebaseFirestore.collection('kas').doc(model.fromKas);
-    //   DocumentSnapshot dataKas = await transaction.get(fromKas);
-    //   int jumlah = dataKas.data()?['saldo'] - model.jumlah!;
-    //   transaction.update(fromKas, {'saldo': 25000});
-    // });
-    return await db.add(model.toSnapshot());
-    // await db.add(model.toSnapshotTransaksiTotal());
+    DocumentReference result = await db.add(model.toSnapshot());
+    model.id = result.id;
+    return result;
   }
 
   Future update(TransaksiModel model) async {
-    return await db.doc(model.fromKas).update(model.toSnapshot());
+    return await db.doc(model.id).update(model.toSnapshot());
     // return await firebaseFirestore.runTransaction((transaction) async {
     //   db.doc(kas.)
     // });

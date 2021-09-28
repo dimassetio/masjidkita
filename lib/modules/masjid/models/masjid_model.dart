@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mosq/modules/inventaris/databases/inventaris_database.dart';
-import 'package:mosq/modules/kas/databases/kas_database.dart';
+import 'package:mosq/modules/kas/buku/kas_database.dart';
 import 'package:mosq/integrations/firestore.dart';
-import 'package:mosq/modules/kas/databases/transaksi_database.dart';
+import 'package:mosq/modules/kas/transaksi/transaksi_database.dart';
 import 'package:mosq/modules/kas/kategori/kategori_database.dart';
 import 'package:mosq/modules/kegiatan/databases/kegiatan_database.dart';
 import 'package:mosq/modules/masjid/databases/masjid_database.dart';

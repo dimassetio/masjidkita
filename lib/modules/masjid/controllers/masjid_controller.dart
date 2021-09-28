@@ -156,7 +156,7 @@ class MasjidController extends GetxController {
     } finally {
       await isMyMasjid(dataMasjid);
       _currMasjid.bindStream(dataMasjid.dao.streamDetailMasjid(dataMasjid.id!));
-      await Get.toNamed(RouteName.detail, arguments: dataMasjid);
+      Get.toNamed(RouteName.detail, arguments: dataMasjid);
     }
   }
 

@@ -7,8 +7,8 @@ import 'package:mosq/helpers/validator.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/kas/kategori/kategori_database.dart';
 import 'package:mosq/modules/kas/kategori/kategori_model.dart';
-import 'package:mosq/modules/kas/models/kas_model.dart';
-import 'package:mosq/modules/kas/models/transaksi_model.dart';
+import 'package:mosq/modules/kas/buku/kas_model.dart';
+import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
@@ -198,10 +198,10 @@ class _StepperBodyState extends State<StepperBody> {
           children: [
             Obx(
               () => DropdownButtonFormField<KasModel>(
-                validator: (value) => (Validator(
-                        attributeName: mk_lbl_buku_kas, value: value.toString())
-                      ..required())
-                    .getError(),
+                validator: (value) =>
+                    (Validator(attributeName: mk_lbl_buku_kas, model: value)
+                          ..requireModel())
+                        .getError(),
                 // value: transaksiC.kasModel,
                 style: primaryTextStyle(color: appStore.textPrimaryColor),
                 alignment: Alignment.centerLeft,
@@ -243,8 +243,8 @@ class _StepperBodyState extends State<StepperBody> {
               () => DropdownButtonFormField<KategoriModel>(
                 validator: (value) => (Validator(
                         attributeName: mk_lbl_jenis_Kategori_transaksi,
-                        value: value.toString())
-                      ..required())
+                        model: value)
+                      ..requireModel())
                     .getError(),
                 // value: transaksiC.kategoriModel,
 

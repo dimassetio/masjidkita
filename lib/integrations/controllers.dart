@@ -1,8 +1,8 @@
 import 'package:mosq/controllers/appController.dart';
 import 'package:mosq/controllers/authController.dart';
 import 'package:mosq/modules/inventaris/controllers/inventaris_controller.dart';
-import 'package:mosq/modules/kas/controllers/kas_controller.dart';
-import 'package:mosq/modules/kas/controllers/transaksi_controller.dart';
+import 'package:mosq/modules/kas/buku/kas_controller.dart';
+import 'package:mosq/modules/kas/transaksi/transaksi_controller.dart';
 import 'package:mosq/modules/kas/kategori/kategori_controller.dart';
 import 'package:mosq/modules/kegiatan/controllers/kegiatan_controller.dart';
 import 'package:mosq/modules/masjid/controllers/masjid_controller.dart';

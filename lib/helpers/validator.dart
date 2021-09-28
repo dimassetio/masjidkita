@@ -1,16 +1,15 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:mosq/modules/kas/kategori/kategori_model.dart';
 import 'package:nb_utils/src/extensions/string_extensions.dart';
 
 class Validator {
   String? error;
   bool isDone = false;
   final String attributeName;
-  var value;
+  String? value;
+  var model;
 
-  Validator({
-    required this.attributeName,
-    required this.value,
-  });
+  Validator({required this.attributeName, this.value, this.model});
 
   String? getError() {
     return error;
@@ -25,14 +24,22 @@ class Validator {
   // Validations
   void required() {
     if (!isDone) {
-      if (value == null || value!.isEmpty) {
+      if (value.isEmptyOrNull) {
+        _setDone('$attributeName cannot be empty');
+      }
+    }
+  }
+
+  void requireModel() {
+    if (!isDone) {
+      if (model == null) {
         _setDone('$attributeName cannot be empty');
       }
     }
   }
 
   void email() {
-    if (!isDone && value != null && value!.isNotEmpty) {
+    if (!isDone && !value.isEmptyOrNull) {
       if (!EmailValidator.validate(value.toString())) {
         _setDone('$attributeName is not a valid email');
       }
@@ -40,7 +47,7 @@ class Validator {
   }
 
   void email22() {
-    if (!isDone && value != null && value!.isNotEmpty) {
+    if (!isDone && !value.isEmptyOrNull) {
       if (!EmailValidator.validate(value.toString())) {
         _setDone('$attributeName is not a valid email');
       }
@@ -56,7 +63,7 @@ class Validator {
   }
 
   void minLength(int length) {
-    if (!isDone && value != null && value!.isNotEmpty) {
+    if (!isDone && !value.isEmptyOrNull) {
       if (value!.length < length) {
         _setDone('$attributeName cannot be less than $length characters');
       }
@@ -64,7 +71,7 @@ class Validator {
   }
 
   void maxLength(int length) {
-    if (!isDone && value != null && value!.isNotEmpty) {
+    if (!isDone && !value.isEmptyOrNull) {
       if (value!.length > length) {
         _setDone('$attributeName cannot be more than $length characters');
       }

@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mosq/modules/kas/databases/kas_database.dart';
-import 'package:mosq/modules/kas/models/transaksi_model.dart';
+import 'package:mosq/modules/kas/buku/kas_database.dart';
+import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
 
 class KasModel {
   String? id;

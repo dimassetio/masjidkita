@@ -6,8 +6,9 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:get/get.dart';
 import 'package:mosq/modules/kas/kategori/kategori_model.dart';
+import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
-import 'package:mosq/modules/kas/models/kas_model.dart';
+import 'package:mosq/modules/kas/buku/kas_model.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -63,11 +64,20 @@ class KasController extends GetxController {
 
     int saldoAwalInt =
         saldoAwal.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
-    int saldoInt = saldo.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
+    // var streamSaldo = 0.obs;
+    // streamSaldo
+    //     .bindStream(masjidC.currMasjid.transaksiDao!.getSumTransaksi(model));
 
     model.nama = nama.text;
     model.saldoAwal = saldoAwalInt;
-    model.saldo = saldoInt;
+
+    int sumSaldo = 0;
+    if (model.id != null) {
+      sumSaldo =
+          await masjidC.currMasjid.transaksiDao!.calculateTransaksi(model);
+    }
+    sumSaldo = sumSaldo + model.saldoAwal!;
+    model.saldo = sumSaldo;
     model.deskripsi = deskripsi.text;
     try {
       await model.save();

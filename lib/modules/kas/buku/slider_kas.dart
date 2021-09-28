@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/modules/kas/models/kas_model.dart';
-import 'package:mosq/modules/kas/views/dashboard.dart';
+import 'package:mosq/modules/kas/buku/kas_model.dart';
+import 'package:mosq/modules/kas/buku/show_kas.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';
@@ -58,9 +58,9 @@ class KasSlider extends StatelessWidget {
       child: InkWell(
         splashColor: mkColorPrimaryDark,
         onTap: () {
-          dataKas.nama != "Kas Total"
-              ? Get.toNamed(RouteName.dashboard_kas, arguments: dataKas)
-              : text("EWEWEW");
+          if (dataKas.nama != "Kas Total") {
+            Get.toNamed(RouteName.dashboard_kas, arguments: dataKas);
+          }
         },
         child: Stack(
           children: [

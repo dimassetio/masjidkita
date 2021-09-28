@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/modules/kas/models/kas_model.dart';
+import 'package:mosq/modules/kas/buku/kas_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';

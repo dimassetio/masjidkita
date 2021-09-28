@@ -29,7 +29,7 @@ jenisTransaksiToStr(int? jenis) {
     case 20:
       return 'Pengeluaran';
     case 30:
-      return 'Pengeluaran';
+      return 'Mutasi';
     default:
       return 'Jenis Transaksi';
   }

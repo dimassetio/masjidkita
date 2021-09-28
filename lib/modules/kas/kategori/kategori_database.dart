@@ -23,13 +23,13 @@ extension on Query {
 }
 
 class KategoriDatabase {
-  final CollectionReference? db;
+  final CollectionReference db;
   KategoriDatabase({
-    this.db,
+    required this.db,
   });
 
   Stream<KategoriModel> streamDetailKategori(KategoriModel model) {
-    return db!
+    return db
         .doc(model.id)
         .snapshots()
         .map((event) => KategoriModel().fromSnapshot(event, model.dao!));
@@ -37,7 +37,7 @@ class KategoriDatabase {
 
   Stream<List<KategoriModel>> filterKategoriStream(
       MasjidModel model, FilterKategori? filter) async* {
-    yield* db!.filtering(filter).snapshots().map((QuerySnapshot query) {
+    yield* db.filtering(filter).snapshots().map((QuerySnapshot query) {
       List<KategoriModel> retVal = [];
       query.docs.forEach((element) {
         retVal.add(KategoriModel().fromSnapshot(element, model.kategoriDao!));
@@ -47,7 +47,7 @@ class KategoriDatabase {
   }
 
   Stream<List<KategoriModel>> kategoriStream(MasjidModel model) async* {
-    yield* db!.snapshots().map((QuerySnapshot query) {
+    yield* db.snapshots().map((QuerySnapshot query) {
       List<KategoriModel> retVal = [];
       query.docs.forEach((element) {
         retVal.add(KategoriModel().fromSnapshot(element, model.kategoriDao!));
@@ -57,16 +57,16 @@ class KategoriDatabase {
   }
 
   Future store(KategoriModel model) async {
-    DocumentReference result = await db!.add(model.toSnapshot());
+    DocumentReference result = await db.add(model.toSnapshot());
     model.id = result.id;
     return result;
   }
 
   Future update(KategoriModel model) async {
-    return await db!.doc(model.id).update(model.toSnapshot());
+    return await db.doc(model.id).update(model.toSnapshot());
   }
 
   Future delete(KategoriModel model) async {
-    return await db!.doc(model.id).delete();
+    return await db.doc(model.id).delete();
   }
 }

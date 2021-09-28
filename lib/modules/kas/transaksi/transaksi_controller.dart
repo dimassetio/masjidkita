@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:get/get.dart';
-import 'package:mosq/modules/kas/databases/kas_database.dart';
+import 'package:mosq/modules/kas/buku/kas_database.dart';
 import 'package:mosq/modules/kas/kategori/kategori_model.dart';
-import 'package:mosq/modules/kas/models/kas_model.dart';
+import 'package:mosq/modules/kas/buku/kas_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
-import 'package:mosq/modules/kas/models/transaksi_model.dart';
+import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -68,8 +68,8 @@ class TransaksiController extends GetxController {
   saveTransaksi(TransaksiModel model, {String? path}) async {
     isSaving.value = true;
     int sisaSaldo = kasModel.saldo!;
-    sumTransaksi.bindStream(masjidC.currMasjid.transaksiDao!
-        .getSumTransaksi(masjidC.currMasjid, kasModel));
+    sumTransaksi
+        .bindStream(masjidC.currMasjid.transaksiDao!.getSumTransaksi(kasModel));
     // sumTransaksi.value = model.transaksiDao!.getSumTransaksi(model, kasModel);
     int jumlahInt =
         jumlah.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
@@ -83,79 +83,34 @@ class TransaksiController extends GetxController {
     model.keterangan = keterangan.text;
     model.toKas = toKas;
     model.tanggal = DateTime.now();
+    File? foto;
+    if (!path.isEmptyOrNull) {
+      foto = File(path ?? '');
+    }
+    try {
+      foto == null ? await model.save() : await model.saveWithDetails(foto);
+    } catch (e) {
+      toast(e.toString());
+      isSaving.value = false;
+      print("error e iku  $e");
+      // rethrow;
+    }
+
     int? totalNow;
 
-    if (model.tipeTransaksi == 20) {
-      jumlahInt = 0 - model.jumlah!;
-    }
-    totalNow = kasModel.saldoAwal! + sumTransaksi.value + jumlahInt;
     try {
+      totalNow =
+          await model.dao!.calculateTransaksi(kasModel) + kasModel.saldoAwal;
       firebaseFirestore.runTransaction((transaction) async {
-        CollectionReference colRef = kasModel.dao!.db;
+        DocumentReference docRef = kasModel.dao!.db.doc(kasModel.id);
 
-        transaction.update(colRef.doc(kasModel.id), {'saldo': totalNow});
+        transaction.update(docRef, {'saldo': totalNow});
       });
     } catch (e) {
       print('transaksi error');
     } finally {
-      model.save();
       print('transaksi sukses');
     }
-    // int jumlahInt =
-    //     jumlah.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
-
-    // model.tipeTransaksi = tipeTransaksi;
-    // model.fromKas = kasModel.id;
-    // model.kategori = kategoriModel.nama;
-    // model.kategoriID = kategoriModel.id;
-    // model.photoUrl = path;
-    // model.jumlah = jumlahInt;
-    // model.keterangan = keterangan.text;
-    // model.toKas = toKas;
-    // model.tanggal = DateTime.now();
-    // var sumTransaksi = 0.obs;
-    // sumTransaksi.bindStream(masjidC.currMasjid.transaksiDao!
-    //     .getSumTransaksi(masjidC.currMasjid, kasModel));
-
-    // try {
-    //   int sisaSaldo = kasModel.saldo!;
-
-    //   int? totalNow;
-
-    //   if (model.tipeTransaksi == 10) {
-    //     totalNow = kasModel.saldoAwal! + sumTransaksi.value + model.jumlah!;
-    //     print("COK ${sumTransaksi.value}");
-    //   } else if (model.tipeTransaksi == 20) {
-    //     totalNow = kasModel.saldoAwal! + sumTransaksi.value - model.jumlah!;
-    //   }
-    //   firebaseFirestore.runTransaction((transaction) async {
-    //     CollectionReference colRef = kasModel.dao!.db;
-
-    //     transaction.update(colRef.doc(kasModel.id), {'saldo': totalNow});
-    //   });
-    // } catch (e) {
-    //   print('transaction error');
-    // } finally {
-    // File? foto;
-    // if (!path.isEmptyOrNull) {
-    //   foto = File(path!);
-    // }
-    //   try {
-    //     await model.save();
-    //   } on SocketException catch (_) {
-    //     showDialog(
-    //         context: Get.context!,
-    //         builder: (context) => AlertDialog(
-    //               title: Text("Connection Error !"),
-    //               content: Text("Please connect to the internet."),
-    //             ));
-    //   } catch (e) {
-    //     print(e);
-    //     toast("Error Saving Data");
-    //   } finally {
-    //     toast("Data Berhasil Diperbarui");
-    //   }
-    // }
     isSaving.value = false;
     Get.back();
   }

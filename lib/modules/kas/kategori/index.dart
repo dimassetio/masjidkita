@@ -131,16 +131,13 @@ class KategoriCard extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            onTap: () {
-              toast('value');
-            },
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             leading: CircleAvatar(
               backgroundColor: model.jenis == 10
                   ? Colors.green.withOpacity(0.5)
                   : Colors.red.withOpacity(0.5),
               child: Icon(
-                model.jenis == 10 ? Icons.arrow_downward : Icons.arrow_upward,
+                model.jenis == 10 ? Icons.call_received : Icons.call_made,
                 color: model.jenis == 10 ? Colors.green : Colors.red,
               ),
             ),

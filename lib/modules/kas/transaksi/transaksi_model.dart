@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mosq/modules/kas/databases/transaksi_database.dart';
+import 'package:mosq/modules/kas/transaksi/transaksi_database.dart';
 
 class TransaksiModel {
   String? id;
@@ -72,7 +72,7 @@ class TransaksiModel {
       keterangan: snapshot.data()?["keterangan"],
       kategori: snapshot.data()?["kategori"],
       tipeTransaksi: snapshot.data()?["tipeTransaksi"],
-      fromKas: snapshot.data()?["fromKas"],
+      fromKas: snapshot.data()?["from_kas"],
       dao: dao,
     );
   }

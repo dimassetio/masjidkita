@@ -11,7 +11,7 @@ import 'package:mosq/helpers/Validator.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/kas/kategori/kategori_model.dart';
-import 'package:mosq/modules/kas/models/kas_model.dart';
+import 'package:mosq/modules/kas/buku/kas_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/widgets/ButtonForm.dart';
 import 'package:mosq/screens/widgets/ImageSourceBottomSheet.dart';
@@ -265,7 +265,7 @@ class _StepperBodyState extends State<StepperBody> {
                     tapFunction: () async {
                       if (kasC.isSaving.value == false) {
                         if (_formKey.currentState!.validate()) {
-                          await kasC.saveKas(modelKas!);
+                          kasC.saveKas(modelKas!);
                         } else {
                           _formKey.currentState!.validate();
                         }
