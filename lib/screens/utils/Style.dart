@@ -234,6 +234,7 @@ Widget textField2({
 Widget CardDetails({
   required String visaTitle,
   required Color color,
+  required String creditNumber,
   required String expire,
   required String name,
 }) {
@@ -273,7 +274,7 @@ Widget CardDetails({
             ),
             FittedBox(
               child: Text(
-                "**** **** **** ",
+                "**** **** **** " + creditNumber,
                 style: boldTextStyle(
                     size: 20,
                     color: Colors.white,
@@ -317,7 +318,7 @@ Widget CardDetails({
                 children: <Widget>[
                   FittedBox(
                     child: Text(
-                      'SALDO',
+                      'SALDO SAAT INI',
                       style: secondaryTextStyle(color: Colors.white60),
                       textAlign: TextAlign.center,
                     ),

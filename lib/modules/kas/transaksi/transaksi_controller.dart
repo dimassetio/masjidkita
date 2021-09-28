@@ -30,6 +30,10 @@ class TransaksiController extends GetxController {
 
   List<KasModel> fromKases = kasC.kases;
 
+  var _date = DateTime.now().obs;
+  DateTime get selectedDate => _date.value;
+  set selectedDate(DateTime value) => this._date.value = value;
+
   TextEditingController jumlah = TextEditingController();
   TextEditingController keterangan = TextEditingController();
 
@@ -68,8 +72,8 @@ class TransaksiController extends GetxController {
   saveTransaksi(TransaksiModel model, {String? path}) async {
     isSaving.value = true;
     int sisaSaldo = kasModel.saldo!;
-    sumTransaksi
-        .bindStream(masjidC.currMasjid.transaksiDao!.getSumTransaksi(kasModel));
+    // sumTransaksi
+    //     .bindStream(masjidC.currMasjid.transaksiDao!.getSumTransaksi(kasModel));
     // sumTransaksi.value = model.transaksiDao!.getSumTransaksi(model, kasModel);
     int jumlahInt =
         jumlah.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
@@ -83,6 +87,7 @@ class TransaksiController extends GetxController {
     model.keterangan = keterangan.text;
     model.toKas = toKas;
     model.tanggal = DateTime.now();
+    model.tanggal = selectedDate;
     File? foto;
     if (!path.isEmptyOrNull) {
       foto = File(path ?? '');

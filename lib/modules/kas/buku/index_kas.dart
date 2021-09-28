@@ -42,7 +42,7 @@ class TMTabKas extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Transaction',
+                    Text('Transaksi',
                         style: TextStyle(fontSize: 18, fontFamily: fontMedium)),
                     Container(
                       padding: EdgeInsets.only(left: 16, right: 5),

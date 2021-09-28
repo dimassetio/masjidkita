@@ -131,6 +131,7 @@ const mk_lbl_bukti_transaks = "Foto Bukti Transaksi";
 const mk_add_kategori = "Tambah Kategori transaksi";
 const mk_edit_kategori = "Edit Kategori";
 const mk_lbl_kategori = "Kategori";
+const mk_lbl_rincian = "Rincian";
 const mk_lbl_nama_kategori = "Nama Kategori";
 
 const mk_lbl_tipe_transaksi = "Tipe Transaksi";

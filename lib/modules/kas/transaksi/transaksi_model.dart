@@ -27,7 +27,7 @@ class TransaksiModel {
     this.kategori,
     this.tipeTransaksi,
     this.dao,
-    this.fromKas,
+    this.fromKas, //Testing Only//Testing Only
   });
 
   save() async {
