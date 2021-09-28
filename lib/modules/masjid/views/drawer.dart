@@ -95,11 +95,11 @@ class MosQDrawer extends StatelessWidget {
                             ontap: () {
                           Get.toNamed(RouteName.kategori, arguments: model);
                         }),
-                        getDrawerItem(mk_report, 'Tes ' + mk_lbl_transaksi, 2,
-                            ontap: () {
-                          Get.toNamed(RouteName.tes_transaksi,
-                              arguments: model);
-                        }),
+                        // getDrawerItem(mk_report, 'Tes ' + mk_lbl_transaksi, 2,
+                        //     ontap: () {
+                        //   Get.toNamed(RouteName.tes_transaksi,
+                        //       arguments: model);
+                        // }),
                         getDrawerItem(mk_report, 'Buku Kas Baru', 3, ontap: () {
                           Get.toNamed(RouteName.new_kas,
                               arguments: KasModel(dao: model.kasDao));

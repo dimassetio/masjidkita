@@ -42,7 +42,7 @@ class AppPage {
     GetPage(name: RouteName.new_transaksi, page: () => FormTransaksi()),
     GetPage(name: RouteName.edit_transaksi, page: () => FormTransaksi()),
     GetPage(name: RouteName.kategori, page: () => KategoriIndex()),
-    GetPage(name: RouteName.tes_transaksi, page: () => TesTransaksi()),
+    // GetPage(name: RouteName.tes_transaksi, page: () => TesTransaksi()),
     GetPage(name: RouteName.new_kategori, page: () => FormKategori()),
     GetPage(name: RouteName.edit_kategori, page: () => FormKategori()),
     GetPage(name: RouteName.dashboard_kas, page: () => DashboardKas()),
