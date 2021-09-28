@@ -16,8 +16,6 @@ class TransaksiModel {
   DateTime? tanggal;
   TransaksiDatabase? dao;
 
-  int? jenis; //Testing Only
-
   TransaksiModel({
     this.id,
     this.toKas,
@@ -29,8 +27,7 @@ class TransaksiModel {
     this.kategori,
     this.tipeTransaksi,
     this.dao,
-    this.fromKas, //Testing Only
-    this.jenis, //Testing Only
+    this.fromKas, //Testing Only//Testing Only
   });
 
   save() async {
@@ -77,7 +74,6 @@ class TransaksiModel {
       tipeTransaksi: snapshot.data()?["tipeTransaksi"],
       fromKas: snapshot.data()?["fromKas"],
       dao: dao,
-      jenis: snapshot.data()?["jenis"], //testing only
     );
   }
 
@@ -92,7 +88,6 @@ class TransaksiModel {
       'keterangan': this.keterangan,
       'kategori': this.kategori,
       'tipeTransaksi': this.tipeTransaksi,
-      'jenis': this.jenis,
       'from_kas': this.fromKas,
     };
   }

@@ -31,7 +31,10 @@ class TransaksiDatabase {
   }
 
   Stream<List<TransaksiModel>> transaksiStream(MasjidModel model) async* {
-    yield* db.snapshots().map((QuerySnapshot query) {
+    yield* db
+        .orderBy("tanggal", descending: true)
+        .snapshots()
+        .map((QuerySnapshot query) {
       List<TransaksiModel> list = [];
       query.docs.forEach((element) {
         list.add(TransaksiModel().fromSnapshot(element, model.transaksiDao!));

@@ -30,6 +30,10 @@ class TransaksiController extends GetxController {
 
   List<KasModel> fromKases = kasC.kases;
 
+  var _date = DateTime.now().obs;
+  DateTime get selectedDate => _date.value;
+  set selectedDate(DateTime value) => this._date.value = value;
+
   TextEditingController jumlah = TextEditingController();
   TextEditingController keterangan = TextEditingController();
 
@@ -82,7 +86,7 @@ class TransaksiController extends GetxController {
     model.jumlah = jumlahInt;
     model.keterangan = keterangan.text;
     model.toKas = toKas;
-    model.tanggal = DateTime.now();
+    model.tanggal = selectedDate;
     int? totalNow;
 
     if (model.tipeTransaksi == 20) {

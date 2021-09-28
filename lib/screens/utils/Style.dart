@@ -318,7 +318,7 @@ Widget CardDetails({
                 children: <Widget>[
                   FittedBox(
                     child: Text(
-                      'SALDO',
+                      'SALDO SAAT INI',
                       style: secondaryTextStyle(color: Colors.white60),
                       textAlign: TextAlign.center,
                     ),

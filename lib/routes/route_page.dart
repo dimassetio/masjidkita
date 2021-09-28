@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/modules/kas/kategori/index.dart';
+import 'package:mosq/modules/kas/transaksi/detail.dart';
 import 'package:mosq/modules/kas/transaksi/tesTransaksi.dart';
 import 'package:mosq/modules/kas/views/dashboard.dart';
 import 'package:mosq/modules/kas/views/form_kas.dart';
 import 'package:mosq/modules/kas/kategori/form_kategori.dart';
-import 'package:mosq/modules/kas/views/form_transaksi.dart';
+import 'package:mosq/modules/kas/transaksi/form_transaksi.dart';
 import 'package:mosq/modules/kegiatan/views/show.dart';
 import 'package:mosq/modules/kegiatan/views/show.dart';
 import 'package:mosq/modules/kas/views/form_kas.dart';
@@ -43,6 +44,7 @@ class AppPage {
     GetPage(name: RouteName.edit_transaksi, page: () => FormTransaksi()),
     GetPage(name: RouteName.kategori, page: () => KategoriIndex()),
     GetPage(name: RouteName.tes_transaksi, page: () => TesTransaksi()),
+    GetPage(name: RouteName.detail_transaksi, page: () => DetailTransaksi()),
     GetPage(name: RouteName.new_kategori, page: () => FormKategori()),
     GetPage(name: RouteName.edit_kategori, page: () => FormKategori()),
     GetPage(name: RouteName.dashboard_kas, page: () => DashboardKas()),

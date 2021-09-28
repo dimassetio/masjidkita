@@ -73,6 +73,29 @@ class _StepperBodyState extends State<StepperBody> {
   var isSelected = false.obs;
   List<KasModel> fromKases = kasC.kases;
 
+  Future<void> _selectDate(BuildContext context) async {
+    var result = await showDatePicker(
+        context: context,
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData(colorScheme: mkColorScheme),
+            child: child!,
+          );
+        },
+        initialDate: kegiatanC.selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (result is DateTime) {
+      kegiatanC.selectedDate = new DateTime(
+        result.year,
+        result.month,
+        result.day,
+        kegiatanC.selectedDate.hour,
+        kegiatanC.selectedDate.minute,
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -191,7 +214,7 @@ class _StepperBodyState extends State<StepperBody> {
         ),
       ),
       Step(
-        title: Text(mk_lbl_kategori),
+        title: Text(mk_lbl_rincian),
         isActive: currStep == 1,
         state: isSelected.value ? StepState.indexed : StepState.disabled,
         content: Column(
@@ -285,6 +308,35 @@ class _StepperBodyState extends State<StepperBody> {
                 }).toList(),
               ),
             ),
+            SizedBox(height: 10),
+            Obx(() => Column(children: <Widget>[
+                  Card(
+                    // elevation: 2,
+                    child: ListTile(
+                      onTap: () {
+                        _selectDate(context);
+                      },
+                      title: Text(
+                        'Tanggal Transaksi',
+                        style: primaryTextStyle(),
+                      ),
+                      subtitle: Text(
+                        "${transaksiC.selectedDate.toLocal()}".split(' ')[0],
+                        style: secondaryTextStyle(),
+                      ),
+                      leading: IconButton(
+                        icon: Icon(
+                          Icons.date_range,
+                          color: mkColorPrimaryDark,
+                        ),
+                        onPressed: () {
+                          _selectDate(context);
+                        },
+                      ),
+                    ),
+                  )
+                ])),
+            SizedBox(height: 10),
             EditText(
               isEnabled: !transaksiC.isSaving.value,
               mController: transaksiC.keterangan,
