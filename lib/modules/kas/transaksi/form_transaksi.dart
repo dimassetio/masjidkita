@@ -72,41 +72,33 @@ class _StepperBodyState extends State<StepperBody> {
   var isMutasi = false.obs;
   var isSelected = false.obs;
   List<KasModel> fromKases = kasC.kases;
-
-  Future<void> _selectDate(BuildContext context) async {
-    var result = await showDatePicker(
-        context: context,
-        builder: (BuildContext context, Widget? child) {
-          return Theme(
-            data: ThemeData(colorScheme: mkColorScheme),
-            child: child!,
-          );
-        },
-        initialDate: kegiatanC.selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (result is DateTime) {
-      kegiatanC.selectedDate = new DateTime(
-        result.year,
-        result.month,
-        result.day,
-        kegiatanC.selectedDate.hour,
-        kegiatanC.selectedDate.minute,
-      );
-    }
-  }
+  FilterKategori filter = FilterKategori.All;
 
   @override
   void initState() {
     super.initState();
     fromKases = kasC.kases;
     fromKases.removeWhere((item) => item.nama == "Kas Total");
+    if (model.tipeTransaksi == 10) {
+      filter = FilterKategori.Pemasukan;
+    } else if (model.tipeTransaksi == 20) {
+      filter = FilterKategori.Pengeluaran;
+    }
 
-    kategoriC.filterKategoriStream(masjidC.currMasjid, null);
+    kategoriC.filterKategoriStream(masjidC.currMasjid, filter);
 
     if (!model.id.isEmptyOrNull) {
       transaksiC.keterangan.text = model.keterangan ?? "";
+      transaksiC.kasModel =
+          fromKases.where((element) => element.id == model.fromKas).first;
+      transaksiC.selectedDate = model.tanggal ?? DateTime.now();
       transaksiC.kategori = model.kategori;
+      kategoriC.filteredKategories.forEach((element) {
+        print("fil : ${element.toSnapshot()}}");
+      });
+      print("ele : ${transaksiC.kategoriModel?.toSnapshot()}}");
+      print(kategoriC.filteredKategories.length);
+
       transaksiC.tipeTransaksi = model.tipeTransaksi;
       transaksiC.jumlah.text = currencyFormatter(model.jumlah);
       // transaksiC.selectedDate = model.tanggal ?? DateTime.now();
@@ -225,7 +217,7 @@ class _StepperBodyState extends State<StepperBody> {
                     (Validator(attributeName: mk_lbl_buku_kas, model: value)
                           ..requireModel())
                         .getError(),
-                // value: transaksiC.kasModel,
+                value: transaksiC.kasModel,
                 style: primaryTextStyle(color: appStore.textPrimaryColor),
                 alignment: Alignment.centerLeft,
                 // value: KasModel(
@@ -253,11 +245,11 @@ class _StepperBodyState extends State<StepperBody> {
                   return DropdownMenuItem<KasModel>(
                     value: value,
                     child: Tooltip(
-                        message: value.nama!,
+                        message: value.nama ?? '',
                         child: Container(
                             margin: EdgeInsets.only(left: 4, right: 4),
-                            child:
-                                Text(value.nama!, style: primaryTextStyle()))),
+                            child: Text(value.nama ?? '',
+                                style: primaryTextStyle()))),
                   );
                 }).toList(),
               ),
@@ -269,6 +261,9 @@ class _StepperBodyState extends State<StepperBody> {
                         model: value)
                       ..requireModel())
                     .getError(),
+                value: model.kategoriID.isEmptyOrNull
+                    ? null
+                    : transaksiC.mKategori(model.kategoriID!),
                 // value: transaksiC.kategoriModel,
 
                 style: primaryTextStyle(color: appStore.textPrimaryColor),
@@ -299,44 +294,34 @@ class _StepperBodyState extends State<StepperBody> {
                   return DropdownMenuItem<KategoriModel>(
                     value: value,
                     child: Tooltip(
-                        message: value.nama!,
+                        message: value.nama ?? '',
                         child: Container(
                             margin: EdgeInsets.only(left: 4, right: 4),
-                            child:
-                                Text(value.nama!, style: primaryTextStyle()))),
+                            child: Text(value.nama ?? '',
+                                style: primaryTextStyle()))),
                   );
                 }).toList(),
               ),
             ),
             SizedBox(height: 10),
-            Obx(() => Column(children: <Widget>[
-                  Card(
-                    // elevation: 2,
-                    child: ListTile(
-                      onTap: () {
-                        _selectDate(context);
-                      },
-                      title: Text(
-                        'Tanggal Transaksi',
-                        style: primaryTextStyle(),
-                      ),
-                      subtitle: Text(
-                        "${transaksiC.selectedDate.toLocal()}".split(' ')[0],
-                        style: secondaryTextStyle(),
-                      ),
-                      leading: IconButton(
-                        icon: Icon(
-                          Icons.date_range,
-                          color: mkColorPrimaryDark,
-                        ),
-                        onPressed: () {
-                          _selectDate(context);
-                        },
-                      ),
-                    ),
-                  )
-                ])),
-            SizedBox(height: 10),
+            Obx(
+              () => InkWell(
+                onTap: () {
+                  transaksiC.selectDate(context);
+                },
+                child: EditText(
+                  label: 'Tanggal Transaksi',
+                  mController: TextEditingController(
+                      text: dateFormatter(transaksiC.selectedDate)),
+                  icon: Icon(
+                    Icons.date_range,
+                    color: mkColorPrimaryDark,
+                  ),
+                  isEnabled: false,
+                ),
+              ),
+            ),
+            10.height,
             EditText(
               isEnabled: !transaksiC.isSaving.value,
               mController: transaksiC.keterangan,

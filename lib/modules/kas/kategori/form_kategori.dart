@@ -96,7 +96,7 @@ class _StepperBodyState extends State<StepperBody> {
             DropdownButtonFormField<int>(
               validator: (value) => (Validator(
                       attributeName: mk_lbl_jenis_Kategori_transaksi,
-                      value: jenisTransaksiToStr(value))
+                      value: tipeTransaksiToStr(value))
                     ..required())
                   .getError(),
               style: primaryTextStyle(color: appStore.textPrimaryColor),
@@ -127,10 +127,10 @@ class _StepperBodyState extends State<StepperBody> {
                 return DropdownMenuItem<int>(
                   value: value,
                   child: Tooltip(
-                      message: jenisTransaksiToStr(value),
+                      message: tipeTransaksiToStr(value),
                       child: Container(
                           margin: EdgeInsets.only(left: 4, right: 4),
-                          child: Text(jenisTransaksiToStr(value),
+                          child: Text(tipeTransaksiToStr(value),
                               style: primaryTextStyle()))),
                 );
               }).toList(),

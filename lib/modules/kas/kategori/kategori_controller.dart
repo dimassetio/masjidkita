@@ -19,6 +19,8 @@ class KategoriController extends GetxController {
 
   RxList<KategoriModel> _filteredKategories = RxList<KategoriModel>();
   List<KategoriModel> get filteredKategories => _filteredKategories.value;
+  KategoriModel? tkategori(String id) =>
+      filteredKategories.firstWhere((element) => element.id == id);
 
   Rx<KategoriModel> _kategoriModel = KategoriModel().obs;
   KategoriModel get kategori => _kategoriModel.value;

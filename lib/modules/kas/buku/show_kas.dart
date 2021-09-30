@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
@@ -83,10 +84,11 @@ class _DashboardKasState extends State<DashboardKas> {
                             Container(
                               child: CardDetails(
                                 visaTitle: model.nama ?? 'Buku kas',
-                                expire: model.saldo.toString(),
-                                name: model.id ?? "Nama Masjid",
+                                expire: currencyFormatter(model.saldo),
+                                name: currencyFormatter(model.saldoAwal),
                                 // name: masjidC.currMasjid.nama ?? "Nama Masjid",
                                 color: mkColorPrimary,
+                                namaMasjid: masjidC.currMasjid.nama ?? '',
                               ),
                             ),
                           ],

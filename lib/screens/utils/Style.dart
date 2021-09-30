@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
+import 'package:mosq/screens/utils/m_k_icon_icons.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'MKColors.dart';
 import 'MKConstant.dart';
@@ -234,7 +235,7 @@ Widget textField2({
 Widget CardDetails({
   required String visaTitle,
   required Color color,
-  required String creditNumber,
+  required String namaMasjid,
   required String expire,
   required String name,
 }) {
@@ -255,10 +256,10 @@ Widget CardDetails({
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Image(
-                  width: 40,
-                  height: 40,
-                  image: AssetImage('images/widgets/opchip.png'),
+                Icon(
+                  MKIcon.mosque,
+                  size: 40,
+                  color: mkWhite,
                 ),
                 Align(
                   alignment: Alignment.centerRight,
@@ -274,7 +275,7 @@ Widget CardDetails({
             ),
             FittedBox(
               child: Text(
-                "**** **** **** " + creditNumber,
+                namaMasjid,
                 style: boldTextStyle(
                     size: 20,
                     color: Colors.white,
@@ -296,7 +297,7 @@ Widget CardDetails({
                 children: <Widget>[
                   FittedBox(
                     child: Text(
-                      'MASJID',
+                      'Saldo Awal',
                       style: secondaryTextStyle(color: Colors.white60),
                       textAlign: TextAlign.center,
                     ),

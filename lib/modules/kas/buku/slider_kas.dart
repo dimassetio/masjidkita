@@ -24,7 +24,7 @@ class TMKasSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MasjidCarouselSlider(
-      aspectRatio: 2.5 / 1,
+      aspectRatio: 2.2 / 1,
       viewportFraction: 0.9,
       enlargeCenterPage: true,
       scrollDirection: Axis.horizontal,
@@ -127,10 +127,12 @@ class KasSlider extends StatelessWidget {
                                 text(
                                   "Sisa Saldo",
                                   textColor: mkWhite,
-                                  fontSize: textSizeLargeMedium,
+                                  fontSize: textSizeMedium,
                                 ),
                                 text("$saldo",
-                                    textColor: mkWhite, fontSize: textSizeLarge)
+                                    textColor: mkWhite,
+                                    fontSize: textSizeLarge,
+                                    fontFamily: fontBold)
                               ],
                             )
                     ],

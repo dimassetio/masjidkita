@@ -22,6 +22,13 @@ class KasDatabase {
     return db.doc(model.id).collection(collectionName);
   }
 
+  Future<KasModel> findDetail(KasModel model) async {
+    return await db
+        .doc(model.id)
+        .get()
+        .then((value) => KasModel().fromSnapshot(value, model.dao!));
+  }
+
   Stream<KasModel> streamDetailKas(KasModel model) {
     return db
         .doc(model.id)

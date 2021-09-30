@@ -22,7 +22,7 @@ timeFormatter(DateTime? date) {
   return '';
 }
 
-jenisTransaksiToStr(int? jenis) {
+tipeTransaksiToStr(int? jenis) {
   switch (jenis) {
     case 10:
       return 'Pemasukan';

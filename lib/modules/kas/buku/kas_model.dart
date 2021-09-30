@@ -52,6 +52,10 @@ class KasModel {
     return await this.dao!.delete(this);
   }
 
+  find() async {
+    return await this.dao!.findDetail(this);
+  }
+
   KasModel getKasTotal(List<KasModel> kases) {
     int result = 0;
     for (var kas in kases) {

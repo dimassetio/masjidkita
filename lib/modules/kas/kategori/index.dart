@@ -12,6 +12,7 @@ import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dar
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:mosq/screens/widgets/DismissibleBackground.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -132,17 +133,9 @@ class KategoriCard extends StatelessWidget {
         children: [
           ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            leading: CircleAvatar(
-              backgroundColor: model.jenis == 10
-                  ? Colors.green.withOpacity(0.5)
-                  : Colors.red.withOpacity(0.5),
-              child: Icon(
-                model.jenis == 10 ? Icons.call_received : Icons.call_made,
-                color: model.jenis == 10 ? Colors.green : Colors.red,
-              ),
-            ),
+            leading: TipeTransaksiIcon(tipeTransaksi: model.jenis!),
             title: text(model.nama ?? "Nama Kategori"),
-            subtitle: text(jenisTransaksiToStr(model.jenis),
+            subtitle: text(tipeTransaksiToStr(model.jenis),
                 fontSize: textSizeSMedium),
           ),
           Divider(
