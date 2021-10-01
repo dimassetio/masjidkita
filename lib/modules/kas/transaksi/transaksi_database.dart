@@ -71,7 +71,7 @@ class TransaksiDatabase {
     });
   }
 
-  Future calculateTransaksi(KasModel kas) {
+  Future calculateTransaksi(KasModel kas) async {
     var tes = db.where('from_kas', isEqualTo: kas.id).get().then((value) {
       int total = 0;
       value.docs.forEach((element) {
@@ -85,6 +85,7 @@ class TransaksiDatabase {
       });
       return total;
     });
+    var total = await tes + await tes;
     return tes;
   }
 

@@ -86,11 +86,13 @@ class _StepperBodyState extends State<StepperBody> {
     }
 
     kategoriC.filterKategoriStream(masjidC.currMasjid, filter);
+    if (!model.fromKas.isEmptyOrNull) {
+      transaksiC.kasModel =
+          fromKases.where((element) => element.id == model.fromKas).first;
+    }
 
     if (!model.id.isEmptyOrNull) {
       transaksiC.keterangan.text = model.keterangan ?? "";
-      transaksiC.kasModel =
-          fromKases.where((element) => element.id == model.fromKas).first;
       transaksiC.selectedDate = model.tanggal ?? DateTime.now();
       transaksiC.kategori = model.kategori;
       kategoriC.filteredKategories.forEach((element) {
@@ -121,14 +123,75 @@ class _StepperBodyState extends State<StepperBody> {
   Widget build(BuildContext context) {
     List<Step> stepsTransaksi = [
       Step(
-        title: Text(mk_lbl_tipe_transaksi),
+        title: Text(mk_lbl_data_transaksi),
         isActive: currStep == 0,
         state: StepState.indexed,
         content: Column(
           children: [
-            // text(isSelected.value.toString()),
-            // text(isMutasi.value.toString()),
-            // text(transaksiC.tipeTransaksi.toString()),
+            Obx(
+              () => InkWell(
+                onTap: () {
+                  transaksiC.selectDate(context);
+                },
+                child: EditText(
+                  label: 'Tanggal Transaksi',
+                  mController: TextEditingController(
+                      text: dateFormatter(transaksiC.selectedDate)),
+                  icon: Icon(
+                    Icons.date_range,
+                    color: mkColorPrimaryDark,
+                  ),
+                  isEnabled: false,
+                ),
+              ),
+            ),
+            10.height,
+            Obx(
+              () => DropdownButtonFormField<KasModel>(
+                validator: (value) =>
+                    (Validator(attributeName: mk_lbl_buku_kas, model: value)
+                          ..requireModel())
+                        .getError(),
+                value: transaksiC.kasModel,
+                style: primaryTextStyle(color: appStore.textPrimaryColor),
+                alignment: Alignment.centerLeft,
+                // value: KasModel(
+                //     id: transaksiC.kategoriID, nama: transaksiC.kategori),
+                decoration: InputDecoration(
+                  labelText: mk_lbl_buku_kas,
+                  hintStyle: secondaryTextStyle(),
+                  labelStyle: secondaryTextStyle(),
+                  hintText: mk_lbl_enter + mk_lbl_buku_kas,
+                  icon: Icon(Icons.book_outlined,
+                      color: transaksiC.isSaving.value
+                          ? mkColorPrimaryLight
+                          : mkColorPrimaryDark),
+                ),
+                dropdownColor: appStore.appBarColor,
+                onChanged: !model.fromKas.isEmptyOrNull
+                    ? null
+                    : transaksiC.isSaving.value
+                        ? null
+                        : (newValue) {
+                            isSelected.value = true;
+                            setState(() {
+                              transaksiC.kasModel = newValue!;
+                            });
+                          },
+                items: fromKases.map<DropdownMenuItem<KasModel>>((value) {
+                  return DropdownMenuItem<KasModel>(
+                    value: value,
+                    child: Tooltip(
+                        message: value.nama ?? '',
+                        child: Container(
+                            margin: EdgeInsets.only(left: 4, right: 4),
+                            child: Text(value.nama ?? '',
+                                style: primaryTextStyle()))),
+                  );
+                }).toList(),
+              ),
+            ),
+            10.height,
             DropdownButtonFormField<int>(
                 value: transaksiC.tipeTransaksi,
                 decoration: InputDecoration(
@@ -146,28 +209,32 @@ class _StepperBodyState extends State<StepperBody> {
                         value: value.toString())
                       ..required())
                     .getError(),
-                onChanged: (newValue) {
-                  setState(() {
-                    FilterKategori? filter;
-                    switch (newValue) {
-                      case 10:
-                        filter = FilterKategori.Pemasukan;
-                        isMutasi.value = false;
-                        break;
-                      case 20:
-                        filter = FilterKategori.Pengeluaran;
-                        isMutasi.value = false;
-                        break;
-                      case 30:
-                        filter = FilterKategori.All;
-                        isMutasi.value = true;
-                        break;
-                    }
-                    isSelected.value = true;
-                    transaksiC.tipeTransaksi = newValue;
-                    kategoriC.filterKategoriStream(masjidC.currMasjid, filter);
-                  });
-                },
+                onChanged: !model.id.isEmptyOrNull
+                    ? null
+                    : (newValue) {
+                        setState(() {
+                          transaksiC.kategoriModel = null;
+                          FilterKategori? filter;
+                          switch (newValue) {
+                            case 10:
+                              filter = FilterKategori.Pemasukan;
+                              isMutasi.value = false;
+                              break;
+                            case 20:
+                              filter = FilterKategori.Pengeluaran;
+                              isMutasi.value = false;
+                              break;
+                            case 30:
+                              filter = FilterKategori.All;
+                              isMutasi.value = true;
+                              break;
+                          }
+                          isSelected.value = true;
+                          transaksiC.tipeTransaksi = newValue;
+                          kategoriC.filterKategoriStream(
+                              masjidC.currMasjid, filter);
+                        });
+                      },
                 items: [
                   DropdownMenuItem<int>(
                     enabled: false,
@@ -202,58 +269,7 @@ class _StepperBodyState extends State<StepperBody> {
                     ),
                   ),
                 ]),
-          ],
-        ),
-      ),
-      Step(
-        title: Text(mk_lbl_rincian),
-        isActive: currStep == 1,
-        state: isSelected.value ? StepState.indexed : StepState.disabled,
-        content: Column(
-          children: [
-            Obx(
-              () => DropdownButtonFormField<KasModel>(
-                validator: (value) =>
-                    (Validator(attributeName: mk_lbl_buku_kas, model: value)
-                          ..requireModel())
-                        .getError(),
-                value: transaksiC.kasModel,
-                style: primaryTextStyle(color: appStore.textPrimaryColor),
-                alignment: Alignment.centerLeft,
-                // value: KasModel(
-                //     id: transaksiC.kategoriID, nama: transaksiC.kategori),
-                decoration: InputDecoration(
-                  labelText: mk_lbl_buku_kas,
-                  hintStyle: secondaryTextStyle(),
-                  labelStyle: secondaryTextStyle(),
-                  hintText: mk_lbl_enter + mk_lbl_buku_kas,
-                  icon: Icon(Icons.book_outlined,
-                      color: transaksiC.isSaving.value
-                          ? mkColorPrimaryLight
-                          : mkColorPrimaryDark),
-                ),
-                dropdownColor: appStore.appBarColor,
-                onChanged: transaksiC.isSaving.value
-                    ? null
-                    : (newValue) {
-                        isSelected.value = true;
-                        setState(() {
-                          transaksiC.kasModel = newValue!;
-                        });
-                      },
-                items: fromKases.map<DropdownMenuItem<KasModel>>((value) {
-                  return DropdownMenuItem<KasModel>(
-                    value: value,
-                    child: Tooltip(
-                        message: value.nama ?? '',
-                        child: Container(
-                            margin: EdgeInsets.only(left: 4, right: 4),
-                            child: Text(value.nama ?? '',
-                                style: primaryTextStyle()))),
-                  );
-                }).toList(),
-              ),
-            ),
+            10.height,
             Obx(
               () => DropdownButtonFormField<KategoriModel>(
                 validator: (value) => (Validator(
@@ -303,24 +319,6 @@ class _StepperBodyState extends State<StepperBody> {
                 }).toList(),
               ),
             ),
-            SizedBox(height: 10),
-            Obx(
-              () => InkWell(
-                onTap: () {
-                  transaksiC.selectDate(context);
-                },
-                child: EditText(
-                  label: 'Tanggal Transaksi',
-                  mController: TextEditingController(
-                      text: dateFormatter(transaksiC.selectedDate)),
-                  icon: Icon(
-                    Icons.date_range,
-                    color: mkColorPrimaryDark,
-                  ),
-                  isEnabled: false,
-                ),
-              ),
-            ),
             10.height,
             EditText(
               isEnabled: !transaksiC.isSaving.value,
@@ -335,15 +333,7 @@ class _StepperBodyState extends State<StepperBody> {
               maxLine: 3,
               keyboardType: TextInputType.multiline,
             ),
-          ],
-        ),
-      ),
-      Step(
-        title: Text(mk_lbl_jumlah),
-        isActive: currStep == 2,
-        state: isSelected.value ? StepState.indexed : StepState.disabled,
-        content: Column(
-          children: [
+            10.height,
             EditText(
               textAlign: TextAlign.end,
               mController: transaksiC.jumlah,
@@ -375,7 +365,7 @@ class _StepperBodyState extends State<StepperBody> {
             formFoto,
           ],
         ),
-        isActive: currStep == 3,
+        isActive: currStep == 1,
         state: isSelected.value ? StepState.indexed : StepState.disabled,
       ),
     ];
