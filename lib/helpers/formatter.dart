@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 
 // class Formatter {
 currencyFormatter(number) {
+  if (number == null || number == '') {
+    number = 0;
+  }
   return NumberFormat.simpleCurrency(locale: "id ", decimalDigits: 0)
       .format(number);
 }

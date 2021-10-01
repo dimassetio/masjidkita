@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mosq/modules/kas/buku/kas_database.dart';
+import 'package:mosq/modules/kas/periode/periode_database.dart';
+import 'package:mosq/modules/kas/periode/periode_model.dart';
 import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
 
 class KasModel {
@@ -11,6 +13,9 @@ class KasModel {
   int? saldo;
   String? deskripsi;
   KasDatabase? dao;
+  DateTime? tanggalAwal;
+  DateTime? tanggalAkhir;
+  PeriodeDatabase? periodeDao;
 
   KasModel(
       {this.id,
@@ -18,7 +23,13 @@ class KasModel {
       this.saldoAwal,
       this.saldo,
       this.deskripsi,
-      this.dao});
+      this.tanggalAwal,
+      this.tanggalAkhir,
+      this.dao}) {
+    if (dao != null) {
+      periodeDao = PeriodeDatabase(db: dao!.db.doc(id).collection('periode'));
+    }
+  }
 
   save() async {
     if (this.id == null) {
@@ -28,19 +39,28 @@ class KasModel {
     }
   }
 
+  getPeriodeDao() {
+    if (this.id != null && this.id != '') {
+      this.periodeDao =
+          PeriodeDatabase(db: this.dao!.db.doc(id).collection('periode'));
+    }
+  }
+
   saveToKas() async {
     if (this.id != null) {
       return await this.dao!.updateFTransaksi(TransaksiModel(), this);
     }
   }
 
-  saveWithDetails(File foto) async {
+  saveWithDetails(PeriodeModel periode) async {
     if (this.id == null) {
       await this.dao!.store(this);
+      this.getPeriodeDao();
+      periode.dao = this.periodeDao;
+      await periode.save();
     } else {
       await this.dao!.update(this);
     }
-    // return await this.dao!.upload(this, foto);
   }
 
   delete() async {
@@ -54,6 +74,13 @@ class KasModel {
 
   find() async {
     return await this.dao!.findDetail(this);
+  }
+
+  addPeriode(PeriodeModel periode) {
+    this.saldoAwal = periode.saldoAwal;
+    this.tanggalAwal = periode.tanggalAwal;
+    this.tanggalAkhir = periode.tanggalAkhir;
+    return this;
   }
 
   KasModel getKasTotal(List<KasModel> kases) {

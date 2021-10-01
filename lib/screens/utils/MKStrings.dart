@@ -135,6 +135,7 @@ const mk_lbl_rincian = "Rincian";
 const mk_lbl_nama_kategori = "Nama Kategori";
 
 const mk_lbl_tipe_transaksi = "Tipe Transaksi";
+const mk_lbl_data_transaksi = "Data Transaksi";
 
 const mk_lbl_delete = "Hapus";
 const mk_lbl_edit = "Edit";

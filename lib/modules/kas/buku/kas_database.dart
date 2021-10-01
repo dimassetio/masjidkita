@@ -6,6 +6,8 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mosq/modules/kas/buku/kas_model.dart';
+import 'package:mosq/modules/kas/periode/periode_database.dart';
+import 'package:mosq/modules/kas/periode/periode_model.dart';
 import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 
@@ -29,8 +31,8 @@ class KasDatabase {
         .then((value) => KasModel().fromSnapshot(value, model.dao!));
   }
 
-  Stream<KasModel> streamDetailKas(KasModel model) {
-    return db
+  Stream<KasModel> streamDetailKas(KasModel model) async* {
+    yield* db
         .doc(model.id)
         .snapshots()
         .map((event) => KasModel().fromSnapshot(event, model.dao!));
@@ -39,8 +41,13 @@ class KasDatabase {
   Stream<List<KasModel>> kasStream(MasjidModel model) async* {
     yield* db.snapshots().map((QuerySnapshot query) {
       List<KasModel> list = [];
-      query.docs.forEach((element) {
-        list.add(KasModel().fromSnapshot(element, model.kasDao!));
+      query.docs.forEach((element) async {
+        KasModel kas = KasModel().fromSnapshot(element, model.kasDao!);
+        // if (kas.periodeDao != null) {
+        //   PeriodeModel periode = await kas.periodeDao!.getLatestPeriode(kas);
+        //   kas.addPeriode(periode);
+        // }
+        list.add(kas);
       });
       list.add(KasModel().getKasTotal(list));
       print(list.toString());
@@ -56,8 +63,9 @@ class KasDatabase {
   // }
 
   Future store(KasModel model) async {
-    return await db.add(model.toSnapshot());
-    // await db.add(model.toSnapshotKasTotal());
+    DocumentReference res = await db.add(model.toSnapshot());
+    model.id = res.id;
+    return res;
   }
 
   Future update(KasModel model) async {

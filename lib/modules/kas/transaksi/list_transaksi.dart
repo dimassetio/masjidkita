@@ -24,17 +24,15 @@ class TransaksiKas extends StatelessWidget {
 
     return Container(
       width: width,
-      child: Expanded(
-        child: ListView.builder(
-            padding: EdgeInsets.symmetric(),
-            scrollDirection: Axis.vertical,
-            itemCount: transaksies.length < 5 ? transaksies.length : length,
-            shrinkWrap: true,
-            physics: ScrollPhysics(),
-            itemBuilder: (context, index) {
-              return TransaksiList(dataTransaksi: transaksies[index]);
-            }),
-      ),
+      child: ListView.builder(
+          padding: EdgeInsets.symmetric(),
+          scrollDirection: Axis.vertical,
+          itemCount: transaksies.length < 5 ? transaksies.length : length,
+          shrinkWrap: true,
+          physics: ScrollPhysics(),
+          itemBuilder: (context, index) {
+            return TransaksiList(dataTransaksi: transaksies[index]);
+          }),
     );
   }
 }
