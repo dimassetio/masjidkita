@@ -4,7 +4,7 @@ import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/modules/kas/kategori/kategori_model.dart';
+import 'package:mosq/modules/kas/kategori/models/kategori_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';

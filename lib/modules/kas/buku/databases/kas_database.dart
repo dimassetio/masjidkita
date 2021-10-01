@@ -5,8 +5,8 @@ import 'package:mobx/mobx.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:mosq/modules/kas/buku/kas_model.dart';
-import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
+import 'package:mosq/modules/kas/buku/models/kas_model.dart';
+import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 
 class KasDatabase {

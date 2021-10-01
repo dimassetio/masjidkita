@@ -5,10 +5,10 @@ import 'package:mobx/mobx.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:mosq/modules/kas/buku/kas_database.dart';
-import 'package:mosq/modules/kas/buku/kas_model.dart';
-import 'package:mosq/modules/kas/transaksi/filter_model.dart';
-import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
+import 'package:mosq/modules/kas/buku/databases/kas_database.dart';
+import 'package:mosq/modules/kas/buku/models/kas_model.dart';
+import 'package:mosq/modules/kas/transaksi/models/filter_model.dart';
+import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 
 class TransaksiDatabase {
@@ -71,21 +71,42 @@ class TransaksiDatabase {
     });
   }
 
-  Future calculateTransaksi(KasModel kas) {
+  Future calculateTransaksi(KasModel kas) async {
     var tes = db.where('from_kas', isEqualTo: kas.id).get().then((value) {
       int total = 0;
+      // int totalTo = 0;
       value.docs.forEach((element) {
         if (element.data()["tipeTransaksi"] == 10) {
           total = total + element.data()["jumlah"] as int;
         } else if (element.data()["tipeTransaksi"] == 20) {
           total = total - element.data()["jumlah"] as int;
+        } else if (element.data()["tipeTransaksi"] == 30) {
+          total = total - element.data()["jumlah"] as int;
+          // totalTo = totalTo + element.data()["jumlah"] as int;
         } else {
           print('Jenis e error bro');
         }
       });
       return total;
     });
-    return tes;
+    var tess = db.where('toKas', isEqualTo: kas.id).get().then((value) {
+      int total = 0;
+      // int totalTo = 0;
+      value.docs.forEach((element) {
+        if (element.data()["tipeTransaksi"] == 10) {
+          total = total + element.data()["jumlah"] as int;
+        } else if (element.data()["tipeTransaksi"] == 20) {
+          total = total - element.data()["jumlah"] as int;
+        } else if (element.data()["tipeTransaksi"] == 30) {
+          total = total + element.data()["jumlah"] as int;
+          // totalTo = totalTo + element.data()["jumlah"] as int;
+        } else {
+          print('Jenis e error bro');
+        }
+      });
+      return total;
+    });
+    return await tes + await tess;
   }
 
   // Future<bool> checkTransaksi(TransaksiModel model) async {

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
-import 'package:mosq/modules/kas/buku/index_kas.dart';
+import 'package:mosq/modules/kas/buku/views/index_kas.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/modules/kegiatan/views/index.dart';
 import 'package:mosq/modules/masjid/views/drawer.dart';

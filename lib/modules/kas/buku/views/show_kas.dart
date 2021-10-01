@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
-import 'package:mosq/modules/kas/buku/kas_model.dart';
-import 'package:mosq/modules/kas/transaksi/filter_model.dart';
-import 'package:mosq/modules/kas/transaksi/list_transaksi.dart';
-import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
-import 'package:mosq/modules/kas/buku/index_kas.dart';
+import 'package:mosq/modules/kas/buku/models/kas_model.dart';
+import 'package:mosq/modules/kas/transaksi/models/filter_model.dart';
+import 'package:mosq/modules/kas/transaksi/views/list_transaksi.dart';
+import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
+import 'package:mosq/modules/kas/buku/views/index_kas.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -85,6 +85,7 @@ class _DashboardKasState extends State<DashboardKas> {
                                 visaTitle: model.nama ?? 'Buku kas',
                                 expire: model.saldo.toString(),
                                 name: model.id ?? "Nama Masjid",
+                                creditNumber: "",
                                 // name: masjidC.currMasjid.nama ?? "Nama Masjid",
                                 color: mkColorPrimary,
                               ),

@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:mosq/controllers/authController.dart';
 import 'package:mosq/modules/inventaris/controllers/inventaris_controller.dart';
-import 'package:mosq/modules/kas/buku/kas_controller.dart';
-import 'package:mosq/modules/kas/transaksi/transaksi_controller.dart';
-import 'package:mosq/modules/kas/kategori/kategori_controller.dart';
+import 'package:mosq/modules/kas/buku/controllers/kas_controller.dart';
+import 'package:mosq/modules/kas/transaksi/controllers/transaksi_controller.dart';
+import 'package:mosq/modules/kas/kategori/controllers/kategori_controller.dart';
 import 'package:mosq/modules/kegiatan/controllers/kegiatan_controller.dart';
 import 'package:mosq/modules/masjid/controllers/masjid_controller.dart';
 import 'package:mosq/modules/profile/controllers/profile_controller.dart';

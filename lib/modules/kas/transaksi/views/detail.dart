@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/main.dart';
-import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
+import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:mosq/main/utils/AppWidget.dart';

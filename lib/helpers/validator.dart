@@ -1,5 +1,5 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:mosq/modules/kas/kategori/kategori_model.dart';
+import 'package:mosq/modules/kas/kategori/models/kategori_model.dart';
 import 'package:nb_utils/src/extensions/string_extensions.dart';
 
 class Validator {

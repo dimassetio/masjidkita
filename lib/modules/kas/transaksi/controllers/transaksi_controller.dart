@@ -2,14 +2,15 @@ import 'dart:collection';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mobx/mobx.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:get/get.dart';
-import 'package:mosq/modules/kas/buku/kas_database.dart';
-import 'package:mosq/modules/kas/kategori/kategori_model.dart';
-import 'package:mosq/modules/kas/buku/kas_model.dart';
+import 'package:mosq/modules/kas/buku/databases/kas_database.dart';
+import 'package:mosq/modules/kas/kategori/models/kategori_model.dart';
+import 'package:mosq/modules/kas/buku/models/kas_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
-import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
+import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -66,6 +67,7 @@ class TransaksiController extends GetxController {
   // }
 
   KasModel kasModel = KasModel();
+  KasModel toKasModel = KasModel();
   KategoriModel kategoriModel = KategoriModel();
   var sumTransaksi = 0.obs;
 
@@ -78,14 +80,27 @@ class TransaksiController extends GetxController {
     int jumlahInt =
         jumlah.text.replaceAll('Rp', '').replaceAll('.', '').toInt();
 
+    // int? kategori = model.tipeTransaksi;
+
+    // if (kategori == 10) {
+    //   model.kategori = "Pemasukan";
+    // } else if (kategori == 20) {
+    //   model.kategori = "Pengeluaran";
+    // } else if (kategori == 30) {
+    //   model.kategori = "Mutasi";
+    // }
+    //  else {
+    //   model.kategori = "error";
+    // }
+
     model.tipeTransaksi = tipeTransaksi;
     model.fromKas = kasModel.id;
-    model.kategori = kategoriModel.nama;
     model.kategoriID = kategoriModel.id;
+    model.kategori = kategoriModel.nama ?? "Mutasi";
     model.photoUrl = path;
     model.jumlah = jumlahInt;
     model.keterangan = keterangan.text;
-    model.toKas = toKas;
+    model.toKas = toKasModel.id;
     model.tanggal = DateTime.now();
     model.tanggal = selectedDate;
     File? foto;
@@ -102,14 +117,25 @@ class TransaksiController extends GetxController {
     }
 
     int? totalNow;
+    int? totalNowTo;
 
     try {
       totalNow =
           await model.dao!.calculateTransaksi(kasModel) + kasModel.saldoAwal;
+      if (toKasModel.id != null) {
+        totalNowTo = await model.dao!.calculateTransaksi(toKasModel) +
+            toKasModel.saldoAwal;
+      }
+      // if (model.tipeTransaksi == 30) {
+      // }
       firebaseFirestore.runTransaction((transaction) async {
         DocumentReference docRef = kasModel.dao!.db.doc(kasModel.id);
-
         transaction.update(docRef, {'saldo': totalNow});
+
+        if (toKasModel.id != null) {
+          DocumentReference docRefTo = kasModel.dao!.db.doc(toKasModel.id);
+          transaction.update(docRefTo, {'saldo': totalNowTo});
+        }
       });
     } catch (e) {
       print('transaksi error');

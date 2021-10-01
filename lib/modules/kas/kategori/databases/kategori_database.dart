@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mosq/modules/kas/kategori/kategori_model.dart';
+import 'package:mosq/modules/kas/kategori/models/kategori_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 
 enum FilterKategori { Pemasukan, Pengeluaran, All }
