@@ -25,8 +25,9 @@ class TMTabKas extends StatelessWidget {
     var width = Get.width - 10;
     var height = Get.height;
     return Stack(children: [
-      Container(
-        child: SingleChildScrollView(
+      SingleChildScrollView(
+        physics: ScrollPhysics(),
+        child: Container(
           child: Column(
             children: [
               Obx(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
@@ -24,14 +25,17 @@ class DashboardKas extends StatefulWidget {
 
 class _DashboardKasState extends State<DashboardKas> {
   // int _currentIndex = 0;
-  KasModel model = Get.arguments;
+  KasModel kas = Get.arguments;
   RxList<TransaksiModel> _transaksies = RxList<TransaksiModel>();
   List<TransaksiModel> get transaksies => _transaksies.value;
+  var _model = KasModel().obs;
+  KasModel get model => _model.value;
 
   @override
   void initState() {
     super.initState();
-    FilterModel filterByKas = FilterModel(field: "from_kas", value: model.id);
+    FilterModel filterByKas = FilterModel(field: "from_kas", value: kas.id);
+    _model.bindStream(kas.dao!.streamDetailKas(kas));
     _transaksies.bindStream(
       masjidC.currMasjid.transaksiDao!
           .transaksiStream(masjidC.currMasjid, filter: filterByKas),
@@ -40,18 +44,6 @@ class _DashboardKasState extends State<DashboardKas> {
 
   @override
   Widget build(BuildContext context) {
-    // final tab = [
-    //   OPDasboardScreen(context, model),
-    //   OPDasboardScreen(context, model),
-    //   OPDasboardScreen(context, model),
-    //   OPDasboardScreen(context, model),
-    //   OPDasboardScreen(context, model),
-    // OPMyCards(),
-    // OPDasboardScreen(context),
-    // OPAtmLocationScreen(),
-    // OPprofilePage(),
-    // ];t
-
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.white,
@@ -68,81 +60,105 @@ class _DashboardKasState extends State<DashboardKas> {
             title: appBarTitleWidget(context, model.nama ?? 'Detail'),
           ),
           // : SizedBox(),
-          body: Container(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Container(
-                        height: 260,
-                        width: double.infinity,
-                        child: PageView(
-                          pageSnapping: true,
+          body: Stack(
+            children: [
+              Obx(
+                () => Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Column(
                           children: <Widget>[
                             Container(
-                              child: CardDetails(
-                                visaTitle: model.nama ?? 'Buku kas',
-                                expire: model.saldo.toString(),
-                                name: model.id ?? "Nama Masjid",
-                                creditNumber: "",
-                                // name: masjidC.currMasjid.nama ?? "Nama Masjid",
-                                color: mkColorPrimary,
+                              height: 260,
+                              width: double.infinity,
+                              child: PageView(
+                                pageSnapping: true,
+                                children: <Widget>[
+                                  Container(
+                                    child: CardDetails(
+                                      visaTitle: model.nama ?? 'Buku kas',
+                                      expire: currencyFormatter(model.saldo),
+                                      name: currencyFormatter(model.saldoAwal),
+                                      // name: masjidC.currMasjid.nama ?? "Nama Masjid",
+                                      color: mkColorPrimary,
+                                      namaMasjid: masjidC.currMasjid.nama ?? '',
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text('Transaction',
-                            style: secondaryTextStyle(
-                                size: 18, fontFamily: fontMedium)),
                         Container(
-                          padding: EdgeInsets.only(left: 16, right: 5),
-                          height: 34,
-                          margin: EdgeInsets.only(left: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(24),
-                            border:
-                                Border.all(color: Colors.grey.withAlpha(50)),
+                          margin:
+                              EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text('Transaction',
+                                  style: secondaryTextStyle(
+                                      size: 18, fontFamily: fontMedium)),
+                              Container(
+                                padding: EdgeInsets.only(left: 16, right: 5),
+                                height: 34,
+                                margin: EdgeInsets.only(left: 8),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(24),
+                                  border: Border.all(
+                                      color: Colors.grey.withAlpha(50)),
+                                ),
+                                child: DropdownButton(
+                                  value: 'Weekly',
+                                  underline: SizedBox(),
+                                  items: <String>[
+                                    'Daily',
+                                    'Weekly',
+                                    'Monthly',
+                                    'Yearly'
+                                  ].map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value,
+                                          style: primaryTextStyle(size: 14)),
+                                    );
+                                  }).toList(),
+                                  onChanged: (dynamic value) {},
+                                ),
+                              )
+                            ],
                           ),
-                          child: DropdownButton(
-                            value: 'Weekly',
-                            underline: SizedBox(),
-                            items: <String>[
-                              'Daily',
-                              'Weekly',
-                              'Monthly',
-                              'Yearly'
-                            ].map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value,
-                                    style: primaryTextStyle(size: 14)),
-                              );
-                            }).toList(),
-                            onChanged: (dynamic value) {},
+                        ),
+                        Obx(
+                          () => TransaksiKas(
+                            transaksies: transaksies,
+                            length: transaksies.length,
                           ),
                         )
                       ],
                     ),
                   ),
-                  Obx(
-                    () => TransaksiKas(
-                      transaksies: transaksies,
-                      length: transaksies.length,
-                    ),
-                  )
-                ],
+                ),
               ),
-            ),
+              Container(
+                  alignment: Alignment.bottomRight,
+                  padding: EdgeInsets.only(right: 15, bottom: 15),
+                  child: Obx(() => masjidC.myMasjid.value
+                      ? FloatingActionButton(
+                          child: Icon(
+                            Icons.edit,
+                            color: mkWhite,
+                          ),
+                          backgroundColor: mkColorPrimary,
+                          onPressed: () {
+                            Get.toNamed(RouteName.new_transaksi,
+                                arguments: TransaksiModel(
+                                    dao: masjidC.currMasjid.transaksiDao,
+                                    fromKas: model.id));
+                          })
+                      : SizedBox())),
+            ],
           )),
     );
   }

@@ -1,17 +1,11 @@
-import 'dart:collection';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/integrations/firestore.dart';
 import 'package:get/get.dart';
-import 'package:mosq/modules/kas/kategori/models/kategori_model.dart';
-import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
+import 'package:mosq/modules/kas/periode/periode_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/modules/kas/buku/models/kas_model.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class KasController extends GetxController {
   static KasController instance = Get.find();
@@ -70,7 +64,7 @@ class KasController extends GetxController {
 
     model.nama = nama.text;
     model.saldoAwal = saldoAwalInt;
-
+    model.tanggalAwal = DateTime.now();
     int sumSaldo = 0;
     if (model.id != null) {
       sumSaldo =
@@ -79,8 +73,15 @@ class KasController extends GetxController {
     sumSaldo = sumSaldo + model.saldoAwal!;
     model.saldo = sumSaldo;
     model.deskripsi = deskripsi.text;
+
+    PeriodeModel periode = PeriodeModel(
+        saldoAwal: model.saldoAwal, tanggalAwal: model.tanggalAwal);
     try {
-      await model.save();
+      await model.saveWithDetails(periode);
+      // await model.save();
+      // print(model.toSnapshot());
+
+      // PeriodeModel().fromKas(model).save();
     } on SocketException catch (_) {
       showDialog(
           context: Get.context!,
