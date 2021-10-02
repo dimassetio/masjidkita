@@ -2,19 +2,19 @@ import 'dart:collection';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mobx/mobx.dart';
+// import 'package:mobx/mobx.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:get/get.dart';
-import 'package:mosq/modules/kas/buku/databases/kas_database.dart';
+// import 'package:mosq/modules/kas/buku/databases/kas_database.dart';
 import 'package:mosq/modules/kas/kategori/models/kategori_model.dart';
 import 'package:mosq/modules/kas/buku/models/kas_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
-import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
+import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
 
 class TransaksiController extends GetxController {
   static TransaksiController instance = Get.find();
@@ -85,11 +85,12 @@ class TransaksiController extends GetxController {
   //   await model.sav
   // }
 
-  KasModel kasModel = KasModel();
-  KasModel toKasModel = KasModel();
-  KategoriModel kategoriModel = KategoriModel();
+  KasModel? kasModel;
+  KategoriModel? kategoriModel;
   KategoriModel? mKategori(String? id) =>
       kategoriC.filteredKategories.firstWhere((element) => element.id == id);
+
+  KasModel? toKasModel;
   var sumTransaksi = 0.obs;
 
   saveTransaksi(TransaksiModel model, {String? path}) async {
@@ -115,18 +116,19 @@ class TransaksiController extends GetxController {
     // }
 
     model.tipeTransaksi = tipeTransaksi;
-    model.fromKas = kasModel.id;
-    model.kategoriID = kategoriModel.id;
-    model.kategori = kategoriModel.nama ?? "Mutasi";
+
     model.fromKas = kasModel?.id;
     if (kategoriModel != null) {
       model.kategori = kategoriModel?.nama;
       model.kategoriID = kategoriModel?.id;
     }
+    model.kategoriID = kategoriModel?.id;
+    model.kategori = kategoriModel?.nama ?? "Mutasi";
+
     model.photoUrl = path;
     model.jumlah = jumlahInt;
     model.keterangan = keterangan.text;
-    model.toKas = toKasModel.id;
+    model.toKas = toKasModel?.id;
     model.tanggal = DateTime.now();
     model.tanggal = selectedDate;
     File? foto;
@@ -148,31 +150,35 @@ class TransaksiController extends GetxController {
 
   updateKasModel(TransaksiModel model) async {
     int? totalNow;
+    //
+    // KasModel kas =
+    //     await KasModel(id: model.fromKas, dao: masjidC.currMasjid.kasDao)
+    //         .find();
+    // try {
+    //   totalNow = await model.dao!.calculateTransaksi(kas) + kas.saldoAwal;
+    //   firebaseFirestore.runTransaction((transaction) async {
+    //     DocumentReference docRef = kas.dao!.db.doc(kas.id);
+
+//
     int? totalNowTo;
 
     try {
-      totalNow =
-          await model.dao!.calculateTransaksi(kasModel) + kasModel.saldoAwal;
-      if (toKasModel.id != null) {
-        totalNowTo = await model.dao!.calculateTransaksi(toKasModel) +
-            toKasModel.saldoAwal;
+      totalNow = await model.dao!.calculateTransaksi(kasModel ?? KasModel()) +
+          kasModel?.saldoAwal;
+      if (toKasModel != null) {
+        totalNowTo = await model.dao!.calculateTransaksi(toKasModel!) +
+            toKasModel!.saldoAwal;
       }
       // if (model.tipeTransaksi == 30) {
       // }
       firebaseFirestore.runTransaction((transaction) async {
-        DocumentReference docRef = kasModel.dao!.db.doc(kasModel.id);
-    KasModel kas =
-        await KasModel(id: model.fromKas, dao: masjidC.currMasjid.kasDao)
-            .find();
-    try {
-      totalNow = await model.dao!.calculateTransaksi(kas) + kas.saldoAwal;
-      firebaseFirestore.runTransaction((transaction) async {
-        DocumentReference docRef = kas.dao!.db.doc(kas.id);
+        DocumentReference docRef = kasModel!.dao!.db.doc(kasModel!.id);
 
+        //
         transaction.update(docRef, {'saldo': totalNow});
 
-        if (toKasModel.id != null) {
-          DocumentReference docRefTo = kasModel.dao!.db.doc(toKasModel.id);
+        if (toKasModel != null) {
+          DocumentReference docRefTo = kasModel!.dao!.db.doc(toKasModel!.id);
           transaction.update(docRefTo, {'saldo': totalNowTo});
         }
       });
