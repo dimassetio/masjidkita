@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mosq/modules/kas/buku/kas_model.dart';
+import 'package:mosq/modules/kas/buku/models/kas_model.dart';
 import 'package:mosq/modules/kas/periode/periode_model.dart';
 
 class PeriodeDatabase {

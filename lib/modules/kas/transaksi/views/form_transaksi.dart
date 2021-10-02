@@ -5,10 +5,11 @@ import 'package:get/get.dart';
 import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/helpers/validator.dart';
 import 'package:mosq/integrations/controllers.dart';
-import 'package:mosq/modules/kas/kategori/kategori_database.dart';
-import 'package:mosq/modules/kas/kategori/kategori_model.dart';
-import 'package:mosq/modules/kas/buku/kas_model.dart';
-import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
+import 'package:mosq/modules/kas/buku/models/kas_model.dart';
+import 'package:mosq/modules/kas/kategori/databases/kategori_database.dart';
+import 'package:mosq/modules/kas/kategori/models/kategori_model.dart';
+import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
+
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
@@ -72,6 +73,7 @@ class _StepperBodyState extends State<StepperBody> {
   var isMutasi = false.obs;
   var isSelected = false.obs;
   List<KasModel> fromKases = kasC.kases;
+  List<KasModel> toKases = kasC.kases;
   FilterKategori filter = FilterKategori.All;
 
   @override
@@ -176,6 +178,7 @@ class _StepperBodyState extends State<StepperBody> {
                             isSelected.value = true;
                             setState(() {
                               transaksiC.kasModel = newValue!;
+                              transaksiC.toKasModel = null;
                             });
                           },
                 items: fromKases.map<DropdownMenuItem<KasModel>>((value) {
@@ -187,6 +190,57 @@ class _StepperBodyState extends State<StepperBody> {
                             margin: EdgeInsets.only(left: 4, right: 4),
                             child: Text(value.nama ?? '',
                                 style: primaryTextStyle()))),
+                  );
+                }).toList(),
+              ),
+            ),
+            10.height,
+            Obx(
+              () => DropdownButtonFormField<KasModel>(
+                validator: (value) => (Validator(
+                        attributeName: mk_lbl_buku_kas + mk_lbl_to,
+                        model: value)
+                      ..requireModel())
+                    .getError(),
+                // value: transaksiC.kategoriModel,
+
+                style: primaryTextStyle(color: appStore.textPrimaryColor),
+                alignment: Alignment.centerLeft,
+                // value: KategoriModel(
+                //     id: transaksiC.kategoriID, nama: transaksiC.kategori),
+                decoration: InputDecoration(
+                  labelText: mk_lbl_jenis_Kategori_transaksi + mk_lbl_to,
+                  hintStyle: secondaryTextStyle(),
+                  labelStyle: secondaryTextStyle(),
+                  hintText: mk_lbl_enter + mk_lbl_jenis_Kategori_transaksi,
+                  icon: Icon(Icons.book_outlined,
+                      color: transaksiC.isSaving.value
+                          ? mkColorPrimaryLight
+                          : mkColorPrimaryDark),
+                ),
+                dropdownColor: appStore.appBarColor,
+                onChanged: transaksiC.isSaving.value
+                    ? null
+                    : (newValue) {
+                        isSelected.value = true;
+                        setState(() {
+                          transaksiC.toKasModel = newValue!;
+                        });
+                      },
+                items: toKases.map<DropdownMenuItem<KasModel>>((value) {
+                  // items: toKases.map<DropdownMenuItem<KasModel>>((value) {
+                  return DropdownMenuItem<KasModel>(
+                    enabled: transaksiC.kasModel == value ? false : true,
+                    value: value,
+                    child: Tooltip(
+                        message: value.nama!,
+                        child: Container(
+                            margin: EdgeInsets.only(left: 4, right: 4),
+                            child: Text(value.nama!,
+                                style: primaryTextStyle(
+                                    color: transaksiC.kasModel == value
+                                        ? mkTextColorGrey
+                                        : null)))),
                   );
                 }).toList(),
               ),

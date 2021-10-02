@@ -57,7 +57,7 @@ class _StepperBodyState extends State<StepperBody> {
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
-  bool isEdit = Get.currentRoute == RouteName.edit_takmir;
+  bool isEdit = Get.currentRoute == RouteName.edit_kegiatan;
   KegiatanModel model = Get.arguments ?? KegiatanModel();
 
   MqFormFoto formFoto = MqFormFoto();

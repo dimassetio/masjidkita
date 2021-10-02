@@ -4,7 +4,7 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:get/get.dart';
 import 'package:mosq/modules/kas/periode/periode_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
-import 'package:mosq/modules/kas/buku/kas_model.dart';
+import 'package:mosq/modules/kas/buku/models/kas_model.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class KasController extends GetxController {

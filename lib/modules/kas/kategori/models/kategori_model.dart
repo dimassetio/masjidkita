@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mosq/modules/kas/kategori/kategori_database.dart';
+import 'package:mosq/modules/kas/kategori/databases/kategori_database.dart';
 
 class KategoriModel {
   String? id;
