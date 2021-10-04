@@ -7,9 +7,10 @@ import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/kas/buku/models/kas_model.dart';
 import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 import 'package:mosq/routes/route_name.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';
+import 'package:mosq/screens/widgets/DeleteDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:mosq/screens/widgets/DismissibleBackground.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -92,25 +93,8 @@ class TransaksiList extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Container(
-                    decoration: boxDecoration(
-                        radius: Get.width * 0.06,
-                        bgColor: dataTransaksi.tipeTransaksi == 10
-                            ? mkGreen.withOpacity(0.3)
-                            : mkRed.withOpacity(0.3)),
-                    // margin: EdgeInsets.only(left: 16, right: 16),
-                    width: Get.width * 0.06,
-                    height: Get.width * 0.06,
-                    child: Icon(
-                      dataTransaksi.tipeTransaksi == 10
-                          ? Icons.call_received
-                          : Icons.call_made,
-                      size: Get.width * 0.04,
-                      color:
-                          dataTransaksi.tipeTransaksi == 10 ? mkGreen : mkRed,
-                    ),
-                    // padding: EdgeInsets.all(width / 30),
-                  ),
+                  TipeTransaksiIcon(
+                      tipeTransaksi: dataTransaksi.tipeTransaksi!),
                   Container(
                     width: Get.width * 0.5,
                     child: Column(

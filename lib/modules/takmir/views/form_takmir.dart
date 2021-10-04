@@ -13,7 +13,7 @@ import 'package:mosq/modules/takmir/models/takmir_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/widgets/ButtonForm.dart';
 import 'package:mosq/screens/widgets/ImageSourceBottomSheet.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/confirm_leave_dialog.dart';
+import 'package:mosq/screens/widgets/confirm_leave_dialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';

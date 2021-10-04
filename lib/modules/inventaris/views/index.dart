@@ -5,7 +5,7 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';
+import 'package:mosq/screens/widgets/DeleteDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/widgets/DismissibleBackground.dart';
 // import 'package:mosq/screens/utils/MKImages.dart';

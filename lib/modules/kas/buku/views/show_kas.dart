@@ -34,7 +34,8 @@ class _DashboardKasState extends State<DashboardKas> {
   @override
   void initState() {
     super.initState();
-    FilterModel filterByKas = FilterModel(field: "from_kas", value: kas.id);
+    FilterModel filterByKas = FilterModel(
+        field: "kas", value: kas.id, operator: Operator.arrayContains);
     _model.bindStream(kas.dao!.streamDetailKas(kas));
     _transaksies.bindStream(
       masjidC.currMasjid.transaksiDao!
@@ -89,6 +90,9 @@ class _DashboardKasState extends State<DashboardKas> {
                               ),
                             ),
                           ],
+                        ),
+                        Obx(
+                          () => text(transaksies.toString()),
                         ),
                         Container(
                           margin:

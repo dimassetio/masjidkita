@@ -9,7 +9,7 @@ import 'package:mosq/modules/kas/buku/models/kas_model.dart';
 import 'package:mosq/modules/kas/buku/views/show_kas.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';
+import 'package:mosq/screens/widgets/DeleteDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/widgets/MasjidCarouselSlider.dart';
@@ -187,10 +187,23 @@ class KasSlider extends StatelessWidget {
                                       builder: (BuildContext context) =>
                                           CustomDelete(
                                             titleName: 'Kas',
-                                            subtitleName: dataKas.nama ?? "",
+                                            subtitleName: "'${dataKas.nama}'",
+                                            description:
+                                                "Seluruh TRANSAKSI pada Buku Kas '${dataKas.nama}' akan terhapus apabila anda mengahapus Buku Kas ini. Apakah Anda Yakin?",
                                           ));
                                   if (res == true) {
-                                    kasC.delete(dataKas);
+                                    var res2 = await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            CustomDelete(
+                                              titleName: 'Kas',
+                                              subtitleName: dataKas.nama ?? "",
+                                              description:
+                                                  "Seluruh data TRANSAKSI dan BUKU KAS tidak akan bisa dikembalikan, Apakah Anda Yakin?",
+                                            ));
+                                    if (res2 == true) {
+                                      kasC.delete(dataKas);
+                                    }
                                   }
                                 }
                               },

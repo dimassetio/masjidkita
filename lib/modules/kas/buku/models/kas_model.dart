@@ -6,6 +6,7 @@ import 'package:mosq/modules/kas/periode/periode_database.dart';
 import 'package:mosq/modules/kas/periode/periode_model.dart';
 // import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
 import 'package:mosq/modules/kas/buku/databases/kas_database.dart';
+import 'package:mosq/modules/kas/transaksi/databases/transaksi_database.dart';
 import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 
 class KasModel {
@@ -69,9 +70,9 @@ class KasModel {
     return await this.dao!.delete(this);
   }
 
-  deleteWithDetails() async {
-    await this.dao!.deleteFromStorage(this);
-    return await this.dao!.delete(this);
+  deleteWithDetails(TransaksiDatabase transaksiDao) async {
+    await this.dao!.deleteWithTransaksi(this, transaksiDao);
+    // return await this.dao!.delete(this);
   }
 
   find() async {

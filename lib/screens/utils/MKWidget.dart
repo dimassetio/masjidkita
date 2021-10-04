@@ -212,12 +212,22 @@ class TipeTransaksiIcon extends StatelessWidget {
     return Container(
       width: 30,
       child: CircleAvatar(
-        backgroundColor: tipeTransaksi == 10
-            ? Colors.green.withOpacity(0.5)
-            : Colors.red.withOpacity(0.5),
+        backgroundColor: tipeTransaksi == 30
+            ? Colors.lightBlue[300]!.withOpacity(0.5)
+            : tipeTransaksi == 10
+                ? Colors.green.withOpacity(0.5)
+                : Colors.red.withOpacity(0.5),
         child: Icon(
-          tipeTransaksi == 10 ? Icons.call_received : Icons.call_made,
-          color: tipeTransaksi == 10 ? Colors.green : Colors.red,
+          tipeTransaksi == 30
+              ? Icons.repeat
+              : tipeTransaksi == 10
+                  ? Icons.call_received
+                  : Icons.call_made,
+          color: tipeTransaksi == 30
+              ? Colors.lightBlue
+              : tipeTransaksi == 10
+                  ? Colors.green
+                  : Colors.red,
           size: 24,
         ),
       ),
