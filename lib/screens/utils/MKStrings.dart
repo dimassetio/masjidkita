@@ -156,3 +156,4 @@ const mk_lbl_settings = 'Settings';
 const mk_lbl_message = 'Messages';
 const mk_lbl_report = 'Report';
 const mk_lbl_share_and_invite = 'Share and Invite';
+const mk_lbl_show_all = 'Show all';

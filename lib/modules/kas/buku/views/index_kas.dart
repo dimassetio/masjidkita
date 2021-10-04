@@ -12,6 +12,7 @@ import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKImages.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../../main.dart';
@@ -68,6 +69,20 @@ class TMTabKas extends StatelessWidget {
                           print(value);
                         },
                       ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // Get.toNamed(RouteName.dashboard_kas, arguments: dataKas);
+                      },
+                      child: Row(
+                        children: [
+                          Text(mk_lbl_show_all,
+                              style: secondaryTextStyle(color: mkColorPrimary)),
+                          4.width,
+                          Icon(Icons.keyboard_arrow_right,
+                              color: mkColorPrimary, size: 16),
+                        ],
+                      ).paddingOnly(left: 16, right: 16),
                     )
                   ],
                 ),
