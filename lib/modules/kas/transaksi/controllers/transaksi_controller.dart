@@ -36,6 +36,12 @@ class TransaksiController extends GetxController {
   DateTime get selectedDate => _date.value;
   set selectedDate(DateTime value) => this._date.value = value;
 
+  List<String> tipeTransaksiList = [
+    'Pemasukan',
+    'Pengeluaran',
+    'Mutasi',
+  ];
+
   Future<void> selectDate(BuildContext context) async {
     var result = await showDatePicker(
         context: context,
@@ -73,12 +79,12 @@ class TransaksiController extends GetxController {
   }
 
   Future delete(TransaksiModel model) async {
-    // if (model.url.isEmptyOrNull) {
-    //   return await model.delete();
-    // } else
-    //   return await model.deleteWithDetails();
-    await model.delete();
-    updateKasModel(model);
+    if (model.photoUrl.isEmptyOrNull) {
+      await model.delete();
+    } else {
+      await model.deleteWithDetails();
+    }
+    await updateKasModel(model);
   }
 
   // updateKas(KasModel model) async {
@@ -150,16 +156,6 @@ class TransaksiController extends GetxController {
 
   updateKasModel(TransaksiModel model) async {
     int? totalNow;
-    //
-    // KasModel kas =
-    //     await KasModel(id: model.fromKas, dao: masjidC.currMasjid.kasDao)
-    //         .find();
-    // try {
-    //   totalNow = await model.dao!.calculateTransaksi(kas) + kas.saldoAwal;
-    //   firebaseFirestore.runTransaction((transaction) async {
-    //     DocumentReference docRef = kas.dao!.db.doc(kas.id);
-
-//
     int? totalNowTo;
 
     try {
@@ -212,6 +208,7 @@ class TransaksiController extends GetxController {
     keterangan.clear();
     kategoriModel = null;
     kasModel = null;
+    toKasModel = null;
     kategori = null;
     tipeTransaksi = null;
   }

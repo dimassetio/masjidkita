@@ -22,21 +22,7 @@ class DetailTransaksi extends StatelessWidget {
   Widget build(BuildContext context) {
     TransaksiModel model = argument[0];
     KasModel kas = argument[1];
-    String? keterangan = model.keterangan;
-    if (keterangan == "") {
-      keterangan = "Tidak ada";
-    }
-    String? url = model.photoUrl;
-    if (url.isEmptyOrNull) {
-      url = "https://i.postimg.cc/9M4hLrrJ/no-image.png";
-    }
-    String? tipeTransaksi;
-    if (model.tipeTransaksi == 20) {
-      tipeTransaksi = "Pengeluaran";
-    } else if (model.tipeTransaksi == 10) {
-      tipeTransaksi = "Pemasukan";
-    }
-    var jumlah = currencyFormatter(model.jumlah);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

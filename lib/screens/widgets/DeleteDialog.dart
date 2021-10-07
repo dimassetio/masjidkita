@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/modules/inventaris/models/inventaris_model.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -11,9 +13,14 @@ import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/main.dart';
 
 class CustomDelete extends StatelessWidget {
-  const CustomDelete({required this.titleName, required this.subtitleName});
+  CustomDelete({
+    required this.titleName,
+    required this.subtitleName,
+    this.description,
+  });
   final String titleName;
   final String subtitleName;
+  String? description;
   // final InventarisModel inventaris = InventarisModel();
   // CustomDelete(int index);
   @override
@@ -40,14 +47,21 @@ class CustomDelete extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            24.height,
             ClipRRect(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-              child: Image(
-                  width: MediaQuery.of(context).size.width,
-                  image: AssetImage('images/widgets/widget_delete.jpg'),
-                  height: 120,
-                  fit: BoxFit.cover),
+              child: SvgPicture.asset(
+                mk_delete_svg,
+                height: 120,
+                width: Get.width,
+                fit: BoxFit.cover,
+              ),
+              // Image(
+              //     width: MediaQuery.of(context).size.width,
+              //     // image: AssetImage('images/widgets/widget_delete.jpg'),
+              //     height: 120,
+              //     fit: BoxFit.cover),
             ),
             24.height,
             Text('Hapus $titleName?',
@@ -57,13 +71,14 @@ class CustomDelete extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: Text(
-                  "$titleName $subtitleName Akan dihapus permanen dari database, anda yakin?",
+                  description ??
+                      "$titleName $subtitleName Akan dihapus permanen dari database dan tidak dapat dikembalikan lagi, anda yakin?",
                   style:
                       secondaryTextStyle(color: appStore.textSecondaryColor)),
             ),
-            16.height,
+            24.height,
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 children: [
                   Expanded(
@@ -129,7 +144,7 @@ class CustomDelete extends StatelessWidget {
                 ],
               ),
             ),
-            16.height,
+            24.height,
           ],
         ),
       ),

@@ -25,6 +25,8 @@ const mk_lbl_search = "Cari Masjid";
 const mk_lbl_belum_login = "Anda Belum Sign In";
 const mk_lbl_belum_login_desc = "Anda Harus Sign In Untuk Menikmati Fitur Ini";
 const mk_lbl_batal = "Batal";
+const mk_lbl_apply = "Apply";
+const mk_lbl_filter = "Filter";
 const mk_lbl_email = "Email";
 const mk_lbl_nama = "Nama";
 const mk_lbl_nama_masjid = "Nama Masjid";
@@ -126,7 +128,7 @@ const mk_lbl_keterangan = "Keterangan";
 const mk_lbl_keterangan_optional = "Keterangan (opsional)";
 const mk_lbl_jumlah = "Jumlah";
 const mk_hint_jumlah = "Ex: Rp. 700.000,-";
-const mk_lbl_bukti_transaks = "Foto Bukti Transaksi";
+const mk_lbl_bukti_transaksi = "Foto Bukti Transaksi";
 
 const mk_add_kategori = "Tambah Kategori transaksi";
 const mk_edit_kategori = "Edit Kategori";

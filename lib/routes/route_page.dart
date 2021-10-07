@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/modules/kas/kategori/views/index.dart';
+import 'package:mosq/modules/kas/transaksi/views/all_transaksi.dart';
 import 'package:mosq/modules/kas/transaksi/views/detail.dart';
 import 'package:mosq/modules/kas/buku/views/show_kas.dart';
 import 'package:mosq/modules/kas/buku/views/form_kas.dart';
@@ -39,10 +40,10 @@ class AppPage {
     GetPage(name: RouteName.edit_inventaris, page: () => FormInventaris()),
     GetPage(name: RouteName.new_kas, page: () => FormKas()),
     GetPage(name: RouteName.edit_kas, page: () => FormKas()),
+    GetPage(name: RouteName.transaksi, page: () => Transaksies()),
     GetPage(name: RouteName.new_transaksi, page: () => FormTransaksi()),
     GetPage(name: RouteName.edit_transaksi, page: () => FormTransaksi()),
     GetPage(name: RouteName.kategori, page: () => KategoriIndex()),
-    // GetPage(name: RouteName.tes_transaksi, page: () => TesTransaksi()),
     GetPage(name: RouteName.detail_transaksi, page: () => DetailTransaksi()),
     GetPage(name: RouteName.new_kategori, page: () => FormKategori()),
     GetPage(name: RouteName.edit_kategori, page: () => FormKategori()),

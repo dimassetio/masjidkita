@@ -92,17 +92,15 @@ class _StepperBodyState extends State<StepperBody> {
       transaksiC.kasModel =
           fromKases.where((element) => element.id == model.fromKas).first;
     }
+    !model.toKas.isEmptyOrNull
+        ? transaksiC.toKasModel =
+            fromKases.where((element) => element.id == model.toKas).first
+        : null;
 
     if (!model.id.isEmptyOrNull) {
       transaksiC.keterangan.text = model.keterangan ?? "";
       transaksiC.selectedDate = model.tanggal ?? DateTime.now();
       transaksiC.kategori = model.kategori;
-      kategoriC.filteredKategories.forEach((element) {
-        print("fil : ${element.toSnapshot()}}");
-      });
-      print("ele : ${transaksiC.kategoriModel?.toSnapshot()}}");
-      print(kategoriC.filteredKategories.length);
-
       transaksiC.tipeTransaksi = model.tipeTransaksi;
       transaksiC.jumlah.text = currencyFormatter(model.jumlah);
       // transaksiC.selectedDate = model.tanggal ?? DateTime.now();
@@ -195,57 +193,6 @@ class _StepperBodyState extends State<StepperBody> {
               ),
             ),
             10.height,
-            Obx(
-              () => DropdownButtonFormField<KasModel>(
-                validator: (value) => (Validator(
-                        attributeName: mk_lbl_buku_kas + mk_lbl_to,
-                        model: value)
-                      ..requireModel())
-                    .getError(),
-                // value: transaksiC.kategoriModel,
-
-                style: primaryTextStyle(color: appStore.textPrimaryColor),
-                alignment: Alignment.centerLeft,
-                // value: KategoriModel(
-                //     id: transaksiC.kategoriID, nama: transaksiC.kategori),
-                decoration: InputDecoration(
-                  labelText: mk_lbl_jenis_Kategori_transaksi + mk_lbl_to,
-                  hintStyle: secondaryTextStyle(),
-                  labelStyle: secondaryTextStyle(),
-                  hintText: mk_lbl_enter + mk_lbl_jenis_Kategori_transaksi,
-                  icon: Icon(Icons.book_outlined,
-                      color: transaksiC.isSaving.value
-                          ? mkColorPrimaryLight
-                          : mkColorPrimaryDark),
-                ),
-                dropdownColor: appStore.appBarColor,
-                onChanged: transaksiC.isSaving.value
-                    ? null
-                    : (newValue) {
-                        isSelected.value = true;
-                        setState(() {
-                          transaksiC.toKasModel = newValue!;
-                        });
-                      },
-                items: toKases.map<DropdownMenuItem<KasModel>>((value) {
-                  // items: toKases.map<DropdownMenuItem<KasModel>>((value) {
-                  return DropdownMenuItem<KasModel>(
-                    enabled: transaksiC.kasModel == value ? false : true,
-                    value: value,
-                    child: Tooltip(
-                        message: value.nama!,
-                        child: Container(
-                            margin: EdgeInsets.only(left: 4, right: 4),
-                            child: Text(value.nama!,
-                                style: primaryTextStyle(
-                                    color: transaksiC.kasModel == value
-                                        ? mkTextColorGrey
-                                        : null)))),
-                  );
-                }).toList(),
-              ),
-            ),
-            10.height,
             DropdownButtonFormField<int>(
                 value: transaksiC.tipeTransaksi,
                 decoration: InputDecoration(
@@ -273,10 +220,12 @@ class _StepperBodyState extends State<StepperBody> {
                             case 10:
                               filter = FilterKategori.Pemasukan;
                               isMutasi.value = false;
+                              transaksiC.toKasModel = null;
                               break;
                             case 20:
                               filter = FilterKategori.Pengeluaran;
                               isMutasi.value = false;
+                              transaksiC.toKasModel = null;
                               break;
                             case 30:
                               filter = FilterKategori.All;
@@ -291,14 +240,12 @@ class _StepperBodyState extends State<StepperBody> {
                       },
                 items: [
                   DropdownMenuItem<int>(
-                    enabled: false,
                     value: 30,
                     child: Tooltip(
                       message: 'Mutasi',
                       child: Container(
                         margin: EdgeInsets.only(left: 4, right: 4),
-                        child: Text('Mutasi (Disabled)',
-                            style: primaryTextStyle()),
+                        child: Text('Mutasi', style: primaryTextStyle()),
                       ),
                     ),
                   ),
@@ -325,53 +272,105 @@ class _StepperBodyState extends State<StepperBody> {
                 ]),
             10.height,
             Obx(
-              () => DropdownButtonFormField<KategoriModel>(
-                validator: (value) => (Validator(
-                        attributeName: mk_lbl_jenis_Kategori_transaksi,
-                        model: value)
-                      ..requireModel())
-                    .getError(),
-                value: model.kategoriID.isEmptyOrNull
-                    ? null
-                    : transaksiC.mKategori(model.kategoriID!),
-                // value: transaksiC.kategoriModel,
+              () => transaksiC.tipeTransaksi == 30
+                  ? DropdownButtonFormField<KasModel>(
+                      validator: (value) => (Validator(
+                              attributeName: mk_lbl_buku_kas + mk_lbl_to,
+                              model: value)
+                            ..requireModel())
+                          .getError(),
+                      value: transaksiC.toKasModel,
 
-                style: primaryTextStyle(color: appStore.textPrimaryColor),
-                alignment: Alignment.centerLeft,
-                // value: KategoriModel(
-                //     id: transaksiC.kategoriID, nama: transaksiC.kategori),
-                decoration: InputDecoration(
-                  labelText: mk_lbl_jenis_Kategori_transaksi,
-                  hintStyle: secondaryTextStyle(),
-                  labelStyle: secondaryTextStyle(),
-                  hintText: mk_lbl_enter + mk_lbl_jenis_Kategori_transaksi,
-                  icon: Icon(Icons.plagiarism_outlined,
-                      color: transaksiC.isSaving.value
-                          ? mkColorPrimaryLight
-                          : mkColorPrimaryDark),
-                ),
-                dropdownColor: appStore.appBarColor,
-                onChanged: transaksiC.isSaving.value
-                    ? null
-                    : (newValue) {
-                        isSelected.value = true;
-                        setState(() {
-                          transaksiC.kategoriModel = newValue!;
-                        });
-                      },
-                items: kategoriC.filteredKategories
-                    .map<DropdownMenuItem<KategoriModel>>((value) {
-                  return DropdownMenuItem<KategoriModel>(
-                    value: value,
-                    child: Tooltip(
-                        message: value.nama ?? '',
-                        child: Container(
-                            margin: EdgeInsets.only(left: 4, right: 4),
-                            child: Text(value.nama ?? '',
-                                style: primaryTextStyle()))),
-                  );
-                }).toList(),
-              ),
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                      alignment: Alignment.centerLeft,
+                      // value: KategoriModel(
+                      //     id: transaksiC.kategoriID, nama: transaksiC.kategori),
+                      decoration: InputDecoration(
+                        labelText: mk_lbl_buku_kas + mk_lbl_to,
+                        hintStyle: secondaryTextStyle(),
+                        labelStyle: secondaryTextStyle(),
+                        hintText: mk_lbl_enter + mk_lbl_buku_kas,
+                        icon: Icon(Icons.book_outlined,
+                            color: transaksiC.isSaving.value
+                                ? mkColorPrimaryLight
+                                : mkColorPrimaryDark),
+                      ),
+                      dropdownColor: appStore.appBarColor,
+                      onChanged: !model.toKas.isEmptyOrNull
+                          ? null
+                          : transaksiC.isSaving.value
+                              ? null
+                              : (newValue) {
+                                  isSelected.value = true;
+                                  setState(() {
+                                    transaksiC.toKasModel = newValue!;
+                                  });
+                                },
+                      items: toKases.map<DropdownMenuItem<KasModel>>((value) {
+                        // items: toKases.map<DropdownMenuItem<KasModel>>((value) {
+                        return DropdownMenuItem<KasModel>(
+                          enabled: transaksiC.kasModel == value ? false : true,
+                          value: value,
+                          child: Tooltip(
+                              message: value.nama!,
+                              child: Container(
+                                  margin: EdgeInsets.only(left: 4, right: 4),
+                                  child: Text(value.nama!,
+                                      style: primaryTextStyle(
+                                          color: transaksiC.kasModel == value
+                                              ? mkTextColorGrey
+                                              : null)))),
+                        );
+                      }).toList(),
+                    )
+                  : DropdownButtonFormField<KategoriModel>(
+                      validator: (value) => (Validator(
+                              attributeName: mk_lbl_jenis_Kategori_transaksi,
+                              model: value)
+                            ..requireModel())
+                          .getError(),
+                      value: model.kategoriID.isEmptyOrNull
+                          ? null
+                          : transaksiC.mKategori(model.kategoriID!),
+                      // value: transaksiC.kategoriModel,
+
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                      alignment: Alignment.centerLeft,
+                      // value: KategoriModel(
+                      //     id: transaksiC.kategoriID, nama: transaksiC.kategori),
+                      decoration: InputDecoration(
+                        labelText: mk_lbl_jenis_Kategori_transaksi,
+                        hintStyle: secondaryTextStyle(),
+                        labelStyle: secondaryTextStyle(),
+                        hintText:
+                            mk_lbl_enter + mk_lbl_jenis_Kategori_transaksi,
+                        icon: Icon(Icons.plagiarism_outlined,
+                            color: transaksiC.isSaving.value
+                                ? mkColorPrimaryLight
+                                : mkColorPrimaryDark),
+                      ),
+                      dropdownColor: appStore.appBarColor,
+                      onChanged: transaksiC.isSaving.value
+                          ? null
+                          : (newValue) {
+                              isSelected.value = true;
+                              setState(() {
+                                transaksiC.kategoriModel = newValue!;
+                              });
+                            },
+                      items: kategoriC.filteredKategories
+                          .map<DropdownMenuItem<KategoriModel>>((value) {
+                        return DropdownMenuItem<KategoriModel>(
+                          value: value,
+                          child: Tooltip(
+                              message: value.nama ?? '',
+                              child: Container(
+                                  margin: EdgeInsets.only(left: 4, right: 4),
+                                  child: Text(value.nama ?? '',
+                                      style: primaryTextStyle()))),
+                        );
+                      }).toList(),
+                    ),
             ),
             10.height,
             EditText(

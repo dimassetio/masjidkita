@@ -25,6 +25,7 @@ const t5_circle = "images/theme5/t5_circle.svg";
 const t5_coupon = "images/theme5/t5_coupon.svg";
 const t5_wallet = "images/theme5/t5_wallet.svg";
 const no_image = "images/widgets/no-image.png";
+const mk_delete_svg = "images/MK/delete.svg";
 
 const mk_user = "images/MK/mk_user.svg";
 const mk_chat = "images/MK/mk_chat.svg";

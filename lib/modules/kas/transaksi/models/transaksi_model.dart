@@ -27,7 +27,7 @@ class TransaksiModel {
     this.kategori,
     this.tipeTransaksi,
     this.dao,
-    this.fromKas, //Testing Only//Testing Only
+    this.fromKas,
   });
 
   save() async {
@@ -64,7 +64,7 @@ class TransaksiModel {
       DocumentSnapshot snapshot, TransaksiDatabase dao) {
     return TransaksiModel(
       id: snapshot.id,
-      toKas: snapshot.data()?["kas"][1],
+      toKas: snapshot.data()?["kas"]?[1],
       kategoriID: snapshot.data()?["kategoriID"],
       photoUrl: snapshot.data()?["url"],
       tanggal: snapshot.data()?["tanggal"].toDate(),

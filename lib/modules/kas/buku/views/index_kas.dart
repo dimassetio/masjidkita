@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/kas/transaksi/views/list_transaksi.dart';
@@ -11,7 +9,6 @@ import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
-import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -20,7 +17,7 @@ import '../../../../../main.dart';
 class TMTabKas extends StatelessWidget {
   const TMTabKas(this.model);
   final MasjidModel model;
-  // final TransaksiModel modelT;
+
   @override
   Widget build(BuildContext context) {
     var width = Get.width - 10;
@@ -49,7 +46,7 @@ class TMTabKas extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.only(left: 16, right: 5),
                       height: 34,
-                      margin: EdgeInsets.only(left: 8),
+                      margin: EdgeInsets.only(left: 0),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(24),
@@ -72,7 +69,7 @@ class TMTabKas extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        // Get.toNamed(RouteName.dashboard_kas, arguments: dataKas);
+                        Get.toNamed(RouteName.transaksi, arguments: model);
                       },
                       child: Row(
                         children: [

@@ -8,7 +8,7 @@ import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/kegiatan/models/kegiatan_model.dart';
 import 'package:mosq/routes/route_name.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';
+import 'package:mosq/screens/widgets/DeleteDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKImages.dart';

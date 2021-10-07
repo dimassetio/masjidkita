@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mosq/modules/kas/kategori/databases/kategori_database.dart';
 
 class KategoriModel {
+  bool isSelected = false;
   String? id;
   String? nama;
   int? jenis;

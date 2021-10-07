@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/helpers/formatter.dart';
@@ -7,9 +9,11 @@ import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/kas/buku/models/kas_model.dart';
 import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 import 'package:mosq/routes/route_name.dart';
-import 'package:mosq/screens/fitur/Kelola_Masjid/Dialog/DeleteDialog.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
+import 'package:mosq/screens/widgets/DeleteDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/utils/MKWidget.dart';
 import 'package:mosq/screens/widgets/DismissibleBackground.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -22,18 +26,20 @@ class TransaksiKas extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width - 10;
 
-    return Container(
-      width: width,
-      child: ListView.builder(
-          padding: EdgeInsets.symmetric(),
-          scrollDirection: Axis.vertical,
-          itemCount: transaksies.length < 5 ? transaksies.length : length,
-          shrinkWrap: true,
-          physics: ScrollPhysics(),
-          itemBuilder: (context, index) {
-            return TransaksiList(dataTransaksi: transaksies[index]);
-          }),
-    );
+    return Stack(children: [
+      Container(
+        width: width,
+        child: ListView.builder(
+            padding: EdgeInsets.symmetric(),
+            scrollDirection: Axis.vertical,
+            itemCount: transaksies.length < 5 ? transaksies.length : length,
+            shrinkWrap: true,
+            physics: ScrollPhysics(),
+            itemBuilder: (context, index) {
+              return TransaksiList(dataTransaksi: transaksies[index]);
+            }),
+      ),
+    ]);
   }
 }
 
@@ -92,25 +98,8 @@ class TransaksiList extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Container(
-                    decoration: boxDecoration(
-                        radius: Get.width * 0.06,
-                        bgColor: dataTransaksi.tipeTransaksi == 10
-                            ? mkGreen.withOpacity(0.3)
-                            : mkRed.withOpacity(0.3)),
-                    // margin: EdgeInsets.only(left: 16, right: 16),
-                    width: Get.width * 0.06,
-                    height: Get.width * 0.06,
-                    child: Icon(
-                      dataTransaksi.tipeTransaksi == 10
-                          ? Icons.call_received
-                          : Icons.call_made,
-                      size: Get.width * 0.04,
-                      color:
-                          dataTransaksi.tipeTransaksi == 10 ? mkGreen : mkRed,
-                    ),
-                    // padding: EdgeInsets.all(width / 30),
-                  ),
+                  TipeTransaksiIcon(
+                      tipeTransaksi: dataTransaksi.tipeTransaksi!),
                   Container(
                     width: Get.width * 0.5,
                     child: Column(
@@ -141,6 +130,170 @@ class TransaksiList extends StatelessWidget {
               ),
             ),
             Divider(height: 0.5)
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FilterBottomSheetLayout extends StatefulWidget {
+  TransaksiModel? transaksiModel;
+  var onSave;
+
+  FilterBottomSheetLayout({Key? key, this.transaksiModel, this.onSave})
+      : super(key: key);
+
+  @override
+  FilterBottomSheetLayoutState createState() {
+    return FilterBottomSheetLayoutState();
+  }
+}
+
+class FilterBottomSheetLayoutState extends State<FilterBottomSheetLayout> {
+  // List<int> selectedCategories = [];
+  // List<String> selectedColors = [];
+  // List<String> selectedSizes = [];
+  // List<String> selectedBrands = [];
+
+  @override
+  Widget build(BuildContext context) {
+    // var categoryList = widget.mProductAttributeModel!.categories;
+    // var colorsList = widget.mProductAttributeModel!.color;
+    // var sizesList = widget.mProductAttributeModel!.size;
+    // var brandsList = widget.mProductAttributeModel!.brand;
+    final bukuKasList = ListView.builder(
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        itemCount: kasC.kases.length,
+        itemBuilder: (_, index) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ChoiceChip(
+              label: text(kasC.kases[index].nama,
+                  textColor:
+                      kasC.kases[index].isSelected ? mkColorPrimary : mkBlack),
+              selected: kasC.kases[index].isSelected,
+              onSelected: (selected) {
+                setState(() {
+                  kasC.kases[index].isSelected
+                      ? kasC.kases[index].isSelected = false
+                      : kasC.kases[index].isSelected = true;
+                });
+              },
+              elevation: 2,
+              backgroundColor: Colors.white10,
+              selectedColor: mkTextColorGrey.withOpacity(0.1),
+            ),
+          );
+        });
+
+    // final tipeTransaksiList = ListView.builder(
+    //     scrollDirection: Axis.horizontal,
+    //     shrinkWrap: true,
+    //     itemCount: transaksiC.tipeTransaksiList.length,
+    //     itemBuilder: (_, index) {
+    //       return Padding(
+    //         padding: const EdgeInsets.all(8.0),
+    //         child: ChoiceChip(
+    //           label:
+    //               text(transaksiC.tipeTransaksiList[index], textColor: mkBlack),
+    //           // selected: transaksiC.tipeTransaksiList[index].isSelected,
+    //           selected: transaksiC.tipeTransaksiList[index],
+    //           onSelected: (selected) {
+    //             setState(() {
+    //               // transaksiC.tipeTransaksiList[index].isSelected
+    //               //     ? transaksiC.tipeTransaksiList[index].isSelected = false
+    //               //     : transaksiC.tipeTransaksiList[index].isSelected = true;
+    //             });
+    //           },
+    //           elevation: 2,
+    //           backgroundColor: Colors.white10,
+    //           selectedColor: mkColorPrimary.withOpacity(0.5),
+    //         ),
+    //       );
+    //     });
+
+    final kategoriList = ListView.builder(
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        itemCount: kategoriC.kategories.length,
+        itemBuilder: (_, index) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ChoiceChip(
+              label: text(kategoriC.kategories[index].nama,
+                  textColor: kategoriC.kategories[index].isSelected
+                      ? mkColorPrimary
+                      : mkBlack),
+              selected: kategoriC.kategories[index].isSelected,
+              onSelected: (selected) {
+                setState(() {
+                  kategoriC.kategories[index].isSelected
+                      ? kategoriC.kategories[index].isSelected = false
+                      : kategoriC.kategories[index].isSelected = true;
+                });
+              },
+              elevation: 2,
+              backgroundColor: Colors.white10,
+              selectedColor: mkTextColorGrey.withOpacity(0.1),
+            ),
+          );
+        });
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: mkColorPrimary,
+        title: text(mk_lbl_filter,
+            textColor: mkWhite,
+            fontSize: textSizeNormal,
+            fontFamily: fontMedium),
+        iconTheme: IconThemeData(color: mkWhite),
+        actions: <Widget>[
+          InkWell(
+              child: Container(
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 5),
+                  child: text(mk_lbl_apply,
+                      textColor: mkWhite,
+                      fontFamily: fontMedium,
+                      fontSize: textSizeLargeMedium)),
+              onTap: () {
+                finish(context);
+              })
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: 10, top: 10),
+              child: text("Buku Kas",
+                  textColor: mkBlack,
+                  fontFamily: fontMedium,
+                  fontSize: textSizeLargeMedium),
+            ),
+            SizedBox(height: 10),
+            Container(child: bukuKasList, height: 50),
+            // Padding(
+            //   padding: EdgeInsets.only(left: 10, top: 10),
+            //   child: text("Tipe Transaksi",
+            //       textColor: mkBlack,
+            //       fontFamily: fontMedium,
+            //       fontSize: textSizeLargeMedium),
+            // ),
+            // SizedBox(height: 10),
+            // Container(child: productColorsListView, height: 50),
+            Padding(
+              padding: EdgeInsets.only(left: 10, top: 10),
+              child: text("Kategori",
+                  textColor: mkBlack,
+                  fontFamily: fontMedium,
+                  fontSize: textSizeLargeMedium),
+            ),
+            SizedBox(height: 10),
+            Container(child: kategoriList, height: 50),
           ],
         ),
       ),

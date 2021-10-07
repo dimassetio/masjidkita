@@ -49,8 +49,8 @@ class KasController extends GetxController {
     // if (model.photoUrl.isEmptyOrNull) {
     //   return await model.delete();
     // } else
-    //   return await model.deleteWithDetails();
-    return await model.delete();
+    return await model.deleteWithDetails(masjidC.currMasjid.transaksiDao!);
+    // return await model.delete();
   }
 
   saveKas(KasModel model) async {
