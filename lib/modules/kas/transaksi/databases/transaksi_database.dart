@@ -11,6 +11,13 @@ import 'package:mosq/modules/kas/transaksi/models/filter_model.dart';
 import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 
+extension on Query {
+  Query filterKas(String? kasID) {
+    // return where('from_kas', isEqualTo: kasID);
+    return where('kas', arrayContains: kasID);
+  }
+}
+
 class TransaksiDatabase {
   final CollectionReference db;
   final Reference storage;
@@ -32,15 +39,16 @@ class TransaksiDatabase {
   }
 
   Stream<List<TransaksiModel>> transaksiStream(MasjidModel model,
-      {FilterModel? filter}) async* {
-    Query ref = db;
-    if (filter != null) {
-      ref = db.where(
-        filter.field,
-        isEqualTo: filter.value,
-      );
-    }
-    yield* ref
+      {KasModel? kas}) async* {
+    // Query ref = db;
+    // if (filter != null) {
+    //   ref = db.where(
+    //     filter.field,
+    //     arrayContains: filter.value,
+    //   );
+    // }
+    yield* db
+        .filterKas(kas?.id)
         .orderBy('tanggal', descending: true)
         .snapshots()
         .map((QuerySnapshot query) {
@@ -72,7 +80,24 @@ class TransaksiDatabase {
   }
 
   Future calculateTransaksi(KasModel kas) async {
-    var tes = db.where('from_kas', isEqualTo: kas.id).get().then((value) {
+    // var tes = db.where('from_kas', isEqualTo: kas.id).get().then((value) {
+    //   int total = 0;
+    //   // int totalTo = 0;
+    //   value.docs.forEach((element) {
+    //     if (element.data()["tipeTransaksi"] == 10) {
+    //       total = total + element.data()["jumlah"] as int;
+    //     } else if (element.data()["tipeTransaksi"] == 20) {
+    //       total = total - element.data()["jumlah"] as int;
+    //     } else if (element.data()["tipeTransaksi"] == 30) {
+    //       total = total - element.data()["jumlah"] as int;
+    //       // totalTo = totalTo + element.data()["jumlah"] as int;
+    //     } else {
+    //       print('Jenis e error bro');
+    //     }
+    //   });
+    //   return total;
+    // });
+    var tes = db.where('kas', arrayContains: kas.id).get().then((value) {
       int total = 0;
       // int totalTo = 0;
       value.docs.forEach((element) {
@@ -81,7 +106,11 @@ class TransaksiDatabase {
         } else if (element.data()["tipeTransaksi"] == 20) {
           total = total - element.data()["jumlah"] as int;
         } else if (element.data()["tipeTransaksi"] == 30) {
-          total = total - element.data()["jumlah"] as int;
+          if (element.data()["kas"][0] == kas.id) {
+            total = total - element.data()["jumlah"] as int;
+          } else if (element.data()["kas"][1] == kas.id) {
+            total = total + element.data()["jumlah"] as int;
+          }
           // totalTo = totalTo + element.data()["jumlah"] as int;
         } else {
           print('Jenis e error bro');
@@ -89,24 +118,7 @@ class TransaksiDatabase {
       });
       return total;
     });
-    var tess = db.where('toKas', isEqualTo: kas.id).get().then((value) {
-      int total = 0;
-      // int totalTo = 0;
-      value.docs.forEach((element) {
-        if (element.data()["tipeTransaksi"] == 10) {
-          total = total + element.data()["jumlah"] as int;
-        } else if (element.data()["tipeTransaksi"] == 20) {
-          total = total - element.data()["jumlah"] as int;
-        } else if (element.data()["tipeTransaksi"] == 30) {
-          total = total + element.data()["jumlah"] as int;
-          // totalTo = totalTo + element.data()["jumlah"] as int;
-        } else {
-          print('Jenis e error bro');
-        }
-      });
-      return total;
-    });
-    return await tes + await tess;
+    return await tes;
   }
 
   // Future<bool> checkTransaksi(TransaksiModel model) async {

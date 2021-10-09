@@ -5,6 +5,7 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/kas/buku/models/kas_model.dart';
+import 'package:mosq/modules/kas/buku/views/slider_kas.dart';
 import 'package:mosq/modules/kas/transaksi/models/filter_model.dart';
 import 'package:mosq/modules/kas/transaksi/views/list_transaksi.dart';
 import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
@@ -34,12 +35,10 @@ class _DashboardKasState extends State<DashboardKas> {
   @override
   void initState() {
     super.initState();
-    FilterModel filterByKas = FilterModel(
-        field: "kas", value: kas.id, operator: Operator.arrayContains);
     _model.bindStream(kas.dao!.streamDetailKas(kas));
     _transaksies.bindStream(
       masjidC.currMasjid.transaksiDao!
-          .transaksiStream(masjidC.currMasjid, filter: filterByKas),
+          .transaksiStream(masjidC.currMasjid, kas: kas),
     );
   }
 
@@ -58,7 +57,15 @@ class _DashboardKasState extends State<DashboardKas> {
               icon: Icon(Icons.arrow_back,
                   color: appStore.isDarkModeOn ? white : black),
             ),
-            title: appBarTitleWidget(context, model.nama ?? 'Detail'),
+            actions: [
+              Container(
+                  // padding: EdgeInsets.only(right: 16),
+                  child: PopUpMenuKas(
+                dataKas: kas,
+                color: mkBlack,
+              )),
+            ],
+            title: appBarTitleWidget(context, 'Detail ${kas.nama ?? ''}'),
           ),
           // : SizedBox(),
           body: Stack(
@@ -90,9 +97,6 @@ class _DashboardKasState extends State<DashboardKas> {
                               ),
                             ),
                           ],
-                        ),
-                        Obx(
-                          () => text(transaksies.toString()),
                         ),
                         Container(
                           margin:

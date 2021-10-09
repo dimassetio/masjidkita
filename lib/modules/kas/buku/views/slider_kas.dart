@@ -169,79 +169,91 @@ class KasSlider extends StatelessWidget {
                 margin: EdgeInsets.only(right: 10, top: 5),
                 child: dataKas.nama != "Kas Total"
                     ? Obx(() => masjidC.myMasjid.value
-                        ? InkWell(
-                            onTap: () {},
-                            child: PopupMenuButton(
-                              color: mkWhite,
-                              icon: Icon(
-                                Icons.more_vert,
-                                color: mkWhite,
-                              ),
-                              onSelected: (dynamic value) async {
-                                if (value == 'edit') {
-                                  Get.toNamed(RouteName.edit_kas,
-                                      arguments: dataKas);
-                                } else if (value == 'delete') {
-                                  var res = await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          CustomDelete(
-                                            titleName: 'Kas',
-                                            subtitleName: "'${dataKas.nama}'",
-                                            description:
-                                                "Seluruh TRANSAKSI pada Buku Kas '${dataKas.nama}' akan terhapus apabila anda mengahapus Buku Kas ini. Apakah Anda Yakin?",
-                                          ));
-                                  if (res == true) {
-                                    var res2 = await showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            CustomDelete(
-                                              titleName: 'Kas',
-                                              subtitleName: dataKas.nama ?? "",
-                                              description:
-                                                  "Seluruh data TRANSAKSI dan BUKU KAS tidak akan bisa dikembalikan, Apakah Anda Yakin?",
-                                            ));
-                                    if (res2 == true) {
-                                      kasC.delete(dataKas);
-                                    }
-                                  }
-                                }
-                              },
-                              offset: Offset(0, 50),
-                              itemBuilder: (context) {
-                                List<PopupMenuEntry<Object>> list = [];
-                                list.add(
-                                  PopupMenuItem(
-                                    child: ListTile(
-                                      leading: Icon(
-                                        Icons.edit,
-                                        color: Colors.black,
-                                      ),
-                                      title: Text('Edit'),
-                                    ),
-                                    value: 'edit',
-                                  ),
-                                );
-                                list.add(
-                                  PopupMenuItem(
-                                    child: ListTile(
-                                      leading: Icon(
-                                        Icons.delete,
-                                        color: Colors.black,
-                                      ),
-                                      title: Text('Hapus'),
-                                    ),
-                                    value: 'delete',
-                                  ),
-                                );
-                                return list;
-                              },
-                            ),
-                          )
+                        ? PopUpMenuKas(dataKas: dataKas)
                         : SizedBox())
                     : SizedBox()),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class PopUpMenuKas extends StatelessWidget {
+  const PopUpMenuKas({
+    Key? key,
+    required this.dataKas,
+    this.color = mkWhite,
+  }) : super(key: key);
+
+  final KasModel dataKas;
+  final Color color;
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: PopupMenuButton(
+        color: mkWhite,
+        icon: Icon(
+          Icons.more_vert,
+          color: color,
+        ),
+        onSelected: (dynamic value) async {
+          if (value == 'edit') {
+            Get.toNamed(RouteName.edit_kas, arguments: dataKas);
+          } else if (value == 'delete') {
+            var res = await showDialog(
+                context: context,
+                builder: (BuildContext context) => CustomDelete(
+                      titleName: 'Kas',
+                      subtitleName: "'${dataKas.nama}'",
+                      description:
+                          "Seluruh TRANSAKSI pada Buku Kas '${dataKas.nama}' akan terhapus apabila anda mengahapus Buku Kas ini. Apakah Anda Yakin?",
+                    ));
+            if (res == true) {
+              var res2 = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) => CustomDelete(
+                        titleName: 'Kas',
+                        subtitleName: dataKas.nama ?? "",
+                        description:
+                            "Seluruh data TRANSAKSI dan BUKU KAS tidak akan bisa dikembalikan, Apakah Anda Yakin?",
+                      ));
+              if (res2 == true) {
+                kasC.delete(dataKas);
+              }
+            }
+          }
+        },
+        offset: Offset(0, 50),
+        itemBuilder: (context) {
+          List<PopupMenuEntry<Object>> list = [];
+          list.add(
+            PopupMenuItem(
+              child: ListTile(
+                leading: Icon(
+                  Icons.edit,
+                  color: Colors.black,
+                ),
+                title: Text('Edit'),
+              ),
+              value: 'edit',
+            ),
+          );
+          list.add(
+            PopupMenuItem(
+              child: ListTile(
+                leading: Icon(
+                  Icons.delete,
+                  color: Colors.black,
+                ),
+                title: Text('Hapus'),
+              ),
+              value: 'delete',
+            ),
+          );
+          return list;
+        },
       ),
     );
   }
