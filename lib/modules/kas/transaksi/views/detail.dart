@@ -23,6 +23,7 @@ class DetailTransaksi extends StatelessWidget {
   Widget build(BuildContext context) {
     TransaksiModel model = argument[0];
     KasModel kas = argument[1];
+    KasModel toKas = argument[2] ?? null;
 
     return Scaffold(
       appBar: AppBar(
@@ -59,10 +60,31 @@ class DetailTransaksi extends StatelessWidget {
                       subtitle: text(currencyFormatter(model.jumlah),
                           fontSize: textSizeMedium, fontFamily: fontSemibold),
                     ),
-                    CustomTile(
-                      title: mk_lbl_buku_kas,
-                      subtitle: kas.nama,
-                      icon: Icons.my_library_books,
+                    ListTile(
+                      leading: Icon(Icons.my_library_books,
+                          color: mkColorPrimaryDark),
+                      title: text(mk_lbl_buku_kas,
+                          fontSize: textSizeSmall,
+                          textColor: mkTextColorSecondary),
+                      subtitle: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          text("${kas.nama}",
+                              fontSize: textSizeMedium,
+                              textColor: mkTextColorPrimary),
+                          model.toKas != null
+                              ? Icon(
+                                  Icons.arrow_forward_rounded,
+                                  color: mkColorPrimaryDark,
+                                )
+                              : SizedBox(),
+                          model.toKas != null
+                              ? text("${toKas.nama}",
+                                  fontSize: textSizeMedium,
+                                  textColor: mkTextColorPrimary)
+                              : SizedBox(),
+                        ],
+                      ),
                     ),
                   ],
                 ),

@@ -73,12 +73,22 @@ class TransaksiController extends GetxController {
   }
 
   Future delete(TransaksiModel model) async {
+    kasModel = await KasModel(id: model.fromKas, dao: masjidC.currMasjid.kasDao)
+        .find();
+    !model.toKas.isEmptyOrNull
+        ? toKasModel =
+            await KasModel(id: model.toKas, dao: masjidC.currMasjid.kasDao)
+                .find()
+        : null;
     if (model.photoUrl.isEmptyOrNull) {
       await model.delete();
     } else {
       await model.deleteWithDetails();
     }
     await updateKasModel(model);
+
+    kasModel = null;
+    toKasModel = null;
   }
 
   // updateKas(KasModel model) async {
@@ -161,7 +171,7 @@ class TransaksiController extends GetxController {
       }
       // if (model.tipeTransaksi == 30) {
       // }
-      firebaseFirestore.runTransaction((transaction) async {
+      await firebaseFirestore.runTransaction((transaction) async {
         DocumentReference docRef = kasModel!.dao!.db.doc(kasModel!.id);
 
         //

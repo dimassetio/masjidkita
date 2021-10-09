@@ -5,6 +5,7 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/kas/buku/models/kas_model.dart';
+import 'package:mosq/modules/kas/kategori/databases/kategori_database.dart';
 import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/widgets/DeleteDialog.dart';
@@ -52,12 +53,12 @@ class TransaksiList extends StatelessWidget {
       secondaryBackground: slideLeftBackground(),
       confirmDismiss: (direction) async {
         final bool? res;
+
         if (direction == DismissDirection.startToEnd) {
           try {
             res = false;
           } finally {
             Get.toNamed(RouteName.edit_transaksi, arguments: dataTransaksi);
-            // );
           }
         } else if (direction == DismissDirection.endToStart) {
           return res = await showDialog(
@@ -80,11 +81,18 @@ class TransaksiList extends StatelessWidget {
       },
       child: InkWell(
         onTap: () async {
-          KasModel kas = await KasModel(
-                  id: dataTransaksi.fromKas, dao: masjidC.currMasjid.kasDao)
-              .find();
-          Get.toNamed(RouteName.detail_transaksi,
-              arguments: [dataTransaksi, kas]);
+          try {
+            KasModel kas = await KasModel(
+                    id: dataTransaksi.fromKas, dao: masjidC.currMasjid.kasDao)
+                .find();
+            KasModel? toKas = await KasModel(
+                    id: dataTransaksi.toKas, dao: masjidC.currMasjid.kasDao)
+                .find();
+            Get.toNamed(RouteName.detail_transaksi,
+                arguments: [dataTransaksi, kas, toKas]);
+          } catch (e) {
+            Get.snackbar('Error', 'Please Check Your Connection and Try Again');
+          }
         },
         child: Column(
           children: [
