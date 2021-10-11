@@ -9,6 +9,7 @@ import 'package:mosq/modules/kas/buku/models/kas_model.dart';
 import 'package:mosq/modules/kas/buku/views/show_kas.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
+import 'package:mosq/screens/widgets/CustomAlert.dart';
 import 'package:mosq/screens/widgets/DeleteDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
@@ -202,26 +203,29 @@ class PopUpMenuKas extends StatelessWidget {
           if (value == 'edit') {
             Get.toNamed(RouteName.edit_kas, arguments: dataKas);
           } else if (value == 'delete') {
-            var res = await showDialog(
-                context: context,
-                builder: (BuildContext context) => CustomDelete(
-                      titleName: 'Kas',
-                      subtitleName: "'${dataKas.nama}'",
-                      description:
-                          "Seluruh TRANSAKSI pada Buku Kas '${dataKas.nama}' akan terhapus apabila anda mengahapus Buku Kas ini. Apakah Anda Yakin?",
-                    ));
-            if (res == true) {
+            var res = await masjidC.currMasjid.transaksiDao!
+                .kasHaveTransaksi(dataKas);
+            if (res == false) {
               var res2 = await showDialog(
                   context: context,
                   builder: (BuildContext context) => CustomDelete(
                         titleName: 'Kas',
                         subtitleName: dataKas.nama ?? "",
-                        description:
-                            "Seluruh data TRANSAKSI dan BUKU KAS tidak akan bisa dikembalikan, Apakah Anda Yakin?",
                       ));
               if (res2 == true) {
                 kasC.delete(dataKas);
               }
+            } else if (res == true) {
+              await showDialog(
+                  context: context,
+                  builder: (BuildContext context) => CustomAlert(
+                        title: 'Tidak Dapat Menghapus',
+                        subtitle:
+                            'Buku Kas ini tidak dapat dihapus karena telah memiliki data TRANSAKSI',
+                        action: 'Tutup',
+                      ));
+            } else {
+              Get.snackbar('Eror', 'Error While Checking Data Transaction!');
             }
           }
         },

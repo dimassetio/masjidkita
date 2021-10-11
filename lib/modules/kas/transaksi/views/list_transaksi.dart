@@ -119,7 +119,7 @@ class TransaksiList extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    alignment: Alignment.center,
+                    alignment: Alignment.centerRight,
                     width: Get.width * 0.25,
                     child:
                         // text("${dataTransaksi.fromKas}",

@@ -118,7 +118,7 @@ class MosQDrawer extends StatelessWidget {
                     16.height,
                     Divider(height: 1),
                     16.height,
-                    getDrawerItem(mk_share, mk_lbl_share_and_invite, 6),
+                    // getDrawerItem(mk_share, mk_lbl_share_and_invite, 6),
                     SizedBox(height: 30),
                   ],
                 ),

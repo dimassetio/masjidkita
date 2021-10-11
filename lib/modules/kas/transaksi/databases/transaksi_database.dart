@@ -79,6 +79,13 @@ class TransaksiDatabase {
     });
   }
 
+  Future<bool> kasHaveTransaksi(KasModel kas) async {
+    var test = await db.where('kas', arrayContains: kas.id).get();
+    print('test.size');
+    print(test.size);
+    return test.size > 0;
+  }
+
   Future calculateTransaksi(KasModel kas) async {
     // var tes = db.where('from_kas', isEqualTo: kas.id).get().then((value) {
     //   int total = 0;
