@@ -219,15 +219,24 @@ class TransaksiKas extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    alignment: Alignment.center,
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 10),
                     width: Get.width * 0.25,
-                    child:
-                        // text("${dataTransaksi.fromKas}",
-                        text("${currencyFormatter(dataTransaksi.jumlah)}",
-                            textColor: appStore.textSecondaryColor,
-                            fontSize: textSizeMedium,
-                            isLongText: true,
-                            fontFamily: fontSemibold),
+                    child: Text(
+                      "${currencyFormatter(dataTransaksi.jumlah)}",
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: fontSemibold,
+                          color: textSecondaryColor),
+                    ),
+                    // text("${currencyFormatter(dataTransaksi.jumlah)}",
+                    //     textColor: appStore.textSecondaryColor,
+                    //     fontSize: textSizeMedium,
+                    //     isLongText: true,
+                    //     fontFamily: fontSemibold
+                    //     ),
                   )
                 ],
               ),

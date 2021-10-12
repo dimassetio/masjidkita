@@ -109,7 +109,7 @@ class TransaksiList extends StatelessWidget {
                   TipeTransaksiIcon(
                       tipeTransaksi: dataTransaksi.tipeTransaksi!),
                   Container(
-                    width: Get.width * 0.5,
+                    width: Get.width * 0.4,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,15 +124,24 @@ class TransaksiList extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    alignment: Alignment.center,
-                    width: Get.width * 0.25,
-                    child:
-                        // text("${dataTransaksi.fromKas}",
-                        text("${currencyFormatter(dataTransaksi.jumlah)}",
-                            textColor: appStore.textSecondaryColor,
-                            fontSize: textSizeMedium,
-                            isLongText: true,
-                            fontFamily: fontSemibold),
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 10),
+                    width: Get.width * 0.35,
+                    child: Text(
+                      "${currencyFormatter(dataTransaksi.jumlah)}",
+                      textAlign: TextAlign.end,
+                      textDirection: TextDirection.rtl,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: fontSemibold,
+                          color: textSecondaryColor),
+                    ),
+                    // text("${currencyFormatter(dataTransaksi.jumlah)}",
+                    //     textColor: appStore.textSecondaryColor,
+                    //     fontSize: textSizeMedium,
+                    //     isLongText: true,
+                    //     fontFamily: fontSemibold),
                   )
                 ],
               ),
