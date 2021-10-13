@@ -56,14 +56,16 @@ class KasSlider extends StatelessWidget {
 }
 
 class KasCard extends StatelessWidget {
-  const KasCard({
+  KasCard({
     Key? key,
     required this.dataKas,
     required this.masjid,
+    this.withPadding = false,
   }) : super(key: key);
 
   final KasModel dataKas;
   final MasjidModel masjid;
+  bool withPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +132,7 @@ class KasCard extends StatelessWidget {
                 ),
               ],
             ),
-            16.height,
+            withPadding ? 16.height : 0.height,
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +148,7 @@ class KasCard extends StatelessWidget {
                 ),
               ],
             ),
-            16.height,
+            withPadding ? 16.height : 0.height,
             Container(
               // padding: EdgeInsets.all(14),
               child: Row(

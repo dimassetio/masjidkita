@@ -78,7 +78,10 @@ class _DashboardKasState extends State<DashboardKas> {
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: KasCard(
-                              dataKas: model, masjid: masjidC.currMasjid),
+                            dataKas: model,
+                            masjid: masjidC.currMasjid,
+                            withPadding: true,
+                          ),
                         ),
                         // Column(
                         //   children: <Widget>[
