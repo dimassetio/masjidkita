@@ -7,7 +7,6 @@ import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main.dart';
 import 'package:mosq/modules/kas/buku/models/kas_model.dart';
 import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
-// import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';

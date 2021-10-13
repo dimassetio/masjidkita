@@ -36,6 +36,12 @@ class TransaksiController extends GetxController {
   DateTime get selectedDate => _date.value;
   set selectedDate(DateTime value) => this._date.value = value;
 
+  List<String> tipeTransaksiList = [
+    'Pemasukan',
+    'Pengeluaran',
+    'Mutasi',
+  ];
+
   Future<void> selectDate(BuildContext context) async {
     var result = await showDatePicker(
         context: context,

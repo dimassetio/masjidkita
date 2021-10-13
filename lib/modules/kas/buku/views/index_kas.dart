@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mosq/helpers/formatter.dart';
 import 'package:mosq/integrations/controllers.dart';
 import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/modules/kas/transaksi/views/list_transaksi.dart';
@@ -11,7 +9,7 @@ import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
-import 'package:mosq/screens/utils/MKImages.dart';
+import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../../../../main.dart';
@@ -19,7 +17,7 @@ import '../../../../../main.dart';
 class TMTabKas extends StatelessWidget {
   const TMTabKas(this.model);
   final MasjidModel model;
-  // final TransaksiModel modelT;
+
   @override
   Widget build(BuildContext context) {
     var width = Get.width - 10;
@@ -45,6 +43,20 @@ class TMTabKas extends StatelessWidget {
                   children: <Widget>[
                     Text('Transaksi',
                         style: TextStyle(fontSize: 18, fontFamily: fontMedium)),
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed(RouteName.transaksi, arguments: model);
+                      },
+                      child: Row(
+                        children: [
+                          Text(mk_lbl_show_all,
+                              style: secondaryTextStyle(color: mkColorPrimary)),
+                          4.width,
+                          Icon(Icons.keyboard_arrow_right,
+                              color: mkColorPrimary, size: 16),
+                        ],
+                      ).paddingOnly(left: 16, right: 16),
+                    )
                   ],
                 ),
               ),

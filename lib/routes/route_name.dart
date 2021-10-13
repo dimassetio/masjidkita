@@ -23,6 +23,7 @@ abstract class RouteName {
   static const detail_kas = '/detail_kas';
   static const edit_kas = '/edit_kas';
   static const dashboard_kas = '/dashboard_kas';
+  static const transaksi = '/transaksi';
   static const kategori = '/kategori';
   static const new_kategori = '/new_kategori';
   static const edit_kategori = '/edit_kategori';

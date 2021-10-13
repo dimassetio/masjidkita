@@ -1,15 +1,14 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:mosq/modules/kas/buku/kas_database.dart';
-import 'package:mosq/modules/kas/periode/periode_database.dart';
-import 'package:mosq/modules/kas/periode/periode_model.dart';
-// import 'package:mosq/modules/kas/transaksi/transaksi_model.dart';
 import 'package:mosq/modules/kas/buku/databases/kas_database.dart';
 import 'package:mosq/modules/kas/transaksi/databases/transaksi_database.dart';
 import 'package:mosq/modules/kas/transaksi/models/transaksi_model.dart';
+import 'package:mosq/modules/kas/periode/periode_database.dart';
+import 'package:mosq/modules/kas/periode/periode_model.dart';
 
 class KasModel {
+  bool isSelected = false;
   String? id;
   String? nama;
   int? saldoAwal;
