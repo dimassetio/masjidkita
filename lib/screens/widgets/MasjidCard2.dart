@@ -94,17 +94,6 @@ class MasjidCard2 extends StatelessWidget {
                                       return !isLiked;
                                     },
                                   )),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.share,
-                                  color: mkTextColorSecondary,
-                                  size: 25,
-                                ),
-                                onPressed: () {
-                                  // masjidC.deleteMasjid(dataMasjid.id);
-                                  toast("On Progress");
-                                },
-                              ),
                             ],
                           ),
                         ],

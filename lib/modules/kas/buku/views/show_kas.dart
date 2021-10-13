@@ -75,29 +75,34 @@ class _DashboardKasState extends State<DashboardKas> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            Container(
-                              height: 260,
-                              width: double.infinity,
-                              child: PageView(
-                                pageSnapping: true,
-                                children: <Widget>[
-                                  Container(
-                                    child: CardDetails(
-                                      visaTitle: model.nama ?? 'Buku kas',
-                                      expire: currencyFormatter(model.saldo),
-                                      name: currencyFormatter(model.saldoAwal),
-                                      // name: masjidC.currMasjid.nama ?? "Nama Masjid",
-                                      color: mkColorPrimary,
-                                      namaMasjid: masjidC.currMasjid.nama ?? '',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: KasCard(
+                              dataKas: model, masjid: masjidC.currMasjid),
                         ),
+                        // Column(
+                        //   children: <Widget>[
+                        //     Container(
+                        //       height: 260,
+                        //       width: double.infinity,
+                        //       child: PageView(
+                        //         pageSnapping: true,
+                        //         children: <Widget>[
+                        //           Container(
+                        //             child: CardDetails(
+                        //               visaTitle: model.nama ?? 'Buku kas',
+                        //               expire: currencyFormatter(model.saldo),
+                        //               name: currencyFormatter(model.saldoAwal),
+                        //               // name: masjidC.currMasjid.nama ?? "Nama Masjid",
+                        //               color: mkColorPrimary,
+                        //               namaMasjid: masjidC.currMasjid.nama ?? '',
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         Container(
                           margin:
                               EdgeInsets.only(left: 16, right: 16, bottom: 16),
@@ -107,34 +112,6 @@ class _DashboardKasState extends State<DashboardKas> {
                               Text('Transaction',
                                   style: secondaryTextStyle(
                                       size: 18, fontFamily: fontMedium)),
-                              Container(
-                                padding: EdgeInsets.only(left: 16, right: 5),
-                                height: 34,
-                                margin: EdgeInsets.only(left: 8),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(24),
-                                  border: Border.all(
-                                      color: Colors.grey.withAlpha(50)),
-                                ),
-                                child: DropdownButton(
-                                  value: 'Weekly',
-                                  underline: SizedBox(),
-                                  items: <String>[
-                                    'Daily',
-                                    'Weekly',
-                                    'Monthly',
-                                    'Yearly'
-                                  ].map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value,
-                                          style: primaryTextStyle(size: 14)),
-                                    );
-                                  }).toList(),
-                                  onChanged: (dynamic value) {},
-                                ),
-                              )
                             ],
                           ),
                         ),
@@ -174,7 +151,7 @@ class _DashboardKasState extends State<DashboardKas> {
 
 // ignore: non_constant_identifier_names
 // Widget OPDasboardScreen(BuildContext context, KasModel model) {
-//   return 
+//   return
 //   Container(
 //     child: SingleChildScrollView(
 //       child: Column(

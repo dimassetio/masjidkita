@@ -9,6 +9,7 @@ import 'package:mosq/modules/kas/buku/models/kas_model.dart';
 import 'package:mosq/modules/kas/buku/views/show_kas.dart';
 import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/widgets/CustomAlert.dart';
 import 'package:mosq/screens/widgets/DeleteDialog.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
@@ -25,7 +26,7 @@ class TMKasSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MasjidCarouselSlider(
-      aspectRatio: 2.2 / 1,
+      aspectRatio: 2 / 1,
       viewportFraction: 0.9,
       enlargeCenterPage: true,
       scrollDirection: Axis.horizontal,
@@ -50,12 +51,32 @@ class KasSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var saldoAwal = currencyFormatter(dataKas.saldoAwal ?? 0);
-    var saldo = currencyFormatter(dataKas.saldo);
+    return KasCard(dataKas: dataKas, masjid: masjid);
+  }
+}
+
+class KasCard extends StatelessWidget {
+  const KasCard({
+    Key? key,
+    required this.dataKas,
+    required this.masjid,
+  }) : super(key: key);
+
+  final KasModel dataKas;
+  final MasjidModel masjid;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      width: width,
-      decoration: boxDecoration(bgColor: mkColorPrimary, radius: 20),
+      width: Get.width,
+      decoration: BoxDecoration(
+        image: DecorationImage(image: AssetImage(mk_bg_kas), fit: BoxFit.cover),
+        color: mkColorPrimary,
+        boxShadow: [BoxShadow(color: Colors.transparent)],
+        border: Border.all(color: mkColorPrimary),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
+      padding: EdgeInsets.all(10),
       child: InkWell(
         splashColor: mkColorPrimaryDark,
         onTap: () {
@@ -63,116 +84,118 @@ class KasSlider extends StatelessWidget {
             Get.toNamed(RouteName.dashboard_kas, arguments: dataKas);
           }
         },
-        child: Stack(
-          children: [
-            Column(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  children: [
-                    text(dataKas.nama,
-                        textColor: mkWhite,
-                        fontSize: textSizeLarge,
-                        fontFamily: fontBold),
-                    text(
-                      masjid.nama,
-                      textColor: mkWhite,
-                      fontSize: textSizeMedium,
-                    ),
-                  ],
-                ),
+              children: [
+                text(dataKas.nama ?? 'Kas',
+                    textColor: mkWhite,
+                    fontSize: textSizeLarge,
+                    fontFamily: fontBold),
                 Container(
-                  padding: EdgeInsets.all(14),
+                  // color: mkColorAccent,
                   child: Row(
-                    mainAxisAlignment: dataKas.nama != "Kas Total"
-                        ? MainAxisAlignment.spaceBetween
-                        : MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ClipOval(
+                        child: Material(
+                          color: mkWhite, // Button color
+                          child: InkWell(
+                            splashColor: mkColorPrimaryDark, // Splash color
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    DialogDeskripsiKas(dataKas),
+                              );
+                            },
+                            child: SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: Icon(Icons.info,
+                                    size: 30, color: mkColorPrimary)),
+                          ),
+                        ),
+                      ),
                       dataKas.nama != "Kas Total"
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                text(
-                                  "Saldo Awal",
-                                  textColor: mkWhite,
-                                  fontSize: textSizeMedium,
-                                ),
-                                // text("${dataKas.saldoAwal}",
-                                text("${saldoAwal ?? " "}",
-                                    textColor: mkWhite,
-                                    fontSize: textSizeMedium)
-                              ],
-                            )
+                          ? Obx(() => masjidC.myMasjid.value
+                              ? PopUpMenuKas(dataKas: dataKas)
+                              : SizedBox())
                           : SizedBox(),
-                      dataKas.nama != "Kas Total"
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                text(
-                                  "Sisa Saldo",
-                                  textColor: mkWhite,
-                                  fontSize: textSizeMedium,
-                                ),
-                                text("$saldo",
-                                    textColor: mkWhite,
-                                    fontSize: textSizeMedium)
-                              ],
-                            )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                text(
-                                  "Sisa Saldo",
-                                  textColor: mkWhite,
-                                  fontSize: textSizeMedium,
-                                ),
-                                text("$saldo",
-                                    textColor: mkWhite,
-                                    fontSize: textSizeLarge,
-                                    fontFamily: fontBold)
-                              ],
-                            )
                     ],
                   ),
-                )
+                ),
               ],
             ),
-            Container(
-              alignment: Alignment.topLeft,
-              margin: EdgeInsets.only(left: 15, top: 15),
-              child: ClipOval(
-                child: Material(
-                  color: mkWhite, // Button color
-                  child: InkWell(
-                    splashColor: mkColorPrimaryDark, // Splash color
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            DialogDeskripsiKas(dataKas),
-                      );
-                    },
-                    child: SizedBox(
-                        width: 30,
-                        height: 30,
-                        child:
-                            Icon(Icons.info, size: 30, color: mkColorPrimary)),
-                  ),
+            16.height,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  chips_png,
+                  height: 28,
                 ),
-              ),
+                text(
+                  masjid.nama ?? '',
+                  textColor: mkWhite,
+                  fontSize: textSizeLargeMedium,
+                ),
+              ],
             ),
+            16.height,
             Container(
-                alignment: Alignment.topRight,
-                margin: EdgeInsets.only(right: 10, top: 5),
-                child: dataKas.nama != "Kas Total"
-                    ? Obx(() => masjidC.myMasjid.value
-                        ? PopUpMenuKas(dataKas: dataKas)
-                        : SizedBox())
-                    : SizedBox()),
+              // padding: EdgeInsets.all(14),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  dataKas.nama != "Kas Total"
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            text(
+                              "Saldo Awal",
+                              textColor: mkWhite,
+                              fontSize: textSizeSMedium,
+                            ),
+                            // text("${dataKas.saldoAwal}",
+                            text(
+                                currencyFormatter(dataKas.saldoAwal ?? 0) ?? '',
+                                textColor: mkWhite,
+                                fontSize: textSizeMedium)
+                          ],
+                        )
+                      : SizedBox(),
+                  Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        text(
+                          "Sisa Saldo",
+                          textColor: mkWhite,
+                          fontSize: textSizeSMedium,
+                        ),
+                        text(currencyFormatter(dataKas.saldo ?? 0) ?? '',
+                            textColor: mkWhite, fontSize: textSizeMedium)
+                      ],
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    child: Image.asset(
+                      mosq_logo_white,
+                      height: 30,
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

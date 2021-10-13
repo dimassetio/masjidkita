@@ -37,7 +37,7 @@ class PageListMasjid extends GetView<MasjidController> {
                   gradient: LinearGradient(
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
-                      colors: [mkColorPrimary, mkColorPrimaryLight])),
+                      colors: [mkColorPrimary, mkColorSecondary])),
             ),
             Column(
               children: [

@@ -45,30 +45,6 @@ class TMTabKas extends StatelessWidget {
                   children: <Widget>[
                     Text('Transaksi',
                         style: TextStyle(fontSize: 18, fontFamily: fontMedium)),
-                    Container(
-                      padding: EdgeInsets.only(left: 16, right: 5),
-                      height: 34,
-                      margin: EdgeInsets.only(left: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: Colors.grey.withAlpha(50)),
-                      ),
-                      child: DropdownButton(
-                        value: 'Weekly',
-                        underline: SizedBox(),
-                        items: <String>['Daily', 'Weekly', 'Monthly', 'Yearly']
-                            .map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value, style: TextStyle(fontSize: 14)),
-                          );
-                        }).toList(),
-                        onChanged: (dynamic value) {
-                          print(value);
-                        },
-                      ),
-                    )
                   ],
                 ),
               ),

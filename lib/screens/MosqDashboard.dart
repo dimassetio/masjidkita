@@ -13,6 +13,7 @@ import 'package:mosq/modules/masjid/models/masjid_model.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:mosq/screens/utils/MKColors.dart';
 import 'package:mosq/screens/utils/MKConstant.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
 import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/widgets/BottomNav.dart';
 import 'package:mosq/screens/widgets/ConfirmLogout.dart';
@@ -140,36 +141,53 @@ class _MosqDashboardState extends State<MosqDashboard> {
                         // centerTitle: true,
                         // title: Text('MosqDashboard', style: primaryTextStyle(color: white)),
                         background: GestureDetector(
-                            onTap: () {
-                              toast("go to adzan page");
-                            },
+                            // onTap: () {
+                            //   toast("go to adzan page");
+                            // },
                             child: Container(
-                                // alignment: Alignment.center,
-                                padding: EdgeInsets.fromLTRB(Get.width / 20,
-                                    Get.width / 10, Get.width / 20, 0),
-                                color: mkColorPrimary,
-                                child: Column(
-                                  // crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: text("09:00:00",
-                                          textColor: mkWhite,
-                                          fontSize: textSizeLargeMedium),
-                                    ),
-                                    text("Dzuhur", textColor: mkWhite),
-                                    text(
-                                      "11:36",
-                                      textColor: mkWhite,
-                                      fontSize: textSizeXXLarge,
-                                    ),
-                                    text(
-                                      "2 jam 36 menit lagi",
-                                      textColor: mkWhite,
-                                      fontSize: textSizeMedium,
-                                    ),
-                                  ],
-                                ))),
+                          // alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(mk_pattern),
+                                fit: BoxFit.cover),
+                            color: mkColorPrimary,
+                          ),
+                          padding: EdgeInsets.fromLTRB(Get.width / 20,
+                              Get.width / 10, Get.width / 20, 0),
+                          // color: mkColorPrimary,
+                          child: Column(
+                            // crossAxisAlignment: CrossAxisAlignment.start,
+
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: text("09:00:00",
+                                    textColor: mkWhite,
+                                    fontSize: textSizeLargeMedium),
+                              ),
+                              Container(
+                                // color: mkColorAccent,
+                                child: Center(
+                                  child: Image.asset(
+                                    mosq_logo_white,
+                                    height: 100,
+                                  ),
+                                ),
+                              )
+                              // text("Dzuhur", textColor: mkWhite),
+                              // text(
+                              //   "11:36",
+                              //   textColor: mkWhite,
+                              //   fontSize: textSizeXXLarge,
+                              // ),
+                              // text(
+                              //   "2 jam 36 menit lagi",
+                              //   textColor: mkWhite,
+                              //   fontSize: textSizeMedium,
+                              // ),
+                            ],
+                          ),
+                        )),
                       ),
                     )
                   ];

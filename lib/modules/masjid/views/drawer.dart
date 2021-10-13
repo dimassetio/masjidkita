@@ -109,7 +109,7 @@ class MosQDrawer extends StatelessWidget {
                     16.height,
                     Divider(height: 1),
                     16.height,
-                    getDrawerItem(mk_settings, mk_lbl_settings, 4),
+                    // getDrawerItem(mk_settings, mk_lbl_settings, 4),
                     getDrawerItem(mk_logout, mk_log_out, 5, ontap: () {
                       showDialog(
                           context: context,
@@ -119,7 +119,7 @@ class MosQDrawer extends StatelessWidget {
                     Divider(height: 1),
                     16.height,
                     // getDrawerItem(mk_share, mk_lbl_share_and_invite, 6),
-                    SizedBox(height: 30),
+                    // SizedBox(height: 30),
                   ],
                 ),
               ),

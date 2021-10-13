@@ -28,6 +28,13 @@ const no_image = "images/widgets/no-image.png";
 const mk_delete_svg = "images/MK/delete.svg";
 const mk_alert_svg = "images/MK/alert.svg";
 
+const chips_png = "images/widgets/opchip.png";
+const mk_chip = "images/MK/chip.png";
+const mosq_logo = "images/MK/logo.png";
+const mosq_logo_white = "images/MK/logo_white.png";
+const mk_pattern = "images/MK/pattern_masjid.png";
+
+const mk_bg_kas = "images/MK/bg_card.jpg";
 const mk_user = "images/MK/mk_user.svg";
 const mk_chat = "images/MK/mk_chat.svg";
 const mk_report = "images/MK/mk_report.svg";
