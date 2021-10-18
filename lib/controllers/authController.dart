@@ -1,6 +1,10 @@
 // @dart=2.9
+import 'dart:async';
+
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mosq/helpers/showLoading.dart';
+import 'package:mosq/main/utils/AppWidget.dart';
 import 'package:mosq/models/user.dart';
 import 'package:mosq/routes/route_name.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mosq/screens/utils/MKImages.dart';
+import 'package:mosq/screens/widgets/CustomAlert.dart';
 import 'package:nb_utils/nb_utils.dart';
 // import 'package:mosq/screens/inventaris/inventaris_page.dart';
 
@@ -22,6 +28,40 @@ class AuthController extends GetxController {
   RxBool isLoggedIn = false.obs;
 
   // final googleSignIn = GoogleSignIn();
+
+  var _lastVerif = 0.obs;
+  int get lastVerif => _lastVerif.value;
+  set lastVerif(int value) => this._lastVerif.value = value;
+  Timer timer;
+
+  setTimer() {
+    lastVerif = 30;
+    timer = Timer.periodic(
+      Duration(seconds: 1),
+      (Timer timer) {
+        if (lastVerif == 0) {
+          timer.cancel();
+        } else {
+          lastVerif = lastVerif - 1;
+        }
+      },
+    );
+  }
+
+  sendVerif(User user) async {
+    if (lastVerif == 0) {
+      try {
+        await user.sendEmailVerification();
+        Get.snackbar('Verifikasi telah dikirimkan', 'Silahkan cek Email anda');
+        setTimer();
+      } catch (e) {
+        Get.snackbar('Error', e.toString());
+      }
+    } else {
+      Get.snackbar("Verifikasi Gagal",
+          "Tunggu selama $lastVerif detik untuk mengirim ulang verifikasi");
+    }
+  }
 
   final box = GetStorage();
   var isFirstLaunch = false.obs;
@@ -69,13 +109,40 @@ class AuthController extends GetxController {
     try {
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
-          .then((result) {
-        String _userId = result.user.uid;
-        _initializeUserModel(_userId);
+          .then((result) async {
+        if (result.user.emailVerified == true) {
+          String _userId = result.user.uid;
+          _initializeUserModel(_userId);
 
-        print(firebaseUser);
-        Get.offAllNamed(RouteName.home);
-        toast("Sign In Success");
+          print(firebaseUser);
+          Get.offAllNamed(RouteName.home);
+          toast("Sign In Success");
+        } else {
+          await Get.defaultDialog(
+              barrierDismissible: false,
+              textCancel: 'Tutup',
+              textConfirm: 'OK',
+              title: "Email Belum Terverifikasi",
+              middleText:
+                  "Untuk melanjutkan login, email anda harus diverifikasi terlebih dahulu. silahkan klik 'OK' untuk mendapatkan email verifikasi",
+              onConfirm: () async {
+                try {
+                  // await result.user.sendEmailVerification();
+                  Get.back();
+                  await sendVerif(result.user);
+                  Get.toNamed(
+                    RouteName.verification,
+                    arguments: [email, password],
+                  );
+                } catch (e) {
+                  Get.back();
+                  Get.snackbar('Error Sending Verification', e.toString());
+                }
+              });
+
+          // await result.user.sendEmailVerification();
+          // Get.toNamed(RouteName.verification, arguments: [email, password]);
+        }
       });
     } on FirebaseAuthException catch (e) {
       String error;
@@ -94,15 +161,14 @@ class AuthController extends GetxController {
           break;
         case 'network-request-failed':
           error = 'Connection error';
-
-          print(e.code + 'iki error cok');
           break;
+
         default:
-          error = e.code;
+          error = e.message;
       }
       return Get.snackbar('Sign In Failed', error);
     } catch (e) {
-      return Get.snackbar("Sign In Failed", "Try again");
+      return Get.snackbar("Sign In Failed", e.toString());
     }
   }
 
@@ -111,15 +177,21 @@ class AuthController extends GetxController {
       UserCredential result = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
       if (result.user != null) {
-        String _userId = result.user.uid;
-        _addUserToFirestore(
-          _userId,
-          name,
-          email,
-        );
+        await sendVerif(result.user);
+        // await result.user.sendEmailVerification();
+        // Get.dialog(Container());
+        Get.toNamed(RouteName.verification, arguments: [email, password]);
+
+        // auth.signOut();
+
+        String _userId = result.user.email;
+
+        // result.user.
+
+        _addUserToFirestore(name: name, user: result.user);
         _initializeUserModel(_userId);
-        Get.offAllNamed(RouteName.home);
-        toast("Sign Up Success");
+        // Get.offAllNamed(RouteName.home);
+        // toast("Sign Up Success");
       } else {
         Get.snackbar('Sign Up Failed', 'Unknown Error');
       }
@@ -212,11 +284,13 @@ class AuthController extends GetxController {
     toast("Sign Out Success");
   }
 
-  _addUserToFirestore(String userId, String name, String email) {
-    firebaseFirestore.collection(usersCollection).doc(userId).set({
-      "name": name,
-      "id": userId,
-      "email": email,
+  _addUserToFirestore({String name, User user}) {
+    firebaseFirestore.collection(usersCollection).doc(user.email).set({
+      "name": name ?? user.displayName,
+      "id": user.uid,
+      "email": user.email,
+      "email_verified": user.emailVerified,
+      'created_at': DateTime.now(),
       "role": "user",
       "masjid": ""
     });

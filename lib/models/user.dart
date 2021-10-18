@@ -13,6 +13,7 @@ class UserModel {
   String? email;
   String? role;
   String? masjid;
+  bool? isVerified;
   // String last_login;
 
   UserModel({this.id, this.name, this.email, this.role, this.masjid});
@@ -20,6 +21,7 @@ class UserModel {
   UserModel.fromSnapshot(DocumentSnapshot snapshot) {
     name = snapshot.data()?[NAME];
     email = snapshot.data()?[EMAIL];
+    isVerified = snapshot.data()?['email_verified'];
     id = snapshot.data()?[ID];
     role = snapshot.data()?[ROLE];
     masjid = snapshot.data()?[MASJID];

@@ -31,7 +31,7 @@ class MosqProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    changeStatusColor(appStore.appBarColor!);
+    // changeStatusColor(appStore.appBarColor!);
     final profileImg = Container(
       margin: EdgeInsets.symmetric(horizontal: 16.0),
       alignment: FractionalOffset.center,

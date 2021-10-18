@@ -30,7 +30,7 @@ class InventarisDetail extends StatelessWidget {
     //   imagephotoUrl;
     // }
 
-    changeStatusColor(appStore.appBarColor!);
+    // changeStatusColor(appStore.appBarColor!);changeStatusColo
     var width = Get.width;
     var height = Get.height;
 

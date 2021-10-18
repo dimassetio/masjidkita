@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mosq/integrations/binding.dart';
 import 'package:mosq/modules/kas/kategori/views/index.dart';
@@ -22,6 +23,7 @@ import 'package:mosq/modules/masjid/views/show.dart';
 import 'package:mosq/modules/inventaris/views/show.dart';
 import 'package:mosq/modules/takmir/views/show.dart';
 import 'package:mosq/modules/kegiatan/views/form_kegiatan.dart';
+import 'package:mosq/screens/authentication/Verification.dart';
 import './route_name.dart';
 
 class AppPage {
@@ -63,6 +65,7 @@ class AppPage {
       name: RouteName.edit_takmir,
       page: () => FormTakmir(),
     ),
+    GetPage(name: RouteName.verification, page: () => Verification()),
     // GetPage(name: RouteName.new_kas, page: () => FormKas()),
   ];
 }

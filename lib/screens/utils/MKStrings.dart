@@ -10,7 +10,7 @@ const mk_note_registration =
     " Please enter your mobile number, then we will send OTP to verify";
 const mk_lbl_registration = " Registration";
 const mk_continue = " Continue";
-const mk_lanjut = " Lanjut";
+const mk_lanjut = " Lanjutkan";
 const mk_batal = " Batal";
 const mk_register = "MosQ Registration";
 const mk_to_register = "Don't Have Account? Register";

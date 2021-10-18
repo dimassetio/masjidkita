@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -16,7 +17,38 @@ import 'package:mosq/screens/utils/MKStrings.dart';
 import 'package:mosq/screens/utils/MKWidget.dart';
 
 import '../../main.dart';
+
 // import 'T5Dialog.dart';
+class SignIn extends StatefulWidget {
+  const SignIn({Key? key}) : super(key: key);
+
+  @override
+  _SignInState createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+  Map? user = Get.arguments;
+
+  var isLoading = false.obs;
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    if (user != null) {
+      email.text = user?['email'] ?? '';
+      password.text = user?['password'] ?? '';
+    }
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
 
 class MKSignIn extends StatelessWidget {
   var isLoading = false.obs;
@@ -26,7 +58,7 @@ class MKSignIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    changeStatusColor(mkWhite);
+    // changeStatusColor(mkWhite);
     var width = Get.width;
     var height = Get.height;
 
@@ -150,7 +182,7 @@ class MKSignIn extends StatelessWidget {
                         Get.toNamed(RouteName.sign_up);
                       },
                       child: text(mk_to_register,
-                          textColor: mkColorPrimary, fontSize: textSizeMedium))
+                          textColor: mkColorPrimary, fontSize: textSizeMedium)),
                 ],
               ),
             ),

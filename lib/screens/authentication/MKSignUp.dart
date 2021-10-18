@@ -27,7 +27,7 @@ class MKSignUp extends StatelessWidget {
   TextEditingController confirmPassword = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    changeStatusColor(mkWhite);
+    // changeStatusColor(mkWhite);
     var width = Get.width;
 
     return Scaffold(

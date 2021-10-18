@@ -22,6 +22,7 @@ class CustomAlert extends StatelessWidget {
   final String title;
   final String action;
   final String subtitle;
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -76,24 +77,40 @@ class CustomAlert extends StatelessWidget {
                   fontSize: textSizeSMedium),
             ),
             24.height,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: boxDecoration(radius: 8, bgColor: mkColorPrimary),
-                child: Center(
-                  child: Text(
-                    action,
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        color: mkWhite,
-                        fontFamily: fontRegular),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      // return false;
+                    },
+                    child: text('Batal',
+                        textColor: mkWhite,
+                        fontSize: textSizeSMedium,
+                        fontFamily: fontRegular)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: InkWell(
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration:
+                          boxDecoration(radius: 8, bgColor: mkColorPrimary),
+                      child: Center(
+                        child: Text(
+                          action,
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              color: mkWhite,
+                              fontFamily: fontRegular),
+                        ),
+                      ),
+                    ).onTap(() {
+                      finish(context);
+                      return false;
+                    }),
                   ),
                 ),
-              ).onTap(() {
-                finish(context);
-                return false;
-              }),
+              ],
             ),
             24.height,
           ],

@@ -66,7 +66,7 @@ class _MosqDashboardState extends State<MosqDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    changeStatusColor(mkColorPrimary);
+    // changeStatusColor(mkColorPrimary);
     var width = Get.width;
     width = width - 50;
     final GlobalKey<ScaffoldState> _scaffoldKey =
